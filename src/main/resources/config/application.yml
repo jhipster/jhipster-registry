@@ -1,0 +1,13 @@
+server:
+    port: 8761
+
+eureka:
+    instance:
+        appname: registry
+        hostname: localhost
+        prefer-ip-address: true
+    server:
+        enable-self-preservation: true
+    client:
+        registerWithEureka: false
+        fetchRegistry: false
