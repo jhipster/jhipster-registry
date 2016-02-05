@@ -13,9 +13,9 @@ The JHipster microservices architecture is supposed to work in the following way
 When the gateway and the microservices are launched, they will register themselves in the registry (using the `eureka.client.serviceUrl.defaultZone` key in the `src/main/resources/config/application.yml` file.
 The gateway will automatically proxy all requests to the microservices, using their application name: for example, when microservices `app1` is registered, it is available on the gateway on the `/app1` URL.
 
-For example, if your gateway is running on `localhost:8080`, you could point to `http://localhost:8080/app1/rest/foos` to 
-get the `foos` resource served by microservice `app1`. Of course, if you're trying to do it with your Web browser, don't forget REST resources are secured 
-by default in JHipster, so you need to send the correct JWT header (see next point).
+For example, if your gateway is running on `localhost:8080`, you could point to [http://localhost:8080/app1/rest/foos](http://localhost:8080/app1/rest/foos) to 
+get the `foos` resource served by microservice `app1`. If you're trying to do this with your Web browser, don't forget REST resources are secured 
+by default in JHipster, so you need to send the correct JWT header (see next point), or remove the security on those URLs in the gateway's `SecurityConfiguration` class.
 
 ### Security considerations
 
@@ -34,6 +34,8 @@ To run the application, like any JHipster application, just launch:
 
 The registry Web console should be available at [http://127.0.0.1:8761/](http://127.0.0.1:8761/).
 
+The microservices will be registered on the gateway, you can see them on the gateway management screen at [http://127.0.0.1:8080/#/gateway](http://127.0.0.1:8080/#/gateway).
+
 ## Tips
 
 ### Avoid port conflicts
@@ -42,8 +44,6 @@ If you run several JHipster microservices on your machine, don't forget to chang
 `server.port` key in their `src/main/resources/config/application.yml` file.
 
 
-curl 'http://127.0.0.1:8080/api/foos?cacheBuster=1454682734916' -H 'Pragma: no-cache' -H 'Accept-Encoding: gzip, deflate, sdch' -H 'Accept-Language: fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4' -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTQ1NDc2ODY3OH0.JUp-v33vFPrf0Lb2R6ja8UuEc1fkfz8WG7f4CunUCGIxwPWHXwyG1XcR_0FzqjeTrjcROJIiFQSPGclehfHyWw' -H 'Accept: application/json, text/plain, */*' -H 'User-Agent: Mozilla/5.0' -H 'Connection: keep-alive' -H 'Cache-Control: no-cache' --compressed
-
 ## More information
 
-[JHipster]: https://jhipster.github.io/
+[JHipster website](http://jhipster.github.io/)
