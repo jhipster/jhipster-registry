@@ -2,6 +2,12 @@
 
 This is the [JHipster](http://jhipster.github.io/) registry service, based on [Eureka](https://github.com/Netflix/eureka).
 
+## Warning: JHipster 3.0 feature!
+
+This project is to be used with JHipster 3.0, which is not released yet.
+
+If you wish to test this, you need to use our development branch. If you want to do this, don't panic! It's in fact surprisingly easy, just [follow this guide](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md#setup) to setup your environment.
+
 ## Architecture
 
 The JHipster microservices architecture is supposed to work in the following way:
@@ -13,8 +19,8 @@ The JHipster microservices architecture is supposed to work in the following way
 When the gateway and the microservices are launched, they will register themselves in the registry (using the `eureka.client.serviceUrl.defaultZone` key in the `src/main/resources/config/application.yml` file.
 The gateway will automatically proxy all requests to the microservices, using their application name: for example, when microservices `app1` is registered, it is available on the gateway on the `/app1` URL.
 
-For example, if your gateway is running on `localhost:8080`, you could point to [http://localhost:8080/app1/rest/foos](http://localhost:8080/app1/rest/foos) to 
-get the `foos` resource served by microservice `app1`. If you're trying to do this with your Web browser, don't forget REST resources are secured 
+For example, if your gateway is running on `localhost:8080`, you could point to [http://localhost:8080/app1/rest/foos](http://localhost:8080/app1/rest/foos) to
+get the `foos` resource served by microservice `app1`. If you're trying to do this with your Web browser, don't forget REST resources are secured
 by default in JHipster, so you need to send the correct JWT header (see next point), or remove the security on those URLs in the gateway's `SecurityConfiguration` class.
 
 ### Security considerations
