@@ -32,7 +32,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-config-server</artifactId>
-            <version>1.1.0.BUILD-SNAPSHOT</version>
+            <version>${spring-cloud.version}</version>
         </dependency>
     </dependencies>
 
