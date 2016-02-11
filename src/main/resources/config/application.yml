@@ -12,10 +12,14 @@ eureka:
         registerWithEureka: false
         fetchRegistry: false
 spring:
+  profiles:
+    active: native
   cloud:
     config:
       server:
-        git:
-          uri: ${HOME}/Desktop/config
+        #git:
+        #  uri: ${HOME}/config
+        native:
+          search-locations: file:./central-config
         bootstrap: true
         prefix: /config
