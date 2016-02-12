@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>jhiregistry</name>
+    <name>JHipster Registry</name>
     <description>JHipster service registry, made with Netflix Eureka</description>
 
     <parent>
