@@ -15,4 +15,14 @@ eureka:
 spring:
     application:
         name: jhipster-registry
+    profiles:
+        active: native
+    cloud:
+        config:
+            server:
+                #git:
+                #    uri: ${HOME}/config
+                native:
+                    search-locations: file:./central-config
+                prefix: /config
 
