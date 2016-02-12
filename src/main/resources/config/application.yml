@@ -25,3 +25,4 @@ spring:
                 native:
                     search-locations: file:./central-config
                 prefix: /config
+
