@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>JHipster Registry</name>
-    <description>JHipster service registry, made with Netflix Eureka</description>
+    <description>JHipster service registry, made with Netflix Eureka and Spring Cloud Config</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

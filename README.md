@@ -1,6 +1,6 @@
 # JHipster registry
 
-This is the [JHipster](http://jhipster.github.io/) registry service, based on [Eureka](https://github.com/Netflix/eureka).
+This is the [JHipster](http://jhipster.github.io/) registry service, based on [Eureka](https://github.com/Netflix/eureka) and Spring Cloud Config.
 
 ## Warning: JHipster 3.0 feature!
 
