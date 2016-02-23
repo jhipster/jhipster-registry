@@ -1,0 +1,13 @@
+# Gateway "prod" configuration
+# In prod profile, microservices are not automatically added to the gateway's routes
+
+zuul:
+    routes:
+        # sample microservice route
+        route1:
+            path: /app1/**
+            serviceId: app1
+        # sample regular API route (http://petstore.swagger.io)
+        #route2:
+        #    path: /petstore/**
+        #    url: http://petstore.swagger.io/v2/
