@@ -11,6 +11,16 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+# ===================================================================
+# Eureka server configuration (eureka.server.*)
+#
+# Full list of properties with default values at:
+# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
+#
+# Documentation at:
+# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
+# ===================================================================
+
 server:
     port: 8761
 
