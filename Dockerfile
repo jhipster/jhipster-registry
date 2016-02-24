@@ -7,7 +7,8 @@ ENV JAVA_VERSION_MAJOR=8 \
     JAVA_PACKAGE=jdk \
     JAVA_HOME=/opt/jdk \
     PATH=${PATH}:/opt/jdk/bin \
-    LANG=C.UTF-8
+    LANG=C.UTF-8 \
+    SPRING_PROFILES=prod
 
 # do all in one step : install java
 RUN apk upgrade --update && \
@@ -76,4 +77,4 @@ RUN cd /code/ && \
 RUN bash -c 'touch /jhipster-registry.jar'
 EXPOSE 8761
 VOLUME /tmp
-CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.jar"]
+CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.jar","--spring.profiles.active=${SPRING_PROFILES}"]
