@@ -1,0 +1,23 @@
+elk-elasticsearch:
+  container_name: elk-elasticsearch
+  image: elasticsearch:2.2.0
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+elk-logstash:
+  container_name: elk-logstash
+  image: logstash:2.2.2
+  volumes:
+    - ./logconfig/:/config-dir
+  command: logstash -f /config-dir/logstash.conf
+  ports:
+    - "5000:5000/udp"
+  links:
+    - elk-elasticsearch:elasticsearch
+elk-kibana:
+  container_name: elk-kibana
+  image: kibana:4.4.1
+  ports:
+    - "5601:5601"
+  links:
+    - elk-elasticsearch:elasticsearch
