@@ -1,0 +1,23 @@
+{
+  "generator-jhipster": {
+    "jhipsterVersion": "3.0.0",
+    "baseName": "registry",
+    "packageName": "io.github.jhipster.registry",
+    "packageFolder": "io/github/jhipster/registry",
+    "authenticationType": "jwt",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "no",
+    "devDatabaseType": "no",
+    "prodDatabaseType": "no",
+    "searchEngine": "no",
+    "buildTool": "maven",
+    "enableSocialSignIn": false,
+    "useSass": false,
+    "enableTranslation": false,
+    "applicationType": "microservice",
+    "testFrameworks": [
+    ]
+  }
+}

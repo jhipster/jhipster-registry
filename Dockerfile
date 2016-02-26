@@ -70,11 +70,11 @@ RUN chmod +x /code/mvnw
 # package the application and delete all lib
 RUN cd /code/ && \
     ./mvnw package && \
-    mv /code/target/*.jar /jhipster-registry.jar && \
+    mv /code/target/*.war /jhipster-registry.war && \
     rm -Rf /root/.m2/wrapper/ && \
     rm -Rf /root/.m2/repository/
 
-RUN bash -c 'touch /jhipster-registry.jar'
+RUN bash -c 'touch /jhipster-registry.war'
 EXPOSE 8761
 VOLUME /tmp
-CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.jar","--spring.profiles.active=${SPRING_PROFILES}"]
+CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.war","--spring.profiles.active=${SPRING_PROFILES}"]
