@@ -1,4 +1,4 @@
-# Centralized logging with ELK 
+# Centralized logging and metrics monitoring with ELK
 
 The ELK stack is composed of :
 - [Elasticsearch][] for indexing the logs
@@ -7,7 +7,7 @@ The ELK stack is composed of :
 
 ### Configure your applications
 
-To configure JHipster microservices and gateway apps to forward their logs to ELK, enable logstash logging in their application-dev.yml or application-prod.yml
+To configure a JHipster app to forward their logs to ELK, enable logstash logging in their application-dev.yml or application-prod.yml
 
     jhipster:
         logging:
@@ -19,6 +19,13 @@ To configure JHipster microservices and gateway apps to forward their logs to EL
 
 This setup is recommended for a production environment where centralizing logs is very interesting.
 
+To configure metrics monitoring, enable metrics log reporting in your JHipster apps.
+
+    jhipster:
+        logs:
+            enabled: false
+            reportFrequency: 60 # seconds
+            q 
 ### Start ELK with docker
 
 To start ELK :
@@ -43,6 +50,23 @@ In order to trace the origin of logs, before being forwarded to logstash, those 
 - the app name (_spring.application.name_)
 - their port (_server.port_)
 - their eureka instance ID (_eureka.instance.instanceId_)
+
+### Install Kibana plugins
+
+To install Kibana plugins, first start your containers as explained before and then do the following:
+
+Log into your application:
+
+    docker exec -it elk-kibana /bin/bash
+
+Install the plugins you want:
+
+    kibana plugin --install elastic/timelion
+
+Exit and restart the Kibana container:
+
+    exit
+    docker-compose -f elk.yml restart elk-kibana
 
 [JHipster]: https://jhipster.github.io/
 [Elasticsearch]: https://www.elastic.co/products/elasticsearch
