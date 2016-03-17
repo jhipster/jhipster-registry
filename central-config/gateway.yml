@@ -1,3 +1,0 @@
-# Used on the gateway's startup to check the config server status
-configserver:
-    status: ${spring.cloud.config.uri} (OK)
