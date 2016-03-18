@@ -5,4 +5,4 @@
 # Property used on app startup to check the config server status
 configserver:
     name: JHipster Sample Spring Cloud Config
-    status: ${spring.cloud.config.uri}/${spring.cloud.config.label}/${spring.cloud.config.name}-${spring.cloud.config.profile}.yml
+    status: ${spring.cloud.config.uri}/${spring.cloud.config.label}/${spring.cloud.config.name}-${spring.cloud.config.profile}.yml/
