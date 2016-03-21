@@ -56,8 +56,8 @@ public class JHipsterRegistry {
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(JHipsterRegistry.class);
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
-        addDefaultProfile(app, source);
         Environment env = app.run(args).getEnvironment();
+        addDefaultProfile(app, source, env);
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
                 "Local: \t\thttp://127.0.0.1:{}\n\t" +
@@ -71,11 +71,15 @@ public class JHipsterRegistry {
     /**
      * If no profile has been configured, set by default the "dev" profile.
      */
-    private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
+    private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source, Environment env) {
         if (!source.containsProperty("spring.profiles.active") &&
             !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
 
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT, Constants.SPRING_PROFILE_NATIVE);
+        }
+        if (env.getActiveProfiles().equals(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+            log.info("Running in development mode, using the \"native\" profile to read the configuration from the filesystem");
+            app.setAdditionalProfiles(Constants.SPRING_PROFILE_NATIVE);
         }
     }
 }
