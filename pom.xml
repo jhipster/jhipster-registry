@@ -121,7 +121,7 @@
                         <configuration>
                             <executable>true</executable>
                             <arguments>
-                                <argument>--spring.profiles.active=prod</argument>
+                                <argument>--spring.profiles.active=prod,native</argument>
                             </arguments>
                         </configuration>
                     </plugin>

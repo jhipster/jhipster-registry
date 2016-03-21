@@ -21,7 +21,7 @@ RUN sh -c 'touch /jhipster-registry.war'
 EXPOSE 8761
 VOLUME /tmp
 
-ENV SPRING_PROFILES_ACTIVE=prod
+ENV SPRING_PROFILES_ACTIVE=prod,native
 ENV GIT_URI=https://github.com/jhipster/jhipster-registry/
 ENV GIT_SEARCH_PATHS=central-config
 
