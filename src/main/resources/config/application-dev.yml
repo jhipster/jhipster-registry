@@ -18,4 +18,8 @@ spring:
             server:
                 native:
                     search-locations: file:./central-config
+                git:
+                    # sample prod config using the central-directory folder in the jhipster-registry github repos
+                    uri: https://github.com/jhipster/jhipster-registry/
+                    search-paths: central-config
                 prefix: /config

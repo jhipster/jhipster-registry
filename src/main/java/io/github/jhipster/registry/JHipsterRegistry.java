@@ -35,8 +35,8 @@ public class JHipsterRegistry {
      * <p/>
      * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
      * <p/>
-     * <p>
-     * You can find more information on how profiles work with JHipster on <a href="http://jhipster.github.io/profiles.html">http://jhipster.github.io/profiles.html</a>.
+     * <p> You can find more information on how profiles work with JHipster on
+     * <a href="http://jhipster.github.io/profiles.html">http://jhipster.github.io/profiles.html</a>.
      * </p>
      */
     @PostConstruct
@@ -56,8 +56,8 @@ public class JHipsterRegistry {
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(JHipsterRegistry.class);
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
+        addDefaultProfile(app, source);
         Environment env = app.run(args).getEnvironment();
-        addDefaultProfile(app, source, env);
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
                 "Local: \t\thttp://127.0.0.1:{}\n\t" +
@@ -69,17 +69,13 @@ public class JHipsterRegistry {
     }
 
     /**
-     * If no profile has been configured, set by default the "dev" profile.
+     * If no profile has been configured, set by default the "prod" and "native" profile.
      */
-    private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source, Environment env) {
+    private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active") &&
             !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
 
-            app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT, Constants.SPRING_PROFILE_NATIVE);
-        }
-        if (env.getActiveProfiles().equals(Constants.SPRING_PROFILE_DEVELOPMENT)) {
-            log.info("Running in development mode, using the \"native\" profile to read the configuration from the filesystem");
-            app.setAdditionalProfiles(Constants.SPRING_PROFILE_NATIVE);
+            app.setAdditionalProfiles(Constants.SPRING_PROFILE_PRODUCTION, Constants.SPRING_PROFILE_NATIVE);
         }
     }
 }
