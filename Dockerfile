@@ -21,8 +21,8 @@ RUN sh -c 'touch /jhipster-registry.war'
 EXPOSE 8761
 VOLUME /tmp
 
-ENV SPRING_PROFILES=prod
+ENV SPRING_PROFILES_ACTIVE=prod
 ENV GIT_URI=https://github.com/jhipster/jhipster-registry/
 ENV GIT_SEARCH_PATHS=central-config
 
-CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.war","--spring.profiles.active=${SPRING_PROFILES}","--spring.cloud.config.server.git.uri=${GIT_URI}","--spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS}"]
+CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.war","--spring.cloud.config.server.git.uri=${GIT_URI}","--spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS}"]
