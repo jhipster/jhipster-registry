@@ -4,7 +4,9 @@ This is the [JHipster](http://jhipster.github.io/) registry service, based on [S
 
 Full documentation is available on the [JHipster documentation for microservices](http://jhipster.github.io/microservices-architecture).
 
-## Deploy
+## Deploy to Heroku
+
+Click this button to deploy your own instance of the registry:
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
