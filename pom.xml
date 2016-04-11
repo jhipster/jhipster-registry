@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-parent</artifactId>
-        <version>Brixton.M5</version>
+        <version>Brixton.RC1</version>
     </parent>
 
     <dependencies>
