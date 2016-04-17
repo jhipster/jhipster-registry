@@ -6,7 +6,7 @@ RUN apk add --no-cache openjdk8 && \
 
 # add directly the war
 ENV SPRING_PROFILES=dev
-ADD *.war /jhipster-registry.war
+ADD target/*.war /jhipster-registry.war
 
 RUN sh -c 'touch /jhipster-registry.war'
 EXPOSE 8761
