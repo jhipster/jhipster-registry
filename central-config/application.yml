@@ -11,4 +11,4 @@ configserver:
 jhipster:
     security:
         rememberMe:
-            key: my-secret-token-to-be-changed
+            key: 7ddaa96176349832ee392f4ccc464d6344e0e126
