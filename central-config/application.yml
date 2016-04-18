@@ -10,5 +10,6 @@ configserver:
 # Default JWT secret token (to be changed in production!)
 jhipster:
     security:
-        rememberMe:
-            key: 7ddaa96176349832ee392f4ccc464d6344e0e126
+        authentication:
+            jwt:
+                secret: my-secret-token-to-change-in-production
