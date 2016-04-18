@@ -6,3 +6,9 @@
 configserver:
     name: JHipster Sample Spring Cloud Config
     status: ${spring.cloud.config.uri}/${spring.cloud.config.label}/${spring.cloud.config.name}-${spring.cloud.config.profile}.yml/
+
+# Default JWT secret token (to be changed in production!)
+jhipster:
+    security:
+        rememberMe:
+            key: my-secret-token-to-be-changed
