@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jre-alpine
+FROM java:openjdk-8-jdk-alpine
 
 # add jhipster-registry source
 ADD pom.xml mvnw /code/
