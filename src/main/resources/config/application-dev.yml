@@ -23,3 +23,5 @@ spring:
                     uri: https://github.com/jhipster/jhipster-registry/
                     search-paths: central-config
                 prefix: /config
+    thymeleaf:
+        cache: false

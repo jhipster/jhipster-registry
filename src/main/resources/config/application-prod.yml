@@ -24,3 +24,5 @@ spring:
                     search-paths: central-config
                 prefix: /config
 
+    thymeleaf:
+        cache: true
