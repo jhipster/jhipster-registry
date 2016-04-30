@@ -14,7 +14,7 @@
         vm.refresh();
 
         function refresh () {
-            vm.applications = EurekaService.get();
+            vm.data = EurekaService.get();
         }
     }
 })();

@@ -15,6 +15,8 @@ import com.netflix.eureka.EurekaServerContext;
 import com.netflix.eureka.EurekaServerContextHolder;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
 
+import io.github.jhipster.registry.web.rest.dto.EurekaDTO;
+
 /**
  * Controller for viewing Eureka data.
  */
@@ -25,13 +27,19 @@ public class EurekaResource {
     private final Logger log = LoggerFactory.getLogger(EurekaResource.class);
 
     /**
-     * GET  / : list available services
+     * GET  / : get Eureka information
      */
     @RequestMapping(value = "/eureka",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ArrayList<Map<String, Object>>> services() {
+    public ResponseEntity<EurekaDTO> eureka() {
+        EurekaDTO eurekaDTO = new EurekaDTO();
+        eurekaDTO.setApplications(getApplications());
+        return new ResponseEntity<>(eurekaDTO, HttpStatus.OK);
+    }
+
+    private ArrayList<Map<String, Object>> getApplications() {
         List<Application> sortedApplications = getRegistry().getSortedApplications();
         ArrayList<Map<String, Object>> apps = new ArrayList<>();
         for (Application app : sortedApplications) {
@@ -96,7 +104,7 @@ public class EurekaResource {
                 }
             }
         }
-        return new ResponseEntity<>(apps, HttpStatus.OK);
+        return apps;
     }
 
     private PeerAwareInstanceRegistry getRegistry() {

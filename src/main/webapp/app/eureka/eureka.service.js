@@ -9,7 +9,7 @@
 
     function EurekaService ($resource) {
         var service = $resource('api/eureka', {}, {
-            'get': { method: 'GET', isArray: true}
+            'get': { method: 'GET'}
         });
 
         return service;
