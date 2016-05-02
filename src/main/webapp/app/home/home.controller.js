@@ -25,8 +25,6 @@
                 vm.isAuthenticated = Principal.isAuthenticated;
                 if (account == null) {
                     vm.login();
-                } else {
-                    console.log(vm.account);
                 }
             });
         }
