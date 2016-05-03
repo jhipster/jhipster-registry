@@ -88,6 +88,21 @@ public class EurekaResource {
         return new ResponseEntity<>(lastn, HttpStatus.OK);
     }
 
+    /**
+     * GET  /eureka/replicas : get Eureka replicas
+     */
+    @RequestMapping(value = "/eureka/replicas",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<String>> replicas() {
+        List<String> replicas = new ArrayList<>();
+        getServerContext().getPeerEurekaNodes().getPeerNodesView().stream().forEach(
+            node -> replicas.add(node.getServiceUrl())
+        );
+        return new ResponseEntity<>(replicas, HttpStatus.OK);
+    }
+
     private PeerAwareInstanceRegistry getRegistry() {
         return getServerContext().getRegistry();
     }
