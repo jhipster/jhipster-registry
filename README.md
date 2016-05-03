@@ -18,5 +18,5 @@ There are a few limitations when deploying to Heroku.
 * The registry service cannot be scaled up to multiple dynos to provide redundancy. You must deploy multiple applications (i.e. click the button more than once). This is because Eureka requires distinct URLs to synchronize in-memory state between instances.
 * The Registry is not secured by default. You must add it with Spring Security’s basic authentication support.
 
-[travis-image]: https://travis-ci.org/pascalgrimaud/generator-jhipster.svg?branch=master
-[travis-url]: https://travis-ci.org/pascalgrimaud/generator-jhipster
+[travis-image]: https://travis-ci.org/jhipster/generator-jhipster.svg?branch=master
+[travis-url]: https://travis-ci.org/jhipster/generator-jhipster
