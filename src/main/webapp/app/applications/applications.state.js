@@ -8,17 +8,17 @@
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig($stateProvider) {
-        $stateProvider.state('eureka', {
+        $stateProvider.state('applications', {
             parent: 'admin',
-            url: '/eureka',
+            url: '/applications',
             data: {
                 authorities: ['ROLE_ADMIN'],
-                pageTitle: 'Eureka'
+                pageTitle: 'Applications'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/eureka/eureka.html',
-                    controller: 'EurekaController',
+                    templateUrl: 'app/applications/applications.html',
+                    controller: 'ApplicationsController',
                     controllerAs: 'vm'
                 }
             }

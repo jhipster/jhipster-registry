@@ -29,7 +29,7 @@ public class EurekaResource {
     /**
      * GET  / : get Eureka information
      */
-    @RequestMapping(value = "/eureka",
+    @RequestMapping(value = "/eureka/applications",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -46,63 +46,17 @@ public class EurekaResource {
             LinkedHashMap<String, Object> appData = new LinkedHashMap<>();
             apps.add(appData);
             appData.put("name", app.getName());
-            Map<String, Integer> amiCounts = new HashMap<>();
-            Map<InstanceInfo.InstanceStatus, List<Pair<String, String>>> instancesByStatus = new HashMap<>();
-            Map<String, Integer> zoneCounts = new HashMap<>();
+            List<Map<String, String>> instances = new ArrayList<>();
             for (InstanceInfo info : app.getInstances()) {
-                String id = info.getId();
-                String url = info.getStatusPageUrl();
-                InstanceInfo.InstanceStatus status = info.getStatus();
-                String ami = "n/a";
-                String zone = "";
-                if (info.getDataCenterInfo().getName() == DataCenterInfo.Name.Amazon) {
-                    AmazonInfo dcInfo = (AmazonInfo) info.getDataCenterInfo();
-                    ami = dcInfo.get(AmazonInfo.MetaDataKey.amiId);
-                    zone = dcInfo.get(AmazonInfo.MetaDataKey.availabilityZone);
-                }
-                Integer count = amiCounts.get(ami);
-                if (count != null) {
-                    amiCounts.put(ami, count + 1);
-                } else {
-                    amiCounts.put(ami, 1);
-                }
-                count = zoneCounts.get(zone);
-                if (count != null) {
-                    zoneCounts.put(zone, count + 1);
-                } else {
-                    zoneCounts.put(zone, 1);
-                }
-                List<Pair<String, String>> list = instancesByStatus.get(status);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    instancesByStatus.put(status, list);
-                }
-                list.add(new Pair<>(id, url));
+                Map<String, String> instance = new HashMap<>();
+                instance.put("instanceId", info.getInstanceId());
+                instance.put("homePageUrl", info.getHomePageUrl());
+                instance.put("healthCheckUrl", info.getHealthCheckUrl());
+                instance.put("statusPageUrl", info.getStatusPageUrl());
+                instance.put("status", info.getStatus().name());
+                instances.add(instance);
             }
-            appData.put("amiCounts", amiCounts.entrySet());
-            appData.put("zoneCounts", zoneCounts.entrySet());
-            ArrayList<Map<String, Object>> instanceInfos = new ArrayList<>();
-            appData.put("instanceInfos", instanceInfos);
-            for (Iterator<Map.Entry<InstanceInfo.InstanceStatus, List<Pair<String, String>>>> iter = instancesByStatus
-                .entrySet().iterator(); iter.hasNext(); ) {
-                Map.Entry<InstanceInfo.InstanceStatus, List<Pair<String, String>>> entry = iter
-                    .next();
-                List<Pair<String, String>> value = entry.getValue();
-                InstanceInfo.InstanceStatus status = entry.getKey();
-                LinkedHashMap<String, Object> instanceData = new LinkedHashMap<>();
-                instanceInfos.add(instanceData);
-                instanceData.put("status", entry.getKey());
-                ArrayList<Map<String, Object>> instances = new ArrayList<>();
-                instanceData.put("instances", instances);
-                instanceData.put("isNotUp", status != InstanceInfo.InstanceStatus.UP);
-                for (Pair<String, String> p : value) {
-                    LinkedHashMap<String, Object> instance = new LinkedHashMap<>();
-                    instances.add(instance);
-                    instance.put("id", p.first());
-                    instance.put("url", p.second());
-                    instance.put("isHref", p.second().startsWith("http"));
-                }
-            }
+            appData.put("instances", instances);
         }
         return apps;
     }
