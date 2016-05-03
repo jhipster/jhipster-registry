@@ -24,14 +24,20 @@
         function activateRegistered() {
             vm.registeredClass = 'btn-primary';
             vm.canceledClass = 'btn-default';
-            vm.instanceData = vm.data.registered;
+            vm.items = [];
+            for (var key in vm.data.registered) {
+                vm.items.push({ key: key, value: vm.data.registered[key] });
+            }
         }
 
         vm.activateCanceled = activateCanceled;
         function activateCanceled() {
             vm.registeredClass = 'btn-default';
             vm.canceledClass = 'btn-primary';
-            vm.instanceData = vm.data.canceled;
+            vm.items = [];
+            for (var key in vm.data.canceled) {
+                vm.items.push({ key: key, value: vm.data.registered[key] });
+            }
         }
     }
 })();

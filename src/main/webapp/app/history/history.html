@@ -22,12 +22,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="(key, value) in vm.instanceData">
+                    <tr ng-repeat="instance in vm.items | orderBy:'-value'">
                         <td>
-                            {{key | date:'medium'}}
+                            {{instance.key | date:'medium'}}
                         </td>
                         <td>
-                            {{value}}
+                            {{instance.value}}
                         </td>
                     </tr>
                     </tbody>
