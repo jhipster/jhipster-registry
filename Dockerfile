@@ -1,5 +1,8 @@
 FROM java:openjdk-8-jdk-alpine
 
+# Add OpenSSH
+RUN apk update && apk add openssh
+
 # add jhipster-registry source
 ADD pom.xml mvnw /code/
 ADD src /code/src
