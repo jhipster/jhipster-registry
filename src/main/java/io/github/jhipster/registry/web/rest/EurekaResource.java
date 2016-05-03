@@ -8,12 +8,12 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.codahale.metrics.annotation.Timed;
-import com.netflix.appinfo.*;
+import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.shared.Application;
-import com.netflix.discovery.shared.Pair;
 import com.netflix.eureka.EurekaServerContext;
 import com.netflix.eureka.EurekaServerContextHolder;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
+import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl;
 
 import io.github.jhipster.registry.web.rest.dto.EurekaDTO;
 
@@ -27,7 +27,7 @@ public class EurekaResource {
     private final Logger log = LoggerFactory.getLogger(EurekaResource.class);
 
     /**
-     * GET  / : get Eureka information
+     * GET  /eureka/applications : get Eureka applications information
      */
     @RequestMapping(value = "/eureka/applications",
         method = RequestMethod.GET,
@@ -39,7 +39,7 @@ public class EurekaResource {
         return new ResponseEntity<>(eurekaDTO, HttpStatus.OK);
     }
 
-    private ArrayList<Map<String, Object>> getApplications() {
+    private List<Map<String, Object>> getApplications() {
         List<Application> sortedApplications = getRegistry().getSortedApplications();
         ArrayList<Map<String, Object>> apps = new ArrayList<>();
         for (Application app : sortedApplications) {
@@ -59,6 +59,33 @@ public class EurekaResource {
             appData.put("instances", instances);
         }
         return apps;
+    }
+
+    /**
+     * GET  /eureka/lastn : get Eureka registrations
+     */
+    @RequestMapping(value = "/eureka/lastn",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
+        Map<String, Map<Long, String>> lastn = new HashMap<>();
+        PeerAwareInstanceRegistryImpl registry = (PeerAwareInstanceRegistryImpl) getRegistry();
+        Map<Long, String> canceledMap = new HashMap<>();
+        registry.getLastNCanceledInstances().stream().forEach(
+            canceledInstance -> {
+                canceledMap.put(canceledInstance.first(), canceledInstance.second());
+            }
+        );
+        lastn.put("canceled", canceledMap);
+        Map<Long, String> registeredMap = new HashMap<>();
+        registry.getLastNRegisteredInstances().stream().forEach(
+            registeredInstance -> {
+                registeredMap.put(registeredInstance.first(), registeredInstance.second());
+            }
+        );
+        lastn.put("registered", registeredMap);
+        return new ResponseEntity<>(lastn, HttpStatus.OK);
     }
 
     private PeerAwareInstanceRegistry getRegistry() {
