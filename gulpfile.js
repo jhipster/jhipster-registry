@@ -1,4 +1,4 @@
-// Generated on 2016-04-28 using generator-jhipster 3.1.0
+// Generated on 2016-05-04 using generator-jhipster 3.1.0
 'use strict';
 
 var gulp = require('gulp'),
@@ -19,6 +19,7 @@ var gulp = require('gulp'),
     gulpIf = require('gulp-if'),
     inject = require('gulp-inject'),
     angularFilesort = require('gulp-angular-filesort'),
+    naturalSort = require('gulp-natural-sort'),
     bowerFiles = require('main-bower-files');
 
 var handleErrors = require('./gulp/handleErrors'),
@@ -90,7 +91,9 @@ gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
 
 gulp.task('inject:app', function () {
     return gulp.src(config.app + 'index.html')
-        .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
+        .pipe(inject(gulp.src(config.app + 'app/**/*.js')
+            .pipe(naturalSort())
+            .pipe(angularFilesort()), {relative: true}))
         .pipe(gulp.dest(config.app));
 });
 

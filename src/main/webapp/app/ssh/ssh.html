@@ -39,18 +39,18 @@
     </p>
 
     <p>To setup your own git repo, edit the GIT_URI environment variable passed to your container, for example using Docker Compose:</p>
-    <pre>
+    <div hljs hljs-language="yaml">
     version: '2'
       services:
         jhipster-registry:
           container_name: jhipster-registry
           image: jhipster/jhipster-registry
-      <span style="color:green">volumes:
+      volumes:
         - ./ssh/:/root/.ssh/
       environment:
         - SPRING_PROFILES_ACTIVE=prod
-        - GIT_URI=ssh:git@github.com:jhipster/test-registry.git</span>
+        - GIT_URI=ssh:git@github.com:jhipster/test-registry.git
       ports:
         - 8761:8761
-    </pre>
+  </div>
 </div>

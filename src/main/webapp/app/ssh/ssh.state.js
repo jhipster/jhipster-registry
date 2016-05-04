@@ -9,7 +9,7 @@
 
     function stateSsh($stateProvider) {
         $stateProvider.state('ssh', {
-            parent: 'admin',
+            parent: 'app',
             url: '/ssh',
             data: {
                 authorities: ['ROLE_ADMIN'],
