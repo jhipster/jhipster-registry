@@ -27,7 +27,6 @@
     "commit": "059909214c50aed6520cb4cb913e0d7aa98afac3"
   },
   "_source": "https://github.com/pc035860/angular-highlightjs.git",
-  "_target": "^0.6.1",
-  "_originalSource": "angular-highlightjs",
-  "_direct": true
+  "_target": "0.6.1",
+  "_originalSource": "angular-highlightjs"
 }
