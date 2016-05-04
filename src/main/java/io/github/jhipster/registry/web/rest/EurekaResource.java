@@ -1,5 +1,7 @@
 package io.github.jhipster.registry.web.rest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.shared.Application;
 import com.netflix.eureka.EurekaServerContext;
 import com.netflix.eureka.EurekaServerContextHolder;
+import com.netflix.eureka.cluster.PeerEurekaNode;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl;
 
@@ -98,8 +101,17 @@ public class EurekaResource {
     public ResponseEntity<List<String>> replicas() {
         List<String> replicas = new ArrayList<>();
         getServerContext().getPeerEurekaNodes().getPeerNodesView().stream().forEach(
-            node -> replicas.add(node.getServiceUrl())
+            node -> {
+                try {
+                    // The URL is parsed in order to remove login/password information
+                    URI uri = new URI(node.getServiceUrl());
+                    replicas.add(uri.getHost() + ":" + uri.getPort());
+                } catch (URISyntaxException e) {
+                    log.warn("Could not parse peer Eureka node URL: {}", e.getMessage());
+                }
+            }
         );
+
         return new ResponseEntity<>(replicas, HttpStatus.OK);
     }
 

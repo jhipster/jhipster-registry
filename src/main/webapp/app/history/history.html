@@ -21,7 +21,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="instance in vm.items | orderBy:'-value'">
+                    <tr ng-repeat="instance in vm.items | orderBy:'-key'">
                         <td>
                             {{instance.key | date:'medium'}}
                         </td>

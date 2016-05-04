@@ -10,6 +10,20 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+eureka:
+    env: dev
+    instance:
+        hostname: localhost
+        appname: registry
+        prefer-ip-address: true
+    server:
+        enable-self-preservation: true
+    client:
+        fetch-registry: false
+        register-with-eureka: false
+        serviceUrl:
+            defaultZone: http://admin:admin@localhost:8761/eureka/
+
 jhipster:
     security:
         authentication:

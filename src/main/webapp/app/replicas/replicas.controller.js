@@ -10,6 +10,7 @@
     function ReplicasController (ReplicasService) {
         var vm = this;
         vm.refresh = refresh;
+        vm.showMore = true;
 
         vm.refresh();
 
