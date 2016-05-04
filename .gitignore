@@ -1,7 +1,6 @@
 ######################
 # Project Specific
 ######################
-/src/main/webapp/dist
 /target/www/**
 
 ######################

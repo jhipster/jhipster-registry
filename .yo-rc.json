@@ -18,8 +18,8 @@
     "enableTranslation": false,
     "applicationType": "microservice",
     "testFrameworks": [],
-    "jhiPrefix": "jhi",
-    "skipClient": true,
+    "jhiPrefix": "JHi",
+    "skipClient": false,
     "skipUserManagement": true
   }
 }
