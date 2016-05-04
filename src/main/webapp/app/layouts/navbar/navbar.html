@@ -7,14 +7,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand logo" href="#/" ng-click="vm.collapseNavbar()"><img class="logo-img" src="content/images/logo-jhipster.png"/><span>JHipster Registry</span> <span class="navbar-version">v{{VERSION}}</span></a>
         </div>
         <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
                 <li ui-sref-active="active">
                     <a ui-sref="home" ng-click="vm.collapseNavbar()">
-                        <span class="glyphicon glyphicon-home"></span>
-                        <span class="hidden-sm">Home</span>
+                        <img src="content/images/logo-jhipster.png"/>
+                        <span class="hidden-sm">JHipster Registry <span class="navbar-version">v{{VERSION}}</span></span>
                     </a>
                 </li>
                 <li ui-sref-active="active">
