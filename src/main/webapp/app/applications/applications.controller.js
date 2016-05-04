@@ -9,8 +9,9 @@
 
     function ApplicationsController (ApplicationsService, $q) {
         var vm = this;
-        vm.refresh = refresh;
         vm.application = '';
+        vm.refresh = refresh;
+        vm.show = show;
 
         vm.refresh();
 
@@ -23,8 +24,6 @@
             });
 
         }
-
-        vm.show = show;
 
         function show(app) {
             vm.application = app;
