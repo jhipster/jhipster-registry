@@ -18,7 +18,9 @@
     "json3": "3.3.2",
     "messageformat": "0.3.1",
     "modernizr": "3.3.1",
-    "bootswatch-dist": "flatly"
+    "bootswatch-dist": "flatly",
+    "angular-highlightjs": "0.6.1",
+    "highlightjs": "9.2.0"
   },
   "devDependencies": {
     "angular-mocks": "1.5.2"
@@ -37,6 +39,12 @@
     "bootswatch-dist": {
       "main": [
         "css/bootstrap.css"
+      ]
+    },
+    "highlightjs": {
+      "main": [
+        "highlight.pack.js",
+        "styles/monokai-sublime.css"
       ]
     }
   },
