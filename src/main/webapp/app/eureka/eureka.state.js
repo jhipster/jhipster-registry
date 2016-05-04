@@ -9,7 +9,7 @@
 
     function stateConfig($stateProvider) {
         $stateProvider.state('eureka', {
-            parent: 'admin',
+            parent: 'app',
             url: '/eureka',
             data: {
                 authorities: ['ROLE_ADMIN'],
