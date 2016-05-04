@@ -9,7 +9,7 @@
 
     function stateConfig($stateProvider) {
         $stateProvider.state('applications', {
-            parent: 'admin',
+            parent: 'app',
             url: '/applications',
             data: {
                 authorities: ['ROLE_ADMIN'],
