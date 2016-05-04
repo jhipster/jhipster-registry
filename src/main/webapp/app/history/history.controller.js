@@ -17,7 +17,7 @@
         function refresh () {
             HistoryService.get().$promise.then(function(data) {
                 vm.data = data;
-                vm.activateRegistered();
+                vm.activate('registered');
             });
         }
 
