@@ -22,7 +22,7 @@ eureka:
         fetch-registry: false
         register-with-eureka: false
         serviceUrl:
-            defaultZone: http://admin:admin@localhost:8761/eureka/
+            defaultZone: http://admin:${security.user.password:admin}@localhost:8761/eureka/
 
 jhipster:
     security:
