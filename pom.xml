@@ -59,6 +59,7 @@
         <sortpom-maven-plugin.version>2.5.0</sortpom-maven-plugin.version>
         <metrics-spring.version>3.1.3</metrics-spring.version>
         <spring-cloud.version>Brixton.RC2</spring-cloud.version>
+        <logstash-logback-encoder.version>4.6</logstash-logback-encoder.version>
     </properties>
 
     <dependencyManagement>
@@ -179,6 +180,25 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-access</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Spring Cloud -->
         <dependency>
