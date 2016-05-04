@@ -10,6 +10,7 @@
     function HistoryController (HistoryService) {
         var vm = this;
         vm.refresh = refresh;
+        vm.activate = activate;
 
         vm.refresh();
 
@@ -20,23 +21,13 @@
             });
         }
 
-        vm.activateRegistered = activateRegistered;
-        function activateRegistered() {
-            vm.registeredClass = 'btn-primary';
-            vm.canceledClass = 'btn-default';
+        function activate(objKey) {
             vm.items = [];
-            for (var key in vm.data.registered) {
-                vm.items.push({ key: key, value: vm.data.registered[key] });
-            }
-        }
-
-        vm.activateCanceled = activateCanceled;
-        function activateCanceled() {
-            vm.registeredClass = 'btn-default';
-            vm.canceledClass = 'btn-primary';
-            vm.items = [];
-            for (var key in vm.data.canceled) {
-                vm.items.push({ key: key, value: vm.data.registered[key] });
+            var obj = vm.data ? vm.data[objKey] : null;
+            if (obj) {
+                for (var key in obj) {
+                    vm.items.push({ key: key, value: obj[key] });
+                }
             }
         }
     }
