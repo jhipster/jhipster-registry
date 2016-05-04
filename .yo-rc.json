@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "3.0.0",
+    "jhipsterVersion": "3.1.0",
     "baseName": "jhipsterRegistry",
     "packageName": "io.github.jhipster.registry",
     "packageFolder": "io/github/jhipster/registry",
@@ -17,7 +17,9 @@
     "useSass": false,
     "enableTranslation": false,
     "applicationType": "microservice",
-    "testFrameworks": [
-    ]
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "skipClient": true,
+    "skipUserManagement": true
   }
 }

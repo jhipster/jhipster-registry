@@ -62,6 +62,9 @@
     <!-- build:js app/app.js  -->
     <!-- inject:js -->
     <script src="app/app.module.js"></script>
+    <script src="app/ssh/ssh.state.js"></script>
+    <script src="app/ssh/ssh.service.js"></script>
+    <script src="app/ssh/ssh.controller.js"></script>
     <script src="app/services/auth/principal.service.js"></script>
     <script src="app/services/auth/has-authority.directive.js"></script>
     <script src="app/services/auth/has-any-authority.directive.js"></script>
@@ -71,10 +74,18 @@
     <script src="app/layouts/navbar/navbar.controller.js"></script>
     <script src="app/layouts/navbar/active-link.directive.js"></script>
     <script src="app/layouts/error/error.state.js"></script>
+    <script src="app/home/home.state.js"></script>
+    <script src="app/home/home.controller.js"></script>
+    <script src="app/eureka/eureka.state.js"></script>
+    <script src="app/eureka/eureka.service.js"></script>
+    <script src="app/eureka/eureka.controller.js"></script>
+    <script src="app/config/config.state.js"></script>
+    <script src="app/config/config.service.js"></script>
+    <script src="app/config/config.controller.js"></script>
     <script src="app/components/util/truncate-words.filter.js"></script>
     <script src="app/components/util/truncate-characters.filter.js"></script>
-    <script src="app/components/util/sort.directive.js"></script>
     <script src="app/components/util/sort-by.directive.js"></script>
+    <script src="app/components/util/sort.directive.js"></script>
     <script src="app/components/util/parse-links.service.js"></script>
     <script src="app/components/util/pagination-util.service.js"></script>
     <script src="app/components/util/date-util.service.js"></script>
@@ -87,25 +98,27 @@
     <script src="app/components/form/uib-pager.config.js"></script>
     <script src="app/components/form/show-validation.directive.js"></script>
     <script src="app/components/form/pagination.constants.js"></script>
+    <script src="app/components/alert/alert-error.directive.js"></script>
     <script src="app/components/alert/alert.service.js"></script>
     <script src="app/components/alert/alert.directive.js"></script>
-    <script src="app/components/alert/alert-error.directive.js"></script>
     <script src="app/blocks/interceptor/notification.interceptor.js"></script>
     <script src="app/blocks/interceptor/errorhandler.interceptor.js"></script>
-    <script src="app/blocks/interceptor/auth.interceptor.js"></script>
     <script src="app/blocks/interceptor/auth-expired.interceptor.js"></script>
+    <script src="app/blocks/interceptor/auth.interceptor.js"></script>
     <script src="app/blocks/handlers/state.handler.js"></script>
     <script src="app/blocks/config/localstorage.config.js"></script>
     <script src="app/blocks/config/http.config.js"></script>
     <script src="app/blocks/config/compile.config.js"></script>
     <script src="app/blocks/config/alert.config.js"></script>
-    <script src="app/admin/logs/logs.state.js"></script>
-    <script src="app/admin/logs/logs.service.js"></script>
-    <script src="app/admin/logs/logs.controller.js"></script>
+    <script src="app/app.state.js"></script>
+    <script src="app/app.constants.js"></script>
     <script src="app/admin/metrics/metrics.state.js"></script>
     <script src="app/admin/metrics/metrics.service.js"></script>
     <script src="app/admin/metrics/metrics.modal.controller.js"></script>
     <script src="app/admin/metrics/metrics.controller.js"></script>
+    <script src="app/admin/logs/logs.state.js"></script>
+    <script src="app/admin/logs/logs.service.js"></script>
+    <script src="app/admin/logs/logs.controller.js"></script>
     <script src="app/admin/health/health.state.js"></script>
     <script src="app/admin/health/health.service.js"></script>
     <script src="app/admin/health/health.modal.controller.js"></script>
@@ -113,20 +126,7 @@
     <script src="app/admin/configuration/configuration.state.js"></script>
     <script src="app/admin/configuration/configuration.service.js"></script>
     <script src="app/admin/configuration/configuration.controller.js"></script>
-    <script src="app/home/home.state.js"></script>
-    <script src="app/home/home.controller.js"></script>
-    <script src="app/eureka/eureka.state.js"></script>
-    <script src="app/eureka/eureka.service.js"></script>
-    <script src="app/eureka/eureka.controller.js"></script>
-    <script src="app/config/config.state.js"></script>
-    <script src="app/config/config.service.js"></script>
-    <script src="app/config/config.controller.js"></script>
-    <script src="app/ssh/ssh.state.js"></script>
-    <script src="app/ssh/ssh.service.js"></script>
-    <script src="app/ssh/ssh.controller.js"></script>
     <script src="app/admin/admin.state.js"></script>
-    <script src="app/app.state.js"></script>
-    <script src="app/app.constants.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
 
