@@ -1,0 +1,34 @@
+<div>
+    <h2>Registry Replicas</h2>
+    <p>
+        <button type="button" class="btn btn-primary" ng-click="vm.refresh()"><span
+            class="glyphicon glyphicon-refresh"></span>&nbsp;<span>Refresh</span></button>
+    </p>
+    <div ng-show="vm.replicas.length <= 1">
+        <div class="alert alert-warning">
+            Alert! This registry is not replicated.
+        </div>
+    </div>
+
+
+    <div class="panel panel-default" >
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Replica</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="replica in vm.replicas">
+                        <td>
+                            <a ng-href="{{replica}}">{{replica}}</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

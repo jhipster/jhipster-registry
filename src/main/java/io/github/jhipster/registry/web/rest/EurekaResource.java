@@ -8,12 +8,12 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.codahale.metrics.annotation.Timed;
-import com.netflix.appinfo.*;
+import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.shared.Application;
-import com.netflix.discovery.shared.Pair;
 import com.netflix.eureka.EurekaServerContext;
 import com.netflix.eureka.EurekaServerContextHolder;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
+import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl;
 
 import io.github.jhipster.registry.web.rest.dto.EurekaDTO;
 
@@ -27,9 +27,9 @@ public class EurekaResource {
     private final Logger log = LoggerFactory.getLogger(EurekaResource.class);
 
     /**
-     * GET  / : get Eureka information
+     * GET  /eureka/applications : get Eureka applications information
      */
-    @RequestMapping(value = "/eureka",
+    @RequestMapping(value = "/eureka/applications",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -39,72 +39,68 @@ public class EurekaResource {
         return new ResponseEntity<>(eurekaDTO, HttpStatus.OK);
     }
 
-    private ArrayList<Map<String, Object>> getApplications() {
+    private List<Map<String, Object>> getApplications() {
         List<Application> sortedApplications = getRegistry().getSortedApplications();
         ArrayList<Map<String, Object>> apps = new ArrayList<>();
         for (Application app : sortedApplications) {
             LinkedHashMap<String, Object> appData = new LinkedHashMap<>();
             apps.add(appData);
             appData.put("name", app.getName());
-            Map<String, Integer> amiCounts = new HashMap<>();
-            Map<InstanceInfo.InstanceStatus, List<Pair<String, String>>> instancesByStatus = new HashMap<>();
-            Map<String, Integer> zoneCounts = new HashMap<>();
+            List<Map<String, String>> instances = new ArrayList<>();
             for (InstanceInfo info : app.getInstances()) {
-                String id = info.getId();
-                String url = info.getStatusPageUrl();
-                InstanceInfo.InstanceStatus status = info.getStatus();
-                String ami = "n/a";
-                String zone = "";
-                if (info.getDataCenterInfo().getName() == DataCenterInfo.Name.Amazon) {
-                    AmazonInfo dcInfo = (AmazonInfo) info.getDataCenterInfo();
-                    ami = dcInfo.get(AmazonInfo.MetaDataKey.amiId);
-                    zone = dcInfo.get(AmazonInfo.MetaDataKey.availabilityZone);
-                }
-                Integer count = amiCounts.get(ami);
-                if (count != null) {
-                    amiCounts.put(ami, count + 1);
-                } else {
-                    amiCounts.put(ami, 1);
-                }
-                count = zoneCounts.get(zone);
-                if (count != null) {
-                    zoneCounts.put(zone, count + 1);
-                } else {
-                    zoneCounts.put(zone, 1);
-                }
-                List<Pair<String, String>> list = instancesByStatus.get(status);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    instancesByStatus.put(status, list);
-                }
-                list.add(new Pair<>(id, url));
+                Map<String, String> instance = new HashMap<>();
+                instance.put("instanceId", info.getInstanceId());
+                instance.put("homePageUrl", info.getHomePageUrl());
+                instance.put("healthCheckUrl", info.getHealthCheckUrl());
+                instance.put("statusPageUrl", info.getStatusPageUrl());
+                instance.put("status", info.getStatus().name());
+                instances.add(instance);
             }
-            appData.put("amiCounts", amiCounts.entrySet());
-            appData.put("zoneCounts", zoneCounts.entrySet());
-            ArrayList<Map<String, Object>> instanceInfos = new ArrayList<>();
-            appData.put("instanceInfos", instanceInfos);
-            for (Iterator<Map.Entry<InstanceInfo.InstanceStatus, List<Pair<String, String>>>> iter = instancesByStatus
-                .entrySet().iterator(); iter.hasNext(); ) {
-                Map.Entry<InstanceInfo.InstanceStatus, List<Pair<String, String>>> entry = iter
-                    .next();
-                List<Pair<String, String>> value = entry.getValue();
-                InstanceInfo.InstanceStatus status = entry.getKey();
-                LinkedHashMap<String, Object> instanceData = new LinkedHashMap<>();
-                instanceInfos.add(instanceData);
-                instanceData.put("status", entry.getKey());
-                ArrayList<Map<String, Object>> instances = new ArrayList<>();
-                instanceData.put("instances", instances);
-                instanceData.put("isNotUp", status != InstanceInfo.InstanceStatus.UP);
-                for (Pair<String, String> p : value) {
-                    LinkedHashMap<String, Object> instance = new LinkedHashMap<>();
-                    instances.add(instance);
-                    instance.put("id", p.first());
-                    instance.put("url", p.second());
-                    instance.put("isHref", p.second().startsWith("http"));
-                }
-            }
+            appData.put("instances", instances);
         }
         return apps;
+    }
+
+    /**
+     * GET  /eureka/lastn : get Eureka registrations
+     */
+    @RequestMapping(value = "/eureka/lastn",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
+        Map<String, Map<Long, String>> lastn = new HashMap<>();
+        PeerAwareInstanceRegistryImpl registry = (PeerAwareInstanceRegistryImpl) getRegistry();
+        Map<Long, String> canceledMap = new HashMap<>();
+        registry.getLastNCanceledInstances().stream().forEach(
+            canceledInstance -> {
+                canceledMap.put(canceledInstance.first(), canceledInstance.second());
+            }
+        );
+        lastn.put("canceled", canceledMap);
+        Map<Long, String> registeredMap = new HashMap<>();
+        registry.getLastNRegisteredInstances().stream().forEach(
+            registeredInstance -> {
+                registeredMap.put(registeredInstance.first(), registeredInstance.second());
+            }
+        );
+        lastn.put("registered", registeredMap);
+        return new ResponseEntity<>(lastn, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /eureka/replicas : get Eureka replicas
+     */
+    @RequestMapping(value = "/eureka/replicas",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<String>> replicas() {
+        List<String> replicas = new ArrayList<>();
+        getServerContext().getPeerEurekaNodes().getPeerNodesView().stream().forEach(
+            node -> replicas.add(node.getServiceUrl())
+        );
+        return new ResponseEntity<>(replicas, HttpStatus.OK);
     }
 
     private PeerAwareInstanceRegistry getRegistry() {
