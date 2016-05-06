@@ -7,15 +7,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <a class="navbar-brand logo" ui-sref="home" ng-click="vm.collapseNavbar()">
+                <img class="logo-img" src="content/images/logo-jhipster.png"/>
+                <span>Registry</span> <span class="navbar-version">v{{VERSION}}</span>
+            </a>
         </div>
         <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
-                <li ui-sref-active="active">
-                    <a ui-sref="home" ng-click="vm.collapseNavbar()">
-                        <img src="content/images/logo-jhipster.png"/>
-                        <span class="hidden-sm">JHipster Registry <span class="navbar-version">v{{VERSION}}</span></span>
-                    </a>
-                </li>
                 <li ui-sref-active="active">
                     <a ui-sref="applications" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-cloud"></span>
@@ -82,9 +80,8 @@
                     </ul>
                 </li>
                 <li ui-sref-active="active" ng-switch-when="true">
-                    <a href="" ng-click="vm.logout()" id="logout">
-                        <span class="glyphicon glyphicon-log-out"></span>&nbsp;
-                        <span>Sign out</span>
+                    <a href="" ng-click="vm.logout()" id="logout" title="Sign out">
+                        <span class="glyphicon glyphicon-log-out"></span>
                     </a>
                 </li>
             </ul>
