@@ -18,7 +18,7 @@ import io.github.jhipster.registry.web.rest.dto.LoggerDTO;
  * Controller for view and managing Log Level at runtime.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/management/jhipster")
 public class LogsResource {
 
     @RequestMapping(value = "/logs",

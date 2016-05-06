@@ -27,7 +27,7 @@
         function logout () {
             collapseNavbar();
             Auth.logout();
-            $state.go('eureka');
+            $state.go('home');
         }
 
         function toggleNavbar () {

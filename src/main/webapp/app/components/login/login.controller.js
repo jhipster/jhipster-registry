@@ -39,7 +39,7 @@
             }).then(function () {
                 vm.authenticationError = false;
                 $uibModalInstance.close();
-                $state.go('eureka');
+                $state.go('applications');
 
                 $rootScope.$broadcast('authenticationSuccess');
 
