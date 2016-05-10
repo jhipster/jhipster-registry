@@ -5,9 +5,9 @@
         .module('JHipsterRegistryApp')
         .controller('ApplicationsController', ApplicationsController);
 
-    ApplicationsController.$inject = ['ApplicationsService', '$q'];
+    ApplicationsController.$inject = ['ApplicationsService'];
 
-    function ApplicationsController (ApplicationsService, $q) {
+    function ApplicationsController (ApplicationsService) {
         var vm = this;
         vm.application = '';
         vm.refresh = refresh;
@@ -27,14 +27,13 @@
 
         function show(app) {
             vm.application = app;
-            for (var i = 0; i < vm.data.applications.length; i++) {
-                var testApplication = vm.data.applications[i];
-                vm.data.applications[i].active = '';
-                if (testApplication.name == vm.application) {
-                    vm.instances = testApplication.instances;
-                    vm.data.applications[i].active = 'active';
+            angular.forEach(vm.data.applications, function (app) {
+                app.active = '';
+                if (app.name === vm.application) {
+                    vm.instances = app.instances;
+                    app.active = 'active';
                 }
-            }
+            });
         }
     }
 })();

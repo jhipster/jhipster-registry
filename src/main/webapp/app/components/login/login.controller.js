@@ -39,7 +39,7 @@
             }).then(function () {
                 vm.authenticationError = false;
                 $uibModalInstance.close();
-                $state.go('applications');
+                $state.go('home');
 
                 $rootScope.$broadcast('authenticationSuccess');
 

@@ -15,6 +15,11 @@
         <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
                 <li ui-sref-active="active">
+                    <a ui-sref="home" ng-click="vm.collapseNavbar()" title="Home">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </a>
+                </li>
+                <li ui-sref-active="active">
                     <a ui-sref="applications" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-cloud"></span>
                         <span class="hidden-sm">Applications</span>
