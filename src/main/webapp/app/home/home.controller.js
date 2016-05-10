@@ -40,7 +40,15 @@
                 vm.status = data.status;
             });
 
-            vm.apps = ApplicationsService.get();
+            ApplicationsService.get().$promise.then(function(data) {
+                vm.appInstances = [];
+                angular.forEach(data.applications, function (app) {
+                    angular.forEach(app.instances, function (inst) {
+                        inst.name = app.name;
+                        vm.appInstances.push(inst);
+                    });
+                });
+            });
 
             JhiHealthService.checkHealth().then(function (response) {
                 vm.healthData = JhiHealthService.transformHealthData(response);

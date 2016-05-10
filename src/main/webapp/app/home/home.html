@@ -54,7 +54,23 @@
                     <h3 class="panel-title">Instances</h3>
                 </div>
                 <div class="panel-body">
-                Panel content
+                {{vm.apps.applications}}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>App</th>
+                            <th>Instance ID</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="app in vm.appInstances">
+                            <td>{{ app.name }}</td>
+                            <td>{{ app.instanceId }}</td>
+                            <td><status-label status="app.status"></status-label></td>
+                        </tr>
+                    </tbody>
+                </table>
                 </div>
             </div>
         </div>
