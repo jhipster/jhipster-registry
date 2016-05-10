@@ -1,8 +1,8 @@
-<div ng-cloak>
+<div ng-cloak ng-switch="vm.isAuthenticated()">
     <h1 class="text-center">JHipster Registry <small>v{{VERSION}}</small></h1>
     <div class="row">
         <div class="col-md-12 text-center">
-            <div ng-switch="vm.isAuthenticated()">
+            <div>
                 <div class="alert alert-success" ng-switch-when="true">
                     You are logged in as user "{{vm.account.login}}".
                 </div>
@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-switch-when="true">
         <div class="col-sm-12 col-md-6">
             <div class="panel panel-success">
                 <div class="panel-heading">
@@ -51,7 +51,7 @@
         <div class="col-sm-12 col-md-6">
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Instances</h3>
+                    <h3 class="panel-title">Instances Registered</h3>
                 </div>
                 <div class="panel-body">
                 {{vm.apps.applications}}
@@ -75,7 +75,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-switch-when="true">
         <div class="col-sm-12 col-md-6">
             <div class="panel panel-success">
                 <div class="panel-heading">
