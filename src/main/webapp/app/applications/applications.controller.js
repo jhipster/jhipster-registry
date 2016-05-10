@@ -5,9 +5,9 @@
         .module('JHipsterRegistryApp')
         .controller('ApplicationsController', ApplicationsController);
 
-    ApplicationsController.$inject = ['ApplicationsService', '$q'];
+    ApplicationsController.$inject = ['ApplicationsService'];
 
-    function ApplicationsController (ApplicationsService, $q) {
+    function ApplicationsController (ApplicationsService) {
         var vm = this;
         vm.application = '';
         vm.refresh = refresh;

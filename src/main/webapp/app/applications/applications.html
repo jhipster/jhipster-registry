@@ -29,9 +29,7 @@
                                 <a ng-href="{{instance.homePageUrl}}" target="_blank">{{instance.instanceId}}</a>
                             </td>
                             <td>
-                                <span class="label label-default" ng-show="{{instance.status == 'UP'}}">{{instance.status}}</span>
-                                <span class="label label-warning" ng-show="{{instance.status != 'UP' && instance.status != 'DOWN'}}">{{instance.status}}</span>
-                                <span class="label label-danger" ng-show="{{instance.status == 'DOWN'}}">{{instance.status}}</span>
+                                <status-label status="instance.status"></status-label>
                             </td>
                         </tr>
                         </tbody>
