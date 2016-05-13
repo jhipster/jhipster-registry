@@ -19,9 +19,7 @@
             <tr ng-repeat="health in vm.healthData">
                 <td><span class="text-capitalize">{{ vm.baseName(health.name) }}</span> {{vm.subSystemName(health.name)}}</td>
                 <td class="text-center">
-                    <span class="label" ng-class="vm.getLabelClass(health.status)">
-                        {{ health.status }}
-                    </span>
+                    <status-label status="health.status"></status-label>
                 </td>
                 <td class="text-center">
                     <a class="hand" ng-click="vm.showHealth(health)" ng-show="health.details || health.error">

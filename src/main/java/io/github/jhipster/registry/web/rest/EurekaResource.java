@@ -1,24 +1,28 @@
 package io.github.jhipster.registry.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-
 import com.codahale.metrics.annotation.Timed;
 import com.netflix.appinfo.InstanceInfo;
+import com.netflix.config.ConfigurationManager;
 import com.netflix.discovery.shared.Application;
 import com.netflix.eureka.EurekaServerContext;
 import com.netflix.eureka.EurekaServerContextHolder;
-import com.netflix.eureka.cluster.PeerEurekaNode;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl;
-
+import com.netflix.eureka.resources.StatusResource;
+import com.netflix.eureka.util.StatusInfo;
 import io.github.jhipster.registry.web.rest.dto.EurekaDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 /**
  * Controller for viewing Eureka data.
@@ -113,6 +117,62 @@ public class EurekaResource {
         );
 
         return new ResponseEntity<>(replicas, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /eureka/status : get Eureka status
+     */
+    @RequestMapping(value = "/eureka/status",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<EurekaDTO> eurekaStatus() {
+
+        EurekaDTO eurekaDTO = new EurekaDTO();
+        eurekaDTO.setStatus(getEurekaStatus());
+        return new ResponseEntity<>(eurekaDTO, HttpStatus.OK);
+    }
+
+    private Map<String, Object> getEurekaStatus() {
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("time", new Date());
+        stats.put("currentTime", StatusResource.getCurrentTimeAsString());
+        stats.put("upTime", StatusInfo.getUpTime());
+        stats.put("environment", ConfigurationManager.getDeploymentContext()
+            .getDeploymentEnvironment());
+        stats.put("datacenter", ConfigurationManager.getDeploymentContext()
+            .getDeploymentDatacenter());
+
+        PeerAwareInstanceRegistry registry = getRegistry();
+
+        stats.put("isBelowRenewThreshold", registry.isBelowRenewThresold() == 1);
+
+        populateInstanceInfo(stats);
+
+        return stats;
+    }
+
+    private void populateInstanceInfo(Map<String, Object> model) {
+
+        StatusInfo statusInfo;
+        try {
+            statusInfo = new StatusResource().getStatusInfo();
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            statusInfo = StatusInfo.Builder.newBuilder().isHealthy(false).build();
+        }
+        if(statusInfo !=null && statusInfo.getGeneralStats() !=null) {
+            model.put("generalStats", statusInfo.getGeneralStats());
+        }
+        if(statusInfo !=null && statusInfo.getInstanceInfo() !=null) {
+            InstanceInfo instanceInfo = statusInfo.getInstanceInfo();
+            Map<String, String> instanceMap = new HashMap<>();
+            instanceMap.put("ipAddr", instanceInfo.getIPAddr());
+            instanceMap.put("status", instanceInfo.getStatus().toString());
+            model.put("instanceInfo", instanceMap);
+        }
     }
 
     private PeerAwareInstanceRegistry getRegistry() {
