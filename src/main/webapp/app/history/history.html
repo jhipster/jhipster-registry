@@ -1,0 +1,37 @@
+<div>
+    <h2>Instances history</h2>
+    <p>
+        <button type="button" class="btn btn-primary" ng-click="vm.refresh()"><span
+            class="glyphicon glyphicon-refresh"></span>&nbsp;<span>Refresh</span></button>
+    </p>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <uib-tabset active="active">
+                <uib-tab index="0" heading="Last registered leases" active="true" ng-click="vm.activate('registered')">
+                </uib-tab>
+                <uib-tab index="1" heading="Last canceled leases" ng-click="vm.activate('canceled')">
+                </uib-tab>
+            </uib-tabset>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Instance</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="instance in vm.items | orderBy:'-key'">
+                        <td>
+                            {{instance.key | date:'medium'}}
+                        </td>
+                        <td>
+                            {{instance.value}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

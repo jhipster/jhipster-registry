@@ -1,0 +1,11 @@
+os:
+  - linux
+services:
+  - docker
+install:
+  - docker build -t jhipster/jhipster-registry:travis .
+  - docker run --name jhipster-registry -p 8761:8761 -d -t jhipster/jhipster-registry:travis
+script:
+  - sleep 30
+  - docker ps
+  - docker logs jhipster-registry

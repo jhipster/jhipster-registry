@@ -1,0 +1,134 @@
+<div ng-cloak ng-switch="vm.isAuthenticated()">
+    <h1 class="text-center">JHipster Registry <small>v{{VERSION}}</small></h1>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div>
+                <div class="alert alert-success" ng-switch-when="true">
+                    You are logged in as user "{{vm.account.login}}".
+                </div>
+
+                <div class="alert alert-warning" ng-switch-when="false">
+                    You are not authenticated.
+                    <a class="alert-link" href="" ng-click="vm.login()">Please sign in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-switch-when="true">
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">System Status</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td>Environment</td>
+                                <td>{{vm.status.environment}}</td>
+                            </tr>
+                            <tr>
+                                <td>Data Center</td>
+                                <td>{{vm.status.datacenter}}</td>
+                            </tr>
+                            <tr>
+                                <td>Current Time</td>
+                                <td>{{vm.status.currentTime}}</td>
+                            </tr>
+                            <tr>
+                                <td>System Uptime</td>
+                                <td>{{vm.status.upTime}}</td>
+                            </tr>
+                            <tr>
+                                <td>Below Renew Threshold</td>
+                                <td>{{vm.status.isBelowRenewThreshold}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Instances Registered</h3>
+                </div>
+                <div class="panel-body">
+                {{vm.apps.applications}}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>App</th>
+                            <th>Instance ID</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="app in vm.appInstances">
+                            <td>{{ app.name }}</td>
+                            <td>{{ app.instanceId }}</td>
+                            <td><status-label status="app.status"></status-label></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-switch-when="true">
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">General Info</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td>Total Available Memory</td>
+                                <td>{{vm.status.generalStats['total-avail-memory']}}</td>
+                            </tr>
+                            <tr>
+                                <td>Current Memory Usage</td>
+                                <td>{{vm.status.generalStats['current-memory-usage']}}</td>
+                            </tr>
+                            <tr>
+                                <td>Number of CPU</td>
+                                <td>{{vm.status.generalStats['num-of-cpus']}}</td>
+                            </tr>
+                            <tr>
+                                <td>Instance Ip Address</td>
+                                <td>{{vm.status.instanceInfo.ipAddr}}</td>
+                            </tr>
+                            <tr>
+                                <td>Instance Status</td>
+                                <td>
+                                    <status-label status="vm.status.instanceInfo.status"></status-label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Health</h3>
+                </div>
+                <div class="panel-body">
+                    <table id="healthCheck" class="table table-striped">
+                        <tbody>
+                            <tr ng-repeat="health in vm.healthData">
+                                <td><span class="text-capitalize">{{ vm.baseName(health.name) }}</span> {{vm.subSystemName(health.name)}}</td>
+                                <td class="text-center">
+                                    <status-label status="health.status"></status-label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

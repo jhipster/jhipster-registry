@@ -25,17 +25,21 @@ server:
     port: 8761
 
 eureka:
-    instance:
-        appname: registry
-        hostname: localhost
-        prefer-ip-address: true
-    server:
-        enable-self-preservation: true
-    client:
-        registerWithEureka: false
-        fetchRegistry: false
+    dashboard:
+      path: /registry
+
+management:
+    context-path: /management
 
 spring:
     application:
         name: jhipster-registry
+    mvc:
+        favicon:
+            enabled: false
+    thymeleaf:
+        mode: XHTML
+
+
+
 

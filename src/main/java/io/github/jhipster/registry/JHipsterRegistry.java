@@ -13,16 +13,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 import io.github.jhipster.registry.config.Constants;
+import io.github.jhipster.registry.config.JHipsterProperties;
 
 @SpringBootApplication
 @EnableEurekaServer
 @EnableConfigServer
+@EnableConfigurationProperties({ JHipsterProperties.class })
 public class JHipsterRegistry {
 
     private static final Logger log = LoggerFactory.getLogger(JHipsterRegistry.class);
@@ -69,13 +72,13 @@ public class JHipsterRegistry {
     }
 
     /**
-     * If no profile has been configured, set by default the "prod" and "native" profile.
+     * If no profile has been configured, set by default the "dev" and "native" profile.
      */
     private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active") &&
             !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
 
-            app.setAdditionalProfiles(Constants.SPRING_PROFILE_PRODUCTION, Constants.SPRING_PROFILE_NATIVE);
+            app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT, Constants.SPRING_PROFILE_NATIVE);
         }
     }
 }

@@ -1,0 +1,95 @@
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-click="vm.toggleNavbar()">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand logo" ui-sref="home" ng-click="vm.collapseNavbar()">
+                <img class="logo-img" src="content/images/logo-jhipster.png"/>
+                <span>Registry</span> <span class="navbar-version">v{{VERSION}}</span>
+            </a>
+        </div>
+        <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
+            <ul class="nav navbar-nav navbar-right">
+                <li ui-sref-active="active">
+                    <a ui-sref="home" ng-click="vm.collapseNavbar()" title="Home">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="applications" ng-click="vm.collapseNavbar()">
+                        <span class="glyphicon glyphicon-cloud"></span>
+                        <span class="hidden-sm">Applications</span>
+                    </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="history" ng-click="vm.collapseNavbar()">
+                        <span class="glyphicon glyphicon-hourglass"></span>
+                        <span class="hidden-sm">History</span>
+                    </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="replicas" ng-click="vm.collapseNavbar()">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="hidden-sm">Replicas</span>
+                    </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="config" ng-click="vm.collapseNavbar()">
+                        <span class="glyphicon glyphicon-leaf"></span>
+                        <span class="hidden-sm">Configuration</span>
+                    </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="ssh" ng-click="vm.collapseNavbar()">
+                        <span class="glyphicon glyphicon-lock"></span>
+                        <span class="hidden-sm">SSH</span>
+                    </a>
+                </li>
+                <li ng-class="{active: vm.$state.includes('admin')}"  ng-switch-when="true" has-authority="ROLE_ADMIN" uib-dropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="admin-menu">
+                        <span>
+                            <span class="glyphicon glyphicon-tower"></span>
+                            <span class="hidden-sm">Administration</span>
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu" uib-dropdown-menu>
+                        <li ui-sref-active="active">
+                            <a ui-sref="jhi-metrics" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-dashboard"></span>&nbsp;
+                                <span>Metrics</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="jhi-health" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-heart"></span>&nbsp;
+                                <span>Health</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="jhi-configuration" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-list-alt"></span>&nbsp;
+                                <span>Configuration</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="logs" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-tasks"></span>&nbsp;
+                                <span>Logs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li ui-sref-active="active" ng-switch-when="true">
+                    <a href="" ng-click="vm.logout()" id="logout" title="Sign out">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,121 @@
+<div>
+    <h2>Registry Replicas</h2>
+    <p>
+        <button type="button" class="btn btn-primary" ng-click="vm.refresh()"><span
+            class="glyphicon glyphicon-refresh"></span>&nbsp;<span>Refresh</span></button>
+    </p>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Replicas</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="replica in vm.replicas">
+                        <td>
+                            <a ng-href="http://{{replica}}">{{replica}}</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center pad" >
+        <a ng-click="vm.showMore = !vm.showMore" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-down"></span> show more</a>
+    </div>
+    <div uib-collapse="vm.showMore">
+        <h3><span class="glyphicon glyphicon-info-sign"></span> Configuring replication</h3>
+        <p>
+            Here is the Spring Cloud Netflix official documentation for configuring replication:
+        </p>
+        <ul>
+            <li>
+                <a href="http://cloud.spring.io/spring-cloud-static/spring-cloud.html#_standalone_mode" target="_blank">
+                Standalone mode (no replication)
+                </a>
+            </li>
+            <li>
+                <a href="http://cloud.spring.io/spring-cloud-static/spring-cloud.html#_peer_awareness" target="_blank">
+                    Peer aware mode (replication between peers)
+                </a>
+            </li>
+        </ul>
+        <h4>Standalone mode</h4>
+        <p>
+            By default, the JHipster Registry works in standalone mode: you will see one replica in this screen, which the current standalone
+            registry: the address of the replica should be the same as the address of your server.
+        </p>
+        <h4>Peer aware mode</h4>
+        <p>
+            The JHipster Registry also works in "peer aware mode", and provides for this two pre-defined Spring profiles, named "peer1" and "peer2".
+            Those profiles are mostly here as working examples, as you will probably want something different in production.
+        </p>
+        <p>
+            Those profiles trigger some specific Spring Boot configurations, which are available in your registry's
+            <code>src/main/resources/config</code> folder.
+        </p>
+        <p>
+            Those profiles expect to have 2 different hosts, one for each replica: this is required by Eureka, which expects to have replicas
+            on different servers. If you want to run this on your local machine, you need to point those 2 hostnames to your local address, for
+            example on a Unix/MacOSX system, edit <code>/etc/hosts</code> to add those lines:
+            <pre># Eureka peers
+127.0.0.1	eureka-peer-1
+127.0.0.1	eureka-peer-2</pre>
+        </p>
+        <p>
+            Running a peer-aware development cluster is then just a matter of running:
+            <ul>
+                <li><code>./mvnw -Pdev,git,peer1</code></li>
+                <li><code>./mvnw -Pdev,git,peer2</code></li>
+            </ul>
+        </p>
+        <p>
+            Here is a sample working configuration for "peer1". Note that its "serviceUrl" points to "peer2":
+        <div hljs hljs-language="yaml">server:
+    port: 8761
+
+eureka:
+    instance:
+        hostname: eureka-peer-1
+    server:
+        enable-self-preservation: true
+        registry-sync-retry-wait-ms: 500
+        a-sgcache-expiry-timeout-ms: 60000
+        eviction-interval-timer-in-ms: 30000
+        peer-eureka-nodes-update-interval-ms: 30000
+        renewal-threshold-update-interval-ms: 15000
+    client:
+        fetch-registry: true
+        register-with-eureka: true
+        serviceUrl:
+            defaultZone: http://admin:admin@eureka-peer-2:8762/eureka/</div>
+        </p>
+        <p>
+            Here is the same configuration for "peer2", which has a "serviceUrl" pointing to "peer1":
+        <div hljs hljs-language="yaml">server:
+    port: 8762
+
+eureka:
+    instance:
+        hostname: eureka-peer-2
+    server:
+        enable-self-preservation: true
+        registry-sync-retry-wait-ms: 500
+        a-sgcache-expiry-timeout-ms: 60000
+        eviction-interval-timer-in-ms: 30000
+        peer-eureka-nodes-update-interval-ms: 30000
+        renewal-threshold-update-interval-ms: 15000
+    client:
+        fetch-registry: true
+        register-with-eureka: true
+        serviceUrl:
+            defaultZone: http://admin:admin@eureka-peer-1:8761/eureka/</div>
+        </p>
+    </div>
+</div>

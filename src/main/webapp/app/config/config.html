@@ -1,0 +1,15 @@
+<div>
+    <h2>Spring Cloud Configuration</h2>
+
+    <p>
+        <form name="form" role="form" novalidate ng-submit="vm.refresh()" show-validation>
+            <strong>Application: </strong><input type="text" ng-model="vm.application" required class="form-control">
+            <strong>Profile: </strong><input type="text" ng-model="vm.profile" required class="form-control">
+            <button type="button" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="vm.refresh()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span>Refresh</span></button>
+        </form>
+    </p>
+
+    <h3>Configuration</h3>
+
+    <div hljs hljs-source="vm.data" hljs-language="yaml"></div>
+</div>

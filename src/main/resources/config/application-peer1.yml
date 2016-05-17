@@ -1,0 +1,41 @@
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration will be overriden by the Spring profile you use,
+# for example application-dev.yml if you use the "dev" profile.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+# ===================================================================
+# Eureka server configuration (eureka.server.*)
+#
+# Full list of properties with default values at:
+# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
+#
+# Documentation at:
+# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
+# ===================================================================
+
+server:
+    port: 8761
+
+eureka:
+    instance:
+        hostname: eureka-peer-1
+    server:
+        enable-self-preservation: true
+        registry-sync-retry-wait-ms: 500
+        a-sgcache-expiry-timeout-ms: 60000
+        eviction-interval-timer-in-ms: 30000
+        peer-eureka-nodes-update-interval-ms: 30000
+        renewal-threshold-update-interval-ms: 15000
+    client:
+        fetch-registry: true
+        register-with-eureka: true
+        serviceUrl:
+            defaultZone: http://admin:${security.user.password:admin}@eureka-peer-2:8762/eureka/

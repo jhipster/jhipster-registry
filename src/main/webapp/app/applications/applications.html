@@ -1,0 +1,41 @@
+<div>
+    <p>
+        <button type="button" class="btn btn-primary" ng-click="vm.refresh()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span>Refresh</span></button>
+    </p>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="col-md-3">
+                <h3>Applications</h3>
+                <ul class="list-group">
+                    <li class="list-group-item {{app.active}}" ng-repeat="app in vm.data.applications | orderBy:'name'" ng-click="vm.show(app.name)"><span class="glyphicon glyphicon-alert" ng-show="{{(app.instances | filter:{status:'UP'}).length < app.instances.length}}">&nbsp;</span> {{app.name}}
+                        <span class="badge">{{(app.instances | filter:{status:'UP'}).length}} / {{app.instances.length}}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <h3>Instances</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="instance in vm.instances">
+                            <td>
+                                <a ng-href="{{instance.homePageUrl}}" target="_blank">{{instance.instanceId}}</a>
+                            </td>
+                            <td>
+                                <status-label status="instance.status"></status-label>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
