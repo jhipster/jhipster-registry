@@ -5,14 +5,13 @@
         .module('JHipsterRegistryApp')
         .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ENV', 'LoginService'];
+    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'LoginService'];
 
-    function NavbarController ($state, Auth, Principal, ENV, LoginService) {
+    function NavbarController ($state, Auth, Principal, LoginService) {
         var vm = this;
 
         vm.isNavbarCollapsed = true;
         vm.isAuthenticated = Principal.isAuthenticated;
-        vm.inProduction = ENV === 'prod';
         vm.login = login;
         vm.logout = logout;
         vm.toggleNavbar = toggleNavbar;

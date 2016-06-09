@@ -1,30 +1,27 @@
 package io.github.jhipster.registry;
 
-import io.github.jhipster.registry.config.Constants;
-import io.github.jhipster.registry.config.DefaultProfileUtil;
-import io.github.jhipster.registry.config.JHipsterProperties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.autoconfigure.*;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.env.Environment;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
-@ComponentScan
-@EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class })
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.config.server.EnableConfigServer;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.core.env.Environment;
+
+import io.github.jhipster.registry.config.*;
+
+@SpringBootApplication
+@EnableEurekaServer
+@EnableConfigServer
 @EnableConfigurationProperties({ JHipsterProperties.class })
-@EnableEurekaClient
 public class JHipsterRegistry {
 
     private static final Logger log = LoggerFactory.getLogger(JHipsterRegistry.class);
