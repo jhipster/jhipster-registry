@@ -1,5 +1,7 @@
 package io.github.jhipster.registry.security.jwt;
 
+import io.github.jhipster.registry.config.JHipsterProperties;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -14,7 +16,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import io.github.jhipster.registry.config.JHipsterProperties;
 import io.jsonwebtoken.*;
 
 @Component
