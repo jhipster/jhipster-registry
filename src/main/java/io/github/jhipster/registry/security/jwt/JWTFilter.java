@@ -53,7 +53,7 @@ public class JWTFilter extends GenericFilterBean {
             String jwt = bearerToken.substring(7, bearerToken.length());
             return jwt;
         }
-
+        
         return null;
     }
 }

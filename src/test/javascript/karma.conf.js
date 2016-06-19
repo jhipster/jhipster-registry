@@ -57,12 +57,7 @@ module.exports = function (config) {
             './**/*.js': sourcePreprocessors
         },
 
-        reporters: ['dots', 'jenkins', 'coverage', 'progress'],
-
-        jenkinsReporter: {
-            
-            outputFile: 'target/test-results/karma/TESTS-results.xml'
-        },
+        reporters: ['dots', 'coverage', 'progress'],
 
         coverageReporter: {
             
