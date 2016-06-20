@@ -30,6 +30,12 @@ public class JHipsterProperties {
         return metrics;
     }
 
+    private final Ribbon ribbon = new Ribbon();
+
+    public Ribbon getRibbon() {
+        return ribbon;
+    }
+
     public static class Http {
 
         private final Cache cache = new Cache();
@@ -290,6 +296,19 @@ public class JHipsterProperties {
             public boolean isEnabled() { return enabled; }
 
             public void setEnabled(boolean enabled) { this.enabled = enabled; }
+        }
+    }
+
+    public static class Ribbon {
+
+        private String[] displayOnActiveProfiles;
+
+        public String[] getDisplayOnActiveProfiles() {
+            return displayOnActiveProfiles;
+        }
+
+        public void setDisplayOnActiveProfiles(String[] displayOnActiveProfiles) {
+            this.displayOnActiveProfiles = displayOnActiveProfiles;
         }
     }
 }
