@@ -1,14 +1,17 @@
-FROM alpine:3.3
+FROM java:openjdk-8-jdk-alpine
 
-ENV JAVA_HOME=/usr/lib/jvm/default-jvm
-RUN apk add --no-cache openjdk8 && \
-    ln -sf "${JAVA_HOME}/bin/" "/usr/bin/"
+# Add OpenSSH
+RUN apk update && apk add openssh
 
 # add directly the war
-ENV SPRING_PROFILES=dev
 ADD *.war /jhipster-registry.war
 
 RUN sh -c 'touch /jhipster-registry.war'
 EXPOSE 8761
 VOLUME /tmp
-CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.war","--spring.profiles.active=${SPRING_PROFILES}"]
+
+ENV SPRING_PROFILES_ACTIVE=prod,native
+ENV GIT_URI=https://github.com/jhipster/jhipster-registry/
+ENV GIT_SEARCH_PATHS=central-config
+
+CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.war","--spring.cloud.config.server.git.uri=${GIT_URI}","--spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS}"]
