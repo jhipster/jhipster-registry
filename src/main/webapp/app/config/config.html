@@ -3,9 +3,11 @@
 
     <p>
         <form name="form" role="form" novalidate ng-submit="vm.refresh()" show-validation>
-            <strong>Application: </strong><input type="text" ng-model="vm.application" required class="form-control">
+            <strong>Application: </strong>
+            <input type="text" ng-model="vm.application" required class="form-control" uib-typeahead="app for app in vm.applicationList" typeahead-min-length="0" ng-click="vm.clearApplication()">
+
             <strong>Profile: </strong><input type="text" ng-model="vm.profile" required class="form-control">
-            <p ng-hide="isNative">
+            <p ng-hide="vm.isNative">
                 <strong>Git Label: </strong>
                 <input type="text" ng-model="vm.label" required class="form-control">
             </p>

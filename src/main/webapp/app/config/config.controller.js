@@ -5,14 +5,15 @@
         .module('JHipsterRegistryApp')
         .controller('ConfigController', ConfigController);
 
-    ConfigController.$inject = ['ConfigService', 'ProfileService'];
+    ConfigController.$inject = ['ConfigService', 'ProfileService', 'ApplicationsService'];
 
-    function ConfigController (ConfigService, ProfileService) {
+    function ConfigController (ConfigService, ProfileService, ApplicationsService) {
         var vm = this;
         vm.application = "application";
         vm.profile = "prod";
         vm.label = "master";
         vm.activeRegistryProfiles = [];
+        vm.isNative = true;
         vm.refresh = refresh;
         vm.load = load;
 
@@ -34,6 +35,13 @@
                 vm.data = response;
             }).catch(function(){
                 vm.data = "";
+            });
+
+            ApplicationsService.get().$promise.then(function(data) {
+                vm.applicationList = ["application"];
+                data.applications.forEach(function (application) {
+                    vm.applicationList.push(application.name.toLowerCase())
+                });
             });
         }
     }
