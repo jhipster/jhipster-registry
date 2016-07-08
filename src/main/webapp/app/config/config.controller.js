@@ -11,6 +11,7 @@
         var vm = this;
         vm.application = "application";
         vm.profile = "prod";
+        vm.label = "master";
         vm.activeRegistryProfiles = [];
         vm.refresh = refresh;
         vm.load = load;
@@ -29,8 +30,10 @@
         }
 
         function refresh () {
-            ConfigService.getConfig(vm.application, vm.profile).then(function (response) {
+            ConfigService.getConfig(vm.application, vm.profile, vm.label).then(function (response) {
                 vm.data = response;
+            }).catch(function(){
+                vm.data = "";
             });
         }
     }
