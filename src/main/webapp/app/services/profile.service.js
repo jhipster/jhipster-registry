@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('testswagApp')
+        .module('JHipsterRegistryApp')
         .factory('ProfileService', ProfileService);
 
     ProfileService.$inject = ['$q', '$http'];
@@ -21,12 +21,7 @@
             if (angular.isUndefined(dataPromise)) {
                 dataPromise = $http.get('api/profile-info').then(function(result) {
                     if (result.data.activeProfiles) {
-                        var response = {};
-                        response.activeProfiles = result.data.activeProfiles;
-                        response.ribbonEnv = result.data.ribbonEnv;
-                        response.inProduction = result.data.activeProfiles.indexOf("prod") !== -1;
-                        response.swaggerEnabled = result.data.activeProfiles.indexOf("swagger") !== -1;
-                        return response;
+                        return result.data;
                     }
                 });
             }

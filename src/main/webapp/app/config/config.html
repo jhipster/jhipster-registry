@@ -10,6 +10,28 @@
     </p>
 
     <h3>Configuration</h3>
-
     <div hljs hljs-source="vm.data" hljs-language="yaml"></div>
+
+    <h3>Configuration Source Information</h3>
+
+    <table class="table table-striped ">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th ng-if="!vm.isNative">Repository URI</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-if="vm.isNative" >
+            <td>Local Filesystem</td>
+            <td>{{ vm.nativeSearchLocation }}</td>
+        </tr>
+        <tr ng-if="!vm.isNative" >
+            <td>Git</td>
+            <td>{{ vm.gitUri }}</td>
+            <td>/{{ vm.gitSearchLocation }}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
