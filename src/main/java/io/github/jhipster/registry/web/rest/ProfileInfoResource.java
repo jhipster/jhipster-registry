@@ -1,16 +1,15 @@
 package io.github.jhipster.registry.web.rest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import io.github.jhipster.registry.config.JHipsterProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.jhipster.registry.config.JHipsterProperties;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -22,9 +21,18 @@ public class ProfileInfoResource {
     @Inject
     private JHipsterProperties jHipsterProperties;
 
+    @Value("${spring.cloud.config.server.native.search-locations:}")
+    private String nativeSearchLocation;
+
+    @Value("${spring.cloud.config.server.git.uri:}")
+    private String gitUri;
+
+    @Value("${spring.cloud.config.server.git.search-paths:}")
+    private String gitSearchLocation;
+
     @RequestMapping("/profile-info")
     public ProfileInfoResponse getActiveProfiles() {
-        return new ProfileInfoResponse(env.getActiveProfiles(), getRibbonEnv());
+        return new ProfileInfoResponse(env.getActiveProfiles(), getRibbonEnv(), nativeSearchLocation, gitUri, gitSearchLocation);
     }
 
     private String getRibbonEnv() {
@@ -45,14 +53,20 @@ public class ProfileInfoResource {
         return null;
     }
 
-    class ProfileInfoResponse {
-
+    private class ProfileInfoResponse {
         public String[] activeProfiles;
         public String ribbonEnv;
+        public String nativeSearchLocation;
+        public String gitUri;
+        public String gitSearchLocation;
 
-        ProfileInfoResponse(String[] activeProfiles,String ribbonEnv) {
-            this.activeProfiles=activeProfiles;
-            this.ribbonEnv=ribbonEnv;
+        ProfileInfoResponse(String[] activeProfiles, String ribbonEnv, String nativeSearchLocation, String gitUri,
+                            String gitSearchLocation) {
+            this.activeProfiles = activeProfiles;
+            this.ribbonEnv = ribbonEnv;
+            this.nativeSearchLocation = nativeSearchLocation;
+            this.gitUri = gitUri;
+            this.gitSearchLocation = gitSearchLocation;
         }
     }
 }

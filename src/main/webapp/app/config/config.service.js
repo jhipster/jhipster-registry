@@ -15,8 +15,8 @@
 
         return config;
 
-        function getConfig(application, profile) {
-            return $http.get('config/' + application + '-' + profile + '.yml').then(function (response) {
+        function getConfig(application, profile, label) {
+            return $http.get('config/' + label + '/' + application + '-' + profile + '.yml').then(function (response) {
                 return response.data;
             });
         }
