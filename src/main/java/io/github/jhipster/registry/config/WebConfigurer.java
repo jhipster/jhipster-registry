@@ -7,7 +7,6 @@ import java.util.EnumSet;
 import javax.inject.Inject;
 import javax.servlet.*;
 
-import org.apache.catalina.webresources.StandardRoot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,25 +61,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
         mappings.add("json", "text/html;charset=utf-8");
         container.setMimeMappings(mappings);
-        customizeTomcat(container);
         // When running in an IDE or with ./mvnw spring-boot:run, set location of the static web assets.
         setLocationForStaticAssets(container);
-    }
-
-    /**
-     * Customize Tomcat configuration.
-     */
-    private void customizeTomcat(ConfigurableEmbeddedServletContainer container) {
-        if (container instanceof TomcatEmbeddedServletContainerFactory) {
-            TomcatEmbeddedServletContainerFactory tomcatFactory = (TomcatEmbeddedServletContainerFactory) container;
-            tomcatFactory.addContextCustomizers((TomcatContextCustomizer) context -> {
-                // See https://github.com/jhipster/generator-jhipster/issues/3995
-                StandardRoot resources = new StandardRoot();
-                resources.setCacheMaxSize(40960);
-                resources.setCacheObjectMaxSize(2048);
-                context.setResources(resources);
-            });
-        }
     }
 
     private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
