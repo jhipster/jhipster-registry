@@ -40,7 +40,9 @@
             ApplicationsService.get().$promise.then(function(data) {
                 vm.applicationList = ["application"];
                 data.applications.forEach(function (application) {
-                    vm.applicationList.push(application.name.toLowerCase())
+                    var instanceId = application.instances[0].instanceId;
+                    var applicationName = instanceId.indexOf(':') == -1 ? application.name.toLowerCase() : instanceId.substr(0, instanceId.indexOf(':'));
+                    vm.applicationList.push(applicationName);
                 });
             });
         }
