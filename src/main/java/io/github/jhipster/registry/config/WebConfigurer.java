@@ -1,6 +1,7 @@
 package io.github.jhipster.registry.config;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.EnumSet;
 import javax.inject.Inject;
@@ -10,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.*;
+import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
@@ -48,7 +51,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }
 
     /**
-     * Set up Mime types and, if needed, set the document root.
+     * Customize the Tomcat engine: Mime types, the document root, the cache.
      */
     @Override
     public void customize(ConfigurableEmbeddedServletContainer container) {
@@ -58,17 +61,35 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
         mappings.add("json", "text/html;charset=utf-8");
         container.setMimeMappings(mappings);
-
         // When running in an IDE or with ./mvnw spring-boot:run, set location of the static web assets.
+        setLocationForStaticAssets(container);
+    }
+
+    private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
         File root;
+        String prefixPath = resolvePathPrefix();
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            root = new File("target/www/");
+            root = new File(prefixPath + "target/www/");
         } else {
-            root = new File("src/main/webapp/");
+            root = new File(prefixPath + "src/main/webapp/");
         }
         if (root.exists() && root.isDirectory()) {
             container.setDocumentRoot(root);
         }
+    }
+
+    /**
+     *  Resolve path prefix to static resources.
+     */
+    private String resolvePathPrefix() {
+        String fullExecutablePath = this.getClass().getResource("").getPath();
+        String rootPath = Paths.get(".").toUri().normalize().getPath();
+        String extractedPath = fullExecutablePath.replace(rootPath, "");
+        int extractionEndIndex = extractedPath.indexOf("target/");
+        if(extractionEndIndex <= 0) {
+            return "";
+        }
+        return extractedPath.substring(0, extractionEndIndex);
     }
 
     /**

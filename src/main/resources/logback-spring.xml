@@ -32,6 +32,7 @@
     <logger name="com.netflix" level="INFO"/>
     <logger name="com.netflix.discovery" level="INFO"/>
     <logger name="com.ryantenney" level="WARN"/>
+    <logger name="io.undertow" level="WARN"/>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.springframework" level="WARN"/>
