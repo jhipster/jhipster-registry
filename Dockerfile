@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jdk-alpine
+FROM openjdk:8-jre-alpine
 
 # Add OpenSSH
 RUN apk update && apk add openssh
