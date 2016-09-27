@@ -52,7 +52,8 @@
         - ./ssh/:/root/.ssh/
       environment:
         - SPRING_PROFILES_ACTIVE=prod
-        - GIT_URI=ssh:git@github.com:jhipster/test-registry.git
+        - GIT_URI=git@github.com:jhipster/jhipster-registry.git
+        - GIT_SEARCH_PATHS=central-config
       ports:
         - 8761:8761
         </div>
