@@ -28,7 +28,9 @@ eureka:
     instance:
         hostname: eureka-peer-1
     server:
-        enable-self-preservation: true
+        # see discussion about enable-self-preservation:
+        # https://github.com/jhipster/generator-jhipster/issues/3654
+        enable-self-preservation: false
         registry-sync-retry-wait-ms: 500
         a-sgcache-expiry-timeout-ms: 60000
         eviction-interval-timer-in-ms: 30000

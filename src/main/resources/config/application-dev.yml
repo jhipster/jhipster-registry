@@ -17,7 +17,9 @@ eureka:
         appname: registry
         prefer-ip-address: true
     server:
-        enable-self-preservation: true
+        # see discussion about enable-self-preservation:
+        # https://github.com/jhipster/generator-jhipster/issues/3654
+        enable-self-preservation: false
     client:
         fetch-registry: false
         register-with-eureka: false
