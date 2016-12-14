@@ -1,10 +1,9 @@
 package io.github.jhipster.registry.web.rest;
 
-import java.util.Collections;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
+import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.registry.security.jwt.JWTConfigurer;
+import io.github.jhipster.registry.security.jwt.TokenProvider;
+import io.github.jhipster.registry.web.rest.dto.LoginDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,14 +11,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.Collections;
 
-import io.github.jhipster.registry.security.jwt.JWTConfigurer;
-import io.github.jhipster.registry.security.jwt.TokenProvider;
-import io.github.jhipster.registry.web.rest.dto.LoginDTO;
-
+/**
+ * Controller for authenticate users.
+ */
 @RestController
 @RequestMapping("/api")
 public class UserJWTController {
@@ -30,7 +34,7 @@ public class UserJWTController {
     @Inject
     private AuthenticationManager authenticationManager;
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    @PostMapping("/authenticate")
     @Timed
     public ResponseEntity<?> authorize(@Valid @RequestBody LoginDTO loginDTO, HttpServletResponse response) {
 

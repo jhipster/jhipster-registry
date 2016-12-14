@@ -3,7 +3,7 @@ package io.github.jhipster.registry.web.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Object to return as body in JWT Authentication
+ * Object to return as body in JWT Authentication.
  */
 public class JWTToken {
     private String idToken;

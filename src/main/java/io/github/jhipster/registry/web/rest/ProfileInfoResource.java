@@ -3,6 +3,7 @@ package io.github.jhipster.registry.web.rest;
 import io.github.jhipster.registry.config.JHipsterProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Resource to return information about the currently running Spring profiles.
+ */
 @RestController
 @RequestMapping("/api")
 public class ProfileInfoResource {
@@ -30,7 +34,7 @@ public class ProfileInfoResource {
     @Value("${spring.cloud.config.server.git.search-paths:}")
     private String gitSearchLocation;
 
-    @RequestMapping("/profile-info")
+    @GetMapping("/profile-info")
     public ProfileInfoResponse getActiveProfiles() {
         return new ProfileInfoResponse(env.getActiveProfiles(), getRibbonEnv(), nativeSearchLocation, gitUri, gitSearchLocation);
     }

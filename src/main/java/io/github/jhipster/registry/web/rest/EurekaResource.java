@@ -14,10 +14,9 @@ import io.github.jhipster.registry.web.rest.dto.EurekaDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -36,9 +35,7 @@ public class EurekaResource {
     /**
      * GET  /eureka/applications : get Eureka applications information
      */
-    @RequestMapping(value = "/eureka/applications",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/eureka/applications")
     @Timed
     public ResponseEntity<EurekaDTO> eureka() {
         EurekaDTO eurekaDTO = new EurekaDTO();
@@ -71,9 +68,7 @@ public class EurekaResource {
     /**
      * GET  /eureka/lastn : get Eureka registrations
      */
-    @RequestMapping(value = "/eureka/lastn",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/eureka/lastn")
     @Timed
     public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
         Map<String, Map<Long, String>> lastn = new HashMap<>();
@@ -98,9 +93,7 @@ public class EurekaResource {
     /**
      * GET  /eureka/replicas : get Eureka replicas
      */
-    @RequestMapping(value = "/eureka/replicas",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/eureka/replicas")
     @Timed
     public ResponseEntity<List<String>> replicas() {
         List<String> replicas = new ArrayList<>();
@@ -122,9 +115,7 @@ public class EurekaResource {
     /**
      * GET  /eureka/status : get Eureka status
      */
-    @RequestMapping(value = "/eureka/status",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/eureka/status")
     @Timed
     public ResponseEntity<EurekaDTO> eurekaStatus() {
 
@@ -158,15 +149,14 @@ public class EurekaResource {
         StatusInfo statusInfo;
         try {
             statusInfo = new StatusResource().getStatusInfo();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             statusInfo = StatusInfo.Builder.newBuilder().isHealthy(false).build();
         }
-        if(statusInfo !=null && statusInfo.getGeneralStats() !=null) {
+        if (statusInfo != null && statusInfo.getGeneralStats() != null) {
             model.put("generalStats", statusInfo.getGeneralStats());
         }
-        if(statusInfo !=null && statusInfo.getInstanceInfo() !=null) {
+        if (statusInfo != null && statusInfo.getInstanceInfo() != null) {
             InstanceInfo instanceInfo = statusInfo.getInstanceInfo();
             Map<String, String> instanceMap = new HashMap<>();
             instanceMap.put("ipAddr", instanceInfo.getIPAddr());
