@@ -1,12 +1,8 @@
 package io.github.jhipster.registry;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import io.github.jhipster.registry.config.Constants;
+import io.github.jhipster.registry.config.DefaultProfileUtil;
+import io.github.jhipster.registry.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -16,12 +12,17 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.core.env.Environment;
 
-import io.github.jhipster.registry.config.*;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
 
 @SpringBootApplication
 @EnableEurekaServer
 @EnableConfigServer
-@EnableConfigurationProperties({ JHipsterProperties.class })
+@EnableConfigurationProperties({JHipsterProperties.class})
 public class JHipsterRegistry {
 
     private static final Logger log = LoggerFactory.getLogger(JHipsterRegistry.class);
@@ -69,5 +70,4 @@ public class JHipsterRegistry {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"));
     }
-
 }
