@@ -64,10 +64,12 @@ public class JHipsterRegistry {
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
                 "Local: \t\thttp://127.0.0.1:{}\n\t" +
-                "External: \thttp://{}:{}\n----------------------------------------------------------",
+                "External: \thttp://{}:{}\n\t" +
+                "Profile(s): \t{}\n----------------------------------------------------------",
             env.getProperty("spring.application.name"),
             env.getProperty("server.port"),
             InetAddress.getLocalHost().getHostAddress(),
-            env.getProperty("server.port"));
+            env.getProperty("server.port"),
+            Arrays.toString(env.getActiveProfiles()));
     }
 }
