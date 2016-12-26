@@ -1,6 +1,6 @@
 {
   "name": "jhipster-registry",
-  "version": "2.5.5",
+  "version": "2.5.7",
   "description": "JHipster Registry",
   "private": true,
   "cacheDirectories": [
