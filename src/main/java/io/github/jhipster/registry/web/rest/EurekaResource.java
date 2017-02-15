@@ -74,14 +74,14 @@ public class EurekaResource {
         Map<String, Map<Long, String>> lastn = new HashMap<>();
         PeerAwareInstanceRegistryImpl registry = (PeerAwareInstanceRegistryImpl) getRegistry();
         Map<Long, String> canceledMap = new HashMap<>();
-        registry.getLastNCanceledInstances().stream().forEach(
+        registry.getLastNCanceledInstances().forEach(
             canceledInstance -> {
                 canceledMap.put(canceledInstance.first(), canceledInstance.second());
             }
         );
         lastn.put("canceled", canceledMap);
         Map<Long, String> registeredMap = new HashMap<>();
-        registry.getLastNRegisteredInstances().stream().forEach(
+        registry.getLastNRegisteredInstances().forEach(
             registeredInstance -> {
                 registeredMap.put(registeredInstance.first(), registeredInstance.second());
             }
@@ -97,7 +97,7 @@ public class EurekaResource {
     @Timed
     public ResponseEntity<List<String>> replicas() {
         List<String> replicas = new ArrayList<>();
-        getServerContext().getPeerEurekaNodes().getPeerNodesView().stream().forEach(
+        getServerContext().getPeerEurekaNodes().getPeerNodesView().forEach(
             node -> {
                 try {
                     // The URL is parsed in order to remove login/password information
