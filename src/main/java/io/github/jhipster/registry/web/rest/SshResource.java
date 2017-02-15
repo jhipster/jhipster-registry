@@ -36,7 +36,7 @@ public class SshResource {
             return new ResponseEntity<>(publicKey, HttpStatus.OK);
         } catch (IOException e) {
             log.warn("SSH public key could not be loaded: {}", e.getMessage());
-            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
         }
     }
 }

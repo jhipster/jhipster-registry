@@ -73,8 +73,8 @@ public class TokenProvider {
             .getBody();
 
         Collection<? extends GrantedAuthority> authorities =
-            Arrays.asList(claims.get(AUTHORITIES_KEY).toString().split(",")).stream()
-                .map(authority -> new SimpleGrantedAuthority(authority))
+            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
         User principal = new User(claims.getSubject(), "",

@@ -65,7 +65,7 @@ public final class DefaultProfileUtil {
             return factory.getObject();
         } catch (Exception e) {
             log.error("Failed to read application.yml to get default profile");
+            return null;
         }
-        return null;
     }
 }
