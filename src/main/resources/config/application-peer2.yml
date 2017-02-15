@@ -39,5 +39,5 @@ eureka:
     client:
         fetch-registry: true
         register-with-eureka: true
-        serviceUrl:
-            defaultZone: http://admin:${security.user.password:admin}@eureka-peer-1:8761/eureka/
+        service-url:
+            default-zone: http://admin:${security.user.password:admin}@eureka-peer-1:8761/eureka/

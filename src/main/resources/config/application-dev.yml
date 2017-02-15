@@ -23,8 +23,8 @@ eureka:
     client:
         fetch-registry: false
         register-with-eureka: false
-        serviceUrl:
-            defaultZone: http://admin:${security.user.password:admin}@localhost:8761/eureka/
+        service-url:
+            default-zone: http://admin:${security.user.password:admin}@localhost:8761/eureka/
 
 jhipster:
     security:
@@ -32,9 +32,10 @@ jhipster:
             jwt:
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 24 hours
-                tokenValidityInSeconds: 86400
+                token-validity-in-seconds: 86400
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
+        jmx:
+            enabled: true
         spark:
             enabled: false
             host: localhost
@@ -46,13 +47,13 @@ jhipster:
             prefix: catalog
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
-            reportFrequency: 60 # in seconds
+            report-frequency: 60 # in seconds
     logging:
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
             host: localhost
             port: 5000
-            queueSize: 512
+            queue-size: 512
         spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency

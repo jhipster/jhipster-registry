@@ -26,7 +26,7 @@ server:
 
 eureka:
     dashboard:
-      path: /registry
+        path: /registry
 
 management:
     context-path: /management
