@@ -1,7 +1,7 @@
 package io.github.jhipster.registry.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import io.github.jhipster.registry.web.rest.dto.UserDTO;
+import io.github.jhipster.registry.web.rest.vm.UserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -46,12 +46,12 @@ public class AccountResource {
      */
     @GetMapping("/account")
     @Timed
-    public ResponseEntity<UserDTO> getAccount() {
+    public ResponseEntity<UserVM> getAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        UserDTO userDTO = new UserDTO(user.getUsername(),
+        UserVM userVM = new UserVM(user.getUsername(),
             user.getAuthorities().stream()
                 .map(authority -> authority.getAuthority()).collect(Collectors.toSet()));
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        return new ResponseEntity<>(userVM, HttpStatus.OK);
     }
 }

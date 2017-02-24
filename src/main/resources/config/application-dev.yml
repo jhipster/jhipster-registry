@@ -2,6 +2,9 @@
 # Spring Boot configuration for the "dev" profile.
 #
 # This configuration overrides the application.yml file.
+#
+# More information on profiles: https://jhipster.github.io/profiles/
+# More information on configuration properties: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 # ===================================================================
@@ -11,7 +14,6 @@
 # ===================================================================
 
 eureka:
-    env: dev
     instance:
         hostname: localhost
         appname: registry
@@ -33,18 +35,18 @@ jhipster:
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
+                token-validity-in-seconds-for-remember-me: 2592000
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx:
             enabled: true
-        spark:
-            enabled: false
-            host: localhost
-            port: 9999
         graphite:
             enabled: false
             host: localhost
             port: 2003
-            prefix: catalog
+            prefix: jhipsterRegistry
+        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
+            enabled: false
+            endpoint: /prometheusMetrics
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
@@ -61,15 +63,25 @@ jhipster:
 spring:
     profiles:
         active: dev
-        include: native
     devtools:
         restart:
             enabled: true
         livereload:
             enabled: false # we use gulp + BrowserSync for livereload
+    jackson:
+        serialization.indent_output: true
+    mail:
+        host: localhost
+        port: 25
+        username:
+        password:
+    messages:
+        cache-seconds: 1
     cloud:
         config:
             server:
+                git:
+                    uri: https://github.com/jhipster/jhipster-registry
                 native:
                     search-locations: file:./central-config
                 prefix: /config
@@ -81,3 +93,17 @@ security:
         name: admin
         password: admin
         role: USER,ADMIN
+
+
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://jhipster.github.io/common-application-properties/
+# ===================================================================
+application:
+
+

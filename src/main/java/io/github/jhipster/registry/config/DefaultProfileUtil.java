@@ -1,9 +1,11 @@
 package io.github.jhipster.registry.config;
 
+import io.github.jhipster.config.JHipsterConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 
 import java.util.HashMap;
@@ -17,13 +19,15 @@ import java.util.Properties;
  */
 public final class DefaultProfileUtil {
 
-    private static final long serialVersionUID = 1L;
+    private final static Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultProfileUtil.class);
-
+    private static final String SPRING_PROFILE_DEFAULT = "spring.profiles.default";
     private static final String SPRING_PROFILE_ACTIVE = "spring.profiles.active";
 
     private static final Properties BUILD_PROPERTIES = readProperties();
+
+    private DefaultProfileUtil() {
+    }
 
     /**
      * Get a default profile from <code>application.yml</code>.
@@ -32,17 +36,20 @@ public final class DefaultProfileUtil {
         if (BUILD_PROPERTIES != null) {
             String activeProfile = BUILD_PROPERTIES.getProperty(SPRING_PROFILE_ACTIVE);
             if (activeProfile != null && !activeProfile.isEmpty() &&
-                (activeProfile.contains(Constants.SPRING_PROFILE_DEVELOPMENT) ||
-                    activeProfile.contains(Constants.SPRING_PROFILE_PRODUCTION))) {
+                (activeProfile.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) ||
+                    activeProfile.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION))) {
                 return activeProfile;
             }
         }
-        log.warn("No Spring profile configured, running with default profile: {}", Constants.SPRING_PROFILE_DEVELOPMENT);
-        return Constants.SPRING_PROFILE_DEVELOPMENT;
+        log.warn("No Spring profile configured, running with default profile: {}", JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
+        return JHipsterConstants.SPRING_PROFILE_DEVELOPMENT;
     }
+
 
     /**
      * Set a default to use when no profile is configured.
+     *
+     * @param app the Spring application
      */
     public static void addDefaultProfile(SpringApplication app) {
         Map<String, Object> defProperties =  new HashMap<>();
@@ -51,8 +58,19 @@ public final class DefaultProfileUtil {
         * This cannot be set in the <code>application.yml</code> file.
         * See https://github.com/spring-projects/spring-boot/issues/1219
         */
-        defProperties.put(SPRING_PROFILE_ACTIVE, getDefaultActiveProfiles());
+        defProperties.put(SPRING_PROFILE_DEFAULT, JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
         app.setDefaultProperties(defProperties);
+    }
+
+    /**
+     * Get the profiles that are applied else get default profiles.
+     */
+    public static String[] getActiveProfiles(Environment env) {
+        String[] profiles = env.getActiveProfiles();
+        if (profiles.length == 0) {
+            return env.getDefaultProfiles();
+        }
+        return profiles;
     }
 
     /**

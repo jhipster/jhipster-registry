@@ -3,12 +3,26 @@
 #
 # This configuration will be overriden by the Spring profile you use,
 # for example application-dev.yml if you use the "dev" profile.
+#
+# More information on profiles: https://jhipster.github.io/profiles/
+# More information on configuration properties: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 # ===================================================================
 # Standard Spring Boot properties.
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+# ===================================================================
+# See https://github.com/Netflix/Hystrix/wiki/Configuration
+#hystrix:
+#    command:
+#        default:
+#            execution:
+#                isolation:
+#                    thread:
+#                        timeoutInMilliseconds: 10000
 # ===================================================================
 
 # ===================================================================
@@ -33,13 +47,19 @@ management:
 
 spring:
     application:
-        name: jhipster-registry
+        name: jhipsterRegistry
+    jackson:
+        serialization.write_dates_as_timestamps: false
+    messages:
+        basename: i18n/messages
     mvc:
         favicon:
             enabled: false
     thymeleaf:
         mode: XHTML
 
-
-
-
+security:
+    user:
+        name: admin
+        password: admin
+        role: USER,ADMIN

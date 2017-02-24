@@ -2,6 +2,9 @@
 # Spring Boot configuration for the "prod" profile.
 #
 # This configuration overrides the application.yml file.
+#
+# More information on profiles: https://jhipster.github.io/profiles/
+# More information on configuration properties: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 # ===================================================================
@@ -26,45 +29,15 @@ eureka:
         service-url:
             default-zone: http://admin:${security.user.password:admin}@localhost:8761/eureka/
 
-jhipster:
-    security:
-        authentication:
-            jwt:
-                secret: d6877ac45344bb624472a12dd83bb6b3b7e63113
-                # Token is valid 24 hours
-                token-validity-in-seconds: 86400
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        spark:
-            enabled: false
-            host: localhost
-            port: 9999
-        graphite:
-            enabled: false
-            host: localhost
-            port: 2003
-            prefix: catalog
-        logs: # Reports Dropwizard metrics in the logs
-            enabled: false
-            report-frequency: 60 # in seconds
-    logging:
-        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
-            enabled: false
-            host: localhost
-            port: 5000
-            queue-size: 512
-        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
-            enabled: false
-            # edit spring.metrics.export.delay-millis to set report frequency
-
 spring:
     profiles:
-        active: prod
+        actives: prod
     devtools:
         restart:
             enabled: false
         livereload:
             enabled: false
+
     cloud:
         config:
             server:
@@ -75,18 +48,94 @@ spring:
                     uri: https://github.com/jhipster/jhipster-registry/
                     search-paths: central-config
                 prefix: /config
-
+    mail:
+        host: localhost
+        port: 25
+        username:
+        password:
     thymeleaf:
         cache: true
+
+# ===================================================================
+# To enable SSL, generate a certificate using:
+# keytool -genkey -alias jhipsterRegistry -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+#
+# You can also use Let's Encrypt:
+# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
+#
+# Then, modify the server.ssl properties so your "server" configuration looks like:
+#
+# server:
+#    port: 443
+#    ssl:
+#        key-store: keystore.p12
+#        key-store-password: <your-password>
+#        keyStoreType: PKCS12
+#        keyAlias: jhipsterRegistry
+# ===================================================================
+server:
+    port: 8761
+    compression:
+        enabled: true
+        mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+        min-response-size: 1024
 
 security:
     user:
         name: admin
         password: admin
         role: USER,ADMIN
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://jhipster.github.io/common-application-properties/
+# ===================================================================
 
-server:
-    compression:
-        enabled: true
-        mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
-        min-response-size: 1024
+jhipster:
+    http:
+        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
+        cache: # Used by the CachingHttpHeadersFilter
+            timeToLiveInDays: 1461
+    security:
+        authentication:
+            jwt:
+                secret: c9d37cefc48581919939d587c750ea215020765b
+                # Token is valid 24 hours
+                token-validity-in-seconds: 86400
+                token-validity-in-seconds-for-remember-me: 2592000
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: jhipsterRegistry@localhost
+        base-url: http://my-server-url-to-change # Modify according to your server's URL
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+        graphite:
+            enabled: false
+            host: localhost
+            port: 2003
+            prefix: jhipsterRegistry
+        prometheus:
+            enabled: false
+            endpoint: /prometheusMetrics
+        logs: # Reports Dropwizard metrics in the logs
+            enabled: false
+            reportFrequency: 60 # in seconds
+    logging:
+        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+            enabled: false
+            host: localhost
+            port: 5000
+            queue-size: 512
+        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
+            enabled: false
+            # edit spring.metrics.export.delay-millis to set report frequency
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://jhipster.github.io/common-application-properties/
+# ===================================================================
+
+application:
