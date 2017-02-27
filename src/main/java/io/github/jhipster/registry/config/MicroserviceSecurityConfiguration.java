@@ -52,9 +52,14 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
+            .antMatchers("/**").permitAll() // cannot reconnect without this line
             .antMatchers("/api/**").authenticated()
+            .antMatchers("/api/authenticate").permitAll()
+            .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .anyRequest().authenticated() // always at the end
         .and()
             .apply(securityConfigurerAdapter());
     }

@@ -40,7 +40,6 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <metrics-spring.version>3.1.3</metrics-spring.version>
         <node.version>v6.9.5</node.version>
-        <!-- These remain empty unless the corresponding profile is active -->
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <run.addResources>false</run.addResources>
@@ -361,7 +360,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>

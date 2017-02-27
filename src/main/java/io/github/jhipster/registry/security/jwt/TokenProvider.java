@@ -71,7 +71,7 @@ public class TokenProvider {
             .compact();
     }
 
-    public Authentication getAuthentication(String token) {
+    Authentication getAuthentication(String token) {
         Claims claims = Jwts.parser()
             .setSigningKey(secretKey)
             .parseClaimsJws(token)
