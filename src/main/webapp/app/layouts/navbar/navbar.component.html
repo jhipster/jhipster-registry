@@ -1,0 +1,92 @@
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-toggle" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
+                <i class="fa fa-bars"></i>
+            </a>
+            <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
+                <span class="logo-img"></span>
+                <span>Registry</span> <span class="navbar-version">{{version}}</span>
+            </a>
+        </div>
+        <div class="navbar-collapse" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    <a class="nav-link" routerLink="/" (click)="collapseNavbar()" title="home">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </a>
+                </li>
+                <li routerLinkActive="active" class="nav-item">
+                    <a class="nav-link" routerLink="jhi-applications" (click)="collapseNavbar()">
+                        <span class="glyphicon glyphicon-cloud"></span>
+                        <span class="hidden-sm">Applications</span>
+                    </a>
+                </li>
+                <li routerLinkActive="active" class="nav-item">
+                    <a class="nav-link" routerLink="history" (click)="collapseNavbar()">
+                        <span class="glyphicon glyphicon-hourglass"></span>
+                        <span class="hidden-sm">History</span>
+                    </a>
+                </li>
+                <li routerLinkActive="active" class="nav-item">
+                    <a class="nav-link" routerLink="replicas" (click)="collapseNavbar()">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="hidden-sm">Replicas</span>
+                    </a>
+                </li>
+                <li routerLinkActive="active" class="nav-item">
+                    <a class="nav-link" routerLink="config" (click)="collapseNavbar()">
+                        <span class="glyphicon glyphicon-leaf"></span>
+                        <span class="hidden-sm">Configuration</span>
+                    </a>
+                </li>
+                <li routerLinkActive="active" class="nav-item">
+                    <a class="nav-link" routerLink="ssh" (click)="collapseNavbar()">
+                        <span class="glyphicon glyphicon-lock"></span>
+                        <span class="hidden-sm">SSH</span>
+                    </a>
+                </li>
+                <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
+                    <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
+                        <span>
+                            <span class="glyphicon glyphicon-tower"></span>
+                            <span class="hidden-sm-down">Administration</span>
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu" ngbDropdownMenu>
+                        <li>
+                            <a class="dropdown-item" routerLink="jhi-metrics" routerLinkActive="active" (click)="collapseNavbar()">
+                                <span class="glyphicon glyphicon-dashboard"></span>&nbsp;
+                                <span>Metrics</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" routerLink="jhi-health" routerLinkActive="active" (click)="collapseNavbar()">
+                                <span class="glyphicon glyphicon-heart"></span>&nbsp;
+                                <span>Health</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" routerLink="jhi-configuration" routerLinkActive="active" (click)="collapseNavbar()">
+                                <span class="glyphicon glyphicon-list-alt"></span>&nbsp;
+                                <span>Configuration</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" routerLink="logs" routerLinkActive="active" (click)="collapseNavbar()">
+                                <span class="glyphicon glyphicon-tasks"></span>&nbsp;
+                                <span>Logs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item" routerLinkActive="active" *ngSwitchCase="true">
+                    <a class="nav-link" (click)="logout()" id="logout">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
