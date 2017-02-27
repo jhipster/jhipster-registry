@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +52,7 @@ public class AccountResource {
         User user = (User) authentication.getPrincipal();
         UserVM userVM = new UserVM(user.getUsername(),
             user.getAuthorities().stream()
-                .map(authority -> authority.getAuthority()).collect(Collectors.toSet()));
+                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
         return new ResponseEntity<>(userVM, HttpStatus.OK);
     }
 }
