@@ -26,7 +26,7 @@ export class AuthService {
             let canActivate = true;
 
             // an authenticated user can't access to login and register pages
-            if (isAuthenticated && (toStateInfo.name === 'register')) {
+            if (isAuthenticated && (toStateInfo.name === 'register' || toStateInfo.name === 'social-auth')) {
                 this.router.navigate(['']);
                 canActivate = false;
             }
