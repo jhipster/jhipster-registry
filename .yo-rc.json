@@ -1,6 +1,6 @@
 {
     "generator-jhipster": {
-        "jhipsterVersion": "4.0.5",
+        "jhipsterVersion": "4.0.6",
         "baseName": "jhipsterRegistry",
         "packageName": "io.github.jhipster.registry",
         "packageFolder": "io/github/jhipster/registry",

@@ -34,7 +34,7 @@ public class LoggingAspect {
      */
     @Pointcut("within(io.github.jhipster.registry.repository..*) || within(io.github.jhipster.registry.service..*) || within(io.github.jhipster.registry.web.rest..*)")
     public void loggingPointcut() {
-        // Method is empty as this is just a Poincut, the implementations are in the advices.
+        // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 
     /**

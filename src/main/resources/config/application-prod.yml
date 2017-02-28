@@ -27,7 +27,7 @@ eureka:
         fetch-registry: false
         register-with-eureka: false
         service-url:
-            default-zone: http://admin:${security.user.password:admin}@localhost:8761/eureka/
+            defaultZone: http://admin:${security.user.password:admin}@localhost:8761/eureka/
 
 spring:
     profiles:

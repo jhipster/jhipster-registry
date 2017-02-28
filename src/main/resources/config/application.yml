@@ -39,11 +39,28 @@ server:
     port: 8761
 
 eureka:
+    instance:
+        appname: jhipsterRegistry
+        instanceId: jhipsterRegistry:${spring.application.instance_id:${random.value}}
+        statusPageUrlPath: ${management.context-path}/info
+        healthCheckUrlPath: ${management.context-path}/health
+        metadata-map:
+            profile: ${spring.profiles.active}
+            version: ${info.project.version}
     dashboard:
         path: /registry
 
+ribbon:
+    eureka:
+        enabled: true
+
 management:
+    security:
+        roles: ADMIN
     context-path: /management
+    health:
+        mail:
+            enabled: false # When using the MailService, configure an SMTP server and set this to true
 
 spring:
     application:

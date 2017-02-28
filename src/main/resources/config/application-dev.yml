@@ -13,53 +13,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-eureka:
-    instance:
-        hostname: localhost
-        appname: registry
-        prefer-ip-address: true
-    server:
-        # see discussion about enable-self-preservation:
-        # https://github.com/jhipster/generator-jhipster/issues/3654
-        enable-self-preservation: false
-    client:
-        fetch-registry: false
-        register-with-eureka: false
-        service-url:
-            default-zone: http://admin:${security.user.password:admin}@localhost:8761/eureka/
-
-jhipster:
-    security:
-        authentication:
-            jwt:
-                secret: my-secret-token-to-change-in-production
-                # Token is valid 24 hours
-                token-validity-in-seconds: 86400
-                token-validity-in-seconds-for-remember-me: 2592000
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx:
-            enabled: true
-        graphite:
-            enabled: false
-            host: localhost
-            port: 2003
-            prefix: jhipsterRegistry
-        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
-            enabled: false
-            endpoint: /prometheusMetrics
-        logs: # Reports Dropwizard metrics in the logs
-            enabled: false
-            report-frequency: 60 # in seconds
-    logging:
-        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
-            enabled: false
-            host: localhost
-            port: 5000
-            queue-size: 512
-        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
-            enabled: false
-            # edit spring.metrics.export.delay-millis to set report frequency
-
 spring:
     profiles:
         active: dev
@@ -88,13 +41,90 @@ spring:
     thymeleaf:
         cache: false
 
+
+eureka:
+    instance:
+        hostname: localhost
+        appname: registry
+        prefer-ip-address: true
+    server:
+        # see discussion about enable-self-preservation:
+        # https://github.com/jhipster/generator-jhipster/issues/3654
+        enable-self-preservation: false
+    client:
+        fetch-registry: false
+        register-with-eureka: false
+        service-url:
+            default-zone: http://admin:${security.user.password:admin}@localhost:8761/eureka/
+
+# ===================================================================
+# To enable SSL, generate a certificate using:
+# keytool -genkey -alias jhipsterRegistry -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+#
+# You can also use Let's Encrypt:
+# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
+#
+# Then, modify the server.ssl properties so your "server" configuration looks like:
+#
+# server:
+#    port: 8443
+#    ssl:
+#        key-store: keystore.p12
+#        key-store-password: <your-password>
+#        keyStoreType: PKCS12
+#        keyAlias: jhipsterRegistry
+# ===================================================================
+server:
+    port: 8761
+
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://jhipster.github.io/common-application-properties/
+# ===================================================================
+
+jhipster:
+    http:
+        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
+    security:
+        authentication:
+            jwt:
+                secret: my-secret-token-to-change-in-production
+                # Token is valid 24 hours
+                token-validity-in-seconds: 86400
+                token-validity-in-seconds-for-remember-me: 2592000
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: jhipsterRegistry@localhost
+        base-url: http://127.0.0.1:8761
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx:
+            enabled: true
+        graphite:
+            enabled: false
+            host: localhost
+            port: 2003
+            prefix: jhipsterRegistry
+        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
+            enabled: false
+            endpoint: /prometheusMetrics
+        logs: # Reports Dropwizard metrics in the logs
+            enabled: false
+            report-frequency: 60 # in seconds
+    logging:
+        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+            enabled: false
+            host: localhost
+            port: 5000
+            queue-size: 512
+        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
+            enabled: false
+            # edit spring.metrics.export.delay-millis to set report frequency
+
 security:
     user:
         name: admin
         password: admin
         role: USER,ADMIN
-
-
 
 # ===================================================================
 # Application specific properties
@@ -105,5 +135,3 @@ security:
 # https://jhipster.github.io/common-application-properties/
 # ===================================================================
 application:
-
-
