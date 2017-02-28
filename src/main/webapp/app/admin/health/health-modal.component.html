@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')"><span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" id="showHealthLabel"><span class="text-capitalize">{{ baseName(currentHealth.name) }}</span>
+        {{subSystemName(currentHealth.name)}}
+    </h4>
+</div>
+<div class="modal-body pad">
+    <div *ngIf="currentHealth.details">
+        <h4>Properties</h4>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="row">
+                        <th class="col-md-6 text-xs-left">Name</th>
+                        <th class="col-md-6 text-xs-left">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let entry of currentHealth.details | keys">
+                        <td class="col-md-6 text-xs-left">{{entry.key}}</td>
+                        <td class="col-md-6 text-xs-left">{{readableValue(entry.value)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="currentHealth.error">
+        <h4>Error</h4>
+            <pre>{{currentHealth.error}}</pre>
+    </div>
+</div>
+<div class="modal-footer">
+    <button data-dismiss="modal" class="btn btn-secondary float-xs-left" type="button" (click)="activeModal.dismiss('closed')">Done</button>
+</div>
