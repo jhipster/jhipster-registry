@@ -67,13 +67,9 @@ spring:
         name: jhipsterRegistry
     jackson:
         serialization.write_dates_as_timestamps: false
-    messages:
-        basename: i18n/messages
     mvc:
         favicon:
             enabled: false
-    thymeleaf:
-        mode: XHTML
 
 security:
     user:

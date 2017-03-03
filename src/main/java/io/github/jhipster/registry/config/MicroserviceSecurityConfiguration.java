@@ -33,7 +33,6 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             .antMatchers(HttpMethod.OPTIONS, "/**")
             .antMatchers("/app/**/*.{js,html}")
             .antMatchers("/bower_components/**")
-            .antMatchers("/i18n/**")
             .antMatchers("/content/**")
             .antMatchers("/test/**")
             .antMatchers("/h2-console/**");

@@ -53,8 +53,6 @@ spring:
         port: 25
         username:
         password:
-    thymeleaf:
-        cache: true
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
