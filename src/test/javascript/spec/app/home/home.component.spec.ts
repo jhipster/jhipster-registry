@@ -61,16 +61,16 @@ describe('Component Tests', () => {
             fakeAsync(
                 inject([EurekaStatusService, Principal], (service: EurekaStatusService, principal: Principal) => {
                     let account = new Account(true, ['ROLE_ADMIN'],
-                        "",
-                        "",
+                        "admin@admin.com",
+                        "firstname",
                         "en",
-                        "",
+                        "lastname",
                         "admin", "");
                     spyOn(principal, "identity").and.returnValue(Promise.resolve(account));
                     spyOn(principal, "isAuthenticated").and.returnValue(true);
                     spyOn(service, "findAll").and.returnValue(Observable.of({
                         status: {
-                            environment: "mohamed"
+                            environment: "test"
                         }
                     }));
 
@@ -78,7 +78,7 @@ describe('Component Tests', () => {
                     tick();
 
                     expect(service.findAll).toHaveBeenCalled();
-                    expect(comp.status).toEqual({environment: "mohamed"});
+                    expect(comp.status).toEqual({environment: "test"});
                 })
             )
         );
