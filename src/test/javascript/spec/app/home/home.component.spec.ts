@@ -1,22 +1,22 @@
-import {ComponentFixture, TestBed, async, inject, fakeAsync, tick} from '@angular/core/testing';
-import {MockBackend} from '@angular/http/testing';
-import {Http, BaseRequestOptions} from '@angular/http';
-import {EurekaStatusService} from "../../../../../main/webapp/app/home/eureka.status.service";
-import {HomeComponent} from "../../../../../main/webapp/app/home/home.component";
-import {EventManager} from "ng-jhipster";
-import {LoginModalService} from "../../../../../main/webapp/app/shared/login/login-modal.service";
-import {Principal} from "../../../../../main/webapp/app/shared/auth/principal.service";
-import {Observable} from "rxjs";
-import {AccountService} from "../../../../../main/webapp/app/shared/auth/account.service";
-import {Account} from "../../../../../main/webapp/app/shared/user/account.model";
+import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+import { MockBackend } from '@angular/http/testing';
+import { Http, BaseRequestOptions } from '@angular/http';
+import { Observable } from 'rxjs';
+import { EventManager } from 'ng-jhipster';
 
+import { EurekaStatusService, HomeComponent } from '../../../../../main/webapp/app/home';
+import { Account, AccountService, Principal, LoginModalService } from '../../../../../main/webapp/app/shared';
+import { JhiApplicationsService } from '../../../../../main/webapp/app/applications';
+import { JhiHealthService } from "../../../../../main/webapp/app/admin/health/health.service";
 
 describe('Component Tests', () => {
 
     describe('HomeComponent', () => {
 
+        let account: Account;
         let comp: HomeComponent;
         let fixture: ComponentFixture<HomeComponent>;
+        let principal: Principal;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -41,7 +41,9 @@ describe('Component Tests', () => {
                             }
                         }
                     },
-                    EurekaStatusService
+                    EurekaStatusService,
+                    JhiApplicationsService,
+                    JhiHealthService
                 ]
             })
                 .overrideComponent(HomeComponent, {
@@ -55,22 +57,24 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(HomeComponent);
             comp = fixture.componentInstance;
+            principal = fixture.debugElement.injector.get(Principal);
+
+            account = new Account(true, ['ROLE_ADMIN'],
+                'admin@admin.com',
+                'firstname',
+                'en',
+                'lastname',
+                'admin', '');
+            spyOn(principal, 'identity').and.returnValue(Promise.resolve(account));
+            spyOn(principal, 'isAuthenticated').and.returnValue(true);
         });
 
-        it('populate Dashboard',
+        it('populate Dashboard with Eureka status data',
             fakeAsync(
-                inject([EurekaStatusService, Principal], (service: EurekaStatusService, principal: Principal) => {
-                    let account = new Account(true, ['ROLE_ADMIN'],
-                        "admin@admin.com",
-                        "firstname",
-                        "en",
-                        "lastname",
-                        "admin", "");
-                    spyOn(principal, "identity").and.returnValue(Promise.resolve(account));
-                    spyOn(principal, "isAuthenticated").and.returnValue(true);
-                    spyOn(service, "findAll").and.returnValue(Observable.of({
+                inject([EurekaStatusService], (service: EurekaStatusService) => {
+                    spyOn(service, 'findAll').and.returnValue(Observable.of({
                         status: {
-                            environment: "test"
+                            environment: 'test'
                         }
                     }));
 
@@ -78,7 +82,48 @@ describe('Component Tests', () => {
                     tick();
 
                     expect(service.findAll).toHaveBeenCalled();
-                    expect(comp.status).toEqual({environment: "test"});
+                    expect(comp.status).toEqual({environment: 'test'});
+                })
+            )
+        );
+
+        it('populate Dashboard with Applications data',
+            fakeAsync(
+                inject([JhiApplicationsService], (service: JhiApplicationsService) => {
+
+                    spyOn(service, 'findAll').and.returnValue(Observable.of({
+                        status: null,
+                        applications: [
+                            {
+                                name: 'app1',
+                                instances: [
+                                    {
+                                        instanceId: 1,
+                                        status: 'UP'
+                                    },
+                                    {
+                                        instanceId: 2,
+                                        status: 'DOWN'
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'app2',
+                                instances: [
+                                    {
+                                        instanceId: 3,
+                                        status: 'UP'
+                                    }
+                                ]
+                            }
+                        ]
+                    }));
+
+                    comp.ngOnInit();
+                    tick();
+
+                    expect(service.findAll).toHaveBeenCalled();
+                    expect(comp.appInstances.length).toEqual(3);
                 })
             )
         );
