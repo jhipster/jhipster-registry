@@ -14,7 +14,6 @@ export class JhiApplicationsComponent implements OnInit {
 
     ngOnInit() {
         this.refresh();
-        console.log(this.data);
     }
 
     refresh() {
