@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {JhiApplicationsService} from './applications.service';
+import { Component, OnInit } from '@angular/core';
+import { JhiApplicationsService } from './applications.service';
 
 @Component({
     selector: 'jhi-applications',
@@ -14,13 +14,14 @@ export class JhiApplicationsComponent implements OnInit {
 
     ngOnInit() {
         this.refresh();
+        console.log(this.data);
     }
 
     refresh() {
         this.applicationsService.findAll().toPromise().then((data) => {
             this.data = data;
             if (data.applications.length > 0) {
-                this.show(data.applications[0].name);
+                this.show(data.applications[ 0 ].name);
             }
         });
 
@@ -37,4 +38,11 @@ export class JhiApplicationsComponent implements OnInit {
         }
     }
 
+    getLabelClass(statusState) {
+        if (statusState === 'UP') {
+            return 'label-success';
+        } else {
+            return 'label-danger';
+        }
+    }
 }
