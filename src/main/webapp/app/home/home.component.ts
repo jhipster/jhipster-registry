@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
-import {EventManager} from 'ng-jhipster';
+import { Component, OnInit } from '@angular/core';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { EventManager } from 'ng-jhipster';
 
-import {Account, LoginModalService, Principal} from '../shared';
-import {JhiHealthService} from '../admin';
-import {JhiApplicationsService} from '../applications';
+import { Account, LoginModalService, Principal } from '../shared';
+import { JhiHealthService } from '../admin';
+import { JhiApplicationsService } from '../applications';
 
 import { VERSION } from '../app.constants';
-import {EurekaStatusService} from './eureka.status.service';
+import { EurekaStatusService } from './eureka.status.service';
 
 @Component({
     selector: 'jhi-home',
@@ -30,8 +30,7 @@ export class HomeComponent implements OnInit {
                 private eventManager: EventManager,
                 private eurekaStatusService: EurekaStatusService,
                 private applicationsService: JhiApplicationsService,
-                private healthService: JhiHealthService
-    ) {
+                private healthService: JhiHealthService) {
         this.version = 'v' + VERSION;
         this.appInstances = [];
     }
