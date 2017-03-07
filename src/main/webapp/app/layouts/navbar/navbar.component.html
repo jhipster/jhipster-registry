@@ -11,13 +11,13 @@
         </div>
         <div class="navbar-collapse" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
-                <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <li routerLinkActive="active" class="nav-item" [routerLinkActiveOptions]="{exact: true}">
                     <a class="nav-link" routerLink="/" (click)="collapseNavbar()" title="home">
                         <span class="glyphicon glyphicon-home"></span>
                     </a>
                 </li>
                 <li routerLinkActive="active" class="nav-item">
-                    <a class="nav-link" routerLink="jhi-applications" (click)="collapseNavbar()">
+                    <a class="nav-link" routerLink="applications" (click)="collapseNavbar()">
                         <span class="glyphicon glyphicon-cloud"></span>
                         <span class="hidden-sm">Applications</span>
                     </a>
@@ -46,7 +46,7 @@
                         <span class="hidden-sm">SSH</span>
                     </a>
                 </li>
-                <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
+                <li *jhiHasAnyAuthority="'ROLE_ADMIN'" routerLinkActive="active" ngbDropdown class="nav-item dropdown pointer">
                     <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                         <span>
                             <span class="glyphicon glyphicon-tower"></span>
@@ -56,19 +56,19 @@
                     </a>
                     <ul class="dropdown-menu" ngbDropdownMenu>
                         <li>
-                            <a class="dropdown-item" routerLink="jhi-metrics" routerLinkActive="active" (click)="collapseNavbar()">
+                            <a class="dropdown-item" routerLink="metrics" routerLinkActive="active" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-dashboard"></span>&nbsp;
                                 <span>Metrics</span>
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" routerLink="jhi-health" routerLinkActive="active" (click)="collapseNavbar()">
+                            <a class="dropdown-item" routerLink="health" routerLinkActive="active" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-heart"></span>&nbsp;
                                 <span>Health</span>
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" routerLink="jhi-configuration" routerLinkActive="active" (click)="collapseNavbar()">
+                            <a class="dropdown-item" routerLink="configuration" routerLinkActive="active" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-list-alt"></span>&nbsp;
                                 <span>Configuration</span>
                             </a>
