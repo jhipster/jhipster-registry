@@ -16,8 +16,7 @@ public final class DefaultProfileUtil {
 
     private static final String SPRING_PROFILE_DEFAULT = "spring.profiles.default";
 
-    private DefaultProfileUtil() {
-    }
+    private DefaultProfileUtil() { }
 
     /**
      * Set a default to use when no profile is configured.
@@ -39,6 +38,8 @@ public final class DefaultProfileUtil {
      * Get the profiles that are applied else get default profiles.
      */
     public static String[] getActiveProfiles(Environment env) {
+        if(env==null || env.getActiveProfiles()==null) return null;
+
         String[] profiles = env.getActiveProfiles();
         if (profiles.length == 0) {
             return env.getDefaultProfiles();

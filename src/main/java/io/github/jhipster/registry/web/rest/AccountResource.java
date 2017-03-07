@@ -49,10 +49,14 @@ public class AccountResource {
     @Timed
     public ResponseEntity<UserVM> getAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        UserVM userVM = new UserVM(user.getUsername(),
-            user.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
-        return new ResponseEntity<>(userVM, HttpStatus.OK);
+        try{
+            User user = (User) authentication.getPrincipal();
+            UserVM userVM = new UserVM(user.getUsername(),
+                user.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
+            return new ResponseEntity<>(userVM, HttpStatus.OK);
+        } catch (NullPointerException e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
