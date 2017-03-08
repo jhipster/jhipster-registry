@@ -22,7 +22,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
 
-    public SecurityConfiguration(Http401UnauthorizedEntryPoint authenticationEntryPoint, TokenProvider tokenProvider) {
+    public SecurityConfiguration(Http401UnauthorizedEntryPoint authenticationEntryPoint,
+                                 TokenProvider tokenProvider) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.tokenProvider = tokenProvider;
     }
@@ -33,7 +34,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.OPTIONS, "/**")
             .antMatchers("/app/**/*.{js,html}")
             .antMatchers("/bower_components/**")
-            .antMatchers("/content/**");
+            .antMatchers("/content/**")
+            .antMatchers("/test/**")
+            .antMatchers("/h2-console/**");
     }
 
     @Override
@@ -55,20 +58,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .realmName("JHipster Registry")
         .and()
             .authorizeRequests()
+            .antMatchers("/**").permitAll() // cannot reconnect without this line
+            .antMatchers("/api/**").authenticated()
+            .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/authenticate").permitAll()
-            .antMatchers("/api/**").authenticated()
+            .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/").permitAll()
-            .anyRequest().authenticated()
+            .anyRequest().authenticated() // always at the end
         .and()
             .apply(securityConfigurerAdapter());
-
     }
 
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
     }
-
 }
