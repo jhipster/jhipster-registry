@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,13 +31,11 @@ public class SshResourceTest {
         // without key
         Mockito.doReturn(null).when(ssh).getPublicKey();
         mock.perform(get("/api/ssh/public_key"))
-            .andDo(print())
             .andExpect(status().isNotFound());
 
         // with key
         Mockito.doReturn("key").when(ssh).getPublicKey();
         mock.perform(get("/api/ssh/public_key"))
-            .andDo(print())
             .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
             .andExpect(content().string("key"))
             .andExpect(status().isOk());

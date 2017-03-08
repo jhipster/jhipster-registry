@@ -3,10 +3,10 @@
 <configuration scan="true">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-    <logger name="io.github.jhipster.registry" level="DEBUG"/>
+    <logger name="io.github.jhipster.registry" level="OFF"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
 
-    <root level="WARN">
+    <root level="OFF">
         <appender-ref ref="CONSOLE"/>
     </root>
 

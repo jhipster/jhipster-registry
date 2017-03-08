@@ -2,6 +2,8 @@ os:
   - linux
 services:
   - docker
+before_install:
+  - ./mvnw test -B
 install:
   - docker build -t jhipster/jhipster-registry:travis .
   - docker images
