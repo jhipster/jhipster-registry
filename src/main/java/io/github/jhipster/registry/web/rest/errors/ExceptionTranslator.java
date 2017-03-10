@@ -44,16 +44,6 @@ public class ExceptionTranslator {
         return new ErrorVM(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
     }
 
-    private ErrorVM processFieldErrors(List<FieldError> fieldErrors) {
-        ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
-
-        for (FieldError fieldError : fieldErrors) {
-            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
-        }
-
-        return dto;
-    }
-
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
@@ -74,5 +64,15 @@ public class ExceptionTranslator {
             errorVM = new ErrorVM(ErrorConstants.ERR_INTERNAL_SERVER_ERROR, "Internal server error");
         }
         return builder.body(errorVM);
+    }
+
+    private ErrorVM processFieldErrors(List<FieldError> fieldErrors) {
+        ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
+
+        for (FieldError fieldError : fieldErrors) {
+            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
+        }
+
+        return dto;
     }
 }

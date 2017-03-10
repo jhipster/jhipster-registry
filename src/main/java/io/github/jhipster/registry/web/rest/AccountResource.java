@@ -55,7 +55,7 @@ public class AccountResource {
                 user.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
             return new ResponseEntity<>(userVM, HttpStatus.OK);
-        } catch (NullPointerException e){
+        } catch (NullPointerException | ClassCastException e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
