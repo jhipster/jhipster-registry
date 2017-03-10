@@ -3,12 +3,26 @@
 #
 # This configuration will be overriden by the Spring profile you use,
 # for example application-dev.yml if you use the "dev" profile.
+#
+# More information on profiles: https://jhipster.github.io/profiles/
+# More information on configuration properties: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 # ===================================================================
 # Standard Spring Boot properties.
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+# ===================================================================
+# See https://github.com/Netflix/Hystrix/wiki/Configuration
+#hystrix:
+#    command:
+#        default:
+#            execution:
+#                isolation:
+#                    thread:
+#                        timeoutInMilliseconds: 10000
 # ===================================================================
 
 # ===================================================================
@@ -25,21 +39,40 @@ server:
     port: 8761
 
 eureka:
+    instance:
+        appname: jhipsterRegistry
+        instanceId: jhipsterRegistry:${spring.application.instance_id:${random.value}}
+        statusPageUrlPath: ${management.context-path}/info
+        healthCheckUrlPath: ${management.context-path}/health
+        metadata-map:
+            profile: ${spring.profiles.active}
+            version: ${info.project.version}
     dashboard:
-      path: /registry
+        path: /registry
+
+ribbon:
+    eureka:
+        enabled: true
 
 management:
+    security:
+        roles: ADMIN
     context-path: /management
+    health:
+        mail:
+            enabled: false # When using the MailService, configure an SMTP server and set this to true
 
 spring:
     application:
-        name: jhipster-registry
+        name: jhipsterRegistry
+    jackson:
+        serialization.write_dates_as_timestamps: false
     mvc:
         favicon:
             enabled: false
-    thymeleaf:
-        mode: XHTML
 
-
-
-
+security:
+    user:
+        name: admin
+        password: admin
+        role: USER,ADMIN
