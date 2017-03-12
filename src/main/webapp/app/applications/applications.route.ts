@@ -1,7 +1,7 @@
-import {Route} from '@angular/router';
+import { Route } from '@angular/router';
 
-import {UserRouteAccessService} from '../shared';
-import {JhiApplicationsComponent} from './applications.component';
+import { UserRouteAccessService } from '../shared';
+import { JhiApplicationsComponent } from './applications.component';
 
 export const APPLICATIONS_ROUTE: Route = {
     path: 'applications',
