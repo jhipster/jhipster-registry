@@ -202,3 +202,11 @@ ui bootstrap tweaks
     border-radius: 0; /* Hide the navbar rounded corners */
     -moz-border-radius: 0;
 }
+
+.nav-tabs > li > a.active, .nav-tabs > li > a.active:hover, .nav-tabs > li > a.active:focus {
+    color: #2c3e50;
+    background-color: #ffffff;
+    border: 1px solid #ecf0f1;
+    border-bottom-color: transparent;
+    cursor: default;
+}
