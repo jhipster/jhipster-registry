@@ -6,8 +6,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { JhipsterRegistrySharedModule, UserRouteAccessService } from './shared';
-import { JHipsterRegistryHomeModule } from './home/home.module';
-import { JHipsterRegistryApplicationsModule } from './applications/applications.module';
+import { JHipsterRegistryHomeModule } from './home';
+import { JHipsterRegistryApplicationsModule } from './applications';
+import { JHipsterRegistryHistoryModule } from './history';
 import { JHipsterRegistryAdminModule } from './admin/admin.module';
 
 import { LayoutRoutingModule } from './layouts';
@@ -33,6 +34,7 @@ import {
         JhipsterRegistrySharedModule,
         JHipsterRegistryHomeModule,
         JHipsterRegistryApplicationsModule,
+        JHipsterRegistryHistoryModule,
         JHipsterRegistryAdminModule
     ],
     declarations: [
