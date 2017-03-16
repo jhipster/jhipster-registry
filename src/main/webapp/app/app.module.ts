@@ -9,6 +9,7 @@ import { JhipsterRegistrySharedModule, UserRouteAccessService } from './shared';
 import { JHipsterRegistryHomeModule } from './home';
 import { JHipsterRegistryApplicationsModule } from './applications';
 import { JHipsterRegistryHistoryModule } from './history';
+import { JHipsterRegistryReplicasModule } from './replicas';
 import { JHipsterRegistryAdminModule } from './admin/admin.module';
 
 import { LayoutRoutingModule } from './layouts';
@@ -25,6 +26,7 @@ import {
 } from './layouts';
 
 
+
 @NgModule({
     imports: [
         RouterModule,
@@ -35,6 +37,7 @@ import {
         JHipsterRegistryHomeModule,
         JHipsterRegistryApplicationsModule,
         JHipsterRegistryHistoryModule,
+        JHipsterRegistryReplicasModule,
         JHipsterRegistryAdminModule
     ],
     declarations: [
