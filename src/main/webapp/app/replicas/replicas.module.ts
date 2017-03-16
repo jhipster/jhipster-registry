@@ -4,25 +4,23 @@ import { RouterModule } from '@angular/router';
 import { JhipsterRegistrySharedModule } from '../shared';
 
 import {
-    APPLICATIONS_ROUTE,
-    JhiApplicationsComponent,
-    JhiApplicationsService
+    REPLICAS_ROUTE,
+    JhiReplicasComponent,
+    JhiReplicasService
 } from './';
-
 
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ APPLICATIONS_ROUTE ], {useHash: true})
+        RouterModule.forRoot([ REPLICAS_ROUTE ], {useHash: true})
     ],
     declarations: [
-        JhiApplicationsComponent
+        JhiReplicasComponent
     ],
     entryComponents: [],
     providers: [
-        JhiApplicationsService
+        JhiReplicasService
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
-export class JHipsterRegistryApplicationsModule {
-}
+export class JHipsterRegistryReplicasModule {}
