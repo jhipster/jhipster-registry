@@ -15,6 +15,11 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.shared.Application;
 import com.netflix.eureka.EurekaServerContextHolder;
 
+/**
+ * Updates Zuul proxies depending on available application instances.
+ *
+ * This uses directly the Eureka server, so it only works with the Eureka option.
+ */
 @Service
 public class ZuulUpdaterService {
 
