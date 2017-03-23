@@ -89,7 +89,6 @@ public class ZuulUpdaterService {
                 isDirty = true;
             }
         }
-        log.debug("YOLO - available routes: " + zuulProperties.getRoutes());
         for (String key : zuulRoutesToRemove) {
             zuulProperties.getRoutes().remove(key);
         }
