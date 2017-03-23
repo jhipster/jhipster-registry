@@ -14,16 +14,37 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-# ===================================================================
-# See https://github.com/Netflix/Hystrix/wiki/Configuration
-#hystrix:
-#    command:
-#        default:
-#            execution:
-#                isolation:
-#                    thread:
-#                        timeoutInMilliseconds: 10000
-# ===================================================================
+spring:
+    application:
+        name: jhipster-registry
+    jackson:
+        serialization.write_dates_as_timestamps: false
+    mvc:
+        favicon:
+            enabled: false
+    thymeleaf:
+        mode: XHTML
+
+server:
+    port: 8761
+
+ribbon:
+    eureka:
+        enabled: true
+
+management:
+    security:
+        roles: ADMIN
+    context-path: /management
+    health:
+        mail:
+            enabled: false # When using the MailService, configure an SMTP server and set this to true
+
+security:
+    user:
+        name: admin
+        password: admin
+        role: USER,ADMIN
 
 # ===================================================================
 # Eureka server configuration (eureka.server.*)
@@ -34,9 +55,6 @@
 # Documentation at:
 # https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
 # ===================================================================
-
-server:
-    port: 8761
 
 eureka:
     instance:
@@ -62,32 +80,3 @@ eureka:
         enable-self-preservation: false
     dashboard:
         path: /registry
-
-ribbon:
-    eureka:
-        enabled: true
-
-management:
-    security:
-        roles: ADMIN
-    context-path: /management
-    health:
-        mail:
-            enabled: false # When using the MailService, configure an SMTP server and set this to true
-
-spring:
-    application:
-        name: jhipster-registry
-    jackson:
-        serialization.write_dates_as_timestamps: false
-    mvc:
-        favicon:
-            enabled: false
-    thymeleaf:
-        mode: XHTML
-
-security:
-    user:
-        name: admin
-        password: admin
-        role: USER,ADMIN
