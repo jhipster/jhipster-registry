@@ -55,7 +55,8 @@ public class ZuulUpdaterService {
 
                 ZuulProperties.ZuulRoute zuulRoute =
                     new ZuulProperties.ZuulRoute(
-                        generatePath(application.getName(), instanceId),
+                        "/services/" + application.getName().toLowerCase() + "/" +
+                            instanceId + "/**",
                         url);
 
                 if (zuulProperties.getRoutes().containsKey(instanceId)) {
@@ -96,10 +97,5 @@ public class ZuulUpdaterService {
             log.info("Zuul routes have changed - refreshing the configuration");
             this.publisher.publishEvent(new RoutesRefreshedEvent(routeLocator));
         }
-    }
-
-    private String generatePath(String applicationName, String instanceId) {
-        return "/services/" + applicationName.toLowerCase() + "/" +
-            instanceId + "/**";
     }
 }
