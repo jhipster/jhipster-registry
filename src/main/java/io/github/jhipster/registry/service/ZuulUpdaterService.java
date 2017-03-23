@@ -35,7 +35,7 @@ public class ZuulUpdaterService {
 
     @Scheduled(fixedDelay = 5_000)
     public void updateZuulRoutes() {
-        log.debug("Update routes...");
+        log.debug("Update Zuul routes to application instances");
 
         boolean isDirty = false;
 
