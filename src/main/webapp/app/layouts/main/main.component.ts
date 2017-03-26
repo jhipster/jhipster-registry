@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized } from '@angular/router';
 
-import {Title} from '@angular/platform-browser';
-import {StateStorageService} from '../../shared';
+import { Title } from '@angular/platform-browser';
+import { StateStorageService } from '../../shared';
 
 @Component({
     selector: 'jhi-main',
