@@ -10,8 +10,7 @@ export class JhiHistoryComponent implements OnInit {
     items: any;
     data: any;
 
-    constructor(private historyService: JhiHistoryService) {
-    }
+    constructor(private historyService: JhiHistoryService) {}
 
     ngOnInit() {
         this.refresh();
@@ -22,14 +21,13 @@ export class JhiHistoryComponent implements OnInit {
             this.data = data;
             this.activate('registered');
         });
-
     }
 
     activate(key: string) {
         this.items = [];
         let obj = this.data ? this.data[key] : null;
         if (obj) {
-            for (let k of obj) {
+            for (let k of Object.keys(obj)) {
                 this.items.push({key: k, value: obj[k]});
             }
         }
