@@ -10,6 +10,7 @@ import { JHipsterRegistryHomeModule } from './home';
 import { JHipsterRegistryApplicationsModule } from './applications';
 import { JHipsterRegistryHistoryModule } from './history';
 import { JHipsterRegistryReplicasModule } from './replicas';
+import { JHipsterRegistryConfigModule } from "./config";
 import { JHipsterRegistryAdminModule } from './admin/admin.module';
 
 import { LayoutRoutingModule } from './layouts';
@@ -38,6 +39,7 @@ import {
         JHipsterRegistryApplicationsModule,
         JHipsterRegistryHistoryModule,
         JHipsterRegistryReplicasModule,
+        JHipsterRegistryConfigModule,
         JHipsterRegistryAdminModule
     ],
     declarations: [
