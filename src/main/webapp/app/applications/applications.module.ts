@@ -24,5 +24,4 @@ import {
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
-export class JHipsterRegistryApplicationsModule {
-}
+export class JHipsterRegistryApplicationsModule {}

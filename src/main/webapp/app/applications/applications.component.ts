@@ -23,7 +23,6 @@ export class JhiApplicationsComponent implements OnInit {
                 this.show(data.applications[ 0 ].name);
             }
         });
-
     }
 
     show(app) {
