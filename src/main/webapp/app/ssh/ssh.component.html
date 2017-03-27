@@ -10,12 +10,12 @@
 
     <h3>Your SSH public key</h3>
 
-    <pre>{{vm.data}}</pre>
+    <pre>{{data}}</pre>
     <hr>
     <div class="text-center pad" >
-        <a ng-click="vm.showMore = !vm.showMore" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-down"></span> show more</a>
+        <a (click)="showMore = !showMore" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-down"></span> show more</a>
     </div>
-	<div uib-collapse="vm.showMore">
+	<div [ngbCollapse]="showMore">
         <h3><span class="glyphicon glyphicon-info-sign"></span> Using SSH with Docker</h3>
         <p>
             Here are detailed instruction when using the JHipster Registry Docker image, available at
@@ -42,7 +42,7 @@
         </p>
 
         <p>To setup your own git repo, edit the GIT_URI environment variable passed to your container, for example using Docker Compose:</p>
-        <div hljs hljs-language="yaml">
+        <pre>
     version: '2'
       services:
         jhipster-registry:
@@ -56,6 +56,6 @@
         - GIT_SEARCH_PATHS=central-config
       ports:
         - 8761:8761
-        </div>
+        </pre>
 	</div>
 </div>
