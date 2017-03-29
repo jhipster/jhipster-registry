@@ -1,0 +1,36 @@
+<div>
+    <h2>Health Checks</h2>
+
+    <p>
+        <button class="btn btn-primary" (click)="refresh()">
+            <span class="glyphicon glyphicon-refresh"></span> <span>Refresh</span>
+        </button>
+    </p>
+
+    <div class="table-responsive">
+        <table id="healthCheck" class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="col-md-7">Service Name</th>
+                    <th class="col-md-2 text-center">Status</th>
+                    <th class="col-md-2 text-center">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let health of healthData">
+                    <td><span class="text-capitalize">{{ baseName(health.name) }}</span> {{subSystemName(health.name)}}</td>
+                    <td class="text-center">
+                        <span class="label" [ngClass]="getTagClass(health.status)">
+                            {{health.status}}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
+                            <i class="glyphicon glyphicon-eye-open"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
