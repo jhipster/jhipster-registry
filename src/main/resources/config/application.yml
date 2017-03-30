@@ -32,6 +32,10 @@ ribbon:
     eureka:
         enabled: true
 
+zuul:
+    prefix: /services/ #slash before and after
+    strip-prefix: true
+
 management:
     security:
         roles: ADMIN
