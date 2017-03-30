@@ -10,6 +10,9 @@
         <ul class="list-group">
             <li class="list-group-item {{route.active}}" *ngFor="let route of routes" (click)="showRoute(route)">
                 {{route.appName}} {{route.serviceId ? '('+route.serviceId+')' : ''}}
+                <span class="label" style="float: right;" [ngClass]="getLabelClassRoute(route)">
+                    {{route.status}}
+                </span>
             </li>
         </ul>
     </div>
@@ -17,26 +20,26 @@
     <div class="table-responsive">
         <table id="healthCheck" class="table table-striped">
             <thead>
-                <tr>
-                    <th class="col-md-7">Service Name</th>
-                    <th class="col-md-2 text-center">Status</th>
-                    <th class="col-md-2 text-center">Details</th>
-                </tr>
+            <tr>
+                <th class="col-md-7">Service Name</th>
+                <th class="col-md-2 text-center">Status</th>
+                <th class="col-md-2 text-center">Details</th>
+            </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let health of healthData">
-                    <td><span class="text-capitalize">{{ baseName(health.name) }}</span> {{subSystemName(health.name)}}</td>
-                    <td class="text-center">
-                        <span class="label" [ngClass]="getTagClass(health.status)">
+            <tr *ngFor="let health of healthData">
+                <td><span class="text-capitalize">{{ baseName(health.name) }}</span> {{subSystemName(health.name)}}</td>
+                <td class="text-center">
+                        <span class="label" [ngClass]="getLabelClass(health.status)">
                             {{health.status}}
                         </span>
-                    </td>
-                    <td class="text-center">
-                        <a class="hand" (click)="showHealthModal(health)" *ngIf="health.details || health.error">
-                            <i class="glyphicon glyphicon-eye-open"></i>
-                        </a>
-                    </td>
-                </tr>
+                </td>
+                <td class="text-center">
+                    <a class="hand" (click)="showHealthModal(health)" *ngIf="health.details || health.error">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>

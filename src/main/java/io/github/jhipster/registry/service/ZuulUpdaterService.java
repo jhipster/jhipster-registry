@@ -3,6 +3,7 @@ package io.github.jhipster.registry.service;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.shared.Application;
 import com.netflix.eureka.EurekaServerContextHolder;
+import io.github.jhipster.registry.service.routeWrapper.RegistryRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.zuul.RoutesRefreshedEvent;
@@ -54,20 +55,20 @@ public class ZuulUpdaterService {
                 String url = instanceInfos.getHomePageUrl();
                 log.debug("Checking instance {} - {} ", instanceId, url);
 
-                ZuulProperties.ZuulRoute zuulRoute =
-                    new ZuulProperties.ZuulRoute(instanceId,
-                        application.getName().toLowerCase() + "/" + instanceId + "/**",
-                        null, url, zuulProperties.isStripPrefix(), zuulProperties.getRetryable(), null);
+                RegistryRoute route = new RegistryRoute(instanceId,
+                    application.getName().toLowerCase() + "/" + instanceId + "/**",
+                    null, url, zuulProperties.isStripPrefix(), zuulProperties.getRetryable(), null,
+                    instanceInfos.getStatus().toString());
 
                 if (zuulProperties.getRoutes().containsKey(instanceId) &&
                     !zuulProperties.getRoutes().get(instanceId).getUrl().equals(url)) {
-                        log.debug("Updating instance '{}' with new URL: {}", instanceId, url);
-                        zuulProperties.getRoutes().put(instanceId, zuulRoute);
-                        isDirty = true;
+                    log.debug("Updating instance '{}' with new URL: {}", instanceId, url);
+                    zuulProperties.getRoutes().put(instanceId, route);
+                    isDirty = true;
 
                 } else {
                     log.debug("Adding instance '{}' with URL: {}", instanceId, url);
-                    zuulProperties.getRoutes().put(instanceId, zuulRoute);
+                    zuulProperties.getRoutes().put(instanceId, route);
                     isDirty = true;
                 }
             }

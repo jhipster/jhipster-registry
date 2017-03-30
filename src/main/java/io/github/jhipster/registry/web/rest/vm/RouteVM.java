@@ -1,6 +1,5 @@
 package io.github.jhipster.registry.web.rest.vm;
 
-import com.netflix.appinfo.InstanceInfo;
 import org.springframework.cloud.client.ServiceInstance;
 
 import java.util.List;
@@ -18,13 +17,13 @@ public class RouteVM {
 
     private String appName;
 
-    private InstanceInfo.InstanceStatus status;
+    private String status;
 
     private List<ServiceInstance> serviceInstances;
 
     public RouteVM(){}
 
-    public RouteVM(String path, String prefix, String serviceId, String appName, InstanceInfo.InstanceStatus status, List<ServiceInstance> serviceInstances) {
+    public RouteVM(String path, String prefix, String serviceId, String appName, String status, List<ServiceInstance> serviceInstances) {
         this.path = path;
         this.prefix = prefix;
         this.serviceId = serviceId;
@@ -65,11 +64,11 @@ public class RouteVM {
         this.appName = appName;
     }
 
-    public InstanceInfo.InstanceStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(InstanceInfo.InstanceStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

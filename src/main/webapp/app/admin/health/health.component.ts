@@ -30,7 +30,6 @@ export class JhiHealthCheckComponent implements OnInit {
 
     refresh() {
         this.getRoutes();
-        this.displayActiveRouteHealth();
     }
 
     getRoutes() {
@@ -44,25 +43,34 @@ export class JhiHealthCheckComponent implements OnInit {
             } else if (routes.length > 0) {
                 this.updateChosenInstance(routes[0]);
             }
+            this.displayActiveRouteHealth();
         });
     }
 
     displayActiveRouteHealth() {
         this.updatingHealth = true;
-        this.healthService.checkInstanceHealth(this.activeRoute).subscribe(health => {
-            this.healthData = this.healthService.transformHealthData(health);
-            this.updatingHealth = false;
-        }, error => {
-            if (error.status === 503) {
-                this.healthData = this.healthService.transformHealthData(error.json());
+        if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
+            this.healthService.checkInstanceHealth(this.activeRoute).subscribe(health => {
+                this.healthData = this.healthService.transformHealthData(health);
                 this.updatingHealth = false;
-            }
-        });
+            }, error => {
+                if (error.status === 503 || error.status === 500 || error.status === 404) {
+                    this.healthData = this.healthService.transformHealthData(error.json());
+                    this.updatingHealth = false;
+                    if (error.status === 500 || error.status === 404) {
+                        this.downRoute(this.activeRoute);
+                        this.setActiveRoute(null);
+                        this.updateChosenInstance(this.activeRoute);
+                        this.displayActiveRouteHealth();
+                    }
+                }
+            });
+        }
     }
 
     updateChosenInstance(instance: Route) {
         if (instance) {
-            this.activeRoute = instance;
+            this.setActiveRoute(instance);
             for (let route of this.routes) {
                 route.active = '';
                 if (route.appName === this.activeRoute.appName) {
@@ -74,8 +82,17 @@ export class JhiHealthCheckComponent implements OnInit {
 
     // user click
     showRoute(instance: Route) {
-        this.updateChosenInstance(instance);
-        this.displayActiveRouteHealth();
+        this.setActiveRoute(instance);
+        this.refresh();
+    }
+
+    // change active route only if exists, else choose Registry
+    setActiveRoute(instance: Route) {
+        if (instance && this.routes && this.routes.findIndex(r => r.appName === instance.appName) !== -1) {
+            this.activeRoute = instance;
+        } else if (this.routes && this.routes.length > 0) {
+            this.activeRoute = this.routes[0];
+        }
     }
 
     // user click
@@ -89,15 +106,29 @@ export class JhiHealthCheckComponent implements OnInit {
         });
     }
 
+    private downRoute(instance: Route) {
+        if (instance && this.routes) {
+            let index = this.routes.findIndex(r => r.appName === instance.appName);
+            if (index !== -1) this.routes[index].status = 'DOWN';
+        }
+    }
+
     baseName(name: string) {
         return this.healthService.getBaseName(name);
     }
 
-    getTagClass(statusState) {
-        if (statusState === 'UP') {
-            return 'label-success';
-        } else {
+    // user click
+    getLabelClassRoute(route: Route) {
+        if (route && !route.status) route.status = 'UP';
+        return this.getLabelClass(route.status);
+    }
+
+    // user click
+    getLabelClass(statusState) {
+        if (!statusState || statusState !== 'UP') {
             return 'label-danger';
+        } else {
+            return 'label-success';
         }
     }
 
