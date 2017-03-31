@@ -1,0 +1,28 @@
+/* ==========================================================================
+Metrics page styles
+========================================================================== */
+
+#metrics {
+    display: flex;
+    flex-flow: column;
+}
+
+#garbage div div.col-md-3 {
+    text-align: initial;
+}
+
+span.label{ /* UP, DOWN, ... */
+    float: right;
+}
+
+tbody tr td code, li.list-group-item { /* routes names */
+    word-break: break-all;
+}
+
+/* ==========================================================================
+Metrics modal styles
+========================================================================== */
+
+span.badge { /* Thread dump modal  */
+    vertical-align: initial;
+}

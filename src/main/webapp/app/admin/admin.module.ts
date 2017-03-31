@@ -1,21 +1,16 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ParseLinks } from 'ng-jhipster';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
 
-import { JhipsterRegistrySharedModule } from '../shared';
+import {JhipsterRegistrySharedModule} from '../shared';
 
 import {
     adminState,
-    // LogsComponent,
-    // JhiMetricsMonitoringModalComponent,
-    // JhiMetricsMonitoringComponent,
-    JhiHealthModalComponent,
     JhiHealthCheckComponent,
-    // JhiConfigurationComponent,
-    // JhiConfigurationService,
+    JhiHealthModalComponent,
     JhiHealthService,
-    // JhiMetricsService,
-    // LogsService
+    JhiMetricsMonitoringComponent,
+    JhiMetricsMonitoringModalComponent,
+    JhiMetricsService
 } from './';
 
 
@@ -29,17 +24,17 @@ import {
         // JhiConfigurationComponent,
         JhiHealthCheckComponent,
         JhiHealthModalComponent,
-        // JhiMetricsMonitoringComponent,
-        // JhiMetricsMonitoringModalComponent
+        JhiMetricsMonitoringComponent,
+        JhiMetricsMonitoringModalComponent
     ],
     entryComponents: [
         JhiHealthModalComponent,
-        // JhiMetricsMonitoringModalComponent,
+        JhiMetricsMonitoringModalComponent,
     ],
     providers: [
         // JhiConfigurationService,
         JhiHealthService,
-        // JhiMetricsService,
+        JhiMetricsService,
         // LogsService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
