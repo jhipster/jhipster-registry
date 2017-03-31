@@ -11,7 +11,7 @@
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
-                    <tr class="row">
+                    <tr>
                         <th class="col-md-6 text-xs-left">Name</th>
                         <th class="col-md-6 text-xs-left">Value</th>
                     </tr>
@@ -27,7 +27,7 @@
     </div>
     <div *ngIf="currentHealth.error">
         <h4>Error</h4>
-            <pre>{{currentHealth.error}}</pre>
+        <pre>{{currentHealth.error}}</pre>
     </div>
 </div>
 <div class="modal-footer">

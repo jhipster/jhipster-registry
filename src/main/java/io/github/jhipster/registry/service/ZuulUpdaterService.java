@@ -3,7 +3,7 @@ package io.github.jhipster.registry.service;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.shared.Application;
 import com.netflix.eureka.EurekaServerContextHolder;
-import io.github.jhipster.registry.service.routeWrapper.RegistryRoute;
+import io.github.jhipster.registry.service.dto.ZuulRouteDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.zuul.RoutesRefreshedEvent;
@@ -55,7 +55,7 @@ public class ZuulUpdaterService {
                 String url = instanceInfos.getHomePageUrl();
                 log.debug("Checking instance {} - {} ", instanceId, url);
 
-                RegistryRoute route = new RegistryRoute(instanceId,
+                ZuulRouteDTO route = new ZuulRouteDTO(instanceId,
                     application.getName().toLowerCase() + "/" + instanceId + "/**",
                     null, url, zuulProperties.isStripPrefix(), zuulProperties.getRetryable(), null,
                     instanceInfos.getStatus().toString());

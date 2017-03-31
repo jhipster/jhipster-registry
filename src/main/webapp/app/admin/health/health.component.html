@@ -1,4 +1,4 @@
-<div>
+<div id="health">
     <h2>
         Health Checks
         <button class="btn btn-primary" (click)="refresh()">
@@ -10,7 +10,7 @@
         <ul class="list-group">
             <li class="list-group-item {{route.active}}" *ngFor="let route of routes" (click)="showRoute(route)">
                 {{route.appName}} {{route.serviceId ? '('+route.serviceId+')' : ''}}
-                <span class="label" style="float: right;" [ngClass]="getLabelClassRoute(route)">
+                <span class="label" [ngClass]="getLabelClassRoute(route)">
                     {{route.status}}
                 </span>
             </li>

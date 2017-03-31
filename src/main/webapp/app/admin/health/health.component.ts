@@ -1,15 +1,18 @@
-import {Component, OnInit} from "@angular/core";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Component, OnInit} from '@angular/core';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
-import {JhiHealthService} from "./health.service";
-import {JhiHealthModalComponent} from "./health-modal.component";
+import {JhiHealthService} from './health.service';
+import {JhiHealthModalComponent} from './health-modal.component';
 
-import {JhiRoutesService} from "../../routes";
-import {Route} from "../../routes/route.model";
+import {JhiRoutesService} from '../../routes';
+import {Route} from '../../routes/route.model';
 
 @Component({
     selector: 'jhi-health',
     templateUrl: './health.component.html',
+    styleUrls: [
+        'health.css'
+    ]
 })
 export class JhiHealthCheckComponent implements OnInit {
     healthData: any;
@@ -73,7 +76,7 @@ export class JhiHealthCheckComponent implements OnInit {
             this.setActiveRoute(instance);
             for (let route of this.routes) {
                 route.active = '';
-                if (route.appName === this.activeRoute.appName) {
+                if (route.path === this.activeRoute.path) {
                     route.active = 'active';
                 }
             }

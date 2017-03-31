@@ -1,7 +1,7 @@
-import {Injectable} from "@angular/core";
-import {Http, Response} from "@angular/http";
-import {Observable} from "rxjs/Rx";
-import {Route} from "../../routes/route.model";
+import {Injectable} from '@angular/core';
+import {Http, Response} from '@angular/http';
+import {Observable} from 'rxjs/Rx';
+import {Route} from '../../routes/route.model';
 
 @Injectable()
 export class JhiHealthService {
@@ -17,7 +17,7 @@ export class JhiHealthService {
         return this.http.get('management/health').map((res: Response) => res.json());
     }
 
-    // get the instance's health (or the Registry healty if empty param)
+    // get the instance's health
     checkInstanceHealth(instance: Route): Observable<any> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
             return this.http.get((instance.prefix + '/management/health')).map((res: Response) => res.json());

@@ -2,7 +2,7 @@ package io.github.jhipster.registry.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.netflix.appinfo.InstanceInfo;
-import io.github.jhipster.registry.service.routeWrapper.RegistryRoute;
+import io.github.jhipster.registry.service.dto.ZuulRouteDTO;
 import io.github.jhipster.registry.web.rest.vm.RouteVM;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.netflix.zuul.filters.Route;
@@ -63,8 +63,8 @@ public class RoutesResource {
     private void fillStatus(Map<String, RouteVM> routeVMs) {
         if(routeVMs != null && !routeVMs.isEmpty()) {
             zuulProperties.getRoutes().values().forEach(oneRoute -> {
-                if(oneRoute instanceof RegistryRoute){
-                    routeVMs.get(oneRoute.getId()).setStatus(((RegistryRoute) oneRoute).getStatus());
+                if(oneRoute instanceof ZuulRouteDTO){
+                    routeVMs.get(oneRoute.getId()).setStatus(((ZuulRouteDTO) oneRoute).getStatus());
                 }
             });
         }
