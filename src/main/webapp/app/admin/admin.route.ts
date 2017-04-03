@@ -1,19 +1,19 @@
 import { Routes, CanActivate } from '@angular/router';
 
 import {
-    // configurationRoute,
+    configurationRoute,
     healthRoute,
-    // logsRoute,
-    // metricsRoute
+    logsRoute,
+    metricsRoute
 } from './';
 
 import { UserRouteAccessService } from '../shared';
 
 let ADMIN_ROUTES = [
-    // configurationRoute,
+    configurationRoute,
     healthRoute,
-    // logsRoute,
-    // metricsRoute
+    logsRoute,
+    metricsRoute
 ];
 
 

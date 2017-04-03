@@ -6,16 +6,16 @@ import { JhipsterRegistrySharedModule } from '../shared';
 
 import {
     adminState,
-    // LogsComponent,
-    // JhiMetricsMonitoringModalComponent,
-    // JhiMetricsMonitoringComponent,
+    LogsComponent,
+    JhiMetricsMonitoringModalComponent,
+    JhiMetricsMonitoringComponent,
     JhiHealthModalComponent,
     JhiHealthCheckComponent,
-    // JhiConfigurationComponent,
-    // JhiConfigurationService,
+    JhiConfigurationComponent,
+    JhiConfigurationService,
     JhiHealthService,
-    // JhiMetricsService,
-    // LogsService
+    JhiMetricsService,
+    LogsService
 } from './';
 
 
@@ -25,22 +25,22 @@ import {
         RouterModule.forRoot(adminState, { useHash: true })
     ],
     declarations: [
-        // LogsComponent,
-        // JhiConfigurationComponent,
+        LogsComponent,
+        JhiConfigurationComponent,
         JhiHealthCheckComponent,
         JhiHealthModalComponent,
-        // JhiMetricsMonitoringComponent,
-        // JhiMetricsMonitoringModalComponent
+        JhiMetricsMonitoringComponent,
+        JhiMetricsMonitoringModalComponent
     ],
     entryComponents: [
         JhiHealthModalComponent,
-        // JhiMetricsMonitoringModalComponent,
+        JhiMetricsMonitoringModalComponent,
     ],
     providers: [
-        // JhiConfigurationService,
+        JhiConfigurationService,
         JhiHealthService,
-        // JhiMetricsService,
-        // LogsService
+        JhiMetricsService,
+        LogsService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
