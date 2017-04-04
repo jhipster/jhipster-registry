@@ -27,16 +27,24 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let instance of instances">
-                            <td>
-                                <a routerLink="{{instance.homePageUrl}}" target="_blank">{{instance.instanceId}}</a>
-                            </td>
-                            <td class="text-center">
-                                <span class="label" [ngClass]="getLabelClass(instance.status)">
-                                    {{instance.status}}
-                                </span>
-                            </td>
-                        </tr>
+                            <tr *ngFor="let instance of instances">
+                                <td>
+                                    <a routerLink="{{instance.homePageUrl}}" target="_blank">{{instance.instanceId}}</a>
+                                </td>
+                                <td class="text-center">
+                                    <span class="label" [ngClass]="getLabelClass(instance.status)">
+                                        {{instance.status}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span *ngFor="let entry of (instance.metadata | keys )">
+                                        <span class="badge badge-default font-weight-normal">
+                                            <span class="badge badge-pill badge-info font-weight-normal">{{entry.key}}</span>
+                                            {{entry.value}}
+                                        </span>
+                                    </span>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

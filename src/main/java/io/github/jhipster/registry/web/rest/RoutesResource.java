@@ -5,6 +5,7 @@ import com.netflix.appinfo.InstanceInfo;
 import io.github.jhipster.registry.service.dto.ZuulRouteDTO;
 import io.github.jhipster.registry.web.rest.vm.RouteVM;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
@@ -28,10 +29,13 @@ public class RoutesResource {
 
     private final RouteLocator routeLocator;
 
+    private final DiscoveryClient discoveryClient;
+
     private  ZuulProperties zuulProperties;
 
-    public RoutesResource(RouteLocator routeLocator, ZuulProperties zuulProperties) {
+    public RoutesResource(RouteLocator routeLocator, DiscoveryClient discoveryClient, ZuulProperties zuulProperties) {
         this.routeLocator = routeLocator;
+        this.discoveryClient = discoveryClient;
         this.zuulProperties = zuulProperties;
     }
 
@@ -47,8 +51,9 @@ public class RoutesResource {
             RouteVM routeVM = new RouteVM();
             routeVM.setPath(route.getFullPath());
             routeVM.setPrefix(route.getPrefix());
-            routeVM.setServiceId(route.getId());
             routeVM.setAppName(extractName(route.getId()));
+            routeVM.setServiceId(route.getId());
+            routeVM.setServiceInstances(discoveryClient.getInstances(route.getId()));
             routeVMs.put(route.getId(), routeVM);
         });
 
