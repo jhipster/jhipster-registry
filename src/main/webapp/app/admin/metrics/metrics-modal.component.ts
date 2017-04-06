@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: 'metrics-modal',
+    selector: 'jhi-metrics-modal',
     templateUrl: './metrics-modal.component.html',
     styleUrls: [
-        'metrics.css'
+        'metrics.component.css'
     ]
 })
 export class JhiMetricsMonitoringModalComponent implements OnInit {

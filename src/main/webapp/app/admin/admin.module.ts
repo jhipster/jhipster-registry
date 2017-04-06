@@ -8,6 +8,8 @@ import {
     JhiHealthCheckComponent,
     JhiHealthModalComponent,
     JhiHealthService,
+    JhiLogsComponent,
+    JhiLogsService,
     JhiMetricsMonitoringComponent,
     JhiMetricsMonitoringModalComponent,
     JhiMetricsService
@@ -20,7 +22,7 @@ import {
         RouterModule.forRoot(adminState, { useHash: true })
     ],
     declarations: [
-        // LogsComponent,
+        JhiLogsComponent,
         // JhiConfigurationComponent,
         JhiHealthCheckComponent,
         JhiHealthModalComponent,
@@ -35,7 +37,7 @@ import {
         // JhiConfigurationService,
         JhiHealthService,
         JhiMetricsService,
-        // LogsService
+        JhiLogsService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -6,7 +6,7 @@
         </button>
     </h2>
 
-    <div class="col-md-4" *ngIf="routes">
+    <div class="col-md-5" *ngIf="routes">
         <ul class="list-group">
             <li class="list-group-item {{route.active}}" *ngFor="let route of routes" (click)="showRoute(route)">
                 {{route.appName}} {{route.serviceId ? '('+route.serviceId+')' : ''}}

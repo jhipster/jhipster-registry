@@ -8,10 +8,10 @@ import {JhiRoutesService} from '../../routes';
 import {Route} from '../../routes/route.model';
 
 @Component({
-    selector: 'metrics',
+    selector: 'jhi-metrics',
     templateUrl: './metrics.component.html',
     styleUrls: [
-        'metrics.css'
+        'metrics.component.css'
     ]
 })
 export class JhiMetricsMonitoringComponent implements OnInit {
@@ -140,13 +140,17 @@ export class JhiMetricsMonitoringComponent implements OnInit {
     private downRoute(instance: Route) {
         if (instance && this.routes) {
             let index = this.routes.findIndex(r => r.appName === instance.appName);
-            if (index !== -1) this.routes[index].status = 'DOWN';
+            if (index !== -1) {
+                this.routes[index].status = 'DOWN';
+            }
         }
     }
 
     // user click
     getLabelClassRoute(route: Route) {
-        if (route && !route.status) route.status = 'UP';
+        if (route && !route.status) {
+            route.status = 'UP';
+        }
         return this.getLabelClass(route.status);
     }
 

@@ -15,7 +15,7 @@ span.label{ /* UP, DOWN, ... */
     float: right;
 }
 
-tbody tr td code, li.list-group-item { /* routes names */
+li.list-group-item { /* routes names */
     word-break: break-all;
 }
 

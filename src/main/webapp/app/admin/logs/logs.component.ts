@@ -1,38 +1,50 @@
 import {Component, OnInit} from '@angular/core';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
-import {JhiHealthService} from './health.service';
-import {JhiHealthModalComponent} from './health-modal.component';
+import {Log} from './log.model';
+import {JhiLogsService} from './logs.service';
 
 import {JhiRoutesService} from '../../routes';
 import {Route} from '../../routes/route.model';
 
 @Component({
-    selector: 'jhi-health',
-    templateUrl: './health.component.html',
+    selector: 'jhi-logs',
+    templateUrl: './logs.component.html',
     styleUrls: [
-        'health.component.css'
+        'logs.component.css'
     ]
 })
-export class JhiHealthCheckComponent implements OnInit {
-    healthData: any;
-    updatingHealth: boolean;
+export class JhiLogsComponent implements OnInit {
+
+    loggers: Log[];
+    updatingLogs: boolean;
+    filter: string;
+    orderProp: string;
+    reverse: boolean;
+
     activeRoute: Route;
     routes: Route[];
     updatingRoutes: boolean;
 
-    constructor(
-        private modalService: NgbModal,
-        private healthService: JhiHealthService,
+    constructor (
+        private logsService: JhiLogsService,
         private routesService: JhiRoutesService
-    ) {}
-
-    ngOnInit() {
-        this.refresh();
+    ) {
+        this.filter = '';
+        this.orderProp = 'name';
+        this.reverse = false;
     }
 
-    refresh() {
+    ngOnInit() {
         this.getRoutes();
+    }
+
+    changeLevel (name: string, level: string) {
+        let log = new Log(name, level);
+        if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
+            this.logsService.changeInstanceLevel(this.activeRoute, log).subscribe(() => {
+                this.logsService.findInstanceAll(this.activeRoute).subscribe(loggers => this.loggers = loggers);
+            });
+        }
     }
 
     getRoutes() {
@@ -46,25 +58,24 @@ export class JhiHealthCheckComponent implements OnInit {
             } else if (routes.length > 0) {
                 this.updateChosenInstance(routes[0]);
             }
-            this.displayActiveRouteHealth();
+            this.displayActiveRouteLogs();
         });
     }
 
-    displayActiveRouteHealth() {
-        this.updatingHealth = true;
+    displayActiveRouteLogs() {
+        this.updatingLogs = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.healthService.checkInstanceHealth(this.activeRoute).subscribe(health => {
-                this.healthData = this.healthService.transformHealthData(health);
-                this.updatingHealth = false;
+            this.logsService.findInstanceAll(this.activeRoute).subscribe(loggers => {
+                this.loggers = loggers;
+                this.updatingLogs = false;
             }, error => {
                 if (error.status === 503 || error.status === 500 || error.status === 404) {
-                    this.healthData = this.healthService.transformHealthData(error.json());
-                    this.updatingHealth = false;
+                    this.updatingLogs = false;
                     if (error.status === 500 || error.status === 404) {
                         this.downRoute(this.activeRoute);
                         this.setActiveRoute(null);
                         this.updateChosenInstance(this.activeRoute);
-                        this.displayActiveRouteHealth();
+                        this.displayActiveRouteLogs();
                     }
                 }
             });
@@ -83,10 +94,9 @@ export class JhiHealthCheckComponent implements OnInit {
         }
     }
 
-    // user click
     showRoute(instance: Route) {
         this.setActiveRoute(instance);
-        this.refresh();
+        this.getRoutes();
     }
 
     // change active route only if exists, else choose Registry
@@ -98,17 +108,6 @@ export class JhiHealthCheckComponent implements OnInit {
         }
     }
 
-    // user click
-    showHealthModal(health: any) {
-        const modalRef  = this.modalService.open(JhiHealthModalComponent);
-        modalRef.componentInstance.currentHealth = health;
-        modalRef.result.then((result) => {
-            // Left blank intentionally, nothing to do here
-        }, (reason) => {
-            // Left blank intentionally, nothing to do here
-        });
-    }
-
     private downRoute(instance: Route) {
         if (instance && this.routes) {
             let index = this.routes.findIndex(r => r.appName === instance.appName);
@@ -116,10 +115,6 @@ export class JhiHealthCheckComponent implements OnInit {
                 this.routes[index].status = 'DOWN';
             }
         }
-    }
-
-    baseName(name: string) {
-        return this.healthService.getBaseName(name);
     }
 
     // user click
@@ -130,17 +125,12 @@ export class JhiHealthCheckComponent implements OnInit {
         return this.getLabelClass(route.status);
     }
 
-    // user click
-    getLabelClass(statusState) {
+    private getLabelClass(statusState) {
         if (!statusState || statusState !== 'UP') {
             return 'label-danger';
         } else {
             return 'label-success';
         }
-    }
-
-    subSystemName(name: string) {
-        return this.healthService.getSubSystemName(name);
     }
 
 }

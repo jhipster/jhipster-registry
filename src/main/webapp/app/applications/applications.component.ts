@@ -1,5 +1,5 @@
-import {Component, OnInit} from "@angular/core";
-import {JhiApplicationsService} from "./applications.service";
+import {Component, OnInit} from '@angular/core';
+import {JhiApplicationsService} from './applications.service';
 
 @Component({
     selector: 'jhi-applications',

@@ -1,6 +1,6 @@
 import {Routes} from '@angular/router';
 
-import {healthRoute, metricsRoute} from './';
+import {healthRoute, logsRoute, metricsRoute} from './';
 
 import {UserRouteAccessService} from '../shared';
 
@@ -8,7 +8,7 @@ let ADMIN_ROUTES = [
     // configurationRoute,
     healthRoute,
     metricsRoute,
-    // logsRoute,
+    logsRoute,
 ];
 
 
