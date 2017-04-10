@@ -1,0 +1,58 @@
+<div id="configuration" *ngIf="allConfiguration && configuration">
+    <h2>Configuration</h2>
+
+    <div class="col-md-5" *ngIf="routes">
+        <ul class="list-group">
+            <li class="list-group-item {{route.active}}" *ngFor="let route of routes" (click)="showRoute(route)">
+                {{route.appName}} {{route.serviceId ? '('+route.serviceId+')' : ''}}
+                <span class="label" [ngClass]="getLabelClassRoute(route)">
+                    {{route.status}}
+                </span>
+            </li>
+        </ul>
+    </div>
+
+    <span>Filter (by prefix)</span> <input type="text" [(ngModel)]="filter" class="form-control">
+    <label>Spring configuration</label>
+    <table id="configs" class="table table-striped table-bordered table-responsive d-table">
+        <thead>
+        <tr>
+            <th class="col-md-3" (click)="orderProp = 'prefix'; reverse=!reverse"><span>Prefix</span></th>
+            <th class="col-md-9" (click)="orderProp = 'properties'; reverse=!reverse"><span>Properties</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let entry of (configuration | pureFilter:filter:'prefix' | orderBy:orderProp:reverse)">
+            <td><span>{{entry.prefix}}</span></td>
+            <td>
+                <div class="row" *ngFor="let key of keys(entry.properties)">
+                    <div class="col-md-5 break">{{key}}</div>
+                    <div class="col-md-7 break">
+                        <span class="float-right badge badge-default break">{{entry.properties[key] | json}}</span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div id="allConfigs" *ngFor="let key of keys(allConfiguration)">
+        <label><span>{{key}}</span></label>
+        <table class="table table-sm table-striped table-bordered table-responsive d-table">
+            <thead>
+            <tr>
+                <th class="col-md-3">Property</th>
+                <th class="col-md-9">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of allConfiguration[key]">
+                <td class="col-md-5 break" style="width: 40%;">{{item.key}}</td>
+                <td class="col-md-5 break" style="width: 60%;">
+                    <span class="float-right badge badge-default break">{{item.val}}</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

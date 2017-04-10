@@ -5,6 +5,8 @@ import {JhipsterRegistrySharedModule} from '../shared';
 
 import {
     adminState,
+    JhiConfigurationComponent,
+    JhiConfigurationService,
     JhiHealthCheckComponent,
     JhiHealthModalComponent,
     JhiHealthService,
@@ -23,7 +25,7 @@ import {
     ],
     declarations: [
         JhiLogsComponent,
-        // JhiConfigurationComponent,
+        JhiConfigurationComponent,
         JhiHealthCheckComponent,
         JhiHealthModalComponent,
         JhiMetricsMonitoringComponent,
@@ -34,7 +36,7 @@ import {
         JhiMetricsMonitoringModalComponent,
     ],
     providers: [
-        // JhiConfigurationService,
+        JhiConfigurationService,
         JhiHealthService,
         JhiMetricsService,
         JhiLogsService

@@ -1,6 +1,6 @@
-// export * from './configuration/configuration.component';
-// export * from './configuration/configuration.service';
-// export * from './configuration/configuration.route';
+export * from './configuration/configuration.component';
+export * from './configuration/configuration.service';
+export * from './configuration/configuration.route';
 export * from './health/health.component';
 export * from './health/health-modal.component';
 export * from './health/health.service';
