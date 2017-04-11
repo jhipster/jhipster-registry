@@ -14,7 +14,6 @@ RUN apk update && apk add openssh && \
     rm -Rf /code/ /root/.m2/wrapper/ /root/.m2/repository/ /var/cache/apk/*
 
 EXPOSE 8761
-VOLUME /tmp
 
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     SPRING_PROFILES_ACTIVE=prod,native \

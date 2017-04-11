@@ -7,7 +7,6 @@ ADD *.war /jhipster-registry.war
 RUN apk update && apk add openssh && rm -rf /var/cache/apk/*
 
 EXPOSE 8761
-VOLUME /tmp
 
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     SPRING_PROFILES_ACTIVE=prod,native \
