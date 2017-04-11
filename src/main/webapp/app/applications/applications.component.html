@@ -1,0 +1,46 @@
+<div>
+    <p>
+        <button class="btn btn-primary" (click)="refresh()">
+            <span class="glyphicon glyphicon-refresh"></span> <span>Refresh</span>
+        </button>
+    </p>
+
+    <div class="container-fluid">
+        <div class="row-fluid" *ngIf="data">
+            <div class="col-md-3">
+                <h3>Applications</h3>
+                <ul class="list-group">
+                    <li class="list-group-item {{app.active}}" *ngFor="let app of data.applications | orderBy:name" (click)="show(app.name)">
+                        <span class="glyphicon glyphicon-alert" *ngIf="(app.instances | filter:{status:'UP'}).length < app.instances.length">&nbsp;</span> {{app.name}}
+                        <span class="badge">{{(app.instances | filter:{status:'UP'}).length}} / {{app.instances.length}}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <h3>Instances</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let instance of instances">
+                            <td>
+                                <a routerLink="{{instance.homePageUrl}}" target="_blank">{{instance.instanceId}}</a>
+                            </td>
+                            <td class="text-center">
+                                <span class="label" [ngClass]="getLabelClass(instance.status)">
+                                    {{instance.status}}
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

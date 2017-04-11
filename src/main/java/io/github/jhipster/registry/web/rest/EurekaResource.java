@@ -10,7 +10,7 @@ import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl;
 import com.netflix.eureka.resources.StatusResource;
 import com.netflix.eureka.util.StatusInfo;
-import io.github.jhipster.registry.web.rest.dto.EurekaDTO;
+import io.github.jhipster.registry.web.rest.vm.EurekaVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for viewing Eureka data.
@@ -37,10 +42,10 @@ public class EurekaResource {
      */
     @GetMapping("/eureka/applications")
     @Timed
-    public ResponseEntity<EurekaDTO> eureka() {
-        EurekaDTO eurekaDTO = new EurekaDTO();
-        eurekaDTO.setApplications(getApplications());
-        return new ResponseEntity<>(eurekaDTO, HttpStatus.OK);
+    public ResponseEntity<EurekaVM> eureka() {
+        EurekaVM eurekaVM = new EurekaVM();
+        eurekaVM.setApplications(getApplications());
+        return new ResponseEntity<>(eurekaVM, HttpStatus.OK);
     }
 
     private List<Map<String, Object>> getApplications() {
@@ -117,11 +122,11 @@ public class EurekaResource {
      */
     @GetMapping("/eureka/status")
     @Timed
-    public ResponseEntity<EurekaDTO> eurekaStatus() {
+    public ResponseEntity<EurekaVM> eurekaStatus() {
 
-        EurekaDTO eurekaDTO = new EurekaDTO();
-        eurekaDTO.setStatus(getEurekaStatus());
-        return new ResponseEntity<>(eurekaDTO, HttpStatus.OK);
+        EurekaVM eurekaVM = new EurekaVM();
+        eurekaVM.setStatus(getEurekaStatus());
+        return new ResponseEntity<>(eurekaVM, HttpStatus.OK);
     }
 
     private Map<String, Object> getEurekaStatus() {

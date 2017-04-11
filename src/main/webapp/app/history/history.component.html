@@ -1,0 +1,41 @@
+<div>
+    <h2>Instances history</h2>
+    <p>
+    <button class="btn btn-primary" (click)="refresh()">
+        <span class="glyphicon glyphicon-refresh"></span> <span>Refresh</span>
+    </button>
+</p>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ngb-tabset activeId="registered" (tabChange)="beforeChange($event)">
+                <ngb-tab id="registered">
+                    <template ngbTabTitle>Last registered leases</template>
+                    <template ngbTabContent></template>
+                </ngb-tab>
+                <ngb-tab id="canceled" title="Last canceled leases">
+                    <template ngbTabContent></template>
+                </ngb-tab>
+            </ngb-tabset>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Instance</th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="items">
+                    <tr *ngFor="let instance of (items | orderBy:'-key')">
+                        <td>
+                            {{instance.key | date:'medium'}}
+                        </td>
+                        <td>
+                            {{instance.value}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,9 @@
 package io.github.jhipster.registry.config;
 
-import javax.inject.Inject;
-
+import io.github.jhipster.registry.security.AuthoritiesConstants;
+import io.github.jhipster.registry.security.Http401UnauthorizedEntryPoint;
+import io.github.jhipster.registry.security.jwt.JWTConfigurer;
+import io.github.jhipster.registry.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -11,21 +13,20 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
-import io.github.jhipster.registry.security.AuthoritiesConstants;
-import io.github.jhipster.registry.security.Http401UnauthorizedEntryPoint;
-import io.github.jhipster.registry.security.jwt.JWTConfigurer;
-import io.github.jhipster.registry.security.jwt.TokenProvider;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Inject
-    private Http401UnauthorizedEntryPoint authenticationEntryPoint;
+    private final Http401UnauthorizedEntryPoint authenticationEntryPoint;
 
-    @Inject
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
+
+    public SecurityConfiguration(Http401UnauthorizedEntryPoint authenticationEntryPoint,
+                                 TokenProvider tokenProvider) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.tokenProvider = tokenProvider;
+    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -33,7 +34,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.OPTIONS, "/**")
             .antMatchers("/app/**/*.{js,html}")
             .antMatchers("/bower_components/**")
-            .antMatchers("/content/**");
+            .antMatchers("/content/**")
+            .antMatchers("/test/**")
+            .antMatchers("/h2-console/**");
     }
 
     @Override
@@ -55,20 +58,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .realmName("JHipster Registry")
         .and()
             .authorizeRequests()
+            .antMatchers("/**").permitAll() // cannot reconnect without this line
+            .antMatchers("/api/**").authenticated()
+            .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/authenticate").permitAll()
-            .antMatchers("/api/**").authenticated()
+            .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/").permitAll()
-            .anyRequest().authenticated()
+            .anyRequest().authenticated() // always at the end
         .and()
             .apply(securityConfigurerAdapter());
-
     }
 
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
     }
-
 }

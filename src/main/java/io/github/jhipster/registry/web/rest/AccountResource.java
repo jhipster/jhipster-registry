@@ -1,12 +1,13 @@
 package io.github.jhipster.registry.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import io.github.jhipster.registry.web.rest.dto.UserDTO;
+import io.github.jhipster.registry.web.rest.vm.UserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,12 +47,16 @@ public class AccountResource {
      */
     @GetMapping("/account")
     @Timed
-    public ResponseEntity<UserDTO> getAccount() {
+    public ResponseEntity<UserVM> getAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        UserDTO userDTO = new UserDTO(user.getUsername(),
-            user.getAuthorities().stream()
-                .map(authority -> authority.getAuthority()).collect(Collectors.toSet()));
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        try{
+            User user = (User) authentication.getPrincipal();
+            UserVM userVM = new UserVM(user.getUsername(),
+                user.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
+            return new ResponseEntity<>(userVM, HttpStatus.OK);
+        } catch (NullPointerException | ClassCastException e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

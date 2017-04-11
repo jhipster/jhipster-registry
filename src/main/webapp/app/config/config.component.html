@@ -1,0 +1,44 @@
+<div>
+    <h2>Spring Cloud Configuration</h2>
+
+    <form name="form" role="form" (ngSubmit)="refresh()">
+        <strong>Application: </strong>
+        <input type="text" name="application" [(ngModel)]="application" required class="form-control"
+               uib-typeahead="app for app in vm.applicationList" typeahead-min-length="0">
+        <strong>Profile: </strong>
+        <input type="text" name="profile" [(ngModel)]="profile" required class="form-control">
+        <p *ngIf="isNative">
+            <strong>Git Label: </strong>
+            <input type="text" name="label" [(ngModel)]="label" required class="form-control">
+        </p>
+        <button type="button" ng-disabled="form.$invalid" class="btn btn-primary" (click)="refresh()">
+            <span class="glyphicon glyphicon-refresh"></span>&nbsp;<span>Refresh</span>
+        </button>
+    </form>
+
+    <h3>Configuration</h3>
+    <pre>{{data}}</pre>
+
+    <h3>Configuration Source Information</h3>
+
+    <table class="table table-striped ">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th *ngIf="!isNative">Repository URI</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngIf="isNative">
+            <td>Native (Local Filesystem)</td>
+            <td>{{ nativeSearchLocation }}</td>
+        </tr>
+        <tr *ngIf="!isNative">
+            <td>Git</td>
+            <td>{{ gitUri }}</td>
+            <td>/{{ gitSearchLocation }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
