@@ -1,14 +1,21 @@
-import { Route } from '@angular/router';
+import { Route, Routes } from '@angular/router';
 
 import { UserRouteAccessService } from '../shared';
 import { JhiReplicasComponent } from './replicas.component';
 
-export const REPLICAS_ROUTE: Route = {
-    path: 'replicas',
-    component: JhiReplicasComponent,
+export const replicasState: Routes = [{
+    path: '',
     data: {
-        authorities: ['ROLE_ADMIN'],
-        pageTitle: 'Replicas'
+        authorities: ['ROLE_ADMIN']
     },
-    canActivate: [UserRouteAccessService]
-};
+    canActivate: [UserRouteAccessService],
+    children: [{
+        path: 'replicas',
+        component: JhiReplicasComponent,
+        data: {
+            pageTitle: 'Replicas'
+        },
+        canActivate: [UserRouteAccessService]
+    }]
+}
+];

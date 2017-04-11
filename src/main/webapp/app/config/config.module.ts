@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { JhipsterRegistrySharedModule } from '../shared';
 
 import {
-    CONFIG_ROUTE,
+    configState,
     JhiConfigComponent,
     JhiConfigService
 } from './';
@@ -13,7 +13,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ CONFIG_ROUTE ], {useHash: true})
+        RouterModule.forRoot( configState , {useHash: true})
     ],
     declarations: [
         JhiConfigComponent
