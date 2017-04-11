@@ -1,0 +1,16 @@
+/* ==========================================================================
+Logs page styles
+========================================================================== */
+
+#logs {
+    display: flex;
+    flex-flow: column;
+}
+
+span.label{ /* UP, DOWN, ... */
+    float: right;
+}
+
+li.list-group-item { /* routes names */
+    word-break: break-all;
+}

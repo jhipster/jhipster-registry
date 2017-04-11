@@ -1,21 +1,20 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ParseLinks } from 'ng-jhipster';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
 
-import { JhipsterRegistrySharedModule } from '../shared';
+import {JhipsterRegistrySharedModule} from '../shared';
 
 import {
     adminState,
-    // LogsComponent,
-    // JhiMetricsMonitoringModalComponent,
-    // JhiMetricsMonitoringComponent,
-    JhiHealthModalComponent,
+    JhiConfigurationComponent,
+    JhiConfigurationService,
     JhiHealthCheckComponent,
-    // JhiConfigurationComponent,
-    // JhiConfigurationService,
+    JhiHealthModalComponent,
     JhiHealthService,
-    // JhiMetricsService,
-    // LogsService
+    JhiLogsComponent,
+    JhiLogsService,
+    JhiMetricsMonitoringComponent,
+    JhiMetricsMonitoringModalComponent,
+    JhiMetricsService
 } from './';
 
 
@@ -25,22 +24,22 @@ import {
         RouterModule.forRoot(adminState, { useHash: true })
     ],
     declarations: [
-        // LogsComponent,
-        // JhiConfigurationComponent,
+        JhiLogsComponent,
+        JhiConfigurationComponent,
         JhiHealthCheckComponent,
         JhiHealthModalComponent,
-        // JhiMetricsMonitoringComponent,
-        // JhiMetricsMonitoringModalComponent
+        JhiMetricsMonitoringComponent,
+        JhiMetricsMonitoringModalComponent
     ],
     entryComponents: [
         JhiHealthModalComponent,
-        // JhiMetricsMonitoringModalComponent,
+        JhiMetricsMonitoringModalComponent,
     ],
     providers: [
-        // JhiConfigurationService,
+        JhiConfigurationService,
         JhiHealthService,
-        // JhiMetricsService,
-        // LogsService
+        JhiMetricsService,
+        JhiLogsService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

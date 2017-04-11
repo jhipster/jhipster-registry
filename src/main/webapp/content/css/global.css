@@ -22,11 +22,11 @@ Generic styles
 
 /* Error highlight on input fields */
 .ng-valid[required], .ng-valid.required  {
-  border-left: 5px solid green;
+    border-left: 5px solid green;
 }
 
 .ng-invalid:not(form)  {
-  border-left: 5px solid red;
+    border-left: 5px solid red;
 }
 
 /* other generic styles */
@@ -82,7 +82,7 @@ table td[class*=col-], table th[class*=col-] {
 make sure browsers use the pointer cursor for anchors, even with no href
 ========================================================================== */
 a:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .hand {
@@ -153,12 +153,12 @@ entity tables helpers
 /* Makes toolbar not wrap on smaller screens
  http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
 .flex-btn-group-container {
-   display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: row;
-   flex-direction: row;
-   -webkit-justify-content: flex-end;
-   justify-content: flex-end;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
 }
 
 /* ==========================================================================

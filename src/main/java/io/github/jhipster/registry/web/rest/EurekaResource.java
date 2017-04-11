@@ -55,14 +55,15 @@ public class EurekaResource {
             LinkedHashMap<String, Object> appData = new LinkedHashMap<>();
             apps.add(appData);
             appData.put("name", app.getName());
-            List<Map<String, String>> instances = new ArrayList<>();
+            List<Map<String, Object>> instances = new ArrayList<>();
             for (InstanceInfo info : app.getInstances()) {
-                Map<String, String> instance = new HashMap<>();
+                Map<String, Object> instance = new HashMap<>();
                 instance.put("instanceId", info.getInstanceId());
                 instance.put("homePageUrl", info.getHomePageUrl());
                 instance.put("healthCheckUrl", info.getHealthCheckUrl());
                 instance.put("statusPageUrl", info.getStatusPageUrl());
                 instance.put("status", info.getStatus().name());
+                instance.put("metadata", info.getMetadata());
                 instances.add(instance);
             }
             appData.put("instances", instances);

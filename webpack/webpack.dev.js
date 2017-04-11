@@ -21,6 +21,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         proxy: [{
             context: [
                 '/api',
+                '/services',
                 '/management',
                 '/swagger-resources',
                 '/v2/api-docs',
