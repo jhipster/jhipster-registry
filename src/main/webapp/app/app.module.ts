@@ -53,8 +53,6 @@ import {PaginationConfig} from './blocks/config/uib-pagination.config';
     ],
     providers: [
         ProfileService,
-        { provide: Window, useValue: window },
-        { provide: Document, useValue: document },
         customHttpProvider(),
         PaginationConfig,
         UserRouteAccessService

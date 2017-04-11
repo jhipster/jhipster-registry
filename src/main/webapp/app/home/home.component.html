@@ -66,7 +66,7 @@
                             <td>{{app.name}}</td>
                             <td>{{app.instanceId}}</td>
                             <td class="text-xs-center">
-                                <span class="label" [ngClass]="getTagClass(app.status)">
+                                <span class="badge" [ngClass]="getTagClass(app.status)">
                                     {{app.status}}
                                 </span>
                             </td>
@@ -105,7 +105,7 @@
                         <tr>
                             <td>Instance Status</td>
                             <td class="text-xs-center">
-                                <span class="label" [ngClass]="getTagClass(status.instanceInfo.status)">
+                                <span class="badge" [ngClass]="getTagClass(status.instanceInfo.status)">
                                     {{status.instanceInfo.status}}
                                 </span>
                             </td>
@@ -126,7 +126,7 @@
                         <tr *ngFor="let health of healthData">
                             <td><span class="text-capitalize">{{baseName(health.name)}}</span> {{subSystemName(health.name)}}</td>
                             <td class="text-xs-center">
-                                <span class="label" [ngClass]="getTagClass(health.status)">
+                                <span class="badge" [ngClass]="getTagClass(health.status)">
                                     {{health.status}}
                                 </span>
                             </td>

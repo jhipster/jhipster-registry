@@ -10,7 +10,7 @@ Navbar
     background-color: #353d47;
     padding: .2em 1em;
     border-radius: 0; /* Hide the navbar rounded corners */
-	-moz-border-radius: 0;
+	  -moz-border-radius: 0;
 }
 
 .jh-navbar .profile-image {
@@ -32,7 +32,7 @@ Navbar
     padding: 0.5em;
 }
 
-.jh-navbar .navbar-nav .nav-item+.nav-item {
+.jh-navbar .navbar-nav .nav-item {
     margin-left: 1.5rem;
 }
 

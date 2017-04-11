@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 
-import { ProfileService } from '../profiles/profile.service'; // FIXME barrel doesnt work here
-import { Principal, LoginModalService, LoginService } from '../../shared';
+import {ProfileService} from '../profiles/profile.service'; // FIXME barrel doesn't work here
+import {LoginModalService, LoginService, Principal} from '../../shared';
 
-import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
+import {DEBUG_INFO_ENABLED, VERSION} from '../../app.constants';
 
 @Component({
     selector: 'jhi-navbar',

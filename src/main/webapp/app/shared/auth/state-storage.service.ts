@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { SessionStorageService } from 'ng2-webstorage';
+import {Injectable} from '@angular/core';
+import {SessionStorageService} from 'ng2-webstorage';
 
 @Injectable()
 export class StateStorageService {
@@ -22,6 +22,14 @@ export class StateStorageService {
 
     getDestinationState() {
         return this.$sessionStorage.retrieve('destinationState');
+    }
+
+    storeUrl(url: string) {
+        this.$sessionStorage.store('previousUrl', url);
+    }
+
+    getUrl() {
+        return this.$sessionStorage.retrieve('previousUrl');
     }
 
     storeDestinationState(destinationState, destinationStateParams, fromState) {

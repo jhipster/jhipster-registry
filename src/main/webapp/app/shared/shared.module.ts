@@ -1,25 +1,27 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import {DatePipe} from '@angular/common';
 
-import { CookieService } from 'angular2-cookie/services/cookies.service';
+import {CookieService} from 'angular2-cookie/services/cookies.service';
 import {
-    JwtSharedLibsModule,
-    JwtSharedCommonModule,
-    CSRFService,
-    AuthService,
-    AuthServerProvider,
     AccountService,
-    UserService,
-    StateStorageService,
-    LoginService,
-    LoginModalService,
-    Principal,
+    AuthServerProvider,
+    AuthService,
+    CSRFService,
     HasAnyAuthorityDirective,
-    JhiLoginModalComponent
+    JhiLoginModalComponent,
+    JwtSharedCommonModule,
+    JwtSharedLibsModule,
+    LoginModalService,
+    LoginService,
+    Principal,
+    StateStorageService,
+    UserService
 } from './';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     imports: [
+        NgbModule.forRoot(),
         JwtSharedLibsModule,
         JwtSharedCommonModule
     ],

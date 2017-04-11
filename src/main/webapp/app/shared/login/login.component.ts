@@ -1,10 +1,10 @@
-import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
-import { EventManager } from 'ng-jhipster';
+import {AfterViewInit, Component, ElementRef, OnInit, Renderer} from '@angular/core';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {Router} from '@angular/router';
+import {EventManager} from 'ng-jhipster';
 
-import { LoginService } from '../login/login.service';
-import { StateStorageService } from '../auth/state-storage.service';
+import {LoginService} from '../login/login.service';
+import {StateStorageService} from '../auth/state-storage.service';
 
 @Component({
     selector: 'jhi-login-modal',
@@ -54,7 +54,7 @@ export class JhiLoginModalComponent implements OnInit, AfterViewInit {
         }).then(() => {
             this.authenticationError = false;
             this.activeModal.dismiss('login success');
-            if (this.router.url === '/register' || this.router.url === '/activate' ||
+            if (this.router.url === '/register' || (/activate/.test(this.router.url)) ||
                 this.router.url === '/finishReset' || this.router.url === '/requestReset') {
                 this.router.navigate(['']);
             }
@@ -66,10 +66,9 @@ export class JhiLoginModalComponent implements OnInit, AfterViewInit {
 
             // // previousState was set in the authExpiredInterceptor before being redirected to login modal.
             // // since login is succesful, go to stored previousState and clear previousState
-            let previousState = this.stateStorageService.getPreviousState();
-            if (previousState) {
-                this.stateStorageService.resetPreviousState();
-                this.router.navigate([previousState.name], { queryParams:  previousState.params });
+            let redirect = this.stateStorageService.getUrl();
+            if (redirect) {
+                this.router.navigate([redirect]);
             }
         }).catch(() => {
             this.authenticationError = true;

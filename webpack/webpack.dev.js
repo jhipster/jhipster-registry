@@ -49,7 +49,9 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
-            proxy: 'http://localhost:9060'
+            proxy: {
+                target: 'http://localhost:9060'
+            }
         }, {
             reload: false
         }),

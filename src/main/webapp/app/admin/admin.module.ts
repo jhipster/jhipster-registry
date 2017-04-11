@@ -17,11 +17,14 @@ import {
     JhiMetricsService
 } from './';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot(adminState, { useHash: true })
+        RouterModule.forRoot(adminState, { useHash: true }),
+        NgbModule.forRoot(),
     ],
     declarations: [
         JhiLogsComponent,

@@ -37,6 +37,12 @@ Generic styles
     border: none;
 }
 
+.jh-card {
+    padding: 1.5%;
+    margin-top: 20px;
+    border: none;
+}
+
 .error {
     color: white;
     background-color: red;
@@ -44,6 +50,14 @@ Generic styles
 
 .pad {
     padding: 10px;
+}
+
+.w-40 {
+    width: 40% !important;
+}
+
+.w-60 {
+    width: 60% !important;
 }
 
 .break {
