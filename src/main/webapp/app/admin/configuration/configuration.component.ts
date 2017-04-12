@@ -15,7 +15,7 @@ import {Route} from '../../routes/route.model';
 export class JhiConfigurationComponent implements OnInit {
     allConfiguration: any = null;
     configuration: any = null;
-    configKeys: any;
+    configKeys: any[];
     filter: string;
     orderProp: string;
     reverse: boolean;

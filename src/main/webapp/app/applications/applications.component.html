@@ -5,7 +5,14 @@
         </button>
     </p>
 
+
+    <!--<div class="col-md-5" *ngIf="routes" style="margin-bottom: 5%">
+        <input type="text" name="application" [(ngModel)]="routes" [ngbTypeahead]="search" typeahead-min-length="0">
+    </div>-->
+    <input type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" style="margin-bottom: 5%"/>
+
     <div class="container-fluid">
+
         <div class="row-fluid" *ngIf="data">
             <div class="col-md-3">
                 <h3>Applications</h3>

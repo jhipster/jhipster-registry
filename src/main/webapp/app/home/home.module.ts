@@ -5,8 +5,6 @@ import { JhipsterRegistrySharedModule } from '../shared';
 
 import { HOME_ROUTE, HomeComponent } from './';
 import { EurekaStatusService } from './eureka.status.service';
-import { JhiApplicationsService } from '../applications';
-import { JhiLoginModalComponent } from '../shared/login/login.component';
 
 
 @NgModule({
@@ -18,7 +16,6 @@ import { JhiLoginModalComponent } from '../shared/login/login.component';
         HomeComponent,
     ],
     entryComponents: [
-        JhiLoginModalComponent
     ],
     providers: [
         EurekaStatusService
