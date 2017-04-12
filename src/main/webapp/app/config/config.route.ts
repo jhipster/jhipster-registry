@@ -1,23 +1,14 @@
-import { Route, Routes } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { UserRouteAccessService } from '../shared';
 import { JhiConfigComponent } from './config.component';
 
-
-export const configState: Routes = [{
-    path: '',
+export const CONFIG_ROUTE: Route = {
+    path: 'config',
+    component: JhiConfigComponent,
     data: {
         authorities: ['ROLE_ADMIN'],
-        pageTitle: 'History'
+        pageTitle: 'Configuration'
     },
-    canActivate: [UserRouteAccessService],
-    children: [{
-        path: 'config',
-        component: JhiConfigComponent,
-        data: {
-            pageTitle: 'Configuration'
-        },
-        canActivate: [UserRouteAccessService],
-    }]
-}
-];
+    canActivate: [UserRouteAccessService]
+};
