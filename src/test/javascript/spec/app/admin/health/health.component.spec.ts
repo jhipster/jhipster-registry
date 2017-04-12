@@ -1,9 +1,10 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { MockBackend } from '@angular/http/testing';
-import { Http, BaseRequestOptions } from '@angular/http';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiHealthCheckComponent } from '../../../../../../main/webapp/app/admin/health/health.component';
-import { JhiHealthService } from '../../../../../../main/webapp/app/admin/health/health.service';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {MockBackend} from '@angular/http/testing';
+import {BaseRequestOptions, Http} from '@angular/http';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {JhiHealthCheckComponent} from '../../../../../../main/webapp/app/admin/health/health.component';
+import {JhiHealthService} from '../../../../../../main/webapp/app/admin/health/health.service';
+import {JhiRoutesService} from '../../../../../../main/webapp/app/routes/routes.service';
 
 
 describe('Component Tests', () => {
@@ -31,7 +32,8 @@ describe('Component Tests', () => {
                     {
                         provide: NgbModal,
                         useValue: null
-                    }
+                    },
+                    JhiRoutesService
                 ]
             })
             .overrideComponent(JhiHealthCheckComponent, {
