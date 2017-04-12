@@ -1,106 +1,91 @@
 <nav class="navbar navbar-inverse navbar-toggleable-md jh-navbar">
     <div class="jh-logo-container float-left">
-        <div class="navbar-header">
-            <a class="jh-navbar-toggler hidden-lg-up float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
-                <i class="fa fa-bars"></i>
-            </a>
-            <a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()">
-                <span class="logo-img"></span>
-                <span>Registry</span> <span class="navbar-version">{{version}}</span>
-            </a>
-        </div>
-        <div class="navbar-collapse" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
-            <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                    <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
-                        <i class="fa fa-home" aria-hidden="true"></i>
-                        <span>Home</span>
-                    </a>
-                </li>
-                <li routerLinkActive="active" class="nav-item">
-                    <a class="nav-link" routerLink="applications" (click)="collapseNavbar()">
-                        <span class="glyphicon glyphicon-cloud"></span>
-                        <span class="hidden-sm">Applications</span>
-                    </a>
-                </li>
-                <li routerLinkActive="active" class="nav-item">
-                    <a class="nav-link" routerLink="history" (click)="collapseNavbar()">
-                        <span class="fa fa-hourglass"></span>
-                        <span class="hidden-sm">History</span>
-                    </a>
-                </li>
-                <li routerLinkActive="active" class="nav-item">
-                    <a class="nav-link" routerLink="replicas" (click)="collapseNavbar()">
-                        <span class="fa fa-cloud-download"></span>
-                        <span class="hidden-sm">Replicas</span>
-                    </a>
-                </li>
-                <li routerLinkActive="active" class="nav-item">
-                    <a class="nav-link" routerLink="config" (click)="collapseNavbar()">
-                        <span class="fa fa-leaf"></span>
-                        <span class="hidden-sm">Cloud config</span>
-                    </a>
-                </li>
-                <li routerLinkActive="active" class="nav-item">
-                    <a class="nav-link" routerLink="ssh" (click)="collapseNavbar()">
-                        <span class="fa fa-lock"></span>
-                        <span class="hidden-sm">SSH</span>
-                    </a>
-                </li>
-                <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
-                    <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
-                        <span>
-                             <i class="fa fa-user-plus" aria-hidden="true"></i>
-                            <span>Administration</span>
-                            <b class="caret"></b>
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu" ngbDropdownMenu>
-                        <li>
-                            <a class="dropdown-item" routerLink="jhi-metrics" routerLinkActive="active" (click)="collapseNavbar()">
-                                <i class="fa fa-fw fa-tachometer" aria-hidden="true"></i>
-                                <span>Metrics</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" routerLink="jhi-health" routerLinkActive="active" (click)="collapseNavbar()">
-                                <i class="fa fa-fw fa-heart" aria-hidden="true"></i>
-                                <span>Health</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" routerLink="jhi-configuration" routerLinkActive="active" (click)="collapseNavbar()">
-                                <i class="fa fa-fw fa-list" aria-hidden="true"></i>
-                                <span>Configuration</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" routerLink="jhi-logs" routerLinkActive="active" (click)="collapseNavbar()">
-                                <i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
-                                <span>Logs</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li *ngSwitchCase="true">
-                    <a class="dropdown-item" (click)="logout()" id="logout">
-                        <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>
-                        <span>Sign out</span>
-                    </a>
-                </li>
-                <li *ngSwitchCase="false">
-                    <a class="dropdown-item" (click)="login()" id="login">
-                        <i class="fa fa-fw fa-sign-in" aria-hidden="true"></i>
-                        <span>Sign in</span>
-                    </a>
-                </li>
-                <li *ngSwitchCase="false">
-                    <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
-                        <i class="fa fa-fw fa-registered" aria-hidden="true"></i>
-                        <span>Register</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        <a class="jh-navbar-toggler hidden-lg-up float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
+            <i class="fa fa-bars"></i>
+        </a>
+        <a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()">
+            <span class="logo-img"></span>
+            <span class="navbar-title">Registry</span> <span class="navbar-version">{{version}}</span>
+        </a>
+    </div>
+    <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="applications" (click)="collapseNavbar()">
+                    <span class="fa fa-cloud"></span>
+                    <span class="hidden-sm">Applications</span>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="history" (click)="collapseNavbar()">
+                    <span class="fa fa-hourglass"></span>
+                    <span class="hidden-sm">History</span>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="replicas" (click)="collapseNavbar()">
+                    <span class="fa fa-cloud-download"></span>
+                    <span class="hidden-sm">Replicas</span>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="config" (click)="collapseNavbar()">
+                    <span class="fa fa-leaf"></span>
+                    <span class="hidden-sm">Cloud config</span>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="ssh" (click)="collapseNavbar()">
+                    <span class="fa fa-lock"></span>
+                    <span class="hidden-sm">SSH</span>
+                </a>
+            </li>
+            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
+                    <span>
+                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                        <span>Administration</span>
+                        <b class="caret"></b>
+                    </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu>
+                    <li>
+                        <a class="dropdown-item" routerLink="jhi-metrics" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-tachometer" aria-hidden="true"></i>
+                            <span>Metrics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="jhi-health" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-heart" aria-hidden="true"></i>
+                            <span>Health</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="jhi-configuration" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-list" aria-hidden="true"></i>
+                            <span>Configuration</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="jhi-logs" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
+                            <span>Logs</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" (click)="logout()" id="logout">
+                    <span class="fa fa-fw fa-sign-out"></span>
+                </a>
+            </li>
+        </ul>
     </div>
 </nav>

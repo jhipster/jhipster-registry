@@ -1,10 +1,10 @@
 <div>
-    <h2>Registry Replicas</h2>
-    <p>
+    <h2>
+        <span>Registry Replicas</span>
         <button class="btn btn-primary" (click)="refresh()">
-            <span class="glyphicon glyphicon-refresh"></span> <span>Refresh</span>
+            <span class="fa fa-refresh"></span>
         </button>
-    </p>
+    </h2>
 
     <div class="panel panel-default">
         <div class="panel-body">
@@ -28,11 +28,11 @@
     </div>
 
     <div class="text-center pad">
-        <a (click)="showMore = !showMore" class="btn btn-default"><span
-            class="glyphicon glyphicon-circle-arrow-down"></span> show more</a>
+        <a (click)="showMore = !showMore" class="btn btn-default">
+            <span class="fa fa-arrow-circle-down"></span>&nbsp;show more</a>
     </div>
     <div [ngbCollapse]="showMore">
-        <h3><span class="glyphicon glyphicon-info-sign"></span> Configuring replication</h3>
+        <h3><span class="fa fa-info-circle"></span> Configuring replication</h3>
         <p>
             Here is the Spring Cloud Netflix official documentation for configuring replication:
         </p>

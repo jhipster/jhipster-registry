@@ -5,12 +5,6 @@
         </button>
     </p>
 
-
-    <!--<div class="col-md-5" *ngIf="routes" style="margin-bottom: 5%">
-        <input type="text" name="application" [(ngModel)]="routes" [ngbTypeahead]="search" typeahead-min-length="0">
-    </div>-->
-    <input type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" style="margin-bottom: 5%"/>
-
     <div class="container-fluid">
 
         <div class="row-fluid" *ngIf="data">
@@ -18,7 +12,7 @@
                 <h3>Applications</h3>
                 <ul class="list-group">
                     <li class="list-group-item {{app.active}}" *ngFor="let app of data.applications | orderBy:name" (click)="show(app.name)">
-                        <span class="glyphicon glyphicon-alert" *ngIf="(app.instances | filter:{status:'UP'}).length < app.instances.length">&nbsp;</span> {{app.name}}
+                        <span class="fa fa--alert" *ngIf="(app.instances | filter:{status:'UP'}).length < app.instances.length">&nbsp;</span> {{app.name}}
                         <span class="badge">{{(app.instances | filter:{status:'UP'}).length}} / {{app.instances.length}}</span>
                     </li>
                 </ul>

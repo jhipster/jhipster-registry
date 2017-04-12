@@ -7,10 +7,21 @@ Health page styles
     flex-flow: column;
 }
 
-span.label{ /* UP, DOWN, ... */
+
+/* ==========================================================================
+Routes styles
+========================================================================== */
+#routes {
+    margin-top: 1%;
+    margin-bottom: 2%;
+    padding-left: 0;
+}
+
+#routes .badge { /* UP, DOWN, ... */
     float: right;
 }
 
 li.list-group-item { /* routes names */
     word-break: break-all;
+    display: block;
 }

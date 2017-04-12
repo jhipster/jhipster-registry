@@ -1,5 +1,10 @@
 <div>
-    <h2>Spring Cloud Configuration</h2>
+    <h2>
+        <span>Spring Cloud Configuration</span>
+        <button class="btn btn-primary" (click)="refresh()">
+            <span class="fa fa-refresh"></span>
+        </button>
+    </h2>
 
     <form name="form" role="form" (ngSubmit)="refresh()">
         <strong>Application: </strong>
@@ -11,13 +16,12 @@
             <strong>Git Label: </strong>
             <input type="text" name="label" [(ngModel)]="label" required class="form-control">
         </p>
-        <button type="button" ng-disabled="form.$invalid" class="btn btn-primary" (click)="refresh()">
-            <span class="glyphicon glyphicon-refresh"></span>&nbsp;<span>Refresh</span>
-        </button>
     </form>
 
-    <h3>Configuration</h3>
-    <pre>{{data}}</pre>
+    <div *ngIf="data">
+        <h3>Configuration</h3>
+        <pre>{{data}}</pre>
+    </div>
 
     <h3>Configuration Source Information</h3>
 

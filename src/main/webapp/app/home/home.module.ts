@@ -1,10 +1,11 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
 
-import { JhipsterRegistrySharedModule } from '../shared';
+import {JhipsterRegistrySharedModule} from '../shared';
 
-import { HOME_ROUTE, HomeComponent } from './';
-import { EurekaStatusService } from './eureka.status.service';
+import {HOME_ROUTE, HomeComponent} from './';
+import {EurekaStatusService} from './eureka.status.service';
+import {JhiLoginModalComponent} from '../shared/login/login.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { EurekaStatusService } from './eureka.status.service';
         HomeComponent,
     ],
     entryComponents: [
+        JhiLoginModalComponent
     ],
     providers: [
         EurekaStatusService

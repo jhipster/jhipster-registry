@@ -133,9 +133,9 @@ export class JhiHealthCheckComponent implements OnInit {
     // user click
     getLabelClass(statusState) {
         if (!statusState || statusState !== 'UP') {
-            return 'label-danger';
+            return 'badge-danger';
         } else {
-            return 'label-success';
+            return 'badge-success';
         }
     }
 
