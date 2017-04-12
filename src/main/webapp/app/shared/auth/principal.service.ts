@@ -5,7 +5,7 @@ import { AccountService } from './account.service';
 
 @Injectable()
 export class Principal {
-    private _identity: any;
+    private userIdentity: any;
     private authenticated = false;
     private authenticationState = new Subject<any>();
 
@@ -13,19 +13,19 @@ export class Principal {
         private account: AccountService
     ) {}
 
-    authenticate (_identity) {
-        this._identity = _identity;
-        this.authenticated = _identity !== null;
-        this.authenticationState.next(this._identity);
+    authenticate (identity) {
+        this.userIdentity = identity;
+        this.authenticated = identity !== null;
+        this.authenticationState.next(this.userIdentity);
     }
 
     hasAnyAuthority (authorities: string[]): Promise<boolean> {
-        if (!this.authenticated || !this._identity || !this._identity.authorities) {
+        if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
             return Promise.resolve(false);
         }
 
         for (let i = 0; i < authorities.length; i++) {
-            if (this._identity.authorities.indexOf(authorities[i]) !== -1) {
+            if (this.userIdentity.authorities.indexOf(authorities[i]) !== -1) {
                 return Promise.resolve(true);
             }
         }
@@ -47,30 +47,30 @@ export class Principal {
 
     identity (force?: boolean): Promise<any> {
         if (force === true) {
-            this._identity = undefined;
+            this.userIdentity = undefined;
         }
 
-        // check and see if we have retrieved the _identity data from the server.
+        // check and see if we have retrieved the userIdentity data from the server.
         // if we have, reuse it by immediately resolving
-        if (this._identity) {
-            return Promise.resolve(this._identity);
+        if (this.userIdentity) {
+            return Promise.resolve(this.userIdentity);
         }
 
-        // retrieve the _identity data from the server, update the _identity object, and then resolve.
+        // retrieve the userIdentity data from the server, update the identity object, and then resolve.
         return this.account.get().toPromise().then(account => {
             if (account) {
-                this._identity = account;
+                this.userIdentity = account;
                 this.authenticated = true;
             } else {
-                this._identity = null;
+                this.userIdentity = null;
                 this.authenticated = false;
             }
-            this.authenticationState.next(this._identity);
-            return this._identity;
+            this.authenticationState.next(this.userIdentity);
+            return this.userIdentity;
         }).catch(err => {
-            this._identity = null;
+            this.userIdentity = null;
             this.authenticated = false;
-            this.authenticationState.next(this._identity);
+            this.authenticationState.next(this.userIdentity);
             return null;
         });
     }
@@ -80,7 +80,7 @@ export class Principal {
     }
 
     isIdentityResolved (): boolean {
-        return this._identity !== undefined;
+        return this.userIdentity !== undefined;
     }
 
     getAuthenticationState(): Observable<any> {
@@ -88,6 +88,6 @@ export class Principal {
     }
 
     getImageUrl(): String {
-        return this.isIdentityResolved () ? this._identity.imageUrl : null;
+        return this.isIdentityResolved () ? this.userIdentity.imageUrl : null;
     }
 }

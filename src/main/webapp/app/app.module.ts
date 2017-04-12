@@ -1,19 +1,20 @@
 import './vendor.ts';
 
-import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {BrowserModule} from '@angular/platform-browser';
-import {Ng2Webstorage} from 'ng2-webstorage';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { Ng2Webstorage } from 'ng2-webstorage';
+import { NgLoadingBarModule } from 'ng-loading-bar';
 
-import {JhipsterRegistrySharedModule, UserRouteAccessService} from './shared';
-import {JHipsterRegistryHomeModule} from './home';
-import {JHipsterRegistryApplicationsModule} from './applications';
-import {JHipsterRegistryRoutesModule} from './routes';
-import {JHipsterRegistryHistoryModule} from './history';
-import {JHipsterRegistryReplicasModule} from './replicas';
-import {JHipsterRegistryConfigModule} from './config';
-import {JHipsterRegistrySSHModule} from './ssh';
-import {JHipsterRegistryAdminModule} from './admin/admin.module';
+import { JhipsterRegistrySharedModule, UserRouteAccessService } from './shared';
+import { JHipsterRegistryHomeModule } from './home';
+import { JHipsterRegistryApplicationsModule } from './applications';
+import { JHipsterRegistryRoutesModule } from './routes';
+import { JHipsterRegistryHistoryModule } from './history';
+import { JHipsterRegistryReplicasModule } from './replicas';
+import { JHipsterRegistryConfigModule } from './config';
+import { JHipsterRegistrySSHModule } from './ssh';
+import { JHipsterRegistryAdminModule } from './admin/admin.module';
 
 import {
     ErrorComponent,
@@ -24,8 +25,8 @@ import {
     PageRibbonComponent,
     ProfileService
 } from './layouts';
-import {customHttpProvider} from './blocks/interceptor/http.provider';
-import {PaginationConfig} from './blocks/config/uib-pagination.config';
+import { customHttpProvider } from './blocks/interceptor/http.provider';
+import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import {PaginationConfig} from './blocks/config/uib-pagination.config';
         BrowserModule,
         LayoutRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
+        NgLoadingBarModule.forRoot(),
         JhipsterRegistrySharedModule,
         JHipsterRegistryHomeModule,
         JHipsterRegistryApplicationsModule,

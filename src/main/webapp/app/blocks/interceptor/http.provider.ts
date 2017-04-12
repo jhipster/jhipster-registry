@@ -1,12 +1,13 @@
 import { Injector } from '@angular/core';
 import { Http, XHRBackend, RequestOptions } from '@angular/http';
-import { EventManager, InterceptableHttp } from 'ng-jhipster';
+import { EventManager } from 'ng-jhipster';
 
 import { AuthInterceptor } from './auth.interceptor';
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
 import { AuthExpiredInterceptor } from './auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './errorhandler.interceptor';
 import { NotificationInterceptor } from './notification.interceptor';
+import { InterceptableLoadingBarHttp } from './interceptable-loading-http';
 
 export function interceptableFactory(
     backend: XHRBackend,
@@ -16,7 +17,7 @@ export function interceptableFactory(
     injector: Injector,
     eventManager: EventManager
 ) {
-    return new InterceptableHttp(
+    return new InterceptableLoadingBarHttp(
         backend,
         defaultOptions,
         [

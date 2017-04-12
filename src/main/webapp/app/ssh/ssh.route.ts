@@ -7,8 +7,7 @@ export const SSH_ROUTE: Route = {
     path: 'ssh',
     component: JhiSSHComponent,
     data: {
-        authorities: ['ROLE_ADMIN'],
-        pageTitle: 'SSH public key'
+        authorities: ['ROLE_ADMIN']
     },
     canActivate: [UserRouteAccessService]
 };
