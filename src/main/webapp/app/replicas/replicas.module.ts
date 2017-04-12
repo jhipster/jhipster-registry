@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { JhipsterRegistrySharedModule } from '../shared';
 
 import {
-    REPLICAS_ROUTE,
+    replicasState,
     JhiReplicasComponent,
     JhiReplicasService
 } from './';
@@ -12,7 +12,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ REPLICAS_ROUTE ], {useHash: true})
+        RouterModule.forRoot( replicasState , {useHash: true})
     ],
     declarations: [
         JhiReplicasComponent

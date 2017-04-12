@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { JhipsterRegistrySharedModule } from '../shared';
 
 import {
-    HISTORY_ROUTE,
+    historyState,
     JhiHistoryComponent,
     JhiHistoryService
 } from './';
@@ -13,7 +13,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ HISTORY_ROUTE ], {useHash: true})
+        RouterModule.forRoot( historyState , {useHash: true})
     ],
     declarations: [
         JhiHistoryComponent

@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { JhipsterRegistrySharedModule } from '../shared';
 
 import {
-    SSH_ROUTE,
+    sshState,
     JhiSSHComponent,
     JhiSSHService
 } from './';
@@ -13,7 +13,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ SSH_ROUTE ], {useHash: true})
+        RouterModule.forRoot( sshState , {useHash: true})
     ],
     declarations: [
         JhiSSHComponent

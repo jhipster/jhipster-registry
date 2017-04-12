@@ -1,14 +1,21 @@
-import { Route } from '@angular/router';
+import { Route, Routes } from '@angular/router';
 
 import { UserRouteAccessService } from '../shared';
 import { JhiApplicationsComponent } from './applications.component';
 
-export const APPLICATIONS_ROUTE: Route = {
-    path: 'applications',
-    component: JhiApplicationsComponent,
+export const applicationsState: Routes = [{
+    path: '',
     data: {
-        authorities: ['ROLE_ADMIN'],
-        pageTitle: 'Applications'
+        authorities: ['ROLE_ADMIN']
     },
-    canActivate: [UserRouteAccessService]
-};
+    canActivate: [UserRouteAccessService],
+    children: [{
+        path: 'applications',
+        component: JhiApplicationsComponent,
+        data: {
+            pageTitle: 'Applications'
+        },
+        canActivate: [UserRouteAccessService]
+    }]
+}
+];
