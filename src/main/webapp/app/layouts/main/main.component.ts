@@ -10,17 +10,14 @@ import { StateStorageService } from '../../shared';
 })
 export class JhiMainComponent implements OnInit {
 
-    constructor(private titleService: Title,
-                private router: Router,
-                private $storageService: StateStorageService) {}
+    constructor(
+        private titleService: Title,
+        private router: Router,
+        private $storageService: StateStorageService,
+    ) {}
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
-        let title: string;
-        if (routeSnapshot.data && routeSnapshot.data['pageTitle']) {
-            title = routeSnapshot.data['pageTitle'];
-        } else {
-            title = 'jhipsterRegistryApp';
-        }
+        let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : 'jHipsterRegistryApp';
         if (routeSnapshot.firstChild) {
             title = this.getPageTitle(routeSnapshot.firstChild) || title;
         }
@@ -30,7 +27,7 @@ export class JhiMainComponent implements OnInit {
     ngOnInit() {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
-                this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
+                 this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
             }
             if (event instanceof RoutesRecognized) {
                 let params = {};
