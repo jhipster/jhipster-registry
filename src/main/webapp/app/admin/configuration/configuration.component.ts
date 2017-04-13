@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {JhiConfigurationService} from './configuration.service';
+import { JhiConfigurationService } from './configuration.service';
 
-import {JhiRoutesService} from '../../routes';
-import {Route} from '../../routes/route.model';
+import { JhiRoutesService } from '../../routes';
+import { Route } from '../../routes/route.model';
 
 @Component({
     selector: 'jhi-configuration',

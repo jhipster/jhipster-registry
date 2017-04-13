@@ -13,7 +13,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ APPLICATIONS_ROUTE ], {useHash: true})
+        RouterModule.forRoot([APPLICATIONS_ROUTE], {useHash: true})
     ],
     declarations: [
         JhiApplicationsComponent
@@ -22,6 +22,6 @@ import {
     providers: [
         JhiApplicationsService
     ],
-    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryApplicationsModule {}

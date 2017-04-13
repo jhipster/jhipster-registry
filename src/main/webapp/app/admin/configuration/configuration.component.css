@@ -7,7 +7,7 @@ Logs page styles
     flex-flow: column;
 }
 
-span.label{ /* UP, DOWN, ... */
+span.label { /* UP, DOWN, ... */
     float: right;
 }
 

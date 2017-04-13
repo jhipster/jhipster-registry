@@ -4,9 +4,9 @@ import { UserRouteAccessService } from '../../shared';
 import { JhiHealthCheckComponent } from './health.component';
 
 export const healthRoute: Route = {
-  path: 'jhi-health',
-  component: JhiHealthCheckComponent,
-  data: {
-    pageTitle: 'Health Checks'
-  }
+    path: 'jhi-health',
+    component: JhiHealthCheckComponent,
+    data: {
+        pageTitle: 'Health Checks'
+    }
 };

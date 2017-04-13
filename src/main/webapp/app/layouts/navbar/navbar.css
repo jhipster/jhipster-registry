@@ -10,7 +10,7 @@ Navbar
     background-color: #353d47;
     padding: .2em 1em;
     border-radius: 0; /* Hide the navbar rounded corners */
-	-moz-border-radius: 0;
+    -moz-border-radius: 0;
 }
 
 .jh-navbar .profile-image {
@@ -49,8 +49,6 @@ Navbar
 .jh-navbar .jh-navbar-toggler:hover {
     color: #fff;
 }
-
-
 
 @media screen and (max-width: 992px) {
     .jh-logo-container {

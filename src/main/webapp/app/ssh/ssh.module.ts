@@ -13,7 +13,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ SSH_ROUTE ], {useHash: true})
+        RouterModule.forRoot([SSH_ROUTE], {useHash: true})
     ],
     declarations: [
         JhiSSHComponent
@@ -22,6 +22,6 @@ import {
     providers: [
         JhiSSHService
     ],
-    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistrySSHModule {}
