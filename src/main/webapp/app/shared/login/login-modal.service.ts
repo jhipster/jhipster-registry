@@ -10,7 +10,7 @@ export class LoginModalService {
         private modalService: NgbModal,
     ) {}
 
-    open (): NgbModalRef {
+    open(): NgbModalRef {
         if (this.isOpen) {
             return;
         }

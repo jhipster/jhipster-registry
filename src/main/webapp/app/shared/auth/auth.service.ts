@@ -15,12 +15,12 @@ export class AuthService {
         private router: Router
     ) {}
 
-    authorize (force) {
+    authorize(force) {
         let authReturn = this.principal.identity(force).then(authThen.bind(this));
 
         return authReturn;
 
-        function authThen () {
+        function authThen() {
             let isAuthenticated = this.principal.isAuthenticated();
             let toStateInfo = this.stateStorageService.getDestinationState().destination;
             let canActivate = true;
@@ -36,7 +36,7 @@ export class AuthService {
             let previousState = this.stateStorageService.getPreviousState();
             if (isAuthenticated && !fromStateInfo.name && previousState) {
                 this.stateStorageService.resetPreviousState();
-                this.router.navigate([previousState.name], { queryParams:  previousState.params  });
+                this.router.navigate([previousState.name], {queryParams: previousState.params});
                 canActivate = false;
             }
 

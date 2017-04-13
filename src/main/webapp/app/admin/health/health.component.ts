@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import {JhiHealthService} from './health.service';
-import {JhiHealthModalComponent} from './health-modal.component';
+import { JhiHealthService } from './health.service';
+import { JhiHealthModalComponent } from './health-modal.component';
 
-import {JhiRoutesService} from '../../routes';
-import {Route} from '../../routes/route.model';
+import { JhiRoutesService } from '../../routes';
+import { Route } from '../../routes/route.model';
 
 @Component({
     selector: 'jhi-health',
@@ -100,7 +100,7 @@ export class JhiHealthCheckComponent implements OnInit {
 
     // user click
     showHealthModal(health: any) {
-        const modalRef  = this.modalService.open(JhiHealthModalComponent);
+        const modalRef = this.modalService.open(JhiHealthModalComponent);
         modalRef.componentInstance.currentHealth = health;
         modalRef.result.then((result) => {
             // Left blank intentionally, nothing to do here

@@ -11,7 +11,7 @@ Metrics page styles
     text-align: initial;
 }
 
-span.label{ /* UP, DOWN, ... */
+span.label { /* UP, DOWN, ... */
     float: right;
 }
 

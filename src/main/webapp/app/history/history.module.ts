@@ -13,7 +13,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ HISTORY_ROUTE ], {useHash: true})
+        RouterModule.forRoot([HISTORY_ROUTE], {useHash: true})
     ],
     declarations: [
         JhiHistoryComponent
@@ -22,7 +22,7 @@ import {
     providers: [
         JhiHistoryService
     ],
-    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryHistoryModule {
 }

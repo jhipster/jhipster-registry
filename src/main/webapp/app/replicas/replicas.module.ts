@@ -12,7 +12,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ REPLICAS_ROUTE ], {useHash: true})
+        RouterModule.forRoot([REPLICAS_ROUTE], {useHash: true})
     ],
     declarations: [
         JhiReplicasComponent
@@ -21,6 +21,6 @@ import {
     providers: [
         JhiReplicasService
     ],
-    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryReplicasModule {}

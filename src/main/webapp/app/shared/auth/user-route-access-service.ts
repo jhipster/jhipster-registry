@@ -10,6 +10,6 @@ export class UserRouteAccessService implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot): boolean | Promise<boolean> {
-        return this.auth.authorize(false).then( canActivate => canActivate);
+        return this.auth.authorize(false).then(canActivate => canActivate);
     }
 }

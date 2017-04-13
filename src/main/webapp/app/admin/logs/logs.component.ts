@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {Log} from './log.model';
-import {JhiLogsService} from './logs.service';
+import { Log } from './log.model';
+import { JhiLogsService } from './logs.service';
 
-import {JhiRoutesService} from '../../routes';
-import {Route} from '../../routes/route.model';
+import { JhiRoutesService } from '../../routes';
+import { Route } from '../../routes/route.model';
 
 @Component({
     selector: 'jhi-logs',
@@ -38,7 +38,7 @@ export class JhiLogsComponent implements OnInit {
         this.getRoutes();
     }
 
-    changeLevel (name: string, level: string) {
+    changeLevel(name: string, level: string) {
         let log = new Log(name, level);
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
             this.logsService.changeInstanceLevel(this.activeRoute, log).subscribe(() => {

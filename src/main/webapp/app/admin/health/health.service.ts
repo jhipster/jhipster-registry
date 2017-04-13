@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
-import {Route} from '../../routes/route.model';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+import { Route } from '../../routes/route.model';
 
 @Injectable()
 export class JhiHealthService {
 
     separator: string;
 
-    constructor (private http: Http) {
+    constructor(private http: Http) {
         this.separator = '.';
     }
 
@@ -87,7 +87,7 @@ export class JhiHealthService {
         return healthData;
     }
 
-    private flattenHealthData (result, path, data): any {
+    private flattenHealthData(result, path, data): any {
         for (let key in data) {
             if (data.hasOwnProperty(key)) {
                 let value = data[key];
@@ -105,7 +105,7 @@ export class JhiHealthService {
         return result;
     }
 
-    private getModuleName (path, name): string {
+    private getModuleName(path, name): string {
         let result;
         if (path && name) {
             result = path + this.separator + name;
@@ -119,7 +119,7 @@ export class JhiHealthService {
         return result;
     }
 
-    private hasSubSystem (healthObject): boolean {
+    private hasSubSystem(healthObject): boolean {
         let result = false;
 
         for (let key in healthObject) {
@@ -134,7 +134,7 @@ export class JhiHealthService {
         return result;
     }
 
-    private isHealthObject (healthObject): boolean {
+    private isHealthObject(healthObject): boolean {
         let result = false;
 
         for (let key in healthObject) {

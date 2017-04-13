@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import {JhiMetricsMonitoringModalComponent} from './metrics-modal.component';
-import {JhiMetricsService} from './metrics.service';
+import { JhiMetricsMonitoringModalComponent } from './metrics-modal.component';
+import { JhiMetricsService } from './metrics.service';
 
-import {JhiRoutesService} from '../../routes';
-import {Route} from '../../routes/route.model';
+import { JhiRoutesService } from '../../routes';
+import { Route } from '../../routes/route.model';
 
 @Component({
     selector: 'jhi-metrics',
@@ -37,7 +37,7 @@ export class JhiMetricsMonitoringComponent implements OnInit {
         this.refresh();
     }
 
-    refresh () {
+    refresh() {
         this.getRoutes();
     }
 
@@ -82,9 +82,9 @@ export class JhiMetricsMonitoringComponent implements OnInit {
         }
     }
 
-    refreshThreadDumpData () {
+    refreshThreadDumpData() {
         this.metricsService.instanceThreadDump(this.activeRoute).subscribe((data) => {
-            const modalRef  = this.modalService.open(JhiMetricsMonitoringModalComponent, { size: 'lg'});
+            const modalRef = this.modalService.open(JhiMetricsMonitoringModalComponent, {size: 'lg'});
             modalRef.componentInstance.threadDump = data;
             modalRef.result.then((result) => {
                 // Left blank intentionally, nothing to do here

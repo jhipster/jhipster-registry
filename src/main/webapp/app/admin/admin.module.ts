@@ -1,7 +1,7 @@
-import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
-import {JhipsterRegistrySharedModule} from '../shared';
+import { JhipsterRegistrySharedModule } from '../shared';
 
 import {
     adminState,
@@ -21,7 +21,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot(adminState, { useHash: true })
+        RouterModule.forRoot(adminState, {useHash: true})
     ],
     declarations: [
         JhiLogsComponent,
