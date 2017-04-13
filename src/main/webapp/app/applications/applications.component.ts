@@ -1,10 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {JhiApplicationsService} from './applications.service';
+import { Component, OnInit } from '@angular/core';
+import { JhiApplicationsService } from './applications.service';
 
 @Component({
     selector: 'jhi-applications',
     templateUrl: './applications.component.html',
-    styles: [`.form-control { width: 300px; }`],
+    styleUrls: [
+        'applications.component.css'
+    ]
 })
 export class JhiApplicationsComponent implements OnInit {
     application: any;
@@ -21,14 +23,14 @@ export class JhiApplicationsComponent implements OnInit {
         this.applicationsService.findAll().toPromise().then((data) => {
             this.data = data;
             if (data.applications.length > 0) {
-                this.show(data.applications[ 0 ].name);
+                this.show(data.applications[0].name);
             }
         });
     }
 
     show(app) {
         this.application = app;
-        for (let application of this.data.applications) {
+        for (const application of this.data.applications) {
             application.active = '';
             if (application.name === this.application) {
                 this.instances = application.instances;
@@ -37,11 +39,11 @@ export class JhiApplicationsComponent implements OnInit {
         }
     }
 
-    getLabelClass(statusState) {
+    getBadgeClass(statusState) {
         if (statusState && statusState === 'UP') {
-            return 'label-success';
+            return 'badge-success';
         } else {
-            return 'label-danger';
+            return 'badge-danger';
         }
     }
 
