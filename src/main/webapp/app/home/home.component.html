@@ -14,77 +14,77 @@
     </div>
     <div class="row" *ngSwitchCase="true">
         <div class="col-sm-12 col-md-6" *ngIf="status">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">System Status</h3>
+            <div class="card card-outline-primary">
+                <div class="card-header card-primary">
+                    <h3 class="card-title">System Status</h3>
                 </div>
-                <div class="panel-body">
-                    <table class="table table-striped">
+                <div class="card-block">
+                    <table class="table">
                         <tbody>
-                            <tr>
-                                <td>Environment</td>
-                                <td>{{status.environment}}</td>
-                            </tr>
-                            <tr>
-                                <td>Data Center</td>
-                                <td>{{status.datacenter}}</td>
-                            </tr>
-                            <tr>
-                                <td>Current Time</td>
-                                <td>{{status.currentTime}}</td>
-                            </tr>
-                            <tr>
-                                <td>System Uptime</td>
-                                <td>{{status.upTime}}</td>
-                            </tr>
-                            <tr>
-                                <td>Below Renew Threshold</td>
-                                <td>{{status.isBelowRenewThreshold}}</td>
-                            </tr>
+                        <tr>
+                            <td>Environment</td>
+                            <td>{{status.environment}}</td>
+                        </tr>
+                        <tr>
+                            <td>Data Center</td>
+                            <td>{{status.datacenter}}</td>
+                        </tr>
+                        <tr>
+                            <td>Current Time</td>
+                            <td>{{status.currentTime}}</td>
+                        </tr>
+                        <tr>
+                            <td>System Uptime</td>
+                            <td>{{status.upTime}}</td>
+                        </tr>
+                        <tr>
+                            <td>Below Renew Threshold</td>
+                            <td>{{status.isBelowRenewThreshold}}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
         <div class="col-sm-12 col-md-6" *ngIf="appInstances">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Instances Registered</h3>
+            <div class="card card-outline-primary">
+                <div class="card-header card-primary">
+                    <h3 class="card-title">Instances Registered</h3>
                 </div>
-                <div class="panel-body">
-                <!--{vm.apps.applications}}-->
-                <table class="table table-striped">
-                    <thead>
+                <div class="card-block">
+                    <!--{vm.apps.applications}}-->
+                    <table class="table">
+                        <thead>
                         <tr>
                             <th>App</th>
                             <th>Instance ID</th>
                             <th>Status</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <tr *ngFor="let app of appInstances">
                             <td>{{app.name}}</td>
-                            <td>{{app.instanceId}}</td>
-                            <td class="text-xs-center">
-                                <span class="badge" [ngClass]="getTagClass(app.status)">
-                                    {{app.status}}
-                                </span>
+                            <td class="break">{{app.instanceId}}</td>
+                            <td class="text-center">
+                            <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(app.status)">
+                                {{app.status}}
+                            </span>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
     <div class="row" *ngSwitchCase="true">
         <div class="col-sm-12 col-md-6" *ngIf="status">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">General Info</h3>
+            <div class="card card-outline-primary">
+                <div class="card-header card-primary">
+                    <h3 class="card-title">General Info</h3>
                 </div>
-                <div class="panel-body">
-                    <table class="table table-striped">
+                <div class="card-block">
+                    <table class="table">
                         <tbody>
                         <tr>
                             <td>Total Available Memory</td>
@@ -104,8 +104,8 @@
                         </tr>
                         <tr>
                             <td>Instance Status</td>
-                            <td class="text-xs-center">
-                                <span class="badge" [ngClass]="getTagClass(status.instanceInfo.status)">
+                            <td>
+                                <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(status.instanceInfo.status)">
                                     {{status.instanceInfo.status}}
                                 </span>
                             </td>
@@ -116,19 +116,19 @@
             </div>
         </div>
         <div class="col-sm-12 col-md-6" *ngIf="healthData">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Health</h3>
+            <div class="card card-outline-primary">
+                <div class="card-header card-primary">
+                    <h3 class="card-title">Health</h3>
                 </div>
-                <div class="panel-body">
-                    <table id="healthCheck" class="table table-striped">
+                <div class="card-block">
+                    <table id="healthCheck" class="table">
                         <tbody>
                         <tr *ngFor="let health of healthData">
                             <td><span class="text-capitalize">{{baseName(health.name)}}</span> {{subSystemName(health.name)}}</td>
-                            <td class="text-xs-center">
-                                <span class="badge" [ngClass]="getTagClass(health.status)">
-                                    {{health.status}}
-                                </span>
+                            <td class="text-center">
+                            <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(health.status)">
+                                {{health.status}}
+                            </span>
                             </td>
                         </tr>
                         </tbody>

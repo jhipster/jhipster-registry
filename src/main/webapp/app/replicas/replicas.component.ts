@@ -4,6 +4,9 @@ import { JhiReplicasService } from './replicas.service';
 @Component({
     selector: 'jhi-replicas',
     templateUrl: './replicas.component.html',
+    styleUrls: [
+        'replicas.component.css'
+    ]
 })
 export class JhiReplicasComponent implements OnInit {
     showMore: boolean;

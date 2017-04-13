@@ -10,6 +10,21 @@ Main page styles
     background-size: contain;
 }
 
+.card {
+    margin-top: 2%;
+}
+
+.table, .table tr, .table td, .table th {
+    border: none;
+}
+
+.card-title {
+    color: white;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 17px;
+}
+
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media
 only screen and (-webkit-min-device-pixel-ratio: 2),

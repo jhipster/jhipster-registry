@@ -13,7 +13,7 @@ import { EurekaStatusService } from './eureka.status.service';
     selector: 'jhi-home',
     templateUrl: './home.component.html',
     styleUrls: [
-        'home.css'
+        'home.component.css'
     ]
 })
 export class HomeComponent implements OnInit {
@@ -95,11 +95,11 @@ export class HomeComponent implements OnInit {
         this.healthService.getSubSystemName(name);
     }
 
-    getTagClass(statusState) {
+    getBadgeClass(statusState) {
         if (statusState === 'UP') {
-            return 'label-success';
+            return 'badge-success';
         } else {
-            return 'label-danger';
+            return 'badge-danger';
         }
     }
 }

@@ -58,14 +58,17 @@ Generic styles
     width: 60% !important;
 }
 
+.w-70 {
+    width: 70% !important;
+}
+
 .w-90 {
     width: 90% !important;
 }
 
-
 .break {
     white-space: normal;
-    word-break:break-all;
+    word-break: break-all;
 }
 
 .voffset  { margin-top: 2px; }
