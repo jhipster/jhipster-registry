@@ -1,14 +1,21 @@
-import { Route } from '@angular/router';
+import {Route, Routes} from '@angular/router';
 
-import { UserRouteAccessService } from '../shared';
-import { JhiSSHComponent } from './ssh.component';
+import {UserRouteAccessService} from '../shared';
+import {JhiSSHComponent} from './ssh.component';
 
-export const SSH_ROUTE: Route = {
-    path: 'ssh',
-    component: JhiSSHComponent,
+export const sshState: Routes = [{
+    path: '',
     data: {
-        authorities: ['ROLE_ADMIN'],
-        pageTitle: 'SSH public key'
+        authorities: ['ROLE_ADMIN']
     },
-    canActivate: [UserRouteAccessService]
-};
+    canActivate: [UserRouteAccessService],
+    children: [{
+        path: 'ssh',
+        component: JhiSSHComponent,
+        data: {
+            pageTitle: 'SSH public key'
+        },
+        canActivate: [UserRouteAccessService]
+    }]
+}
+];

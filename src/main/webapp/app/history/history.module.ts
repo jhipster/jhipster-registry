@@ -1,10 +1,10 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {RouterModule} from '@angular/router';
 
-import { JhipsterRegistrySharedModule } from '../shared';
+import {JhipsterRegistrySharedModule} from '../shared';
 
 import {
-    HISTORY_ROUTE,
+    historyState,
     JhiHistoryComponent,
     JhiHistoryService
 } from './';
@@ -13,7 +13,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ HISTORY_ROUTE ], {useHash: true})
+        RouterModule.forRoot(historyState, {useHash: true})
     ],
     declarations: [
         JhiHistoryComponent
@@ -22,7 +22,7 @@ import {
     providers: [
         JhiHistoryService
     ],
-    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryHistoryModule {
 }
