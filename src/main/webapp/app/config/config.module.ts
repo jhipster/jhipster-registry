@@ -1,7 +1,7 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import {NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {RouterModule} from '@angular/router';
 
-import { JhipsterRegistrySharedModule } from '../shared';
+import {JhipsterRegistrySharedModule} from '../shared';
 
 import {
     configState,
@@ -13,7 +13,7 @@ import {
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot( configState , {useHash: true})
+        RouterModule.forRoot(configState, {useHash: true})
     ],
     declarations: [
         JhiConfigComponent
@@ -22,6 +22,6 @@ import {
     providers: [
         JhiConfigService
     ],
-    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryConfigModule {}

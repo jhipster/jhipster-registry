@@ -1,7 +1,7 @@
-import { Route, Routes } from '@angular/router';
+import {Route, Routes} from '@angular/router';
 
-import { UserRouteAccessService } from '../shared';
-import { JhiSSHComponent } from './ssh.component';
+import {UserRouteAccessService} from '../shared';
+import {JhiSSHComponent} from './ssh.component';
 
 export const sshState: Routes = [{
     path: '',

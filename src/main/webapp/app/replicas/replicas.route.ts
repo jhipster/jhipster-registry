@@ -1,7 +1,7 @@
-import { Route, Routes } from '@angular/router';
+import {Route, Routes} from '@angular/router';
 
-import { UserRouteAccessService } from '../shared';
-import { JhiReplicasComponent } from './replicas.component';
+import {UserRouteAccessService} from '../shared';
+import {JhiReplicasComponent} from './replicas.component';
 
 export const replicasState: Routes = [{
     path: '',

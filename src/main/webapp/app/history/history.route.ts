@@ -1,7 +1,7 @@
-import { Route, Routes } from '@angular/router';
+import {Route, Routes} from '@angular/router';
 
-import { UserRouteAccessService } from '../shared';
-import { JhiHistoryComponent } from './history.component';
+import {UserRouteAccessService} from '../shared';
+import {JhiHistoryComponent} from './history.component';
 
 export const historyState: Routes = [{
     path: '',
