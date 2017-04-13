@@ -11,23 +11,23 @@ export class AuthServerProvider {
         private $sessionStorage: SessionStorageService
     ) {}
 
-    getToken () {
+    getToken() {
         return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken');
     }
 
-    login (credentials): Observable<any> {
+    login(credentials): Observable<any> {
 
-        let data = {
+        const data = {
             username: credentials.username,
             password: credentials.password,
             rememberMe: credentials.rememberMe
         };
         return this.http.post('api/authenticate', data).map(authenticateSuccess.bind(this));
 
-        function authenticateSuccess (resp) {
-            let bearerToken = resp.headers.get('Authorization');
+        function authenticateSuccess(resp) {
+            const bearerToken = resp.headers.get('Authorization');
             if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
-                let jwt = bearerToken.slice(7, bearerToken.length);
+                const jwt = bearerToken.slice(7, bearerToken.length);
                 this.storeAuthenticationToken(jwt, credentials.rememberMe);
                 return jwt;
             }
@@ -51,8 +51,8 @@ export class AuthServerProvider {
         }
     }
 
-    logout (): Observable<any> {
-        return new Observable(observer => {
+    logout(): Observable<any> {
+        return new Observable((observer) => {
             this.$localStorage.clear('authenticationToken');
             this.$sessionStorage.clear('authenticationToken');
             observer.complete();

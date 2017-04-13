@@ -1,7 +1,9 @@
-import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
-import {JhipsterRegistrySharedModule} from '../shared';
+import { JhipsterRegistrySharedModule } from '../shared';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import {
     adminState,
@@ -16,9 +18,6 @@ import {
     JhiMetricsMonitoringModalComponent,
     JhiMetricsService
 } from './';
-
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
 
 @NgModule({
     imports: [

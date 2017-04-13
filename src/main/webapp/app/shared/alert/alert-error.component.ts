@@ -1,6 +1,6 @@
-import {Component, OnDestroy} from '@angular/core';
-import {AlertService, EventManager} from 'ng-jhipster';
-import {Subscription} from 'rxjs/Rx';
+import { Component, OnDestroy } from '@angular/core';
+import { EventManager, AlertService } from 'ng-jhipster';
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
     selector: 'jhi-alert-error',
@@ -21,7 +21,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
 
         this.cleanHttpErrorListener = eventManager.subscribe('JHipsterRegistryApp.httpError', (response) => {
             let i;
-            let httpResponse = response.content;
+            const httpResponse = response.content;
             switch (httpResponse.status) {
                 // connection refused, server not reachable
                 case 0:
@@ -29,8 +29,8 @@ export class JhiAlertErrorComponent implements OnDestroy {
                     break;
 
                 case 400:
-                    let arr = Array.from(httpResponse.headers._headers);
-                    let headers = [];
+                    const arr = Array.from(httpResponse.headers._headers);
+                    const headers = [];
                     for (i = 0; i < arr.length; i++) {
                         if (arr[i][0].endsWith('app-error') || arr[i][0].endsWith('app-params')) {
                             headers.push(arr[i][0]);
@@ -44,18 +44,18 @@ export class JhiAlertErrorComponent implements OnDestroy {
                         entityKey = httpResponse.headers.get(headers[1]);
                     }
                     if (errorHeader) {
-                        let entityName = entityKey;
-                        this.addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
+                        const entityName = entityKey;
+                        this.addErrorAlert(errorHeader, errorHeader, { entityName });
                     } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().fieldErrors) {
-                        let fieldErrors = httpResponse.json().fieldErrors;
+                        const fieldErrors = httpResponse.json().fieldErrors;
                         for (i = 0; i < fieldErrors.length; i++) {
-                            let fieldError = fieldErrors[i];
+                            const fieldError = fieldErrors[i];
                             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
-                            let convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-                            let fieldName = convertedField.charAt(0).toUpperCase() +
+                            const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
+                            const fieldName = convertedField.charAt(0).toUpperCase() +
                                 convertedField.slice(1);
                             this.addErrorAlert(
-                                'Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
+                                'Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, { fieldName });
                         }
                     } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
                         this.addErrorAlert(httpResponse.json().message, httpResponse.json().message, httpResponse.json().params);
@@ -85,7 +85,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
         }
     }
 
-    addErrorAlert (message, key?, data?) {
+    addErrorAlert(message, key?, data?) {
         this.alerts.push(
             this.alertService.addAlert(
                 {

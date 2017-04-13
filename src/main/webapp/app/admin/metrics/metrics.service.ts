@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
-import {Route} from '../../routes/route.model';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+import { Route } from '../../routes/route.model';
 
 @Injectable()
 export class JhiMetricsService {
 
-    constructor (private http: Http) {}
+    constructor(private http: Http) {}
 
     // get the Registry's metrics
     getMetrics(): Observable<any> {

@@ -1,8 +1,8 @@
-import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
-import {JhipsterRegistrySharedModule} from '../shared';
+import { JhipsterRegistrySharedModule } from '../shared';
 
-import {JhiRoutesService} from './';
+import { JhiRoutesService } from './';
 
 @NgModule({
     imports: [
@@ -12,6 +12,6 @@ import {JhiRoutesService} from './';
     providers: [
         JhiRoutesService
     ],
-    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryRoutesModule {}

@@ -9,11 +9,11 @@
         <div class="panel-body">
             <ngb-tabset activeId="registered" (tabChange)="beforeChange($event)">
                 <ngb-tab id="registered">
-                    <template ngbTabTitle>Last registered leases</template>
-                    <template ngbTabContent></template>
+                    <ng-template ngbTabTitle>Last registered leases</ng-template>
+                    <ng-template ngbTabContent></ng-template>
                 </ngb-tab>
                 <ngb-tab id="canceled" title="Last canceled leases">
-                    <template ngbTabContent></template>
+                    <ng-template ngbTabContent></ng-template>
                 </ngb-tab>
             </ngb-tabset>
             <div class="table-responsive">

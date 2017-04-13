@@ -51,8 +51,8 @@ export class JhiConfigComponent implements OnInit {
 
         this.applicationsService.findAll().toPromise().then((data) => {
             this.applicationList = ['application'];
-            data.applications.forEach(function (application) {
-                let instanceId = application.instances[0].instanceId;
+            data.applications.forEach(function(application) {
+                const instanceId = application.instances[0].instanceId;
                 let applicationName;
                 if (instanceId.indexOf(':') === -1) {
                     applicationName = application.name.toLowerCase();

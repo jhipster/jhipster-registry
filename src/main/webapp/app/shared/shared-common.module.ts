@@ -7,12 +7,11 @@ import {
     JwtSharedLibsModule,
     JhiAlertComponent,
     JhiAlertErrorComponent
-} from './';
-
+ } from './';
 
 export function alertServiceProvider(sanitizer: Sanitizer) {
     // set below to true to make alerts look like toast
-    let isToast = false;
+    const isToast = false;
     return new AlertService(sanitizer, isToast);
 }
 

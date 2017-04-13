@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
-import {AccountService} from './account.service';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { AccountService } from './account.service';
 
 @Injectable()
 export class Principal {
@@ -13,13 +13,13 @@ export class Principal {
         private account: AccountService
     ) {}
 
-    authenticate (identity) {
+    authenticate(identity) {
         this.userIdentity = identity;
         this.authenticated = identity !== null;
         this.authenticationState.next(this.userIdentity);
     }
 
-    hasAnyAuthority (authorities: string[]): Promise<boolean> {
+    hasAnyAuthority(authorities: string[]): Promise<boolean> {
         if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
             return Promise.resolve(false);
         }
@@ -33,19 +33,19 @@ export class Principal {
         return Promise.resolve(false);
     }
 
-    hasAuthority (authority: string): Promise<boolean> {
+    hasAuthority(authority: string): Promise<boolean> {
         if (!this.authenticated) {
            return Promise.resolve(false);
         }
 
-        return this.identity().then(id => {
+        return this.identity().then((id) => {
             return Promise.resolve(id.authorities && id.authorities.indexOf(authority) !== -1);
         }, () => {
             return Promise.resolve(false);
         });
     }
 
-    identity (force?: boolean): Promise<any> {
+    identity(force?: boolean): Promise<any> {
         if (force === true) {
             this.userIdentity = undefined;
         }
@@ -57,7 +57,7 @@ export class Principal {
         }
 
         // retrieve the userIdentity data from the server, update the identity object, and then resolve.
-        return this.account.get().toPromise().then(account => {
+        return this.account.get().toPromise().then((account) => {
             if (account) {
                 this.userIdentity = account;
                 this.authenticated = true;
@@ -67,7 +67,7 @@ export class Principal {
             }
             this.authenticationState.next(this.userIdentity);
             return this.userIdentity;
-        }).catch(err => {
+        }).catch((err) => {
             this.userIdentity = null;
             this.authenticated = false;
             this.authenticationState.next(this.userIdentity);
@@ -75,11 +75,11 @@ export class Principal {
         });
     }
 
-    isAuthenticated (): boolean {
+    isAuthenticated(): boolean {
         return this.authenticated;
     }
 
-    isIdentityResolved (): boolean {
+    isIdentityResolved(): boolean {
         return this.userIdentity !== undefined;
     }
 
@@ -88,6 +88,6 @@ export class Principal {
     }
 
     getImageUrl(): String {
-        return this.isIdentityResolved () ? this.userIdentity.imageUrl : null;
+        return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
     }
 }

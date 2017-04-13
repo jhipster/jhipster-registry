@@ -37,12 +37,6 @@ Generic styles
     border: none;
 }
 
-.jh-card {
-    padding: 1.5%;
-    margin-top: 20px;
-    border: none;
-}
-
 .error {
     color: white;
     background-color: red;

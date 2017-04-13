@@ -1,3 +1,3 @@
-/* after changing this file run 'npm run webpack:build:vendor' or 'npm install' or 'npm run webpack:build' */
+/* after changing this file run 'yarn run webpack:build:vendor' or 'yarn install' or 'yarn run webpack:build' */
 /* tslint:disable */
 import '../content/css/vendor.css';

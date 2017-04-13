@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-import {Route} from '../../routes/route.model';
+import { Route } from '../../routes/route.model';
 
 @Injectable()
 export class JhiConfigurationService {
@@ -11,11 +11,10 @@ export class JhiConfigurationService {
 
     getConfigs(prefix: String = ''): Observable<any> {
         return this.http.get(prefix + 'management/configprops').map((res: Response) => {
-            let properties: any[] = [];
-
+            const properties: any[] = [];
             const propertiesObject = res.json();
 
-            for (let key in propertiesObject) {
+            for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
                     properties.push(propertiesObject[key]);
                 }
@@ -37,16 +36,15 @@ export class JhiConfigurationService {
 
     getEnv(prefix: String = ''): Observable<any> {
         return this.http.get(prefix + 'management/env').map((res: Response) => {
-            let properties: any = {};
-
+            const properties: any = {};
             const propertiesObject = res.json();
 
-            for (let key in propertiesObject) {
+            for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
-                    let valsObject = propertiesObject[key];
-                    let vals: any[] = [];
+                    const valsObject = propertiesObject[key];
+                    const vals: any[] = [];
 
-                    for (let valKey in valsObject) {
+                    for (const valKey in valsObject) {
                         if (valsObject.hasOwnProperty(valKey)) {
                             vals.push({key: valKey, val: valsObject[valKey]});
                         }

@@ -1,5 +1,5 @@
 /* ==========================================================================
-Logs page styles
+COnfiguration page styles
 ========================================================================== */
 
 #configuration {
@@ -32,4 +32,3 @@ li.list-group-item { /* routes names */
     word-break: break-all;
     display: block;
 }
-

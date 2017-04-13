@@ -10,7 +10,7 @@
         <ul class="list-group">
             <li class="list-group-item {{route.active}}" *ngFor="let route of routes" (click)="showRoute(route)">
                 {{route.appName}} {{route.serviceId ? '('+route.serviceId+')' : ''}}
-                <span class="badge badge-pill font-weight-normal" [ngClass]="getLabelClassRoute(route)">
+                <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClassRoute(route)">
                     {{route.status}}
                 </span>
             </li>
@@ -30,7 +30,7 @@
             <tr *ngFor="let health of healthData">
                 <td><span class="text-capitalize">{{ baseName(health.name) }}</span> {{subSystemName(health.name)}}</td>
                 <td class="text-center">
-                    <span class="badge badge-pill font-weight-normal" [ngClass]="getLabelClass(health.status)">
+                    <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(health.status)">
                         {{health.status}}
                     </span>
                 </td>

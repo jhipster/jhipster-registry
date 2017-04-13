@@ -25,9 +25,9 @@ export class JhiHistoryComponent implements OnInit {
 
     activate(key: string) {
         this.items = [];
-        let obj = this.data ? this.data[key] : null;
+        const obj = this.data ? this.data[key] : null;
         if (obj) {
-            for (let k of Object.keys(obj)) {
+            for (const k of Object.keys(obj)) {
                 this.items.push({key: k, value: obj[k]});
             }
         }

@@ -9,11 +9,10 @@ import {
     JhiConfigService
 } from './';
 
-
 @NgModule({
     imports: [
         JhipsterRegistrySharedModule,
-        RouterModule.forRoot([ CONFIG_ROUTE ], {useHash: true})
+        RouterModule.forRoot([CONFIG_ROUTE], {useHash: true})
     ],
     declarations: [
         JhiConfigComponent
@@ -22,6 +21,6 @@ import {
     providers: [
         JhiConfigService
     ],
-    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryConfigModule {}

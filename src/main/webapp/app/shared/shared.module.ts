@@ -1,7 +1,7 @@
-import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
-import {DatePipe} from '@angular/common';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
-import {CookieService} from 'angular2-cookie/services/cookies.service';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {
     AccountService,
     AuthServerProvider,
@@ -16,12 +16,10 @@ import {
     Principal,
     StateStorageService,
     UserService
-} from './';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+ } from './';
 
 @NgModule({
     imports: [
-        NgbModule.forRoot(),
         JwtSharedLibsModule,
         JwtSharedCommonModule
     ],

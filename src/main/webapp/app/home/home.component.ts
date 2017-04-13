@@ -65,23 +65,23 @@ export class HomeComponent implements OnInit {
     }
 
     populateDashboard() {
-        this.eurekaStatusService.findAll().subscribe(data => {
+        this.eurekaStatusService.findAll().subscribe((data) => {
             this.status = data.status;
         });
 
-        this.applicationsService.findAll().subscribe(data => {
-            for (let app of data.applications) {
-                for (let inst of app.instances) {
+        this.applicationsService.findAll().subscribe((data) => {
+            for (const app of data.applications) {
+                for (const inst of app.instances) {
                     inst.name = app.name;
                     this.appInstances.push(inst);
                 }
             }
         });
 
-        this.healthService.checkHealth().subscribe(response => {
+        this.healthService.checkHealth().subscribe((response) => {
             this.healthData = this.healthService.transformHealthData(response);
             this.updatingHealth = false;
-        }, response => {
+        }, (response) => {
             this.healthData = this.healthService.transformHealthData(response.data);
             this.updatingHealth = false;
         });

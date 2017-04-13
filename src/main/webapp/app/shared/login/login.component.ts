@@ -3,7 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { EventManager } from 'ng-jhipster';
 
-import { LoginService } from '../login/login.service';
+import { LoginService } from './login.service';
 import { StateStorageService } from '../auth/state-storage.service';
 
 @Component({
@@ -36,7 +36,7 @@ export class JhiLoginModalComponent implements OnInit, AfterViewInit {
         this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#username'), 'focus', []);
     }
 
-    cancel () {
+    cancel() {
         this.credentials = {
             username: null,
             password: null,
@@ -46,7 +46,7 @@ export class JhiLoginModalComponent implements OnInit, AfterViewInit {
         this.activeModal.dismiss('cancel');
     }
 
-    login () {
+    login() {
         this.loginService.login({
             username: this.username,
             password: this.password,
@@ -65,23 +65,22 @@ export class JhiLoginModalComponent implements OnInit, AfterViewInit {
             });
 
             // // previousState was set in the authExpiredInterceptor before being redirected to login modal.
-            // // since login is successful, go to stored previousState and clear previousState
-            let previousState = this.stateStorageService.getPreviousState();
-            if (previousState) {
-                this.stateStorageService.resetPreviousState();
-                this.router.navigate([previousState.name], { queryParams:  previousState.params });
+            // // since login is succesful, go to stored previousState and clear previousState
+            const redirect = this.stateStorageService.getUrl();
+            if (redirect) {
+                this.router.navigate([redirect]);
             }
         }).catch(() => {
             this.authenticationError = true;
         });
     }
 
-    register () {
+    register() {
         this.activeModal.dismiss('to state register');
         this.router.navigate(['/register']);
     }
 
-    requestResetPassword () {
+    requestResetPassword() {
         this.activeModal.dismiss('to state requestReset');
         this.router.navigate(['/reset', 'request']);
     }
