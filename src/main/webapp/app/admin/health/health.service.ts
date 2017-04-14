@@ -49,8 +49,8 @@ export class JhiHealthService {
     /* private methods */
     private addHealthObject(result, isLeaf, healthObject, name): any {
 
-        const status: any = '';
-        const error: any = '';
+        const status: any = 'UP';
+        const error: any = undefined;
         const healthData: any = {
             'name': name,
             'error': error,
