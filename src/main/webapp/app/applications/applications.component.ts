@@ -13,7 +13,8 @@ export class JhiApplicationsComponent implements OnInit {
     data: any;
     instances: any;
 
-    constructor(private applicationsService: JhiApplicationsService) {}
+    constructor(private applicationsService: JhiApplicationsService) {
+    }
 
     ngOnInit() {
         this.refresh();
