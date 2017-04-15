@@ -20,7 +20,7 @@ export class JhiApplicationsComponent implements OnInit {
     }
 
     refresh() {
-        this.applicationsService.findAll().toPromise().then((data) => {
+        this.applicationsService.findAll().subscribe((data) => {
             this.data = data;
             if (data.applications.length > 0) {
                 this.show(data.applications[0].name);

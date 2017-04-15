@@ -21,7 +21,7 @@ export class JhiReplicasComponent implements OnInit {
     }
 
     refresh() {
-        this.replicasService.findAll().toPromise().then((replicas) => {
+        this.replicasService.findAll().subscribe((replicas) => {
             this.replicas = replicas;
         });
     }

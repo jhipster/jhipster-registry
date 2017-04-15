@@ -17,7 +17,7 @@ export class JhiHistoryComponent implements OnInit {
     }
 
     refresh() {
-        this.historyService.findAll().toPromise().then((data) => {
+        this.historyService.findAll().subscribe((data) => {
             this.data = data;
             this.activate('registered');
         });

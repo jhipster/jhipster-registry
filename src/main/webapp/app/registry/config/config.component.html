@@ -9,7 +9,7 @@
     <form name="form" role="form" (ngSubmit)="refresh()">
         <strong>Application: </strong>
         <input type="text" name="application" [(ngModel)]="application" required class="form-control"
-               uib-typeahead="app for app in vm.applicationList" typeahead-min-length="0">
+               uib-typeahead="app for app in applicationList" typeahead-min-length="0">
         <strong>Profile: </strong>
         <input type="text" name="profile" [(ngModel)]="profile" required class="form-control">
         <p *ngIf="isNative">

@@ -13,9 +13,11 @@ export class JhiConfigComponent implements OnInit {
     label: string;
     activeRegistryProfiles: any;
     isNative: boolean;
-
+    nativeSearchLocation: string;
+    gitUri: string;
+    gitSearchLocation: string;
     data: any;
-    applicationList: any;
+    applicationList: Array<string>;
 
     constructor(private configService: JhiConfigService,
                 private profileService: ProfileService,
@@ -25,6 +27,7 @@ export class JhiConfigComponent implements OnInit {
         this.label = 'master';
         this.activeRegistryProfiles = [];
         this.isNative = true;
+        this.applicationList = ['application'];
     }
 
     ngOnInit() {
@@ -36,9 +39,9 @@ export class JhiConfigComponent implements OnInit {
         this.profileService.getProfileInfo().subscribe((response) => {
             this.activeRegistryProfiles = response.activeProfiles;
             this.isNative = this.activeRegistryProfiles.includes('native');
-            this['nativeSearchLocation'] = response['nativeSearchLocation'];
-            this['gitUri'] = response['gitUri'];
-            this['gitSearchLocation'] = response['gitSearchLocation'];
+            this.nativeSearchLocation = response.nativeSearchLocation;
+            this.gitUri = response.gitUri;
+            this.gitSearchLocation = response.gitSearchLocation;
         });
     }
 
@@ -49,9 +52,8 @@ export class JhiConfigComponent implements OnInit {
             this.data = '';
         });
 
-        this.applicationsService.findAll().toPromise().then((data) => {
-            this.applicationList = ['application'];
-            data.applications.forEach(function(application) {
+        this.applicationsService.findAll().subscribe((data) => {
+            data.applications.forEach((application) => {
                 const instanceId = application.instances[0].instanceId;
                 let applicationName;
                 if (instanceId.indexOf(':') === -1) {
