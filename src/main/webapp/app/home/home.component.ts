@@ -13,7 +13,7 @@ import { EurekaStatusService } from './eureka.status.service';
     selector: 'jhi-home',
     templateUrl: './home.component.html',
     styleUrls: [
-        'home.component.css'
+        'home.scss'
     ]
 })
 export class HomeComponent implements OnInit {

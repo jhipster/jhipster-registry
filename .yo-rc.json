@@ -18,7 +18,7 @@
     "buildTool": "maven",
     "enableSocialSignIn": false,
     "jwtSecretKey": "c9d37cefc48581919939d587c750ea215020765b",
-    "useSass": false,
+    "useSass": true,
     "enableTranslation": false,
     "applicationType": "gateway",
     "testFrameworks": [],

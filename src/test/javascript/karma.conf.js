@@ -54,6 +54,10 @@ module.exports = function (config) {
                         loaders: ['file?name=[name].[hash].[ext]', 'extract']
                     },
                     {
+                        test: /\.scss$/,
+                        loaders: ['to-string-loader', 'css-loader', 'sass-loader']
+                    },
+                    {
                         test: /src[\/|\\]main[\/|\\]webapp[\/|\\].+\.ts$/,
                         enforce: 'post',
                         exclude: /(test|node_modules)/,

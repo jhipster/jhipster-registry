@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { JHipsterRegistrySharedModule } from '../shared';
@@ -10,7 +10,7 @@ import { JhiLoginModalComponent } from '../shared/login/login.component';
 @NgModule({
     imports: [
         JHipsterRegistrySharedModule,
-        RouterModule.forRoot([HOME_ROUTE], {useHash: true})
+        RouterModule.forRoot([ HOME_ROUTE ], { useHash: true })
     ],
     declarations: [
         HomeComponent,
