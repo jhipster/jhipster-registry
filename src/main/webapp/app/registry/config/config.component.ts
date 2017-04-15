@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JhiConfigService } from './config.service';
-import { ProfileService } from '../layouts/profiles/profile.service';
-import { JhiApplicationsService } from '../applications';
+// import { ProfileService } from '../../layouts/profiles/profile.service';
+import { JhiApplicationsService } from '../';
 
 @Component({
     selector: 'jhi-config',
@@ -18,7 +18,7 @@ export class JhiConfigComponent implements OnInit {
     applicationList: any;
 
     constructor(private configService: JhiConfigService,
-                private profileService: ProfileService,
+                // private profileService: ProfileService,
                 private applicationsService: JhiApplicationsService) {
         this.application = 'application';
         this.profile = 'prod';
@@ -33,13 +33,13 @@ export class JhiConfigComponent implements OnInit {
     }
 
     load() {
-        this.profileService.getProfileInfo().subscribe((response) => {
-            this.activeRegistryProfiles = response.activeProfiles;
-            this.isNative = this.activeRegistryProfiles.includes('native');
-            this['nativeSearchLocation'] = response['nativeSearchLocation'];
-            this['gitUri'] = response['gitUri'];
-            this['gitSearchLocation'] = response['gitSearchLocation'];
-        });
+        // this.profileService.getProfileInfo().subscribe((response) => {
+        //     this.activeRegistryProfiles = response.activeProfiles;
+        //     this.isNative = this.activeRegistryProfiles.includes('native');
+        //     this['nativeSearchLocation'] = response['nativeSearchLocation'];
+        //     this['gitUri'] = response['gitUri'];
+        //     this['gitSearchLocation'] = response['gitSearchLocation'];
+        // });
     }
 
     refresh() {

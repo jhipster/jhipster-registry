@@ -4,10 +4,11 @@ import { Http, BaseRequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 import { EventManager } from 'ng-jhipster';
 
+import { JHipsterRegistryTestModule } from '../../test.module';
 import { EurekaStatusService, HomeComponent } from '../../../../../main/webapp/app/home';
 import { Account, AccountService, Principal, LoginModalService } from '../../../../../main/webapp/app/shared';
-import { JhiApplicationsService } from '../../../../../main/webapp/app/applications';
-import { JhiHealthService } from "../../../../../main/webapp/app/admin/health/health.service";
+import { JhiApplicationsService } from '../../../../../main/webapp/app/registry';
+import { JhiHealthService } from '../../../../../main/webapp/app/admin/health/health.service';
 
 describe('Component Tests', () => {
 
@@ -20,19 +21,11 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
+                imports: [JHipsterRegistryTestModule],
                 declarations: [HomeComponent],
                 providers: [
-                    MockBackend,
                     Principal,
                     AccountService,
-                    BaseRequestOptions,
-                    {
-                        provide: Http,
-                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                            return new Http(backendInstance, defaultOptions);
-                        },
-                        deps: [MockBackend, BaseRequestOptions]
-                    },
                     EventManager,
                     {
                         provide: LoginModalService,
@@ -46,12 +39,12 @@ describe('Component Tests', () => {
                     JhiHealthService
                 ]
             })
-                .overrideComponent(HomeComponent, {
-                    set: {
-                        template: ''
-                    }
-                })
-                .compileComponents();
+            .overrideComponent(HomeComponent, {
+                set: {
+                    template: ''
+                }
+            })
+            .compileComponents();
         }));
 
         beforeEach(() => {

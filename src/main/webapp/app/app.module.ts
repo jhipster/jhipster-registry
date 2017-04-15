@@ -6,13 +6,8 @@ import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { JHipsterRegistrySharedModule, UserRouteAccessService } from './shared';
 import { JHipsterRegistryHomeModule } from './home';
-import { JHipsterRegistryApplicationsModule } from './applications';
-import { JHipsterRegistryRoutesModule } from './routes';
-import { JHipsterRegistryHistoryModule } from './history';
-import { JHipsterRegistryReplicasModule } from './replicas';
-import { JHipsterRegistryConfigModule } from './config';
-import { JHipsterRegistrySSHModule } from './ssh';
 import { JHipsterRegistryAdminModule } from './admin/admin.module';
+// import { JHipsterRegistryModule } from './registry/registry.module';
 
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
@@ -35,12 +30,7 @@ import {
         JHipsterRegistrySharedModule,
         JHipsterRegistryHomeModule,
         JHipsterRegistryAdminModule,
-        JHipsterRegistryApplicationsModule,
-        JHipsterRegistryRoutesModule,
-        JHipsterRegistryHistoryModule,
-        JHipsterRegistryReplicasModule,
-        JHipsterRegistryConfigModule,
-        JHipsterRegistrySSHModule
+        // JHipsterRegistryModule
     ],
     declarations: [
         JhiMainComponent,

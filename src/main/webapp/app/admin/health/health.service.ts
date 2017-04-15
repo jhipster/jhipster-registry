@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-import { Route } from '../../routes/route.model';
+import { Route } from '../../shared';
 
 @Injectable()
 export class JhiHealthService {

@@ -3,9 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { JhiMetricsMonitoringModalComponent } from './metrics-modal.component';
 import { JhiMetricsService } from './metrics.service';
-
-import { JhiRoutesService } from '../../routes';
-import { Route } from '../../routes/route.model';
+import { JhiRoutesService, Route } from '../../shared';
 
 @Component({
     selector: 'jhi-metrics',

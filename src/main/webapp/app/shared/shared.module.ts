@@ -15,7 +15,8 @@ import {
     LoginModalService,
     Principal,
     HasAnyAuthorityDirective,
-    JhiLoginModalComponent
+    JhiLoginModalComponent,
+    JhiRoutesService
 } from './';
 
 @NgModule({
@@ -28,6 +29,7 @@ import {
         HasAnyAuthorityDirective
     ],
     providers: [
+        JhiRoutesService,
         CookieService,
         LoginService,
         LoginModalService,

@@ -3,8 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Log } from './log.model';
 import { LogsService } from './logs.service';
 
-import { JhiRoutesService } from '../../routes';
-import { Route } from '../../routes/route.model';
+import { JhiRoutesService, Route } from '../../shared';
 
 @Component({
     selector: 'jhi-logs',

@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 import { Log } from './log.model';
-import { Route } from '../../routes/route.model';
+import { Route } from '../../shared';
 
 @Injectable()
 export class LogsService {

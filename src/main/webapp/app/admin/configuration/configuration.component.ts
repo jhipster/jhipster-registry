@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { JhiConfigurationService } from './configuration.service';
 
-import { JhiRoutesService } from '../../routes';
-import { Route } from '../../routes/route.model';
+import { JhiRoutesService, Route } from '../../shared';
 
 @Component({
     selector: 'jhi-configuration',

@@ -4,7 +4,7 @@ import { EventManager } from 'ng-jhipster';
 
 import { Account, LoginModalService, Principal } from '../shared';
 import { JhiHealthService } from '../admin';
-import { JhiApplicationsService } from '../applications';
+// import { JhiApplicationsService } from '../registry';
 
 import { VERSION } from '../app.constants';
 import { EurekaStatusService } from './eureka.status.service';
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
                 private loginModalService: LoginModalService,
                 private eventManager: EventManager,
                 private eurekaStatusService: EurekaStatusService,
-                private applicationsService: JhiApplicationsService,
+                // private applicationsService: JhiApplicationsService,
                 private healthService: JhiHealthService) {
         this.version = 'v' + VERSION;
         this.appInstances = [];
@@ -69,14 +69,14 @@ export class HomeComponent implements OnInit {
             this.status = data.status;
         });
 
-        this.applicationsService.findAll().subscribe((data) => {
-            for (const app of data.applications) {
-                for (const inst of app.instances) {
-                    inst.name = app.name;
-                    this.appInstances.push(inst);
-                }
-            }
-        });
+        // this.applicationsService.findAll().subscribe((data) => {
+        //     for (const app of data.applications) {
+        //         for (const inst of app.instances) {
+        //             inst.name = app.name;
+        //             this.appInstances.push(inst);
+        //         }
+        //     }
+        // });
 
         this.healthService.checkHealth().subscribe((response) => {
             this.healthData = this.healthService.transformHealthData(response);

@@ -3,7 +3,8 @@ import { MockBackend } from '@angular/http/testing';
 import { Http, BaseRequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 
-import { JhiHistoryComponent, JhiHistoryService } from '../../../../../main/webapp/app/history';
+import { JHipsterRegistryTestModule } from '../../../test.module';
+import { JhiHistoryComponent, JhiHistoryService } from '../../../../../../main/webapp/app/registry';
 
 
 describe('Component Tests', () => {
@@ -15,26 +16,18 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
+                imports: [JHipsterRegistryTestModule],
                 declarations: [JhiHistoryComponent],
                 providers: [
-                    MockBackend,
-                    BaseRequestOptions,
-                    {
-                        provide: Http,
-                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                            return new Http(backendInstance, defaultOptions);
-                        },
-                        deps: [MockBackend, BaseRequestOptions]
-                    },
                     JhiHistoryService
                 ]
             })
-                .overrideComponent(JhiHistoryComponent, {
-                    set: {
-                        template: ''
-                    }
-                })
-                .compileComponents();
+            .overrideComponent(JhiHistoryComponent, {
+                set: {
+                    template: ''
+                }
+            })
+            .compileComponents();
         }));
 
         beforeEach(() => {
@@ -45,7 +38,7 @@ describe('Component Tests', () => {
         it('refresh data',
             fakeAsync(
                 inject([JhiHistoryService], (service: JhiHistoryService) => {
-                    let response = {
+                    const response = {
                         'canceled': {
                             '11052017': 'instance1'
                         },
@@ -67,7 +60,7 @@ describe('Component Tests', () => {
         it('activate registered tab',
             fakeAsync(
                 inject([JhiHistoryService], (service: JhiHistoryService) => {
-                    let response = {
+                    const response = {
                         'canceled': {
                             '11052017': 'instance1'
                         },

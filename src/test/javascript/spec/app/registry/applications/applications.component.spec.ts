@@ -3,7 +3,8 @@ import { MockBackend } from '@angular/http/testing';
 import { Http, BaseRequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 
-import { JhiApplicationsComponent, JhiApplicationsService } from '../../../../../main/webapp/app/applications';
+import { JHipsterRegistryTestModule } from '../../../test.module';
+import { JhiApplicationsComponent, JhiApplicationsService } from '../../../../../../main/webapp/app/registry';
 
 
 describe('Component Tests', () => {
@@ -15,26 +16,18 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
+                imports: [JHipsterRegistryTestModule],
                 declarations: [JhiApplicationsComponent],
                 providers: [
-                    MockBackend,
-                    BaseRequestOptions,
-                    {
-                        provide: Http,
-                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                            return new Http(backendInstance, defaultOptions);
-                        },
-                        deps: [MockBackend, BaseRequestOptions]
-                    },
                     JhiApplicationsService
                 ]
             })
-                .overrideComponent(JhiApplicationsComponent, {
-                    set: {
-                        template: ''
-                    }
-                })
-                .compileComponents();
+            .overrideComponent(JhiApplicationsComponent, {
+                set: {
+                    template: ''
+                }
+            })
+            .compileComponents();
         }));
 
         beforeEach(() => {
@@ -45,7 +38,7 @@ describe('Component Tests', () => {
         it('refresh data',
             fakeAsync(
                 inject([JhiApplicationsService], (service: JhiApplicationsService) => {
-                    let response = {
+                    const response = {
                         applications: [
                             {
                                 name: 'app1',
