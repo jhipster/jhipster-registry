@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Principal } from './principal.service';
 
 /**
@@ -23,19 +23,18 @@ export class HasAnyAuthorityDirective {
     }
 
     @Input()
-    set jhiHasAnyAuthority(value: string | string[]) {
-        this.authorities = typeof value === 'string' ? [<string> value] : <string[]> value;
-        this._updateView();
+    set jhiHasAnyAuthority(value: string|string[]) {
+        this.authorities = typeof value === 'string' ? [ <string> value ] : <string[]> value;
+        this.updateView();
         // Get notified each time authentication state changes.
-        this.principal.getAuthenticationState().subscribe(identity => this._updateView());
+        this.principal.getAuthenticationState().subscribe((identity) => this.updateView());
     }
 
-    private _updateView(): void {
-        this.principal.hasAnyAuthority(this.authorities).then(result => {
+    private updateView(): void {
+        this.principal.hasAnyAuthority(this.authorities).then((result) => {
+            this.viewContainerRef.clear();
             if (result) {
                 this.viewContainerRef.createEmbeddedView(this.templateRef);
-            } else {
-                this.viewContainerRef.clear();
             }
         });
     }

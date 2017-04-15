@@ -1,29 +1,29 @@
 <div>
-    <p>
-        <button class="btn btn-primary" (click)="refresh()">
-            <span class="glyphicon glyphicon-refresh"></span> <span>Refresh</span>
-        </button>
-    </p>
-
     <div class="container-fluid">
+
         <div class="row-fluid" *ngIf="data">
-            <div class="col-md-3">
-                <h3>Applications</h3>
+            <div id="apps" class="col-md-3">
+                <h3>
+                    <span>Applications</span>
+                    <button class="btn btn-primary" (click)="refresh()">
+                        <span class="fa fa-refresh"></span>
+                    </button>
+                </h3>
                 <ul class="list-group">
                     <li class="list-group-item {{app.active}}" *ngFor="let app of data.applications | orderBy:name" (click)="show(app.name)">
-                        <span class="glyphicon glyphicon-alert" *ngIf="(app.instances | filter:{status:'UP'}).length < app.instances.length">&nbsp;</span> {{app.name}}
-                        <span class="badge">{{(app.instances | filter:{status:'UP'}).length}} / {{app.instances.length}}</span>
+                        <span class="fa fa-alert" *ngIf="(app.instances | filter:{status:'UP'}).length < app.instances.length">&nbsp;</span> {{app.name}}
+                        <span class="badge badge-pill font-weight-normal badge-info">{{(app.instances | filter:{status:'UP'}).length}} / {{app.instances.length}}</span>
                     </li>
                 </ul>
             </div>
-            <div class="col-md-9">
+            <div id="instances" class="col-md-9">
                 <h3>Instances</h3>
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped table-bordered table-responsive d-table">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Status</th>
+                            <th class="w-50">ID</th>
+                            <th class="w-50">Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -31,13 +31,11 @@
                                 <td>
                                     <a routerLink="{{instance.homePageUrl}}" target="_blank">{{instance.instanceId}}</a>
                                 </td>
-                                <td class="text-center">
-                                    <span class="label" [ngClass]="getLabelClass(instance.status)">
+                                <td class="text-left">
+                                    <span class="badge badge-pill font-weight-normal badge-success" [ngClass]="getBadgeClass(instance.status)">
                                         {{instance.status}}
                                     </span>
-                                </td>
-                                <td>
-                                    <span *ngFor="let entry of (instance.metadata | keys )">
+                                    <span class="float-right" *ngFor="let entry of (instance.metadata | keys )">
                                         <span class="badge badge-default font-weight-normal">
                                             <span class="badge badge-pill badge-info font-weight-normal">{{entry.key}}</span>
                                             {{entry.value}}

@@ -9,7 +9,8 @@ import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 @NgModule({
     imports: [
         NgbModule.forRoot(),
-        NgJhipsterModule.forRoot({}),
+        NgJhipsterModule.forRoot({
+        }),
         InfiniteScrollModule
     ],
     exports: [
@@ -21,4 +22,4 @@ import { InfiniteScrollModule } from 'angular2-infinite-scroll';
         InfiniteScrollModule
     ]
 })
-export class JwtSharedLibsModule {}
+export class JHipsterRegistrySharedLibsModule {}

@@ -6,8 +6,7 @@ import { Log } from './log.model';
 import { Route } from '../../routes/route.model';
 
 @Injectable()
-export class JhiLogsService {
-
+export class LogsService {
     constructor(private http: Http) { }
 
     changeLevel(log: Log): Observable<Response> {

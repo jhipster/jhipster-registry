@@ -4,14 +4,16 @@ import { JhiApplicationsService } from './applications.service';
 @Component({
     selector: 'jhi-applications',
     templateUrl: './applications.component.html',
+    styleUrls: [
+        'applications.component.css'
+    ]
 })
 export class JhiApplicationsComponent implements OnInit {
     application: any;
     data: any;
     instances: any;
 
-    constructor(private applicationsService: JhiApplicationsService) {
-    }
+    constructor(private applicationsService: JhiApplicationsService) {}
 
     ngOnInit() {
         this.refresh();
@@ -28,7 +30,7 @@ export class JhiApplicationsComponent implements OnInit {
 
     show(app) {
         this.application = app;
-        for (let application of this.data.applications) {
+        for (const application of this.data.applications) {
             application.active = '';
             if (application.name === this.application) {
                 this.instances = application.instances;
@@ -37,11 +39,12 @@ export class JhiApplicationsComponent implements OnInit {
         }
     }
 
-    getLabelClass(statusState) {
+    getBadgeClass(statusState) {
         if (statusState && statusState === 'UP') {
-            return 'label-success';
+            return 'badge-success';
         } else {
-            return 'label-danger';
+            return 'badge-danger';
         }
     }
+
 }

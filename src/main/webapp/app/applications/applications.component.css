@@ -1,0 +1,16 @@
+/* ==========================================================================
+Applications page styles
+========================================================================== */
+
+#apps span.badge { /* UP, DOWN, ... */
+    float: right;
+}
+
+li.list-group-item { /* apps names */
+    word-break: break-all;
+    display: block;
+}
+
+#apps {
+    margin-bottom: 2%;
+}

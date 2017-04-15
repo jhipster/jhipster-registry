@@ -1,24 +1,21 @@
 import { NgModule, Sanitizer } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-
 import { AlertService } from 'ng-jhipster';
-
 import {
-    JwtSharedLibsModule,
+    JHipsterRegistrySharedLibsModule,
     JhiAlertComponent,
     JhiAlertErrorComponent
 } from './';
 
-
 export function alertServiceProvider(sanitizer: Sanitizer) {
     // set below to true to make alerts look like toast
-    let isToast = false;
+    const isToast = false;
     return new AlertService(sanitizer, isToast);
 }
 
 @NgModule({
     imports: [
-        JwtSharedLibsModule
+        JHipsterRegistrySharedLibsModule
     ],
     declarations: [
         JhiAlertComponent,
@@ -33,9 +30,9 @@ export function alertServiceProvider(sanitizer: Sanitizer) {
         Title
     ],
     exports: [
-        JwtSharedLibsModule,
+        JHipsterRegistrySharedLibsModule,
         JhiAlertComponent,
         JhiAlertErrorComponent
     ]
 })
-export class JwtSharedCommonModule {}
+export class JHipsterRegistrySharedCommonModule {}

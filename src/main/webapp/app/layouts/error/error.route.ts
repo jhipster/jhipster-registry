@@ -11,7 +11,6 @@ export const errorRoute: Routes = [
             authorities: [],
             pageTitle: 'Error page!'
         },
-        canActivate: [UserRouteAccessService]
     },
     {
         path: 'accessdenied',
@@ -20,6 +19,5 @@ export const errorRoute: Routes = [
             authorities: [],
             pageTitle: 'Error page!'
         },
-        canActivate: [UserRouteAccessService]
     }
 ];

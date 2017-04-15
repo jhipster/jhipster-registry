@@ -1,5 +1,7 @@
 package io.github.jhipster.registry.web.rest.errors;
 
+import java.util.List;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,12 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
@@ -27,7 +24,12 @@ public class ExceptionTranslator {
     @ResponseBody
     public ErrorVM processValidationError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
-        return processFieldErrors(result.getFieldErrors());
+        List<FieldError> fieldErrors = result.getFieldErrors();
+        ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
+        for (FieldError fieldError : fieldErrors) {
+            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
+        }
+        return dto;
     }
 
     @ExceptionHandler(CustomParameterizedException.class)
@@ -64,15 +66,5 @@ public class ExceptionTranslator {
             errorVM = new ErrorVM(ErrorConstants.ERR_INTERNAL_SERVER_ERROR, "Internal server error");
         }
         return builder.body(errorVM);
-    }
-
-    private ErrorVM processFieldErrors(List<FieldError> fieldErrors) {
-        ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
-
-        for (FieldError fieldError : fieldErrors) {
-            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
-        }
-
-        return dto;
     }
 }

@@ -15,7 +15,7 @@ import { Route } from '../../routes/route.model';
 export class JhiConfigurationComponent implements OnInit {
     allConfiguration: any = null;
     configuration: any = null;
-    configKeys: any;
+    configKeys: any[];
     filter: string;
     orderProp: string;
     reverse: boolean;
@@ -40,12 +40,16 @@ export class JhiConfigurationComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.refresh();
+    }
+
+    refresh() {
         this.getRoutes();
     }
 
     getRoutes() {
         this.updatingRoutes = true;
-        this.routesService.findAll().subscribe(routes => {
+        this.routesService.findAll().subscribe((routes) => {
             this.routes = routes;
             this.updatingRoutes = false;
 
@@ -55,7 +59,7 @@ export class JhiConfigurationComponent implements OnInit {
                 this.updateChosenInstance(routes[0]);
             }
             this.displayActiveRouteLogs();
-        }, error => {
+        }, (error) => {
             if (error.status === 503 || error.status === 500 || error.status === 404) {
                 this.updatingConfig = false;
                 if (error.status === 500 || error.status === 404) {
@@ -74,7 +78,7 @@ export class JhiConfigurationComponent implements OnInit {
             this.configurationService.getInstanceConfigs(this.activeRoute).subscribe((configuration) => {
                 this.configuration = configuration;
 
-                for (let config of configuration) {
+                for (const config of configuration) {
                     if (config.properties !== undefined) {
                         this.configKeys.push(Object.keys(config.properties));
                     }
@@ -90,7 +94,7 @@ export class JhiConfigurationComponent implements OnInit {
     updateChosenInstance(instance: Route) {
         if (instance) {
             this.setActiveRoute(instance);
-            for (let route of this.routes) {
+            for (const route of this.routes) {
                 route.active = '';
                 if (route.path === this.activeRoute.path) {
                     route.active = 'active';
@@ -106,7 +110,7 @@ export class JhiConfigurationComponent implements OnInit {
 
     // change active route only if exists, else choose Registry
     setActiveRoute(instance: Route) {
-        if (instance && this.routes && this.routes.findIndex(r => r.appName === instance.appName) !== -1) {
+        if (instance && this.routes && this.routes.findIndex((r) => r.appName === instance.appName) !== -1) {
             this.activeRoute = instance;
         } else if (this.routes && this.routes.length > 0) {
             this.activeRoute = this.routes[0];
@@ -115,7 +119,7 @@ export class JhiConfigurationComponent implements OnInit {
 
     private downRoute(instance: Route) {
         if (instance && this.routes) {
-            let index = this.routes.findIndex(r => r.appName === instance.appName);
+            const index = this.routes.findIndex((r) => r.appName === instance.appName);
             if (index !== -1) {
                 this.routes[index].status = 'DOWN';
             }
@@ -123,18 +127,18 @@ export class JhiConfigurationComponent implements OnInit {
     }
 
     // user click
-    getLabelClassRoute(route: Route) {
+    getBadgeClassRoute(route: Route) {
         if (route && !route.status) {
             route.status = 'UP';
         }
-        return this.getLabelClass(route.status);
+        return this.getBadgeClass(route.status);
     }
 
-    private getLabelClass(statusState) {
+    private getBadgeClass(statusState) {
         if (!statusState || statusState !== 'UP') {
-            return 'label-danger';
+            return 'badge-danger';
         } else {
-            return 'label-success';
+            return 'badge-success';
         }
     }
 }

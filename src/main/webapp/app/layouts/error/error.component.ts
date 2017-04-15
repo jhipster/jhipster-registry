@@ -8,7 +8,10 @@ export class ErrorComponent implements OnInit {
     errorMessage: string;
     error403: boolean;
 
-    constructor() { }
+    constructor(
+        ) {
+        }
 
-    ngOnInit() { }
+    ngOnInit() {
+    }
 }

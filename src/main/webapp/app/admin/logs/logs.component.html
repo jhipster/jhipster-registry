@@ -1,11 +1,16 @@
 <div id="logs" class="table-responsive" *ngIf="loggers">
-    <h2>Logs</h2>
+    <h2>
+        <span>Logs</span>
+        <button class="btn btn-primary" (click)="refresh()">
+            <span class="fa fa-refresh"></span>
+        </button>
+    </h2>
 
-    <div class="col-md-5" *ngIf="routes">
+    <div id="routes" class="col-md-5" *ngIf="routes">
         <ul class="list-group">
             <li class="list-group-item {{route.active}}" *ngFor="let route of routes" (click)="showRoute(route)">
                 {{route.appName}} {{route.serviceId ? '('+route.serviceId+')' : ''}}
-                <span class="label" [ngClass]="getLabelClassRoute(route)">
+                <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClassRoute(route)">
                     {{route.status}}
                 </span>
             </li>

@@ -1,6 +1,7 @@
 package io.github.jhipster.registry.aop.logging;
 
 import io.github.jhipster.config.JHipsterConstants;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -39,6 +40,9 @@ public class LoggingAspect {
 
     /**
      * Advice that logs methods throwing exceptions.
+     *
+     * @param joinPoint join point for advice
+     * @param e exception
      */
     @AfterThrowing(pointcut = "loggingPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
@@ -54,6 +58,10 @@ public class LoggingAspect {
 
     /**
      * Advice that logs when a method is entered and exited.
+     *
+     * @param joinPoint join point for advice
+     * @return result
+     * @throws Throwable throws IllegalArgumentException
      */
     @Around("loggingPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {

@@ -1,9 +1,10 @@
 import { Route } from '@angular/router';
-import { JhiLogsComponent } from './logs.component';
+
+import { LogsComponent } from './logs.component';
 
 export const logsRoute: Route = {
-    path: 'jhi-logs',
-    component: JhiLogsComponent,
+    path: 'logs',
+    component: LogsComponent,
     data: {
         pageTitle: 'Logs'
     }

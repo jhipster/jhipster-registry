@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Log } from './log.model';
-import { JhiLogsService } from './logs.service';
+import { LogsService } from './logs.service';
 
 import { JhiRoutesService } from '../../routes';
 import { Route } from '../../routes/route.model';
@@ -13,7 +13,7 @@ import { Route } from '../../routes/route.model';
         'logs.component.css'
     ]
 })
-export class JhiLogsComponent implements OnInit {
+export class LogsComponent implements OnInit {
 
     loggers: Log[];
     updatingLogs: boolean;
@@ -25,8 +25,8 @@ export class JhiLogsComponent implements OnInit {
     routes: Route[];
     updatingRoutes: boolean;
 
-    constructor (
-        private logsService: JhiLogsService,
+    constructor(
+        private logsService: LogsService,
         private routesService: JhiRoutesService
     ) {
         this.filter = '';
@@ -35,21 +35,25 @@ export class JhiLogsComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.refresh();
+    }
+
+    refresh() {
         this.getRoutes();
     }
 
     changeLevel(name: string, level: string) {
-        let log = new Log(name, level);
+        const log = new Log(name, level);
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
             this.logsService.changeInstanceLevel(this.activeRoute, log).subscribe(() => {
-                this.logsService.findInstanceAll(this.activeRoute).subscribe(loggers => this.loggers = loggers);
+                this.logsService.findInstanceAll(this.activeRoute).subscribe((loggers) => this.loggers = loggers);
             });
         }
     }
 
     getRoutes() {
         this.updatingRoutes = true;
-        this.routesService.findAll().subscribe(routes => {
+        this.routesService.findAll().subscribe((routes) => {
             this.routes = routes;
             this.updatingRoutes = false;
 
@@ -65,10 +69,10 @@ export class JhiLogsComponent implements OnInit {
     displayActiveRouteLogs() {
         this.updatingLogs = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.logsService.findInstanceAll(this.activeRoute).subscribe(loggers => {
+            this.logsService.findInstanceAll(this.activeRoute).subscribe((loggers) => {
                 this.loggers = loggers;
                 this.updatingLogs = false;
-            }, error => {
+            }, (error) => {
                 if (error.status === 503 || error.status === 500 || error.status === 404) {
                     this.updatingLogs = false;
                     if (error.status === 500 || error.status === 404) {
@@ -85,7 +89,7 @@ export class JhiLogsComponent implements OnInit {
     updateChosenInstance(instance: Route) {
         if (instance) {
             this.setActiveRoute(instance);
-            for (let route of this.routes) {
+            for (const route of this.routes) {
                 route.active = '';
                 if (route.path === this.activeRoute.path) {
                     route.active = 'active';
@@ -101,7 +105,7 @@ export class JhiLogsComponent implements OnInit {
 
     // change active route only if exists, else choose Registry
     setActiveRoute(instance: Route) {
-        if (instance && this.routes && this.routes.findIndex(r => r.appName === instance.appName) !== -1) {
+        if (instance && this.routes && this.routes.findIndex((r) => r.appName === instance.appName) !== -1) {
             this.activeRoute = instance;
         } else if (this.routes && this.routes.length > 0) {
             this.activeRoute = this.routes[0];
@@ -110,7 +114,7 @@ export class JhiLogsComponent implements OnInit {
 
     private downRoute(instance: Route) {
         if (instance && this.routes) {
-            let index = this.routes.findIndex(r => r.appName === instance.appName);
+            const index = this.routes.findIndex((r) => r.appName === instance.appName);
             if (index !== -1) {
                 this.routes[index].status = 'DOWN';
             }
@@ -118,18 +122,18 @@ export class JhiLogsComponent implements OnInit {
     }
 
     // user click
-    getLabelClassRoute(route: Route) {
+    getBadgeClassRoute(route: Route) {
         if (route && !route.status) {
             route.status = 'UP';
         }
-        return this.getLabelClass(route.status);
+        return this.getBadgeClass(route.status);
     }
 
-    private getLabelClass(statusState) {
+    private getBadgeClass(statusState) {
         if (!statusState || statusState !== 'UP') {
-            return 'label-danger';
+            return 'badge-danger';
         } else {
-            return 'label-success';
+            return 'badge-success';
         }
     }
 

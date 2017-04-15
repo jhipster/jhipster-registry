@@ -1,13 +1,14 @@
 package io.github.jhipster.registry;
 
-import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.registry.config.ApplicationProperties;
 import io.github.jhipster.registry.config.DefaultProfileUtil;
+
+import io.github.jhipster.config.JHipsterConstants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -28,22 +29,22 @@ import java.util.Collection;
 @EnableEurekaServer
 @EnableConfigServer
 @ComponentScan
-@EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class, MetricsDropwizardAutoConfiguration.class})
 @EnableConfigurationProperties({ApplicationProperties.class})
 @EnableDiscoveryClient
 @EnableZuulProxy
-public class JhipsterRegistryApp {
+public class JHipsterRegistryApp {
 
-    private static final Logger log = LoggerFactory.getLogger(JhipsterRegistryApp.class);
+    private static final Logger log = LoggerFactory.getLogger(JHipsterRegistryApp.class);
 
     private final Environment env;
 
-    public JhipsterRegistryApp(Environment env) {
+    public JHipsterRegistryApp(Environment env) {
         this.env = env;
     }
 
     /**
-     * Initializes jhipsterRegistry.
+     * Initializes JHipsterRegistry.
      * <p>
      * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
      * <p>
@@ -51,7 +52,6 @@ public class JhipsterRegistryApp {
      */
     @PostConstruct
     public void initApplication() {
-        log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             log.error("You have misconfigured your application! It should not run " +
@@ -70,7 +70,7 @@ public class JhipsterRegistryApp {
      * @throws UnknownHostException if the local host name could not be resolved into an address
      */
     public static void main(String[] args) throws UnknownHostException {
-        SpringApplication app = new SpringApplication(JhipsterRegistryApp.class);
+        SpringApplication app = new SpringApplication(JHipsterRegistryApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         String protocol = "http";

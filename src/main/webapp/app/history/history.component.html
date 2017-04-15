@@ -1,15 +1,14 @@
 <div>
-    <h2>Instances history</h2>
-    <p>
-    <button class="btn btn-primary" (click)="refresh()">
-        <span class="glyphicon glyphicon-refresh"></span> <span>Refresh</span>
-    </button>
-</p>
+    <h2>
+        <span>Instances history</span>
+        <button class="btn btn-primary" (click)="refresh()">
+            <span class="fa fa-refresh"></span>
+        </button>
+    </h2>
     <div class="panel panel-default">
         <div class="panel-body">
             <ngb-tabset activeId="registered" (tabChange)="beforeChange($event)">
-                <ngb-tab id="registered">
-                    <template ngbTabTitle>Last registered leases</template>
+                <ngb-tab id="registered" title="Last registered leases">
                     <template ngbTabContent></template>
                 </ngb-tab>
                 <ngb-tab id="canceled" title="Last canceled leases">

@@ -13,10 +13,10 @@ export class ErrorHandlerInterceptor extends HttpInterceptor {
     }
 
     responseIntercept(observable: Observable<Response>): Observable<Response> {
-        return <Observable<Response>> observable.catch(error => {
+        return <Observable<Response>> observable.catch((error) => {
             if (!(error.status === 401 && (error.text() === '' ||
                 (error.json().path && error.json().path.indexOf('/api/account') === 0 )))) {
-                this.eventManager.broadcast({name: 'jwtApp.httpError', content: error});
+                this.eventManager.broadcast( {name: 'jHipsterRegistryApp.httpError', content: error});
             }
             return Observable.throw(error);
         });

@@ -1,4 +1,5 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
+const path = require('path');
 module.exports = {
     entry: {
         'vendor': [
@@ -32,32 +33,20 @@ module.exports = {
                 loaders: ['style-loader', 'css-loader']
             },
             {
-                test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
-                loaders: [
-                    'file-loader?hash=sha512&digest=hex&name=[hash].[ext]', {
-                        loader: 'image-webpack-loader',
-                        query: {
-                            gifsicle: {
-                                interlaced: false
-                            },
-                            optipng: {
-                                optimizationLevel: 7
-                            }
-                        }
-                    }
-                ]
+                test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
+                loaders: ['file-loader?hash=sha512&digest=hex&name=[hash].[ext]']
             }
         ]
     },
     output: {
         filename: '[name].dll.js',
-        path: './target/www',
+        path: path.resolve('./target/www'),
         library: '[name]'
     },
     plugins: [
         new webpack.DllPlugin({
             name: '[name]',
-            path: './target/www/[name].json'
+            path: path.resolve('./target/www/[name].json')
         })
     ]
 };

@@ -1,16 +1,16 @@
 <div id="health">
     <h2>
-        Health Checks
+        <span>Health Checks</span>
         <button class="btn btn-primary" (click)="refresh()">
-            <span class="glyphicon glyphicon-refresh"></span>
+            <span class="fa fa-refresh"></span>
         </button>
     </h2>
 
-    <div class="col-md-5" *ngIf="routes">
+    <div id="routes" class="col-md-5" *ngIf="routes">
         <ul class="list-group">
             <li class="list-group-item {{route.active}}" *ngFor="let route of routes" (click)="showRoute(route)">
                 {{route.appName}} {{route.serviceId ? '('+route.serviceId+')' : ''}}
-                <span class="label" [ngClass]="getLabelClassRoute(route)">
+                <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClassRoute(route)">
                     {{route.status}}
                 </span>
             </li>
@@ -30,13 +30,13 @@
             <tr *ngFor="let health of healthData">
                 <td><span class="text-capitalize">{{ baseName(health.name) }}</span> {{subSystemName(health.name)}}</td>
                 <td class="text-center">
-                        <span class="label" [ngClass]="getLabelClass(health.status)">
-                            {{health.status}}
-                        </span>
+                    <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(health.status)">
+                        {{health.status}}
+                    </span>
                 </td>
                 <td class="text-center">
                     <a class="hand" (click)="showHealthModal(health)" *ngIf="health.details || health.error">
-                        <i class="glyphicon glyphicon-eye-open"></i>
+                        <i class="fa fa-eye"></i>
                     </a>
                 </td>
             </tr>

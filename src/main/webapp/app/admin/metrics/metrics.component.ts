@@ -50,17 +50,17 @@ export class JhiMetricsMonitoringComponent implements OnInit {
                 this.servicesStats = {};
                 this.cachesStats = {};
                 Object.keys(metrics.timers).forEach((key) => {
-                    let value = metrics.timers[key];
+                    const value = metrics.timers[key];
                     if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
                         this.servicesStats[key] = value;
                     }
                 });
                 Object.keys(metrics.gauges).forEach((key) => {
                     if (key.indexOf('jcache.statistics') !== -1) {
-                        let value = metrics.gauges[key].value;
+                        const value = metrics.gauges[key].value;
                         // remove gets or puts
-                        let index = key.lastIndexOf('.');
-                        let newKey = key.substr(0, index);
+                        const index = key.lastIndexOf('.');
+                        const newKey = key.substr(0, index);
 
                         // Keep the name of the domain
                         this.cachesStats[newKey] = {
@@ -69,7 +69,7 @@ export class JhiMetricsMonitoringComponent implements OnInit {
                         };
                     }
                 });
-            }, error => {
+            }, (error) => {
                 if (error.status === 503 || error.status === 500 || error.status === 404) {
                     if (error.status === 500 || error.status === 404) {
                         this.downRoute(this.activeRoute);
@@ -94,10 +94,9 @@ export class JhiMetricsMonitoringComponent implements OnInit {
         });
     }
 
-
     getRoutes() {
         this.updatingRoutes = true;
-        this.routesService.findAll().subscribe(routes => {
+        this.routesService.findAll().subscribe((routes) => {
             this.routes = routes;
             this.updatingRoutes = false;
 
@@ -113,7 +112,7 @@ export class JhiMetricsMonitoringComponent implements OnInit {
     updateChosenInstance(instance: Route) {
         if (instance) {
             this.setActiveRoute(instance);
-            for (let route of this.routes) {
+            for (const route of this.routes) {
                 route.active = '';
                 if (route.path === this.activeRoute.path) {
                     route.active = 'active';
@@ -130,7 +129,7 @@ export class JhiMetricsMonitoringComponent implements OnInit {
 
     // change active route only if exists, else choose Registry
     setActiveRoute(instance: Route) {
-        if (instance && this.routes && this.routes.findIndex(r => r.appName === instance.appName) !== -1) {
+        if (instance && this.routes && this.routes.findIndex((r) => r.appName === instance.appName) !== -1) {
             this.activeRoute = instance;
         } else if (this.routes && this.routes.length > 0) {
             this.activeRoute = this.routes[0];
@@ -139,7 +138,7 @@ export class JhiMetricsMonitoringComponent implements OnInit {
 
     private downRoute(instance: Route) {
         if (instance && this.routes) {
-            let index = this.routes.findIndex(r => r.appName === instance.appName);
+            const index = this.routes.findIndex((r) => r.appName === instance.appName);
             if (index !== -1) {
                 this.routes[index].status = 'DOWN';
             }
@@ -147,19 +146,19 @@ export class JhiMetricsMonitoringComponent implements OnInit {
     }
 
     // user click
-    getLabelClassRoute(route: Route) {
+    getBadgeClassRoute(route: Route) {
         if (route && !route.status) {
             route.status = 'UP';
         }
-        return this.getLabelClass(route.status);
+        return this.getBadgeClass(route.status);
     }
 
     // user click
-    getLabelClass(statusState) {
+    getBadgeClass(statusState) {
         if (!statusState || statusState !== 'UP') {
-            return 'label-danger';
+            return 'badge-danger';
         } else {
-            return 'label-success';
+            return 'badge-success';
         }
     }
 

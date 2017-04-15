@@ -4,13 +4,12 @@ import { configurationRoute, healthRoute, logsRoute, metricsRoute } from './';
 
 import { UserRouteAccessService } from '../shared';
 
-let ADMIN_ROUTES = [
+const ADMIN_ROUTES = [
     configurationRoute,
     healthRoute,
     metricsRoute,
     logsRoute,
 ];
-
 
 export const adminState: Routes = [{
     path: '',
@@ -19,5 +18,4 @@ export const adminState: Routes = [{
     },
     canActivate: [UserRouteAccessService],
     children: ADMIN_ROUTES
-}
-];
+}];

@@ -20,6 +20,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         contentBase: './target/www',
         proxy: [{
             context: [
+                /* jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here */
                 '/api',
                 '/services',
                 '/management',
@@ -49,7 +50,9 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
-            proxy: 'http://localhost:9060'
+            proxy: {
+                target: 'http://localhost:9060'
+            }
         }, {
             reload: false
         }),
