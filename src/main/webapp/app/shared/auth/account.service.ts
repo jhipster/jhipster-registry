@@ -3,8 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class AccountService {
-
+export class AccountService  {
     constructor(private http: Http) { }
 
     get(): Observable<any> {

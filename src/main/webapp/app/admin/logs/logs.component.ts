@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Log } from './log.model';
-import { JhiLogsService } from './logs.service';
+import { LogsService } from './logs.service';
 
 import { JhiRoutesService } from '../../routes';
 import { Route } from '../../routes/route.model';
@@ -13,7 +13,7 @@ import { Route } from '../../routes/route.model';
         'logs.component.css'
     ]
 })
-export class JhiLogsComponent implements OnInit {
+export class LogsComponent implements OnInit {
 
     loggers: Log[];
     updatingLogs: boolean;
@@ -26,7 +26,7 @@ export class JhiLogsComponent implements OnInit {
     updatingRoutes: boolean;
 
     constructor(
-        private logsService: JhiLogsService,
+        private logsService: LogsService,
         private routesService: JhiRoutesService
     ) {
         this.filter = '';

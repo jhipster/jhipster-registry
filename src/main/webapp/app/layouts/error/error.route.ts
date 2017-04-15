@@ -9,17 +9,15 @@ export const errorRoute: Routes = [
         component: ErrorComponent,
         data: {
             authorities: [],
-            pageTitle: 'Error page !'
+            pageTitle: 'Error page!'
         },
-        canActivate: [UserRouteAccessService]
     },
     {
         path: 'accessdenied',
         component: ErrorComponent,
         data: {
             authorities: [],
-            pageTitle: 'Error page !'
+            pageTitle: 'Error page!'
         },
-        canActivate: [UserRouteAccessService]
     }
 ];

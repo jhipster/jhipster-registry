@@ -10,17 +10,14 @@ import { StateStorageService } from '../../shared';
 })
 export class JhiMainComponent implements OnInit {
 
-    constructor(private titleService: Title,
-                private router: Router,
-                private $storageService: StateStorageService) {}
+    constructor(
+        private titleService: Title,
+        private router: Router,
+        private $storageService: StateStorageService,
+    ) {}
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
-        let title: string;
-        if (routeSnapshot.data && routeSnapshot.data['pageTitle']) {
-            title = routeSnapshot.data['pageTitle'];
-        } else {
-            title = 'jhipsterRegistryApp';
-        }
+        let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : 'jHipsterRegistryApp';
         if (routeSnapshot.firstChild) {
             title = this.getPageTitle(routeSnapshot.firstChild) || title;
         }

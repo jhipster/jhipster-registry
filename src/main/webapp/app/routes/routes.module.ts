@@ -1,12 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
-import { JhipsterRegistrySharedModule } from '../shared';
+import { JHipsterRegistrySharedModule } from '../shared';
 
 import { JhiRoutesService } from './';
 
 @NgModule({
     imports: [
-        JhipsterRegistrySharedModule
+        JHipsterRegistrySharedModule
     ],
     entryComponents: [],
     providers: [
