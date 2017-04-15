@@ -16,6 +16,7 @@ import {
     Principal,
     HasAnyAuthorityDirective,
     JhiLoginModalComponent,
+    JhiRouteSelectorComponent,
     JhiRoutesService
 } from './';
 
@@ -26,7 +27,8 @@ import {
     ],
     declarations: [
         JhiLoginModalComponent,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        JhiRouteSelectorComponent
     ],
     providers: [
         JhiRoutesService,
@@ -46,6 +48,7 @@ import {
     exports: [
         JHipsterRegistrySharedCommonModule,
         JhiLoginModalComponent,
+        JhiRouteSelectorComponent,
         HasAnyAuthorityDirective,
         DatePipe
     ],

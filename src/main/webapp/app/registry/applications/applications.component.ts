@@ -1,3 +1,5 @@
+/* tslint:disable:no-access-missing-member */
+// TODO lint disabled as the filter pipe used in template seems to trigger this
 import { Component, OnInit } from '@angular/core';
 import { JhiApplicationsService } from './applications.service';
 

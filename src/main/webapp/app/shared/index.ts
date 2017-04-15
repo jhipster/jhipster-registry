@@ -16,6 +16,7 @@ export * from './user/account.model';
 export * from './user/user.model';
 export * from './user/user.service';
 export * from './routes/route.model';
+export * from './routes/route-selector.component';
 export * from './routes/routes.service';
 export * from './shared-libs.module';
 export * from './shared-common.module';
