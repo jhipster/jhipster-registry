@@ -33,7 +33,8 @@ export class JhiHealthService {
 
     getBaseName(name): string {
         if (name) {
-            return name.split('.')[0];
+            const split = name.split('.');
+            return split[0];
         }
     }
 
@@ -48,13 +49,8 @@ export class JhiHealthService {
 
     /* private methods */
     private addHealthObject(result, isLeaf, healthObject, name): any {
-
-        const status: any = 'UP';
-        const error: any = undefined;
         const healthData: any = {
-            'name': name,
-            'error': error,
-            'status': status
+            name
         };
 
         const details = {};
@@ -100,7 +96,6 @@ export class JhiHealthService {
                 }
             }
         }
-
         return result;
     }
 
@@ -108,7 +103,7 @@ export class JhiHealthService {
         let result;
         if (path && name) {
             result = path + this.separator + name;
-        } else if (path) {
+        }  else if (path) {
             result = path;
         } else if (name) {
             result = name;
@@ -129,7 +124,6 @@ export class JhiHealthService {
                 }
             }
         }
-
         return result;
     }
 
@@ -145,5 +139,4 @@ export class JhiHealthService {
         }
         return result;
     }
-
 }
