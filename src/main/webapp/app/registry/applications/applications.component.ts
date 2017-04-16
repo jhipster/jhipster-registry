@@ -7,7 +7,7 @@ import { JhiApplicationsService } from './applications.service';
     selector: 'jhi-applications',
     templateUrl: './applications.component.html',
     styleUrls: [
-        'applications.component.css'
+        'applications.component.scss'
     ]
 })
 export class JhiApplicationsComponent implements OnInit {

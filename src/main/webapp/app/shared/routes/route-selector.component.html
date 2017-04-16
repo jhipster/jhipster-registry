@@ -1,7 +1,7 @@
 <div class="route-selector col-md-5" *ngIf="routes">
     <ul class="list-group">
         <li class="list-group-item {{route.active}}" *ngFor="let route of routes | orderBy:name" (click)="showRoute(route)">
-            {{route.appName}} {{route.serviceId ? '(' + route.serviceId + ')' : ''}}
+            {{route.appName | uppercase}} {{route.serviceId ? '(' + route.serviceId + ')' : ''}}
             <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClassRoute(route)">
                 {{route.status}}
             </span>

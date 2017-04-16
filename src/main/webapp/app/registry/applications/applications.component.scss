@@ -2,15 +2,14 @@
 Applications page styles
 ========================================================================== */
 
-#apps span.badge { /* UP, DOWN, ... */
-    float: right;
-}
-
-li.list-group-item { /* apps names */
-    word-break: break-all;
-    display: block;
-}
-
-#apps {
+.apps {
     margin-bottom: 2%;
+    padding-left: 0;
+    span.badge { /* UP, DOWN, ... */
+        float: right;
+    }
+    li.list-group-item { /* apps names */
+        word-break: break-all;
+        display: block;
+    }
 }

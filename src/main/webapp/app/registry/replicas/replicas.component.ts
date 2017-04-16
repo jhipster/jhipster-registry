@@ -5,7 +5,7 @@ import { JhiReplicasService } from './replicas.service';
     selector: 'jhi-replicas',
     templateUrl: './replicas.component.html',
     styleUrls: [
-        'replicas.component.css'
+        'replicas.component.scss'
     ]
 })
 export class JhiReplicasComponent implements OnInit {
