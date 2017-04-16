@@ -10,10 +10,16 @@ export class JhiRoutesService {
 
     // Observable string sources
     private routeChangedSource = new Subject<Route>();
+    private routeDownSource = new Subject<Route>();
+    private routeReloadSource = new Subject<boolean>();
     routeChanged$: Observable<Route>;
+    routeDown$: Observable<Route>;
+    routeReload$: Observable<boolean>;
 
     constructor(private http: Http) {
         this.routeChanged$ = this.routeChangedSource.asObservable();
+        this.routeDown$ = this.routeDownSource.asObservable();
+        this.routeReload$ = this.routeReloadSource.asObservable();
     }
 
     findAll(): Observable<Route[]> {
@@ -21,6 +27,14 @@ export class JhiRoutesService {
     }
 
     routeChange(route: Route) {
+        this.routeChangedSource.next(route);
+    }
+
+    reloadRoutes() {
+        this.routeReloadSource.next(true);
+    }
+
+    routeDown(route: Route) {
         this.routeChangedSource.next(route);
     }
 }

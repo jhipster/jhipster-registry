@@ -4,7 +4,8 @@ import { AlertService } from 'ng-jhipster';
 import {
     JHipsterRegistrySharedLibsModule,
     JhiAlertComponent,
-    JhiAlertErrorComponent
+    JhiAlertErrorComponent,
+    JhiRouteSelectorComponent
 } from './';
 
 export function alertServiceProvider(sanitizer: Sanitizer) {
@@ -19,7 +20,8 @@ export function alertServiceProvider(sanitizer: Sanitizer) {
     ],
     declarations: [
         JhiAlertComponent,
-        JhiAlertErrorComponent
+        JhiAlertErrorComponent,
+        JhiRouteSelectorComponent
     ],
     providers: [
         {
@@ -32,7 +34,8 @@ export function alertServiceProvider(sanitizer: Sanitizer) {
     exports: [
         JHipsterRegistrySharedLibsModule,
         JhiAlertComponent,
-        JhiAlertErrorComponent
+        JhiAlertErrorComponent,
+        JhiRouteSelectorComponent
     ]
 })
 export class JHipsterRegistrySharedCommonModule {}

@@ -78,6 +78,12 @@ Generic styles
     opacity: 1;
 }
 
+pre.code-block {
+    padding: 10px;
+    background: #403d3d;
+    color: rgb(241, 187, 90);
+    border-radius: 5px;
+}
 /*FIXME this is to support grids in table class; */
 table td[class*=col-], table th[class*=col-] {
     position: static;

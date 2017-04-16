@@ -67,7 +67,7 @@
             your local address, for
             example on a Unix/MacOSX system, edit <code>/etc/hosts</code> to add those lines:
         </p>
-        <pre># Eureka peers
+        <pre class="code-block"># Eureka peers
 127.0.0.1	eureka-peer-1
 127.0.0.1	eureka-peer-2</pre>
         <p>
@@ -85,7 +85,7 @@
         <p>
             Here is a sample working configuration for "peer1". Note that its "serviceUrl" points to "peer2":
         </p>
-        <pre>
+        <pre class="code-block">
 server:
     port: 8761
 eureka:
@@ -106,7 +106,7 @@ eureka:
         <p>
             Here is the same configuration for "peer2", which has a "serviceUrl" pointing to "peer1":
         </p>
-        <pre>
+        <pre class="code-block">
 server:
     port: 8762
 eureka:

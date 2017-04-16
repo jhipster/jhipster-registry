@@ -7,7 +7,8 @@ import { Route } from '../../shared';
 @Injectable()
 export class JhiConfigurationService {
 
-    constructor(private http: Http) {}
+    constructor(private http: Http) {
+    }
 
     getConfigs(prefix: String = ''): Observable<any> {
         return this.http.get(prefix + 'management/configprops').map((res: Response) => {

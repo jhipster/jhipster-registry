@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { JhiMetricsMonitoringModalComponent } from './metrics-modal.component';
@@ -8,9 +9,6 @@ import { JhiRoutesService, Route } from '../../shared';
 @Component({
     selector: 'jhi-metrics',
     templateUrl: './metrics.component.html',
-    styleUrls: [
-        'metrics.component.css'
-    ]
 })
 export class JhiMetricsMonitoringComponent implements OnInit {
     metrics: any = {};
@@ -20,8 +18,7 @@ export class JhiMetricsMonitoringComponent implements OnInit {
     JCACHE_KEY: string;
 
     activeRoute: Route;
-    routes: Route[];
-    updatingRoutes: boolean;
+    subscription: Subscription;
 
     constructor(
         private modalService: NgbModal,
@@ -32,11 +29,14 @@ export class JhiMetricsMonitoringComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.refresh();
+        this.subscription = this.routesService.routeChanged$.subscribe((route) => {
+            this.activeRoute = route;
+            this.displayActiveRouteMetrics();
+        });
     }
 
     refresh() {
-        this.getRoutes();
+        this.routesService.reloadRoutes();
     }
 
     displayActiveRouteMetrics() {
@@ -70,10 +70,7 @@ export class JhiMetricsMonitoringComponent implements OnInit {
             }, (error) => {
                 if (error.status === 503 || error.status === 500 || error.status === 404) {
                     if (error.status === 500 || error.status === 404) {
-                        this.downRoute(this.activeRoute);
-                        this.setActiveRoute(null);
-                        this.updateChosenInstance(this.activeRoute);
-                        this.displayActiveRouteMetrics();
+                        this.routesService.routeDown(this.activeRoute);
                     }
                 }
             });
@@ -92,72 +89,11 @@ export class JhiMetricsMonitoringComponent implements OnInit {
         });
     }
 
-    getRoutes() {
-        this.updatingRoutes = true;
-        this.routesService.findAll().subscribe((routes) => {
-            this.routes = routes;
-            this.updatingRoutes = false;
-
-            if (this.activeRoute) { // in case of new refresh call
-                this.updateChosenInstance(this.activeRoute);
-            } else if (routes.length > 0) {
-                this.updateChosenInstance(routes[0]);
-            }
-            this.displayActiveRouteMetrics();
-        });
-    }
-
-    updateChosenInstance(instance: Route) {
-        if (instance) {
-            this.setActiveRoute(instance);
-            for (const route of this.routes) {
-                route.active = '';
-                if (route.path === this.activeRoute.path) {
-                    route.active = 'active';
-                }
-            }
+    filterNaN(input) {
+        if (isNaN(input)) {
+            return 0;
         }
-    }
-
-    // user click
-    showRoute(instance: Route) {
-        this.setActiveRoute(instance);
-        this.refresh();
-    }
-
-    // change active route only if exists, else choose Registry
-    setActiveRoute(instance: Route) {
-        if (instance && this.routes && this.routes.findIndex((r) => r.appName === instance.appName) !== -1) {
-            this.activeRoute = instance;
-        } else if (this.routes && this.routes.length > 0) {
-            this.activeRoute = this.routes[0];
-        }
-    }
-
-    private downRoute(instance: Route) {
-        if (instance && this.routes) {
-            const index = this.routes.findIndex((r) => r.appName === instance.appName);
-            if (index !== -1) {
-                this.routes[index].status = 'DOWN';
-            }
-        }
-    }
-
-    // user click
-    getBadgeClassRoute(route: Route) {
-        if (route && !route.status) {
-            route.status = 'UP';
-        }
-        return this.getBadgeClass(route.status);
-    }
-
-    // user click
-    getBadgeClass(statusState) {
-        if (!statusState || statusState !== 'UP') {
-            return 'badge-danger';
-        } else {
-            return 'badge-success';
-        }
+        return input;
     }
 
 }

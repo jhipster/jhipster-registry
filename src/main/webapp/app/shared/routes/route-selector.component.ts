@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { JhiRoutesService } from './routes.service';
 import { Route } from './route.model';
 
 @Component({
-    selector: 'jhi-route--selector',
+    selector: 'jhi-route-selector',
     templateUrl: './route-selector.component.html',
     styleUrls: [
         'route-selector.component.scss'
     ]
 })
-export class JhiRouteSelectorComponent implements OnInit {
+export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
 
     activeRoute: Route;
     routes: Route[];
     updatingRoutes: boolean;
+    routeReloadSubscription: Subscription;
+    routeDownSubscription: Subscription;
 
     constructor(
         private routesService: JhiRoutesService
@@ -22,25 +25,17 @@ export class JhiRouteSelectorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.refresh();
-    }
-
-    refresh() {
         this.getRoutes();
+        this.routeReloadSubscription = this.routesService.routeReload$.subscribe((reload) => this.getRoutes());
+        this.routeDownSubscription = this.routesService.routeDown$.subscribe((route) => {
+            this.downRoute(route);
+            this.setActiveRoute(null);
+            this.updateChosenInstance(route);
+        });
     }
 
     getRoutes() {
-        this.updatingRoutes = true;
-        this.routesService.findAll().subscribe((routes) => {
-            this.routes = routes;
-            this.updatingRoutes = false;
-
-            if (this.activeRoute) { // in case of new refresh call
-                this.updateChosenInstance(this.activeRoute);
-            } else if (routes.length > 0) {
-                this.updateChosenInstance(routes[0]);
-            }
-        });
+        this.updateRoute(true);
     }
 
     updateChosenInstance(instance: Route) {
@@ -56,8 +51,7 @@ export class JhiRouteSelectorComponent implements OnInit {
     }
 
     showRoute(instance: Route) {
-        this.setActiveRoute(instance);
-        this.getRoutes();
+        this.updateChosenInstance(instance);
     }
 
     // change active route only if exists, else choose Registry
@@ -70,6 +64,45 @@ export class JhiRouteSelectorComponent implements OnInit {
         this.routesService.routeChange(this.activeRoute);
     }
 
+    // user click
+    getBadgeClassRoute(route: Route) {
+        if (route && !route.status) {
+            route.status = 'UP';
+        }
+        return this.getBadgeClass(route.status);
+    }
+
+    ngOnDestroy() {
+        // prevent memory leak when component destroyed
+        this.routeReloadSubscription.unsubscribe();
+    }
+
+    private updateRoute(updateInstance: boolean) {
+        this.updatingRoutes = true;
+        this.routesService.findAll().subscribe((routes) => {
+            this.routes = routes;
+            if (updateInstance) {
+                if (this.activeRoute) { // in case of new refresh call
+                    this.updateChosenInstance(this.activeRoute);
+                } else if (routes.length > 0) {
+                    this.updateChosenInstance(routes[0]);
+                }
+            }
+            this.updatingRoutes = false;
+        }, (error) => {
+            if (error.status === 503 || error.status === 500 || error.status === 404) {
+                if (error.status === 500 || error.status === 404) {
+                    this.downRoute(this.activeRoute);
+                    this.setActiveRoute(null);
+                    if (updateInstance) {
+                        this.updateChosenInstance(this.activeRoute);
+                    }
+                }
+                this.updatingRoutes = false;
+            }
+        });
+    }
+
     private downRoute(instance: Route) {
         if (instance && this.routes) {
             const index = this.routes.findIndex((r) => r.appName === instance.appName);
@@ -77,14 +110,6 @@ export class JhiRouteSelectorComponent implements OnInit {
                 this.routes[index].status = 'DOWN';
             }
         }
-    }
-
-    // user click
-    getBadgeClassRoute(route: Route) {
-        if (route && !route.status) {
-            route.status = 'UP';
-        }
-        return this.getBadgeClass(route.status);
     }
 
     private getBadgeClass(statusState) {

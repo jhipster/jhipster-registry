@@ -5,16 +5,16 @@ import { JHipsterRegistrySharedModule } from '../shared';
 
 import {
     adminState,
+    LogsComponent,
+    JhiMetricsMonitoringModalComponent,
+    JhiMetricsMonitoringComponent,
+    JhiHealthModalComponent,
+    JhiHealthCheckComponent,
     JhiConfigurationComponent,
     JhiConfigurationService,
-    JhiHealthCheckComponent,
-    JhiHealthModalComponent,
     JhiHealthService,
-    LogsComponent,
-    LogsService,
-    JhiMetricsMonitoringComponent,
-    JhiMetricsMonitoringModalComponent,
-    JhiMetricsService
+    JhiMetricsService,
+    LogsService
 } from './';
 
 @NgModule({

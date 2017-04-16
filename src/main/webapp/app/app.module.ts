@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { JHipsterRegistrySharedModule, UserRouteAccessService } from './shared';
-import { JHipsterRegistryHomeModule } from './home';
+import { JHipsterRegistryHomeModule } from './home/home.module';
 import { JHipsterRegistryAdminModule } from './admin/admin.module';
 import { JHipsterRegistryModule } from './registry/registry.module';
 

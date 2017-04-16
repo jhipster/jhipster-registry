@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Log } from './log.model';
 import { LogsService } from './logs.service';
@@ -7,12 +8,9 @@ import { JhiRoutesService, Route } from '../../shared';
 
 @Component({
     selector: 'jhi-logs',
-    templateUrl: './logs.component.html',
-    styleUrls: [
-        'logs.component.css'
-    ]
+    templateUrl: './logs.component.html'
 })
-export class LogsComponent implements OnInit {
+export class LogsComponent implements OnInit, OnDestroy {
 
     loggers: Log[];
     updatingLogs: boolean;
@@ -21,8 +19,7 @@ export class LogsComponent implements OnInit {
     reverse: boolean;
 
     activeRoute: Route;
-    routes: Route[];
-    updatingRoutes: boolean;
+    subscription: Subscription;
 
     constructor(
         private logsService: LogsService,
@@ -34,11 +31,15 @@ export class LogsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.refresh();
+        this.loggers = [];
+        this.subscription = this.routesService.routeChanged$.subscribe((route) => {
+            this.activeRoute = route;
+            this.displayActiveRouteLogs();
+        });
     }
 
     refresh() {
-        // this.getRoutes();
+        this.routesService.reloadRoutes();
     }
 
     changeLevel(name: string, level: string) {
@@ -60,44 +61,16 @@ export class LogsComponent implements OnInit {
                 if (error.status === 503 || error.status === 500 || error.status === 404) {
                     this.updatingLogs = false;
                     if (error.status === 500 || error.status === 404) {
-                        this.downRoute(this.activeRoute);
-                        this.setActiveRoute(null);
-                        this.updateChosenInstance(this.activeRoute);
-                        this.displayActiveRouteLogs();
+                        this.routesService.routeDown(this.activeRoute);
                     }
                 }
             });
         }
     }
 
-    updateChosenInstance(instance: Route) {
-        if (instance) {
-            this.setActiveRoute(instance);
-            for (const route of this.routes) {
-                route.active = '';
-                if (route.path === this.activeRoute.path) {
-                    route.active = 'active';
-                }
-            }
-        }
-    }
-
-    // change active route only if exists, else choose Registry
-    setActiveRoute(instance: Route) {
-        if (instance && this.routes && this.routes.findIndex((r) => r.appName === instance.appName) !== -1) {
-            this.activeRoute = instance;
-        } else if (this.routes && this.routes.length > 0) {
-            this.activeRoute = this.routes[0];
-        }
-    }
-
-    private downRoute(instance: Route) {
-        if (instance && this.routes) {
-            const index = this.routes.findIndex((r) => r.appName === instance.appName);
-            if (index !== -1) {
-                this.routes[index].status = 'DOWN';
-            }
-        }
+    ngOnDestroy() {
+        // prevent memory leak when component destroyed
+        this.subscription.unsubscribe();
     }
 
 }
