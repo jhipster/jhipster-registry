@@ -1,7 +1,5 @@
 package io.github.jhipster.registry.web.rest;
 
-import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.registry.config.DefaultProfileUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,7 +33,7 @@ public class ProfileInfoResourceTest {
         ProfileInfoResource profileInfoResource = new ProfileInfoResource(env, prop);
         this.mock = MockMvcBuilders.standaloneSetup(profileInfoResource).build();
 
-        Mockito.when(DefaultProfileUtil.getActiveProfiles(env)).thenReturn(profiles);
+        Mockito.when(env.getActiveProfiles()).thenReturn(profiles);
         Mockito.when(prop.getRibbon()).thenReturn(ribbon);
     }
 
