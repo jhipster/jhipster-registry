@@ -9,7 +9,7 @@ RUN apk update && apk add openssh && \
     rm -Rf target && \
     chmod +x /code/mvnw && \
     sleep 1 && \
-    ./mvnw package && \
+    ./mvnw package -Pprod && \
     mv /code/target/*.war /jhipster-registry.war && \
     rm -Rf /code/ /root/.m2/wrapper/ /root/.m2/repository/ /var/cache/apk/*
 
