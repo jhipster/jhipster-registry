@@ -1,11 +1,21 @@
-<div class="route-selector col-md-5" *ngIf="routes">
-    <ul class="list-group">
-        <li class="list-group-item {{route.active}}" *ngFor="let route of routes | orderBy:name" (click)="showRoute(route)">
-            {{route.appName | uppercase}} {{route.serviceId ? '(' + route.serviceId + ')' : ''}}
-            <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClassRoute(route)">
-                {{route.status}}
-            </span>
-        </li>
-    </ul>
+<div class="route-selector col-md-7" *ngIf="routes">
+
+    <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-outline-primary" id="sortMenu" ngbDropdownToggle>
+            {{ activeRoute.serviceId ? (activeRoute.serviceId | uppercase) : (activeRoute.appName | uppercase)}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="sortMenu">
+            <div *ngFor="let app of routes | groupBy : 'appName'">
+                <span class="dropdown-header">{{app.key}}</span>
+                <button class="dropdown-item" *ngFor="let route of app.value" (click)="updateChosenInstance(route)" [ngClass]="states(route)">
+                    <span class="name">{{route.appName | uppercase}} {{route.serviceId ? '(' + route.serviceId + ')' : '' }}</span>
+                    <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClassRoute(route)">
+                    {{route.status}}
+                </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <p *ngIf="updatingRoutes">Loading...</p>
 </div>

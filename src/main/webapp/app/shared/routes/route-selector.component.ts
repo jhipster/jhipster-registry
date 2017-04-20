@@ -50,10 +50,6 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         }
     }
 
-    showRoute(instance: Route) {
-        this.updateChosenInstance(instance);
-    }
-
     // change active route only if exists, else choose Registry
     setActiveRoute(instance: Route) {
         if (instance && this.routes && this.routes.findIndex((r) => r.appName === instance.appName) !== -1) {
@@ -70,6 +66,14 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
             route.status = 'UP';
         }
         return this.getBadgeClass(route.status);
+    }
+
+    states(route: Route) {
+        if (route && route.status && route.status == 'DOWN'){
+            return 'disabled';
+        } else if (route && route === this.activeRoute) {
+            return 'active';
+        }
     }
 
     ngOnDestroy() {
