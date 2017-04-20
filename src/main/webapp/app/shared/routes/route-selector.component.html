@@ -7,7 +7,7 @@
         <div class="dropdown-menu" aria-labelledby="sortMenu">
             <div *ngFor="let app of routes | groupBy : 'appName'">
                 <span class="dropdown-header">{{app.key}}</span>
-                <button class="dropdown-item" *ngFor="let route of app.value" (click)="updateChosenInstance(route)" [ngClass]="states(route)">
+                <button class="dropdown-item" *ngFor="let route of app.value" (click)="updateChosenInstance(route)" [ngClass]="state(route)">
                     <span class="name">{{route.appName | uppercase}} {{route.serviceId ? '(' + route.serviceId + ')' : '' }}</span>
                     <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClassRoute(route)">
                     {{route.status}}

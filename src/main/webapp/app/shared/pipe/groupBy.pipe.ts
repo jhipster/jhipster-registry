@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: "groupBy"
+    name: 'groupBy'
 })
 export class GroupByPipe implements PipeTransform {
 
@@ -9,8 +9,8 @@ export class GroupByPipe implements PipeTransform {
         const newValue = [];
 
         for (let i = 0; i < collection.length; i++) {
-            let keyVal = GroupByPipe.deepFind(collection[i], term);
-            let index = newValue.findIndex( myObj => myObj.key == keyVal);
+            const keyVal = this.deepFind(collection[i], term);
+            const index = newValue.findIndex( (myObj) => myObj.key === keyVal);
             if (index >= 0) {
                 newValue[index].value.push(collection[i]);
             } else {
@@ -20,14 +20,14 @@ export class GroupByPipe implements PipeTransform {
         return newValue;
     }
 
-    static deepFind(obj, path) {
+    private deepFind(obj, path) {
 
         const paths = path.toString().split(/[.\[\]]/);
         let current = obj;
 
         for (let i = 0; i < paths.length; ++i) {
-            if (paths[i] !== "") {
-                if (current[paths[i]] == undefined) {
+            if (paths[i] !== '') {
+                if (!current[paths[i]]) {
                     return undefined;
                 } else {
                     current = current[paths[i]];

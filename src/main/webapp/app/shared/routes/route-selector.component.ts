@@ -60,22 +60,6 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         this.routesService.routeChange(this.activeRoute);
     }
 
-    // user click
-    getBadgeClassRoute(route: Route) {
-        if (route && !route.status) {
-            route.status = 'UP';
-        }
-        return this.getBadgeClass(route.status);
-    }
-
-    states(route: Route) {
-        if (route && route.status && route.status == 'DOWN'){
-            return 'disabled';
-        } else if (route && route === this.activeRoute) {
-            return 'active';
-        }
-    }
-
     ngOnDestroy() {
         // prevent memory leak when component destroyed
         this.routeReloadSubscription.unsubscribe();
@@ -116,11 +100,26 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         }
     }
 
+    getBadgeClassRoute(route: Route) {
+        if (route && !route.status) {
+            route.status = 'UP';
+        }
+        return this.getBadgeClass(route.status);
+    }
+
     private getBadgeClass(statusState) {
         if (!statusState || statusState !== 'UP') {
             return 'badge-danger';
         } else {
             return 'badge-success';
+        }
+    }
+
+    state(route: Route) {
+        if (route && route.status && route.status === 'DOWN') {
+            return 'disabled';
+        } else if (route && route === this.activeRoute) {
+            return 'active';
         }
     }
 
