@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { JhiRoutesService } from './routes.service';
 import { Route } from './route.model';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'jhi-route-selector',
@@ -15,7 +16,9 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
 
     activeRoute: Route;
     routes: Route[];
+    savedRoutes: Route[];
     updatingRoutes: boolean;
+    searchedInstance = '';
     routeReloadSubscription: Subscription;
     routeDownSubscription: Subscription;
 
@@ -50,7 +53,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         }
     }
 
-    // change active route only if exists, else choose Registry
+    /** Change active route only if exists, else choose Registry **/
     setActiveRoute(instance: Route) {
         if (instance && this.routes && this.routes.findIndex((r) => r.appName === instance.appName) !== -1) {
             this.activeRoute = instance;
@@ -61,16 +64,19 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        // prevent memory leak when component destroyed
+        /** prevent memory leak when component destroyed **/
         this.routeReloadSubscription.unsubscribe();
     }
 
     private updateRoute(updateInstance: boolean) {
         this.updatingRoutes = true;
         this.routesService.findAll().subscribe((routes) => {
+            this.savedRoutes = routes;
             this.routes = routes;
+            this.searchedInstance = '';
+
             if (updateInstance) {
-                if (this.activeRoute) { // in case of new refresh call
+                if (this.activeRoute) { /** in case of new refresh call **/
                     this.updateChosenInstance(this.activeRoute);
                 } else if (routes.length > 0) {
                     this.updateChosenInstance(routes[0]);
@@ -123,4 +129,25 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         }
     }
 
+    searchByAppName() {
+        if (this.searchedInstance === '') {
+            this.routes = this.savedRoutes;
+        } else {
+            this.routes = this.savedRoutes.filter((route) => {
+                return route.appName.includes(this.searchedInstance);
+            });
+        }
+    }
+
+    /**
+     * Close the dropdown element.
+     * The dropdown can be closed directly in the HTML, but cause the warning
+     * ("The method "drop" that you're trying to access does not exist in the class declaration.").
+     * @param dropdown
+     */
+    closeDropDown(dropdown: NgbDropdown) {
+        if (dropdown) {
+            dropdown.close();
+        }
+    }
 }
