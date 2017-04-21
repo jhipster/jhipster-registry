@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class GroupByPipe implements PipeTransform {
 
-    transform( collection: Object[] , term: string ) {
+    transform(collection: Object[] , term: string) {
         const newValue = [];
 
         collection.forEach((col) => {
