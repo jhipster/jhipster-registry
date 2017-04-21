@@ -1,6 +1,6 @@
 <div class="route-selector col-md-7" *ngIf="routes">
 
-    <div ngbDropdown #dropId="ngbDropdown" class="d-inline-block">
+    <div ngbDropdown #dropId="ngbDropdown">
         <button class="btn btn-outline-primary" id="sortMenu" ngbDropdownToggle>
             {{ activeRoute.serviceId ? (activeRoute.serviceId | uppercase) : (activeRoute.appName | uppercase)}}
         </button>
