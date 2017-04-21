@@ -1,7 +1,7 @@
 import { NgModule, Sanitizer } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { AlertService } from 'ng-jhipster';
-import { GroupByPipe } from './pipe/groupBy.pipe';
+import { GroupByPipe } from './pipe/group-by.pipe';
 import {
     JHipsterRegistrySharedLibsModule,
     JhiAlertComponent,

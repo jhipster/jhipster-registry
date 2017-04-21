@@ -8,32 +8,31 @@ export class GroupByPipe implements PipeTransform {
     transform( collection: Object[] , term: string ) {
         const newValue = [];
 
-        for (let i = 0; i < collection.length; i++) {
-            const keyVal = this.deepFind(collection[i], term);
+        collection.forEach((col) => {
+            const keyVal = this.deepFind(col, term);
             const index = newValue.findIndex( (myObj) => myObj.key === keyVal);
             if (index >= 0) {
-                newValue[index].value.push(collection[i]);
+                newValue[index].value.push(col);
             } else {
-                newValue.push({key: keyVal, value: [collection[i]]});
+                newValue.push({key: keyVal, value: [col]});
             }
-        }
+        });
         return newValue;
     }
 
     private deepFind(obj, path) {
-
         const paths = path.toString().split(/[.\[\]]/);
         let current = obj;
 
-        for (let i = 0; i < paths.length; ++i) {
-            if (paths[i] !== '') {
-                if (!current[paths[i]]) {
+        paths.forEach((onePath) => {
+            if (onePath !== '') {
+                if (!current[onePath]) {
                     return undefined;
                 } else {
-                    current = current[paths[i]];
+                    current = current[onePath];
                 }
             }
-        }
+        });
         return current;
     }
 
