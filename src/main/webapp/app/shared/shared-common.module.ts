@@ -1,6 +1,7 @@
 import { NgModule, Sanitizer } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { AlertService } from 'ng-jhipster';
+import { GroupByPipe } from './pipe/group-by.pipe';
 import {
     JHipsterRegistrySharedLibsModule,
     JhiAlertComponent,
@@ -21,7 +22,8 @@ export function alertServiceProvider(sanitizer: Sanitizer) {
     declarations: [
         JhiAlertComponent,
         JhiAlertErrorComponent,
-        JhiRouteSelectorComponent
+        JhiRouteSelectorComponent,
+        GroupByPipe
     ],
     providers: [
         {
@@ -35,7 +37,8 @@ export function alertServiceProvider(sanitizer: Sanitizer) {
         JHipsterRegistrySharedLibsModule,
         JhiAlertComponent,
         JhiAlertErrorComponent,
-        JhiRouteSelectorComponent
+        JhiRouteSelectorComponent,
+        GroupByPipe
     ]
 })
 export class JHipsterRegistrySharedCommonModule {}

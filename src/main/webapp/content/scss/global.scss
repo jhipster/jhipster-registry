@@ -39,17 +39,8 @@ Generic styles
     border: none;
 }
 
-.error {
-    color: white;
-    background-color: red;
-}
-
 .pad {
     padding: 10px;
-}
-
-.w-30 {
-    width: 30% !important;
 }
 
 .w-40 {
@@ -60,22 +51,9 @@ Generic styles
     width: 60% !important;
 }
 
-.w-70 {
-    width: 70% !important;
-}
-
-.w-90 {
-    width: 90% !important;
-}
-
 .break {
     white-space: normal;
     word-break:break-all;
-}
-
-.readonly {
-    background-color: #eee;
-    opacity: 1;
 }
 
 pre.code-block {
@@ -236,6 +214,10 @@ ui bootstrap tweaks
     border: 1px solid #ecf0f1;
     border-bottom-color: transparent;
     cursor: default;
+}
+
+.progress {
+    background-color: #e0e2e2;
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
