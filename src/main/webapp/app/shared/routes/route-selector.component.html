@@ -1,9 +1,7 @@
 <div class="route-selector col-md-7" *ngIf="routes">
 
     <div ngbDropdown #dropId="ngbDropdown">
-        <button class="btn btn-outline-primary" id="sortMenu" ngbDropdownToggle>
-            {{ activeRoute.serviceId ? (activeRoute.serviceId | uppercase) : (activeRoute.appName | uppercase)}}
-        </button>
+        <button class="btn btn-outline-primary" id="sortMenu" ngbDropdownToggle [innerHTML]="getActiveRoute()"></button>
         <div class="dropdown-menu" aria-labelledby="sortMenu" aria-expanded="true" (click)="$event.stopPropagation()">
             <p class="d-flex">
                 <input type="search" class="form-control d-flex" placeholder="Search an application..."
@@ -12,7 +10,7 @@
             <div *ngFor="let app of routes | groupBy : 'appName'">
                 <span class="dropdown-header" (click)="$event.stopPropagation()">{{app.key}}</span>
                 <button class="dropdown-item" *ngFor="let route of app.value"
-                        (click)="updateChosenInstance(route); closeDropDown(dropId);" [ngClass]="state(route)">
+                        (click)="setActiveRoute(route); closeDropDown(dropId);" [ngClass]="state(route)">
 
                     <span class="name">{{route.appName | uppercase}} {{route.serviceId ? '(' + route.serviceId + ')' : '' }}</span>
                     <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClassRoute(route)">
