@@ -28,29 +28,17 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.getRoutes();
-        this.routeReloadSubscription = this.routesService.routeReload$.subscribe((reload) => this.getRoutes());
+        this.updateRoute();
+        this.routeReloadSubscription = this.routesService.routeReload$.subscribe((reload) => this.updateRoute());
         this.routeDownSubscription = this.routesService.routeDown$.subscribe((route) => {
             this.downRoute(route);
             this.setActiveRoute(null);
-            this.updateChosenInstance(route);
         });
     }
 
-    getRoutes() {
-        this.updateRoute(true);
-    }
-
-    updateChosenInstance(instance: Route) {
-        if (instance) {
-            this.setActiveRoute(instance);
-            for (const route of this.routes) {
-                route.active = '';
-                if (route.path === this.activeRoute.path) {
-                    route.active = 'active';
-                }
-            }
-        }
+    ngOnDestroy() {
+        /** prevent memory leak when component destroyed **/
+        this.routeReloadSubscription.unsubscribe();
     }
 
     /** Change active route only if exists, else choose Registry **/
@@ -63,24 +51,17 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         this.routesService.routeChange(this.activeRoute);
     }
 
-    ngOnDestroy() {
-        /** prevent memory leak when component destroyed **/
-        this.routeReloadSubscription.unsubscribe();
-    }
-
-    private updateRoute(updateInstance: boolean) {
+    private updateRoute() {
         this.updatingRoutes = true;
         this.routesService.findAll().subscribe((routes) => {
             this.savedRoutes = routes;
             this.routes = routes;
             this.searchedInstance = '';
 
-            if (updateInstance) {
-                if (this.activeRoute) { /** in case of new refresh call **/
-                    this.updateChosenInstance(this.activeRoute);
-                } else if (routes.length > 0) {
-                    this.updateChosenInstance(routes[0]);
-                }
+            if (this.activeRoute) { /** in case of new refresh call **/
+                this.setActiveRoute(this.activeRoute);
+            } else if (routes.length > 0) {
+                this.setActiveRoute(routes[0]);
             }
             this.updatingRoutes = false;
         }, (error) => {
@@ -88,9 +69,6 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
                 if (error.status === 500 || error.status === 404) {
                     this.downRoute(this.activeRoute);
                     this.setActiveRoute(null);
-                    if (updateInstance) {
-                        this.updateChosenInstance(this.activeRoute);
-                    }
                 }
                 this.updatingRoutes = false;
             }
@@ -104,6 +82,14 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
                 this.routes[index].status = 'DOWN';
             }
         }
+    }
+
+    /* ==========================================================================
+                                        UI PART
+     ========================================================================== */
+
+    getActiveRoute() {
+        return this.activeRoute.serviceId ? this.activeRoute.serviceId.toUpperCase() : this.activeRoute.appName.toUpperCase();
     }
 
     getBadgeClassRoute(route: Route) {
