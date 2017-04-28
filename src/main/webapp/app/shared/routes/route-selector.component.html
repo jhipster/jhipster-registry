@@ -1,10 +1,10 @@
 <div class="route-selector col-md-10 d-inline-flex" *ngIf="routes">
 
-    <div ngbDropdown #dropId="ngbDropdown">
+    <div class="dropdown" ngbDropdown #dropId="ngbDropdown">
         <button class="btn btn-outline-primary" id="sortMenu" ngbDropdownToggle [innerHTML]="getActiveRoute()"></button>
         <div class="dropdown-menu" aria-labelledby="sortMenu" aria-expanded="true" (click)="$event.stopPropagation()">
             <p class="d-flex">
-                <input type="search" class="form-control d-flex" placeholder="Search an application..."
+                <input type="search" class="form-control d-flex search" placeholder="Search an application..."
                        [(ngModel)]="searchedInstance" (click)="$event.stopPropagation()" (input)="searchByAppName($event)">
             </p>
             <div *ngFor="let app of routes | groupBy : 'appName'">
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <div ngbDropdown>
+    <div class="dropdown" ngbDropdown>
         <button class="btn btn-outline-primary" [ngClass]="classTime()" id="refreshMenu" ngbDropdownToggle [innerHTML]="'&nbsp; '+getActiveRefreshTime()"></button>
         <div class="dropdown-menu" aria-labelledby="refreshMenu" aria-expanded="true">
             <span class="dropdown-header">Refresh times (in seconds)</span>
