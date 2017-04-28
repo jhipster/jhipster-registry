@@ -5,9 +5,22 @@
     "JHIPSTER_PASSWORD": {
       "description": "Admin password for the registry (used to login after clicking 'View App'). Must be at least 5 characters.",
       "required": "true"
+    },
+    "JAVA_OPTS": {
+      "description": "Java runtime options.",
+      "value": "-Xmx256m -Xss512k -Dfile.encoding=UTF-8"
+    },
+    "MAVEN_CUSTOM_OPTS": {
+        "description": "Options for the Maven build.",
+        "value": "-Pprod,heroku -DskipTests"
+    },
+    "NPM_CONFIG_PRODUCTION": {
+        "description": "Set to false to install devDependencies",
+        "value": "false"
     }
   },
   "buildpacks": [
+    {"url": "heroku/nodejs"},
     {"url": "heroku/java"}
   ]
 }
