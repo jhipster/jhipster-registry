@@ -1,13 +1,10 @@
 package io.github.jhipster.registry.web.rest;
 
+import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.jhipster.registry.security.jwt.JWTConfigurer;
 import io.github.jhipster.registry.security.jwt.TokenProvider;
 import io.github.jhipster.registry.web.rest.vm.LoginVM;
-
-import java.util.Collections;
-
-import com.codahale.metrics.annotation.Timed;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,10 +14,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Collections;
 
 /**
  * Controller to authenticate users.
@@ -60,4 +61,26 @@ public class UserJWTController {
                 ae.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
         }
     }
+
+    /**
+     * Object to return as body in JWT Authentication.
+     */
+    static class JWTToken {
+
+        private String idToken;
+
+        JWTToken(String idToken) {
+            this.idToken = idToken;
+        }
+
+        @JsonProperty("id_token")
+        String getIdToken() {
+            return idToken;
+        }
+
+        void setIdToken(String idToken) {
+            this.idToken = idToken;
+        }
+    }
+
 }

@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -86,5 +86,29 @@ public class UserJWTControllerTest {
             .content(new ObjectMapper().writeValueAsString(vm)))
             .andExpect(status().isUnauthorized())
             .andExpect(content().string("{\"AuthenticationException\":\"Bad credentials\"}"));
+    }
+
+    @Test
+    public void getIdTokenTest() throws Exception {
+        assertNotNull(new UserJWTController.JWTToken("id").getIdToken());
+        assertEquals("id", new UserJWTController.JWTToken("id").getIdToken());
+        assertNull(new UserJWTController.JWTToken(null).getIdToken());
+    }
+
+    @Test
+    public void setIdTokenTest() throws Exception {
+        UserJWTController.JWTToken token = new UserJWTController.JWTToken("id");
+        assertNotNull(token.getIdToken());
+
+        assertNotEquals("id2", token.getIdToken());
+        token.setIdToken("id2");
+        assertEquals("id2", token.getIdToken());
+
+        token.setIdToken(null);
+        assertNull(token.getIdToken());
+
+        token = new UserJWTController.JWTToken(null);
+        token.setIdToken(null);
+        assertNull(token.getIdToken());
     }
 }
