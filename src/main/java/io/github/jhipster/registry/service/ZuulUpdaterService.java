@@ -60,12 +60,14 @@ public class ZuulUpdaterService {
                     null, url, zuulProperties.isStripPrefix(), zuulProperties.getRetryable(), null,
                     instanceInfos.getStatus().toString());
 
-                if (zuulProperties.getRoutes().containsKey(instanceId) &&
-                    !zuulProperties.getRoutes().get(instanceId).getUrl().equals(url)) {
-                    log.debug("Updating instance '{}' with new URL: {}", instanceId, url);
-                    zuulProperties.getRoutes().put(instanceId, route);
-                    isDirty = true;
+                if (zuulProperties.getRoutes().containsKey(instanceId)) {
+                    log.debug("Instance '{}' already registered", instanceId);
+                    if (!zuulProperties.getRoutes().get(instanceId).getUrl().equals(url)) {
 
+                        log.debug("Updating instance '{}' with new URL: {}", instanceId, url);
+                        zuulProperties.getRoutes().put(instanceId, route);
+                        isDirty = true;
+                    }
                 } else {
                     log.debug("Adding instance '{}' with URL: {}", instanceId, url);
                     zuulProperties.getRoutes().put(instanceId, route);

@@ -45,4 +45,5 @@ export class StateStorageService {
         };
         this.$sessionStorage.store('destinationState', destinationInfo);
     }
+
 }
