@@ -18,10 +18,10 @@
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
             <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="registry-menu">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="eureka-menu">
                     <span>
-                        <i class="fa fa-cloud" aria-hidden="true"></i>
-                        <span>Applications</span>
+                        <i class="fa fa-podcast" aria-hidden="true"></i>
+                        <span>Eureka</span>
                         <b class="caret"></b>
                     </span>
                 </a>
@@ -44,6 +44,17 @@
                             <span class="hidden-sm">Replicas</span>
                         </a>
                     </li>
+                </ul>
+            </li>
+            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="configuration-menu">
+                    <span>
+                        <i class="fa fa-cogs" aria-hidden="true"></i>
+                        <span>Configuration</span>
+                        <b class="caret"></b>
+                    </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu>
                     <li>
                         <a class="dropdown-item" routerLinkActive="active" routerLink="config" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-leaf" aria-hidden="true"></i>
