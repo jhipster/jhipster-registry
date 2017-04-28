@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
-
 import { Route } from './route.model';
+import { SessionStorageService } from 'ng2-webstorage';
 
 @Injectable()
 export class JhiRoutesService {
@@ -16,7 +16,10 @@ export class JhiRoutesService {
     routeDown$: Observable<Route>;
     routeReload$: Observable<boolean>;
 
-    constructor(private http: Http) {
+    constructor(
+        private http: Http,
+        private sessionStorage: SessionStorageService
+    ) {
         this.routeChanged$ = this.routeChangedSource.asObservable();
         this.routeDown$ = this.routeDownSource.asObservable();
         this.routeReload$ = this.routeReloadSource.asObservable();
@@ -36,5 +39,21 @@ export class JhiRoutesService {
 
     routeDown(route: Route) {
         this.routeDownSource.next(route);
+    }
+
+    getSelectedInstance() {
+        return this.sessionStorage.retrieve('instanceId');
+    }
+
+    storeSelectedInstance(instance) {
+        this.sessionStorage.store('instanceId', instance);
+    }
+
+    getSelectedRefreshTime(): number {
+        return this.sessionStorage.retrieve('refreshTime');
+    }
+
+    storeSelectedRefreshTime(time: number) {
+        this.sessionStorage.store('refreshTime', time);
     }
 }

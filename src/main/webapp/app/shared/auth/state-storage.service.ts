@@ -46,19 +46,4 @@ export class StateStorageService {
         this.$sessionStorage.store('destinationState', destinationInfo);
     }
 
-    getSelectedInstance() {
-        return this.$sessionStorage.retrieve('instanceId');
-    }
-
-    storeSelectedInstance(instance) {
-        this.$sessionStorage.store('instanceId', instance);
-    }
-
-    getSelectedRefreshTime(): number {
-        return this.$sessionStorage.retrieve('refreshTime');
-    }
-
-    storeSelectedRefreshTime(time: number) {
-        this.$sessionStorage.store('refreshTime', time);
-    }
 }

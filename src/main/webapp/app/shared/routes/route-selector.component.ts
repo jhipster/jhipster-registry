@@ -5,7 +5,6 @@ import { JhiRoutesService } from './routes.service';
 import { Route } from './route.model';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
-import { StateStorageService } from '../auth/state-storage.service';
 
 @Component({
     selector: 'jhi-route-selector',
@@ -26,20 +25,18 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
 
     activeRefreshTime: number;
     refreshTimes: number[];
-    interval: Observable<number>;
     refreshTimer: Subscription;
 
     constructor(
         private routesService: JhiRoutesService,
-        private stateStorageService: StateStorageService,
     ) {
         this.refreshTimes = [0, 5, 10, 30, 60, 300];
         this.activeRefreshTime = this.refreshTimes[0];
     }
 
     ngOnInit() {
-        this.activeRoute = this.stateStorageService.getSelectedInstance();
-        this.activeRefreshTime = this.stateStorageService.getSelectedRefreshTime();
+        this.activeRoute = this.routesService.getSelectedInstance();
+        this.activeRefreshTime = this.routesService.getSelectedRefreshTime();
 
         this.updateRoute();
         this.routeReloadSubscription = this.routesService.routeReload$.subscribe((reload) => this.updateRoute());
@@ -54,6 +51,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         /** prevent memory leak when component destroyed **/
         this.routeReloadSubscription.unsubscribe();
+        this.routeDownSubscription.unsubscribe();
         if (this.refreshTimer) {
             this.refreshTimer.unsubscribe();
         }
@@ -66,7 +64,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         } else if (this.routes && this.routes.length > 0) {
             this.activeRoute = this.routes[0];
         }
-        this.stateStorageService.storeSelectedInstance(this.activeRoute);
+        this.routesService.storeSelectedInstance(this.activeRoute);
         this.routesService.routeChange(this.activeRoute);
     }
 
@@ -107,15 +105,14 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         } else {
             this.activeRefreshTime = this.refreshTimes[0];
         }
-        this.stateStorageService.storeSelectedRefreshTime(time);
+        this.routesService.storeSelectedRefreshTime(time);
         this.launchTimer(true);
     }
 
     /** Init the timer **/
     subscribe() {
         if (this.activeRefreshTime && this.activeRefreshTime > 0) {
-            this.interval = Observable.interval(this.activeRefreshTime * 1000);
-            this.refreshTimer = this.interval.subscribe(() => {
+            this.refreshTimer = Observable.interval(this.activeRefreshTime * 1000).subscribe(() => {
                 this.updateRoute();
             });
         }

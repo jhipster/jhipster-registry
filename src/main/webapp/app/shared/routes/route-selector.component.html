@@ -1,6 +1,6 @@
 <div class="route-selector col-md-10 d-inline-flex" *ngIf="routes">
 
-    <div ngbDropdown id="dropInstances" #dropId="ngbDropdown">
+    <div ngbDropdown #dropId="ngbDropdown">
         <button class="btn btn-outline-primary" id="sortMenu" ngbDropdownToggle [innerHTML]="getActiveRoute()"></button>
         <div class="dropdown-menu" aria-labelledby="sortMenu" aria-expanded="true" (click)="$event.stopPropagation()">
             <p class="d-flex">
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <div ngbDropdown id="dropRefresh" #dropRefreshId="ngbDropdown">
+    <div ngbDropdown>
         <button class="btn btn-outline-primary" [ngClass]="classTime()" id="refreshMenu" ngbDropdownToggle [innerHTML]="'&nbsp; '+getActiveRefreshTime()"></button>
         <div class="dropdown-menu" aria-labelledby="refreshMenu" aria-expanded="true">
             <span class="dropdown-header">Refresh times (in seconds)</span>
