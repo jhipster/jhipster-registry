@@ -8,7 +8,7 @@ import { Route } from './route.model';
 @Injectable()
 export class JhiRoutesService {
 
-    // Observable string sources
+    // Observable sources
     private routeChangedSource = new Subject<Route>();
     private routeDownSource = new Subject<Route>();
     private routeReloadSource = new Subject<boolean>();
@@ -35,6 +35,6 @@ export class JhiRoutesService {
     }
 
     routeDown(route: Route) {
-        this.routeChangedSource.next(route);
+        this.routeDownSource.next(route);
     }
 }

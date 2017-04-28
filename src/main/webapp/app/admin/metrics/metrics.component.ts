@@ -74,6 +74,8 @@ export class JhiMetricsMonitoringComponent implements OnInit {
                     }
                 }
             });
+        } else {
+            this.routesService.routeDown(this.activeRoute);
         }
     }
 

@@ -65,6 +65,8 @@ export class LogsComponent implements OnInit, OnDestroy {
                     }
                 }
             });
+        } else {
+            this.routesService.routeDown(this.activeRoute);
         }
     }
 

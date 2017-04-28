@@ -56,11 +56,15 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
                         this.configKeys.push(Object.keys(config.properties));
                     }
                 }
+            }, (error) => {
+                this.routesService.routeDown(this.activeRoute);
             });
 
             this.configurationService.getInstanceEnv(this.activeRoute).subscribe((configuration) => {
                 this.allConfiguration = configuration;
             });
+        } else {
+            this.routesService.routeDown(this.activeRoute);
         }
     }
 

@@ -49,6 +49,8 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
                     }
                 }
             });
+        } else {
+            this.routesService.routeDown(this.activeRoute);
         }
     }
 

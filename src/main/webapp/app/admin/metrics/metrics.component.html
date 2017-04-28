@@ -178,7 +178,7 @@
             </tbody>
         </table>
     </div>
-    
+
     <h3 *ngIf="metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
     <div class="table-responsive" *ngIf="!updatingMetrics && metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">
         <table class="table table-striped">
