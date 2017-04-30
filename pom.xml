@@ -722,6 +722,16 @@
                                 </configuration>
                             </execution>
                             <execution>
+                                <id>webpack build test</id>
+                                <goals>
+                                    <goal>yarn</goal>
+                                </goals>
+                                <phase>test</phase>
+                                <configuration>
+                                    <arguments>run webpack:test</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>webpack build prod</id>
                                 <goals>
                                     <goal>yarn</goal>

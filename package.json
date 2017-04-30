@@ -104,7 +104,8 @@
     "webpack:build:dev": "webpack --config webpack/webpack.dev.js",
     "webpack:build:vendor": "webpack --config webpack/webpack.vendor.js",
     "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --port=9060",
-    "webpack:prod": "yarn run ngc && yarn run test && webpack -p --config webpack/webpack.vendor.js && webpack -p --config webpack/webpack.prod.js",
+    "webpack:test": "yarn run ngc && yarn run test",
+    "webpack:prod": "yarn run ngc && webpack -p --config webpack/webpack.vendor.js && webpack -p --config webpack/webpack.prod.js",
     "test": "yarn run lint && karma start src/test/javascript/karma.conf.js",
     "test:watch": "karma start --watch",
     "postinstall": "yarn run webpack:build"
