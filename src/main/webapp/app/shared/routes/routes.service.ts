@@ -49,11 +49,4 @@ export class JhiRoutesService {
         this.sessionStorage.store('instanceId', instance);
     }
 
-    getSelectedRefreshTime(): number {
-        return this.sessionStorage.retrieve('refreshTime');
-    }
-
-    storeSelectedRefreshTime(time: number) {
-        this.sessionStorage.store('refreshTime', time);
-    }
 }

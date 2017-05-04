@@ -38,10 +38,6 @@ export class LogsComponent implements OnInit, OnDestroy {
         });
     }
 
-    refresh() {
-        this.routesService.reloadRoutes();
-    }
-
     changeLevel(name: string, level: string) {
         const log = new Log(name, level);
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {

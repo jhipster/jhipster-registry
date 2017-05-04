@@ -41,10 +41,6 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
         });
     }
 
-    refresh() {
-        this.routesService.reloadRoutes();
-    }
-
     displayActiveRouteConfig() {
         this.updatingConfig = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {

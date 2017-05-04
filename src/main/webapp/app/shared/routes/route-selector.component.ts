@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { JhiRoutesService } from './routes.service';
 import { Route } from './route.model';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
+import { JhiRefreshService } from '../refresh/refresh.service';
 
 @Component({
     selector: 'jhi-route-selector',
@@ -23,38 +23,30 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     routeReloadSubscription: Subscription;
     routeDownSubscription: Subscription;
 
-    activeRefreshTime: number;
-    refreshTimes: number[];
-    refreshTimer: Subscription;
+    refreshReloadSubscription: Subscription;
 
     constructor(
         private routesService: JhiRoutesService,
-    ) {
-        this.refreshTimes = [0, 5, 10, 30, 60, 300];
-        this.activeRefreshTime = this.refreshTimes[0];
-    }
+        private refreshService: JhiRefreshService
+    ) {}
 
     ngOnInit() {
         this.activeRoute = this.routesService.getSelectedInstance();
-        this.activeRefreshTime = this.routesService.getSelectedRefreshTime();
 
         this.updateRoute();
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((reload) => this.updateRoute());
         this.routeReloadSubscription = this.routesService.routeReload$.subscribe((reload) => this.updateRoute());
         this.routeDownSubscription = this.routesService.routeDown$.subscribe((route) => {
             this.downRoute(route);
             this.setActiveRoute(null);
         });
-
-        this.launchTimer(false);
     }
 
     ngOnDestroy() {
         /** prevent memory leak when component destroyed **/
         this.routeReloadSubscription.unsubscribe();
         this.routeDownSubscription.unsubscribe();
-        if (this.refreshTimer) {
-            this.refreshTimer.unsubscribe();
-        }
+        this.refreshReloadSubscription.unsubscribe();
     }
 
     /** Change active route only if exists, else choose Registry **/
@@ -96,34 +88,6 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         if (instance) {
             instance.status = 'DOWN';
         }
-    }
-
-    /** Change active time only if exists, else 0 **/
-    setActiveRefreshTime(time: number) {
-        if (time && this.refreshTimes.findIndex((t) => t === time) !== -1) {
-            this.activeRefreshTime = time;
-        } else {
-            this.activeRefreshTime = this.refreshTimes[0];
-        }
-        this.routesService.storeSelectedRefreshTime(time);
-        this.launchTimer(true);
-    }
-
-    /** Init the timer **/
-    subscribe() {
-        if (this.activeRefreshTime && this.activeRefreshTime > 0) {
-            this.refreshTimer = Observable.interval(this.activeRefreshTime * 1000).subscribe(() => {
-                this.updateRoute();
-            });
-        }
-    }
-
-    /** Launch (or relaunch if true) the timer. **/
-    launchTimer(relaunch: boolean) {
-        if (relaunch && this.refreshTimer) {
-            this.refreshTimer.unsubscribe();
-        }
-        this.subscribe();
     }
 
     /* ==========================================================================
@@ -176,26 +140,6 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     closeDropDown(dropdown: NgbDropdown) {
         if (dropdown) {
             dropdown.close();
-        }
-    }
-
-    getActiveRefreshTime(): string {
-        if (this.activeRefreshTime <= 0) {
-            return 'disabled';
-        }
-        return this.activeRefreshTime + ' sec.';
-    }
-
-    classTime(): string {
-        if (this.activeRefreshTime <= 0) {
-            return 'fa-pause';
-        }
-        return 'fa-refresh';
-    }
-
-    stateTime(time: number): string {
-        if (time === this.activeRefreshTime) {
-            return 'active';
         }
     }
 

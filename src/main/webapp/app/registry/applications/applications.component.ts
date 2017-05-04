@@ -1,7 +1,9 @@
 /* tslint:disable:no-access-missing-member */
 // TODO lint disabled as the filter pipe used in template seems to trigger this
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JhiApplicationsService } from './applications.service';
+import { JhiRefreshService } from '../../shared/refresh/refresh.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-applications',
@@ -10,19 +12,31 @@ import { JhiApplicationsService } from './applications.service';
         'applications.component.scss'
     ]
 })
-export class JhiApplicationsComponent implements OnInit {
+export class JhiApplicationsComponent implements OnInit, OnDestroy {
     application: any;
     data: any;
     instances: any;
 
-    constructor(private applicationsService: JhiApplicationsService) {}
+    refreshReloadSubscription: Subscription;
+    applicationsServiceSubscription: Subscription;
+
+    constructor(
+        private applicationsService: JhiApplicationsService,
+        private refreshService: JhiRefreshService
+    ) {}
 
     ngOnInit() {
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
         this.refresh();
     }
 
+    ngOnDestroy() {
+        this.refreshReloadSubscription.unsubscribe();
+        this.applicationsServiceSubscription.unsubscribe();
+    }
+
     refresh() {
-        this.applicationsService.findAll().subscribe((data) => {
+        this.applicationsServiceSubscription = this.applicationsService.findAll().subscribe((data) => {
             this.data = data;
             if (data.applications.length > 0) {
                 this.show(data.applications[0].name);

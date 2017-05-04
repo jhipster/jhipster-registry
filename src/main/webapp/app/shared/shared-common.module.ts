@@ -6,7 +6,8 @@ import {
     JHipsterRegistrySharedLibsModule,
     JhiAlertComponent,
     JhiAlertErrorComponent,
-    JhiRouteSelectorComponent
+    JhiRouteSelectorComponent,
+    JhiRefreshSelectorComponent
 } from './';
 
 export function alertServiceProvider(sanitizer: Sanitizer) {
@@ -23,6 +24,7 @@ export function alertServiceProvider(sanitizer: Sanitizer) {
         JhiAlertComponent,
         JhiAlertErrorComponent,
         JhiRouteSelectorComponent,
+        JhiRefreshSelectorComponent,
         GroupByPipe
     ],
     providers: [
@@ -38,6 +40,7 @@ export function alertServiceProvider(sanitizer: Sanitizer) {
         JhiAlertComponent,
         JhiAlertErrorComponent,
         JhiRouteSelectorComponent,
+        JhiRefreshSelectorComponent,
         GroupByPipe
     ]
 })

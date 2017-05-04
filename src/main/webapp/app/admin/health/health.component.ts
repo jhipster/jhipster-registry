@@ -30,10 +30,6 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
         });
     }
 
-    refresh() {
-        this.routesService.reloadRoutes();
-    }
-
     displayActiveRouteHealth() {
         this.updatingHealth = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JhiReplicasService } from './replicas.service';
+import { JhiRefreshService } from '../../shared/refresh/refresh.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-replicas',
@@ -8,16 +10,25 @@ import { JhiReplicasService } from './replicas.service';
         'replicas.component.scss'
     ]
 })
-export class JhiReplicasComponent implements OnInit {
+export class JhiReplicasComponent implements OnInit, OnDestroy {
     showMore: boolean;
     replicas: any;
 
-    constructor(private replicasService: JhiReplicasService) {
+    refreshReloadSubscription: Subscription;
+
+    constructor(private replicasService: JhiReplicasService,
+                private refreshService: JhiRefreshService
+    ) {
         this.showMore = true;
     }
 
     ngOnInit() {
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
         this.refresh();
+    }
+
+    ngOnDestroy() {
+        this.refreshReloadSubscription.unsubscribe();
     }
 
     refresh() {
