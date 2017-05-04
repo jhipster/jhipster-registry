@@ -26,7 +26,7 @@
                     <tbody>
                         <tr *ngFor="let instance of instances">
                             <td>
-                                <a routerLink="{{instance.homePageUrl}}" target="_blank">{{instance.instanceId}}</a>
+                                <a href="{{instance.homePageUrl}}" target="_blank">{{instance.instanceId}}</a>
                             </td>
                             <td class="text-left">
                                 <span class="badge badge-pill font-weight-normal badge-success" [ngClass]="getBadgeClass(instance.status)">
