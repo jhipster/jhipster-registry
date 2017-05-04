@@ -1,10 +1,8 @@
 <div>
-    <h2>
-        <span>Registry Replicas</span>
-        <button class="btn btn-primary float-right" (click)="refresh()">
-            <span class="fa fa-refresh"></span> <span>Refresh</span>
-        </button>
-    </h2>
+    <div class="head">
+        <h2 class="d-inline-block">Registry Replicas</h2>
+        <jhi-refresh-selector [toTheLeft]="true" class="float-right"></jhi-refresh-selector>
+    </div>
 
     <div id="replicas" class="panel panel-default">
         <div class="panel-body">

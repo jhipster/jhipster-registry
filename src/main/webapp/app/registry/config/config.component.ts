@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JhiConfigService } from './config.service';
 import { ProfileService } from '../../layouts/profiles/profile.service';
 import { JhiApplicationsService } from '../';
+import { JhiRefreshService } from '../../shared/refresh/refresh.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-config',
     templateUrl: './config.component.html',
+    styleUrls: [
+        'config.component.scss'
+    ]
 })
-export class JhiConfigComponent implements OnInit {
+export class JhiConfigComponent implements OnInit, OnDestroy {
     application: string;
     profile: string;
     label: string;
@@ -19,9 +24,13 @@ export class JhiConfigComponent implements OnInit {
     data: any;
     applicationList: Array<string>;
 
+    refreshReloadSubscription: Subscription;
+
     constructor(private configService: JhiConfigService,
                 private profileService: ProfileService,
-                private applicationsService: JhiApplicationsService) {
+                private applicationsService: JhiApplicationsService,
+                private refreshService: JhiRefreshService
+    ) {
         this.application = 'application';
         this.profile = 'prod';
         this.label = 'master';
@@ -35,6 +44,10 @@ export class JhiConfigComponent implements OnInit {
         this.refresh();
     }
 
+    ngOnDestroy() {
+        this.refreshReloadSubscription.unsubscribe();
+    }
+
     load() {
         this.profileService.getProfileInfo().subscribe((response) => {
             this.activeRegistryProfiles = response.activeProfiles;
@@ -43,6 +56,8 @@ export class JhiConfigComponent implements OnInit {
             this.gitUri = response.gitUri;
             this.gitSearchLocation = response.gitSearchLocation;
         });
+
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
     }
 
     refresh() {

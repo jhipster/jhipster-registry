@@ -1,19 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { JhiHistoryService } from './history.service';
+import { JhiRefreshService } from '../../shared/refresh/refresh.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-history',
     templateUrl: './history.component.html',
+    styleUrls: [
+        'history.component.scss'
+    ]
 })
-export class JhiHistoryComponent implements OnInit {
+export class JhiHistoryComponent implements OnInit, OnDestroy {
     items: any;
     data: any;
 
-    constructor(private historyService: JhiHistoryService) {}
+    refreshReloadSubscription: Subscription;
+
+    constructor(
+        private historyService: JhiHistoryService,
+        private refreshService: JhiRefreshService
+    ) {}
 
     ngOnInit() {
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
         this.refresh();
+    }
+
+    ngOnDestroy() {
+        this.refreshReloadSubscription.unsubscribe();
     }
 
     refresh() {
