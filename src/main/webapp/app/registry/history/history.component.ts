@@ -6,10 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-history',
-    templateUrl: './history.component.html',
-    styleUrls: [
-        'history.component.scss'
-    ]
+    templateUrl: './history.component.html'
 })
 export class JhiHistoryComponent implements OnInit, OnDestroy {
     items: any;

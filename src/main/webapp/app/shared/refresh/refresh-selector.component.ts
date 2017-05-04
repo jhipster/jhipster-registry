@@ -18,10 +18,6 @@ export class JhiRefreshSelectorComponent implements OnInit, OnDestroy {
     refreshTimer: Subscription;
     refreshChangedSubscription: Subscription;
 
-    /** True if dropdown-menu must be open in left direction (right direction is by default) **/
-    @Input()
-    toTheLeft: boolean = false;
-
     constructor(
         private refreshService: JhiRefreshService,
     ) {
@@ -97,16 +93,6 @@ export class JhiRefreshSelectorComponent implements OnInit, OnDestroy {
             return 'disabled';
         }
         return this.activeRefreshTime + ' sec.';
-    }
-
-    /**
-     * Return the class "left-side" (see in refresh-selector.component.scss)
-     * @returns {string}
-     */
-    getClassToTheLeft(): string {
-        if(this.toTheLeft){
-            return "left-side";
-        }
     }
 
 }

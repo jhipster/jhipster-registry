@@ -7,10 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-config',
-    templateUrl: './config.component.html',
-    styleUrls: [
-        'config.component.scss'
-    ]
+    templateUrl: './config.component.html'
 })
 export class JhiConfigComponent implements OnInit, OnDestroy {
     application: string;

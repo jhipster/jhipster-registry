@@ -26,9 +26,8 @@ Refresh selector styles
                 display: initial;
             }
         }
-        &.left-side {
-            left: initial;
-            right: 0;
+        .dropdown-divider {
+            background-color: #dcdcdc;
         }
     }
 }
