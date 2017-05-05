@@ -26,7 +26,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 '/management',
                 '/swagger-resources',
                 '/v2/api-docs',
-                '/h2-console'
+                '/h2-console',
+                "/config"
             ],
             target: 'http://127.0.0.1:8761',
             secure: false

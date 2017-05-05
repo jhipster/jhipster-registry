@@ -65,16 +65,19 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
         });
 
         this.applicationsService.findAll().subscribe((data) => {
-            data.applications.forEach((application) => {
-                const instanceId = application.instances[0].instanceId;
-                let applicationName;
-                if (instanceId.indexOf(':') === -1) {
-                    applicationName = application.name.toLowerCase();
-                } else {
-                    applicationName = instanceId.substr(0, instanceId.indexOf(':'));
-                }
-                this.applicationList.push(applicationName);
-            });
+            if (data && data.applications) {
+                this.applicationList = ['application'];
+                data.applications.forEach((application) => {
+                    const instanceId = application.instances[0].instanceId;
+                    let applicationName;
+                    if (instanceId.indexOf(':') === -1) {
+                        applicationName = application.name.toLowerCase();
+                    } else {
+                        applicationName = instanceId.substr(0, instanceId.indexOf(':'));
+                    }
+                    this.applicationList.push(applicationName);
+                });
+            }
         });
     }
 }
