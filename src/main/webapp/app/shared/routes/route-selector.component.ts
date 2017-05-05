@@ -106,10 +106,10 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     }
 
     private getBadgeClass(statusState) {
-        if (!statusState || statusState !== 'UP') {
-            return 'badge-danger';
-        } else {
+        if(statusState && (statusState === 'UP' || statusState.toLowerCase() === 'starting')){
             return 'badge-success';
+        } else {
+            return 'badge-danger';
         }
     }
 
