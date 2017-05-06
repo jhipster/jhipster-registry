@@ -5,7 +5,6 @@ import { JhiHealthCheckComponent } from '../../../../../../main/webapp/app/admin
 import { JhiHealthService } from '../../../../../../main/webapp/app/admin/health/health.service';
 import { JhiRoutesService } from '../../../../../../main/webapp/app/shared/routes/routes.service';
 
-
 describe('Component Tests', () => {
 
     describe('JhiHealthCheckComponent', () => {
