@@ -1,0 +1,140 @@
+<div [ngSwitch]="isAuthenticated()">
+    <h1 class="text-center">JHipster Registry <small>{{version}}</small></h1>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="alert alert-success" *ngSwitchCase="true">
+                <span *ngIf="account"> You are logged in as user "{{account.login}}". </span>
+            </div>
+
+            <div class="alert alert-warning" *ngSwitchCase="false">
+                <span>You are not authenticated.</span>
+                <a class="alert-link" (click)="login()">Please sign in</a>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngSwitchCase="true">
+        <div class="col-sm-12 col-md-6" *ngIf="status">
+            <div class="card card-outline-primary">
+                <div class="card-header card-primary">
+                    <h3 class="card-title">System Status</h3>
+                </div>
+                <div class="card-block">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td>Environment</td>
+                            <td>{{status.environment}}</td>
+                        </tr>
+                        <tr>
+                            <td>Data Center</td>
+                            <td>{{status.datacenter}}</td>
+                        </tr>
+                        <tr>
+                            <td>Current Time</td>
+                            <td>{{status.currentTime}}</td>
+                        </tr>
+                        <tr>
+                            <td>System Uptime</td>
+                            <td>{{status.upTime}}</td>
+                        </tr>
+                        <tr>
+                            <td>Below Renew Threshold</td>
+                            <td>{{status.isBelowRenewThreshold}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6" *ngIf="appInstances">
+            <div class="card card-outline-primary">
+                <div class="card-header card-primary">
+                    <h3 class="card-title">Instances Registered</h3>
+                </div>
+                <div class="card-block">
+                    <!--{vm.apps.applications}}-->
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>App</th>
+                            <th>Instance ID</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let app of appInstances">
+                            <td>{{app.name}}</td>
+                            <td class="break">{{app.instanceId}}</td>
+                            <td class="text-center">
+                            <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(app.status)">
+                                {{app.status}}
+                            </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngSwitchCase="true">
+        <div class="col-sm-12 col-md-6" *ngIf="status">
+            <div class="card card-outline-primary">
+                <div class="card-header card-primary">
+                    <h3 class="card-title">General Info</h3>
+                </div>
+                <div class="card-block">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td>Total Available Memory</td>
+                            <td>{{status.generalStats['total-avail-memory']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Current Memory Usage</td>
+                            <td>{{status.generalStats['current-memory-usage']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of CPU</td>
+                            <td>{{status.generalStats['num-of-cpus']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Instance Ip Address</td>
+                            <td>{{status.instanceInfo.ipAddr}}</td>
+                        </tr>
+                        <tr>
+                            <td>Instance Status</td>
+                            <td>
+                                <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(status.instanceInfo.status)">
+                                    {{status.instanceInfo.status}}
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6" *ngIf="healthData">
+            <div class="card card-outline-primary">
+                <div class="card-header card-primary">
+                    <h3 class="card-title">Health</h3>
+                </div>
+                <div class="card-block">
+                    <table id="healthCheck" class="table">
+                        <tbody>
+                        <tr *ngFor="let health of healthData">
+                            <td><span class="text-capitalize">{{baseName(health.name)}}</span> {{subSystemName(health.name)}}</td>
+                            <td class="text-center">
+                            <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(health.status)">
+                                {{health.status}}
+                            </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

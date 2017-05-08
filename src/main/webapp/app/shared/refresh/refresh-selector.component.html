@@ -1,0 +1,18 @@
+<div class="dropdown" ngbDropdown>
+    <button class="btn btn-outline-primary times" [ngClass]="classTime()" id="refreshMenu" ngbDropdownToggle>
+        &nbsp; <span class="times-text" [innerHTML]="getActiveRefreshTime()"></span>
+    </button>
+    <div class="dropdown-menu" aria-labelledby="refreshMenu" aria-expanded="true">
+        <span class="dropdown-header">Refresh times (in seconds)</span>
+        <div *ngFor="let time of refreshTimes">
+            <button class="dropdown-item" (click)="setActiveRefreshTime(time);" [ngClass]="stateTime(time)">
+                <span *ngIf="time > 0; else disabledTemplate">{{time}}</span>
+                <ng-template #disabledTemplate>disabled</ng-template>
+            </button>
+        </div>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item manual-refresh" (click)="manualRefresh()">
+            Refresh now &nbsp;<span class="fa fa-refresh"></span>
+        </button>
+    </div>
+</div>

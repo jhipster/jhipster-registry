@@ -1,17 +1,18 @@
 package io.github.jhipster.registry.config;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import io.github.jhipster.config.JHipsterProperties;
 
+import ch.qos.logback.classic.AsyncAppender;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.spi.LoggerContextListener;
+import ch.qos.logback.core.spi.ContextAwareBase;
+import net.logstash.logback.appender.LogstashSocketAppender;
+import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-
-import ch.qos.logback.classic.AsyncAppender;
-import ch.qos.logback.classic.LoggerContext;
-import net.logstash.logback.appender.LogstashSocketAppender;
-import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
 
 @Configuration
 public class LoggingConfiguration {
@@ -20,26 +21,31 @@ public class LoggingConfiguration {
 
     private LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 
-    @Value("${spring.application.name}")
-    private String appName;
+    private final String appName;
 
-    @Value("${server.port}")
-    private String serverPort;
+    private final String serverPort;
 
-    @Value("${eureka.instance.instanceId: 0}")
-    private String instanceId;
+    private final String instanceId;
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
 
-    @PostConstruct
-    private void init() {
+    public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
+        @Value("${eureka.instance.instanceId}") String instanceId, JHipsterProperties jHipsterProperties) {
+        this.appName = appName;
+        this.serverPort = serverPort;
+        this.instanceId = instanceId;
+        this.jHipsterProperties = jHipsterProperties;
         if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
-            addLogstashAppender();
+            addLogstashAppender(context);
+
+            // Add context listener
+            LogbackLoggerContextListener loggerContextListener = new LogbackLoggerContextListener();
+            loggerContextListener.setContext(context);
+            context.addListener(loggerContextListener);
         }
     }
 
-    public void addLogstashAppender() {
+    public void addLogstashAppender(LoggerContext context) {
         log.info("Initializing Logstash logging");
 
         LogstashSocketAppender logstashAppender = new LogstashSocketAppender();
@@ -71,4 +77,38 @@ public class LoggingConfiguration {
 
         context.getLogger("ROOT").addAppender(asyncLogstashAppender);
     }
+
+    /**
+     * Logback configuration is achieved by configuration file and API.
+     * When configuration file change is detected, the configuration is reset.
+     * This listener ensures that the programmatic configuration is also re-applied after reset.
+     */
+    class LogbackLoggerContextListener extends ContextAwareBase implements LoggerContextListener {
+
+        @Override
+        public boolean isResetResistant() {
+            return true;
+        }
+
+        @Override
+        public void onStart(LoggerContext context) {
+            addLogstashAppender(context);
+        }
+
+        @Override
+        public void onReset(LoggerContext context) {
+            addLogstashAppender(context);
+        }
+
+        @Override
+        public void onStop(LoggerContext context) {
+            // Nothing to do.
+        }
+
+        @Override
+        public void onLevelChange(ch.qos.logback.classic.Logger logger, Level level) {
+            // Nothing to do.
+        }
+    }
+
 }

@@ -3,6 +3,9 @@
 #
 # This configuration will be overriden by the Spring profile you use,
 # for example application-dev.yml if you use the "dev" profile.
+#
+# More information on profiles: https://jhipster.github.io/profiles/
+# More information on configuration properties: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 # ===================================================================
@@ -10,6 +13,42 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
+
+spring:
+    application:
+        name: jhipster-registry
+    jackson:
+        serialization.write_dates_as_timestamps: false
+    mvc:
+        favicon:
+            enabled: false
+    thymeleaf:
+        mode: XHTML
+
+server:
+    port: 8761
+
+ribbon:
+    eureka:
+        enabled: true
+
+zuul:
+    prefix: /services/ #slash before and after
+    strip-prefix: true
+
+management:
+    security:
+        roles: ADMIN
+    context-path: /management
+    health:
+        mail:
+            enabled: false # When using the MailService, configure an SMTP server and set this to true
+
+security:
+    user:
+        name: admin
+        password: admin
+        role: USER,ADMIN
 
 # ===================================================================
 # Eureka server configuration (eureka.server.*)
@@ -21,32 +60,27 @@
 # https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
 # ===================================================================
 
-server:
-    port: 8761
-
 eureka:
-    client:
-        enabled: true
-        instance-info-replication-interval-seconds: 10
-        registry-fetch-interval-seconds: 10
-    dashboard:
-        path: /registry
     instance:
+        appname: jhipster-registry
+        instanceId: jhipsterRegistry:${spring.application.instance_id:${random.value}}
+        prefer-ip-address: true
         lease-renewal-interval-in-seconds: 5
         lease-expiration-duration-in-seconds: 10
-
-management:
-    context-path: /management
-
-spring:
-    application:
-        name: jhipster-registry
-    mvc:
-        favicon:
-            enabled: false
-    thymeleaf:
-        mode: XHTML
-
-
-
-
+        status-page-url-path: ${management.context-path}/info
+        health-check-url-path: ${management.context-path}/health
+        metadata-map:
+            profile: ${spring.profiles.active}
+            version: ${info.project.version}
+    client:
+        enabled: true
+        fetch-registry: false
+        register-with-eureka: false
+        instance-info-replication-interval-seconds: 10
+        registry-fetch-interval-seconds: 10
+    server:
+        # see discussion about enable-self-preservation:
+        # https://github.com/jhipster/generator-jhipster/issues/3654
+        enable-self-preservation: false
+    dashboard:
+        path: /registry

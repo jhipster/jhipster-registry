@@ -1,0 +1,32 @@
+<div>
+    <h2>Health Checks</h2>
+
+    <jhi-route-selector></jhi-route-selector>
+
+    <div class="table-responsive">
+        <table id="healthCheck" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let health of healthData">
+                    <td><span class="text-capitalize">{{ baseName(health.name) }}</span> {{subSystemName(health.name)}}</td>
+                    <td class="text-center">
+                        <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(health.status)">
+                            {{health.status}}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

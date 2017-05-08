@@ -1,0 +1,62 @@
+<div>
+    <h2>SSH Public Key</h2>
+
+    <p>
+        This is the SSH public key stored in this server's <code>&#126;/.ssh/id_rsa.pub</code>
+    </p>
+    <p>
+        This key should be used to grant access for this server to the Git repository which holds the Spring Cloud Configuration files.
+    </p>
+
+    <h3>Your SSH public key</h3>
+
+    <pre>{{data}}</pre>
+    <hr>
+    <div class="text-center pad" >
+        <a (click)="showMore = !showMore" class="btn btn-default">
+            <span class="fa fa-arrow-circle-down"></span>&nbsp;show more</a>
+    </div>
+	<div [ngbCollapse]="showMore">
+        <h3><span class="fa fa-info-circle"></span> Using SSH with Docker</h3>
+        <p>
+            Here are detailed instruction when using the JHipster Registry Docker image, available at
+            <a href="https://hub.docker.com/r/jhipster/jhipster-registry/" target="_blank">jhipster/jhipster-registry/</a>.
+        </p>
+
+        <ul>
+            <li>Log in inside the container: <code>docker exec -it &lt;containerIdOrName&gt; sh</code></li>
+            <li>Generate an SSH key: <code>ssh-keygen</code></li>
+            <li>Copy the public key in <code>/root/.ssh/id_rsa.pub</code> to the remote Git repository you want to access
+                (in Github, go to your settings/SSH keys)</li>
+            <li>Test inside your container that the SSH connection is working:
+                <ul>
+                    <li>Log in to your Git provider using your ssh key: <code>ssh -T git@github.com</code></li>
+                    <li>When asked to to add the Git repository host to the list of known hosts, reply <b>yes</b></li>
+                </ul>
+            </li>
+            <li>Restart the registry without removing the container, it should be able to read a Git repo secured by SSH</li>
+        </ul>
+
+        <p>
+        In order not to lose our setup every time you recreate or update the container, you can mount the
+        <code>/root/.ssh/</code> folder to a Docker volume.
+        </p>
+
+        <p>To setup your own git repo, edit the GIT_URI environment variable passed to your container, for example using Docker Compose:</p>
+        <pre class="code-block">
+    version: '2'
+      services:
+        jhipster-registry:
+          container_name: jhipster-registry
+          image: jhipster/jhipster-registry
+      volumes:
+        - ./ssh/:/root/.ssh/
+      environment:
+        - SPRING_PROFILES_ACTIVE=prod
+        - GIT_URI=git@github.com:jhipster/jhipster-registry.git
+        - GIT_SEARCH_PATHS=central-config
+      ports:
+        - 8761:8761
+        </pre>
+	</div>
+</div>

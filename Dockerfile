@@ -1,17 +1,17 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8
 
 # Add jhipster-registry source
 ADD . /code/
 
-# Add OpenSSH, package the application and delete all lib
-RUN apk update && apk add openssh && \
+# Package the application and delete all lib
+RUN \
     cd /code/ && \
-    rm -Rf target && \
+    rm -Rf target node_modules && \
     chmod +x /code/mvnw && \
     sleep 1 && \
-    ./mvnw package && \
+    ./mvnw package -Pprod -DskipTests && \
     mv /code/target/*.war /jhipster-registry.war && \
-    rm -Rf /code/ /root/.m2/wrapper/ /root/.m2/repository/ /var/cache/apk/*
+    rm -Rf /code/ /root/.m2 /root/.cache /tmp/*
 
 EXPOSE 8761
 

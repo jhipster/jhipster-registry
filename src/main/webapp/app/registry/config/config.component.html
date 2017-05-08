@@ -1,0 +1,54 @@
+<div>
+    <div class="head">
+        <h2 class="d-inline-block">Spring Cloud Configuration</h2>
+        <jhi-refresh-selector class="float-right refresh-left-side"></jhi-refresh-selector>
+    </div>
+
+    <form #form="ngForm" (ngSubmit)="refresh()">
+        <div class="form-group">
+            <label for="application"><strong>Application</strong></label>
+           <select type="text" name="application" id="application" class="form-control" (click)="refresh()"
+                   required [(ngModel)]="application">
+                <option *ngFor="let app of applicationList" [value]="app">{{app}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="profile"><strong>Profile</strong></label>
+            <input type="text" class="form-control" id="profile" [(ngModel)]="profile" name="profile" required>
+        </div>
+
+        <div class="form-group" *ngIf="isNative">
+            <label for="label"><strong>Git Label: </strong></label>
+            <input type="text" class="form-control" id="label" name="label" [(ngModel)]="label" required>
+        </div>
+        <input type="submit" style="display: none;"> <!-- tips to submit without button -->
+    </form>
+
+    <div *ngIf="data">
+        <h3>Configuration</h3>
+        <pre class="code-block">{{data}}</pre>
+    </div>
+
+    <h3 class="head bottom">Configuration Source Information</h3>
+    <table class="table table-striped ">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th *ngIf="!isNative">Repository URI</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngIf="isNative">
+            <td>Native (Local Filesystem)</td>
+            <td>{{ nativeSearchLocation }}</td>
+        </tr>
+        <tr *ngIf="!isNative">
+            <td>Git</td>
+            <td>{{ gitUri }}</td>
+            <td>/{{ gitSearchLocation }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

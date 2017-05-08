@@ -2,6 +2,9 @@
 # Spring Boot configuration for the "prod" profile.
 #
 # This configuration overrides the application.yml file.
+#
+# More information on profiles: https://jhipster.github.io/profiles/
+# More information on configuration properties: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 # ===================================================================
@@ -10,40 +13,77 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-eureka:
-    env: prod
-    instance:
-        hostname: localhost
-        appname: registry
-        prefer-ip-address: true
-    server:
-        # see discussion about enable-self-preservation:
-        # https://github.com/jhipster/generator-jhipster/issues/3654
-        enable-self-preservation: false
-    client:
-        fetch-registry: false
-        register-with-eureka: false
-        service-url:
-            defaultZone: http://admin:${security.user.password:admin}@localhost:8761/eureka/
+spring:
+    devtools:
+        restart:
+            enabled: false
+        livereload:
+            enabled: false
+    mail:
+        host: localhost
+        port: 25
+        username:
+        password:
+
+# ===================================================================
+# To enable SSL, generate a certificate using:
+# keytool -genkey -alias JHipsterRegistry -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+#
+# You can also use Let's Encrypt:
+# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
+#
+# Then, modify the server.ssl properties so your "server" configuration looks like:
+#
+# server:
+#    port: 443
+#    ssl:
+#        key-store: keystore.p12
+#        key-store-password: <your-password>
+#        keyStoreType: PKCS12
+#        keyAlias: JHipsterRegistry
+# ===================================================================
+server:
+    port: 8761
+    compression:
+        enabled: true
+        mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+        min-response-size: 1024
+
+security:
+    user:
+        name: admin
+        password: admin
+        role: USER,ADMIN
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://jhipster.github.io/common-application-properties/
+# ===================================================================
 
 jhipster:
+    http:
+        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
+        cache: # Used by the CachingHttpHeadersFilter
+            timeToLiveInDays: 1461
     security:
         authentication:
             jwt:
-                secret: d6877ac45344bb624472a12dd83bb6b3b7e63113
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
+                token-validity-in-seconds-for-remember-me: 2592000
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: JHipsterRegistry@localhost
+        base-url: http://my-server-url-to-change # Modify according to your server's URL
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
-        spark:
-            enabled: false
-            host: localhost
-            port: 9999
         graphite:
             enabled: false
             host: localhost
             port: 2003
-            prefix: catalog
+            prefix: JHipsterRegistry
+        prometheus:
+            enabled: false
+            endpoint: /prometheusMetrics
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
@@ -57,36 +97,13 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
 
-spring:
-    profiles:
-        active: prod
-    devtools:
-        restart:
-            enabled: false
-        livereload:
-            enabled: false
-    cloud:
-        config:
-            server:
-                native:
-                    search-locations: file:./central-config
-                git:
-                    # sample prod config using the central-directory folder in the jhipster-registry github repos
-                    uri: https://github.com/jhipster/jhipster-registry/
-                    search-paths: central-config
-                prefix: /config
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://jhipster.github.io/common-application-properties/
+# ===================================================================
 
-    thymeleaf:
-        cache: true
-
-security:
-    user:
-        name: admin
-        password: admin
-        role: USER,ADMIN
-
-server:
-    compression:
-        enabled: true
-        mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
-        min-response-size: 1024
+application:

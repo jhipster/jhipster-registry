@@ -1,0 +1,29 @@
+# ===================================================================
+# Spring Cloud Config bootstrap configuration for the "dev" profile
+# In prod profile, properties will be overwriten by the ones defined in bootstrap-prod.yml
+# ===================================================================
+
+spring:
+    application:
+        name: jhipster-registry
+    profiles:
+        active: prod,git
+    cloud:
+        config:
+            server:
+                git:
+                    uri: https://github.com/jhipster/jhipster-registry-sample-config
+                native:
+                    search-locations: file:./central-config
+                prefix: /config
+                bootstrap: true
+            fail-fast: true
+            # name of the config server's property source (file.yml) that we want to use
+            name: jhispter-registry
+            profile: dev # profile(s) of the property source
+            label: master # toggle to switch to a different version of the configuration as stored in git
+            # it can be set to any label, branch or commit of the config source git repository
+
+info:
+    project:
+        version: #project.version#

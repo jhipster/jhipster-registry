@@ -1,13 +1,12 @@
 package io.github.jhipster.registry.web.rest;
 
-import io.github.jhipster.registry.config.JHipsterProperties;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.github.jhipster.registry.config.DefaultProfileUtil;
 
-import javax.inject.Inject;
+import io.github.jhipster.config.JHipsterProperties;
+
+import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,58 +18,52 @@ import java.util.List;
 @RequestMapping("/api")
 public class ProfileInfoResource {
 
-    @Inject
-    Environment env;
+    private final Environment env;
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
 
-    @Value("${spring.cloud.config.server.native.search-locations:}")
-    private String nativeSearchLocation;
-
-    @Value("${spring.cloud.config.server.git.uri:}")
-    private String gitUri;
-
-    @Value("${spring.cloud.config.server.git.search-paths:}")
-    private String gitSearchLocation;
-
-    @GetMapping("/profile-info")
-    public ProfileInfoResponse getActiveProfiles() {
-        return new ProfileInfoResponse(env.getActiveProfiles(), getRibbonEnv(), nativeSearchLocation, gitUri, gitSearchLocation);
+    public ProfileInfoResource(Environment env, JHipsterProperties jHipsterProperties) {
+        this.env = env;
+        this.jHipsterProperties = jHipsterProperties;
     }
 
-    private String getRibbonEnv() {
-        String[] activeProfiles = env.getActiveProfiles();
-        String[] displayOnActiveProfiles = jHipsterProperties.getRibbon().getDisplayOnActiveProfiles();
+    @GetMapping("/profile-info")
+    public ProfileInfoVM getActiveProfiles() {
+        String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
+        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles));
+    }
 
+    private String getRibbonEnv(String[] activeProfiles) {
+        String[] displayOnActiveProfiles = jHipsterProperties.getRibbon().getDisplayOnActiveProfiles();
         if (displayOnActiveProfiles == null) {
             return null;
         }
-
         List<String> ribbonProfiles = new ArrayList<>(Arrays.asList(displayOnActiveProfiles));
         List<String> springBootProfiles = Arrays.asList(activeProfiles);
         ribbonProfiles.retainAll(springBootProfiles);
-
-        if (ribbonProfiles.size() > 0) {
+        if (!ribbonProfiles.isEmpty()) {
             return ribbonProfiles.get(0);
         }
         return null;
     }
 
-    private class ProfileInfoResponse {
-        public String[] activeProfiles;
-        public String ribbonEnv;
-        public String nativeSearchLocation;
-        public String gitUri;
-        public String gitSearchLocation;
+    class ProfileInfoVM {
 
-        ProfileInfoResponse(String[] activeProfiles, String ribbonEnv, String nativeSearchLocation, String gitUri,
-                            String gitSearchLocation) {
+        private String[] activeProfiles;
+
+        private String ribbonEnv;
+
+        ProfileInfoVM(String[] activeProfiles, String ribbonEnv) {
             this.activeProfiles = activeProfiles;
             this.ribbonEnv = ribbonEnv;
-            this.nativeSearchLocation = nativeSearchLocation;
-            this.gitUri = gitUri;
-            this.gitSearchLocation = gitSearchLocation;
+        }
+
+        public String[] getActiveProfiles() {
+            return activeProfiles;
+        }
+
+        public String getRibbonEnv() {
+            return ribbonEnv;
         }
     }
 }
