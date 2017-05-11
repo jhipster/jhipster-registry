@@ -13,7 +13,6 @@ public class LoginVM {
     private String username;
 
     @NotNull
-    @Size(min = 5, max = 64)
     private String password;
 
     private Boolean rememberMe;
