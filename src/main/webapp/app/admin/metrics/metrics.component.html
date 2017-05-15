@@ -3,7 +3,7 @@
     <jhi-route-selector></jhi-route-selector>
 
     <h3>JVM Metrics</h3>
-    <div class="row" *ngIf="!updatingMetrics">
+    <div class="row" *ngIf="metrics && metrics.gauges">
         <div class="col-md-4">
             <b>Memory</b>
             <p><span>Total Memory</span> ({{metrics.gauges['jvm.memory.total.used'].value / 1000000 | number:'1.0-0'}}M / {{metrics.gauges['jvm.memory.total.max'].value / 1000000 | number:'1.0-0'}}M)</p>
@@ -19,7 +19,7 @@
                 <span>{{metrics.gauges['jvm.memory.non-heap.used'].value * 100 / metrics.gauges['jvm.memory.non-heap.committed'].value  | number:'1.0-0'}}%</span>
             </ngb-progressbar>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" *ngIf="metrics.gauges">
             <b>Threads</b> (Total: {{metrics.gauges['jvm.threads.count'].value}}) <a class="hand" (click)="refreshThreadDumpData()" data-toggle="modal" data-target="#threadDump"><i class="fa fa-eye"></i></a>
             <p><span>Runnable</span> {{metrics.gauges['jvm.threads.runnable.count'].value}}</p>
             <ngb-progressbar [value]="metrics.gauges['jvm.threads.runnable.count'].value" [max]="metrics.gauges['jvm.threads.count'].value" [striped]="true" [animated]="true" type="success">
@@ -58,14 +58,14 @@
             </div>
         </div>
     </div>
-    <div class="well well-lg" *ngIf="updatingMetrics">Updating...</div>
+    <div class="well well-lg" *ngIf="updatingMetrics && !metrics">Updating...</div>
 
     <h3>HTTP requests (events per second)</h3>
-    <p *ngIf="metrics.counters">
+    <p *ngIf="metrics && metrics.counters">
         <span>Active requests</span> <b>{{metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count | number:'1.0-0'}}</b> - <span>Total requests</span> <b>{{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count | number:'1.0-0'}}</b>
     </p>
-    <div class="table-responsive" *ngIf="!updatingMetrics">
-        <table class="table table-striped">
+    <div class="table-responsive">
+        <table class="table table-striped" *ngIf="metrics && metrics.timers && metrics.meters">
             <thead>
             <tr>
                 <th>Code</th>
@@ -142,8 +142,8 @@
     </div>
 
     <h3>Services statistics (time in millisecond)</h3>
-    <div class="table-responsive" *ngIf="!updatingMetrics">
-        <table class="table table-striped">
+    <div class="table-responsive">
+        <table class="table table-striped" *ngIf="servicesStats">
             <thead>
             <tr>
                 <th>Service name</th>
@@ -173,8 +173,8 @@
         </table>
     </div>
 
-    <h3 *ngIf="metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
-    <div class="table-responsive" *ngIf="!updatingMetrics && metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">
+    <h3 *ngIf="metrics && metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
+    <div class="table-responsive" *ngIf="metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -190,7 +190,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr *ngIf="metrics.histograms">
                     <td>
                         <div class="progress progress-striped">
                             <ngb-progressbar [max]="metrics.gauges['HikariPool-1.pool.TotalConnections'].value" [value]="metrics.gauges['HikariPool-1.pool.ActiveConnections'].value" [striped]="true" [animated]="true" type="success">

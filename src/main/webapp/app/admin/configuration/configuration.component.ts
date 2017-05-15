@@ -46,13 +46,14 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
             this.configurationService.getInstanceConfigs(this.activeRoute).subscribe((configuration) => {
                 this.configuration = configuration;
-
+                this.updatingConfig = false;
                 for (const config of configuration) {
                     if (config.properties !== undefined) {
                         this.configKeys.push(Object.keys(config.properties));
                     }
                 }
             }, (error) => {
+                this.updatingConfig = false;
                 this.routesService.routeDown(this.activeRoute);
             });
 

@@ -6,7 +6,6 @@ import {
     JHipsterRegistrySharedLibsModule,
     JHipsterRegistrySharedCommonModule,
     CSRFService,
-    AuthService,
     AuthServerProvider,
     AccountService,
     UserService,
@@ -40,7 +39,6 @@ import {
         Principal,
         CSRFService,
         AuthServerProvider,
-        AuthService,
         UserService,
         DatePipe
     ],
