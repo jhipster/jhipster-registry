@@ -1,6 +1,6 @@
 {
   "name": "jhipster-registry",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "JHipster service registry, made with Netflix Eureka and Spring Cloud Config",
   "private": true,
   "cacheDirectories": [
