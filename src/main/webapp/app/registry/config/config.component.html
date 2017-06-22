@@ -18,7 +18,7 @@
             <input type="text" class="form-control" id="profile" [(ngModel)]="profile" name="profile" required>
         </div>
 
-        <div class="form-group" *ngIf="isNative">
+        <div class="form-group" *ngIf="!isNative">
             <label for="label"><strong>Git Label: </strong></label>
             <input type="text" class="form-control" id="label" name="label" [(ngModel)]="label" required>
         </div>
