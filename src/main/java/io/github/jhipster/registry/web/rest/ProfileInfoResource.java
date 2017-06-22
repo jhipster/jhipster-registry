@@ -1,11 +1,12 @@
 package io.github.jhipster.registry.web.rest;
 
-import io.github.jhipster.registry.config.DefaultProfileUtil;
-
 import io.github.jhipster.config.JHipsterProperties;
-
+import io.github.jhipster.registry.config.DefaultProfileUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +23,15 @@ public class ProfileInfoResource {
 
     private final JHipsterProperties jHipsterProperties;
 
+    @Value("${spring.cloud.config.server.native.search-locations:}")
+    private String nativeSearchLocation;
+
+    @Value("${spring.cloud.config.server.git.uri:}")
+    private String gitUri;
+
+    @Value("${spring.cloud.config.server.git.search-paths:}")
+    private String gitSearchLocation;
+
     public ProfileInfoResource(Environment env, JHipsterProperties jHipsterProperties) {
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
@@ -30,7 +40,7 @@ public class ProfileInfoResource {
     @GetMapping("/profile-info")
     public ProfileInfoVM getActiveProfiles() {
         String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
-        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles));
+        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles), nativeSearchLocation, gitUri, gitSearchLocation);
     }
 
     private String getRibbonEnv(String[] activeProfiles) {
@@ -53,9 +63,19 @@ public class ProfileInfoResource {
 
         private String ribbonEnv;
 
-        ProfileInfoVM(String[] activeProfiles, String ribbonEnv) {
+        private String nativeSearchLocation;
+
+        private String gitUri;
+
+        private String gitSearchLocation;
+
+        ProfileInfoVM(String[] activeProfiles, String ribbonEnv, String nativeSearchLocation, String gitUri,
+                      String gitSearchLocation) {
             this.activeProfiles = activeProfiles;
             this.ribbonEnv = ribbonEnv;
+            this.nativeSearchLocation = nativeSearchLocation;
+            this.gitUri = gitUri;
+            this.gitSearchLocation = gitSearchLocation;
         }
 
         public String[] getActiveProfiles() {
@@ -64,6 +84,18 @@ public class ProfileInfoResource {
 
         public String getRibbonEnv() {
             return ribbonEnv;
+        }
+
+        public String getNativeSearchLocation() {
+            return nativeSearchLocation;
+        }
+
+        public String getGitUri() {
+            return gitUri;
+        }
+
+        public String getGitSearchLocation() {
+            return gitSearchLocation;
         }
     }
 }
