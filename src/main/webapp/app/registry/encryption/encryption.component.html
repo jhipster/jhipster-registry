@@ -4,7 +4,7 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
-            <ngb-tabset type="pills" class="nav-fill">
+            <ngb-tabset type="tabs" class="nav-fill">
                 <ngb-tab title="Encrypt" id="encrypt">
                     <template ngbTabContent>
                         <form>
@@ -23,7 +23,7 @@
                                    required
                                    [(ngModel)]="encryptedText" name="decryptText"
                                    #name="ngModel"></textarea>
-                            <button type="submit" class="btn btn-success" (click)="decrypt()">Decrypt</button>
+                            <button type="submit" class="btn btn-success" [disabled]="encryptedText === ''" (click)="decrypt()">Decrypt</button>
                         </form>
                     </template>
                 </ngb-tab>
@@ -33,7 +33,7 @@
                 <h3>Result:</h3>
                 <pre class="code-block">{{result}}</pre>
             </div>
-            <jhi-alert-error>Please make sure the encryption key is setup correctly.</jhi-alert-error>
+            <jhi-alert-error></jhi-alert-error>
         </div>
 
         <div class="text-center pad" >
