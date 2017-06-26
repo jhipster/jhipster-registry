@@ -16,6 +16,7 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
     application: any;
     data: any;
     instances: any;
+    activeInstance: any;
 
     refreshReloadSubscription: Subscription;
     applicationsServiceSubscription: Subscription;
@@ -38,7 +39,9 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
     refresh() {
         this.applicationsServiceSubscription = this.applicationsService.findAll().subscribe((data) => {
             this.data = data;
-            if (data.applications.length > 0) {
+            if (this.application) {
+                this.show(this.application);
+            } else if (data.applications.length > 0) {
                 this.show(data.applications[0].name);
             }
         });
@@ -46,12 +49,17 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
 
     show(app) {
         this.application = app;
-        for (const application of this.data.applications) {
-            application.active = '';
-            if (application.name === this.application) {
-                this.instances = application.instances;
-                application.active = 'active';
+        let found = false;
+        for (const dataApp of this.data.applications) {
+            dataApp.active = '';
+            if (dataApp.name === this.application) {
+                this.instances = dataApp.instances;
+                dataApp.active = 'active';
+                found = true;
             }
+        }
+        if (!found) {
+            this.application = false;
         }
     }
 
