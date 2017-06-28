@@ -7,11 +7,13 @@ import {
     registryState,
     JhiApplicationsComponent,
     JhiConfigComponent,
+    JhiEncryptionComponent,
     JhiHistoryComponent,
     JhiReplicasComponent,
     JhiSSHComponent,
     JhiApplicationsService,
     JhiConfigService,
+    JhiEncryptionService,
     JhiHistoryService,
     JhiReplicasService,
     JhiSSHService
@@ -25,6 +27,7 @@ import {
     declarations: [
         JhiApplicationsComponent,
         JhiConfigComponent,
+        JhiEncryptionComponent,
         JhiHistoryComponent,
         JhiReplicasComponent,
         JhiSSHComponent
@@ -33,6 +36,7 @@ import {
     providers: [
         JhiApplicationsService,
         JhiConfigService,
+        JhiEncryptionService,
         JhiHistoryService,
         JhiReplicasService,
         JhiSSHService
