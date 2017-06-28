@@ -49,9 +49,24 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
                 this.items.push({key: k, value: obj[k]});
             }
         }
+        this.items = this.sortItems(this.items);
     }
 
     beforeChange($event: NgbTabChangeEvent) {
         this.activate($event.nextId);
     };
+
+    private sortItems(items: any[]) {
+        this.items = items.sort((a, b) => {
+            if (a.key < b.key) {
+                return 1;
+            } else if (b.key < a.key) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+        return items;
+    }
+
 }
