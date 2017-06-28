@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class JhiHistoryComponent implements OnInit, OnDestroy {
     items: any;
     data: any;
+    activeKey: any;
 
     refreshReloadSubscription: Subscription;
 
@@ -31,11 +32,16 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
     refresh() {
         this.historyService.findAll().subscribe((data) => {
             this.data = data;
-            this.activate('registered');
+            if (this.activeKey) {
+                this.activate(this.activeKey);
+            } else {
+                this.activate('registered');
+            }
         });
     }
 
     activate(key: string) {
+        this.activeKey = key;
         this.items = [];
         const obj = this.data ? this.data[key] : null;
         if (obj) {
