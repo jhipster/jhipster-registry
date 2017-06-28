@@ -29,5 +29,5 @@ info:
         version: #project.version#
 
 # uncomment to enable encryption features
-encrypt:
-    key: my-secret-encryption-key-to-change-in-production
+#encrypt:
+#    key: my-secret-encryption-key-to-change-in-production
