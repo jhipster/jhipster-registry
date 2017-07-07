@@ -33,10 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         web.ignoring()
             .antMatchers(HttpMethod.OPTIONS, "/**")
             .antMatchers("/app/**/*.{js,html}")
-            .antMatchers("/bower_components/**")
-            .antMatchers("/content/**")
-            .antMatchers("/test/**")
-            .antMatchers("/h2-console/**");
+            .antMatchers("/content/**");
     }
 
     @Override
@@ -58,14 +55,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .realmName("JHipster Registry")
         .and()
             .authorizeRequests()
-            .antMatchers("/**").permitAll() // cannot reconnect without this line
-            .antMatchers("/api/**").authenticated()
-            .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/management/health").permitAll()
+            .antMatchers("/api/authenticate").permitAll()
+            .antMatchers("/api/**").authenticated()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .anyRequest().authenticated() // always at the end
+            .antMatchers("/*").permitAll()
+            .anyRequest().authenticated()
         .and()
             .apply(securityConfigurerAdapter());
     }

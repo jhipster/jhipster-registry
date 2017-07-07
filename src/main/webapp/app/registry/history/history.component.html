@@ -23,7 +23,7 @@
                     </tr>
                     </thead>
                     <tbody *ngIf="items">
-                    <tr *ngFor="let instance of (items | orderBy:'-key')">
+                    <tr *ngFor="let instance of items">
                         <td>
                             {{instance.key | date:'medium'}}
                         </td>

@@ -75,12 +75,6 @@ public class LoginVMTest {
         // Contraints tests
         vm = new LoginVM();
         vm.setUsername("goodUsername");
-
-        assertFalse(validator.validate(vm).isEmpty());
-        vm.setPassword("");
-        assertFalse(validator.validate(vm).isEmpty());
-        vm.setPassword("badPasswordTooLongbadPasswordTooLongbadPasswordTooLongbadPasswordTooLongbadPasswordTooLong");
-        assertFalse(validator.validate(vm).isEmpty());
         vm.setPassword("goodPassword");
         assertTrue(validator.validate(vm).isEmpty());
     }
