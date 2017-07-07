@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { JhiConfigService } from './config.service';
 import { ProfileService } from '../../layouts/profiles/profile.service';
 import { JhiApplicationsService } from '../';
@@ -18,7 +18,10 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
     nativeSearchLocation: string;
     gitUri: string;
     gitSearchLocation: string;
-    data: any;
+    configAsYaml: any;
+    configAsProperties: any;
+    configAsJson: any;
+    configAsKeyValuePairs: any;
     applicationList: Array<string>;
 
     refreshReloadSubscription: Subscription;
@@ -58,10 +61,30 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
     }
 
     refresh() {
-        this.configService.getConfig(this.application, this.profile, this.label).subscribe((response) => {
-            this.data = response;
+        this.configService.getConfigAsYaml(this.application, this.profile, this.label).subscribe((response) => {
+            this.configAsYaml = response;
         }, () => {
-            this.data = '';
+            this.configAsYaml = '';
+        });
+
+        this.configService.getConfigAsProperties(this.application, this.profile, this.label).subscribe((response) => {
+            console.log(response);
+            this.configAsProperties = response;
+
+            const keyValueArray = [];
+            this.configAsProperties.split('\n').forEach((property) => {
+                const keyValueSplit = property.split(': ');
+                keyValueArray.push({key: keyValueSplit[0], value: keyValueSplit[1]});
+            });
+            this.configAsKeyValuePairs = keyValueArray;
+        }, () => {
+            this.configAsProperties = '';
+        });
+
+        this.configService.getConfigAsJson(this.application, this.profile, this.label).subscribe((response) => {
+            this.configAsJson = response;
+        }, () => {
+            this.configAsJson = {};
         });
 
         this.applicationsService.findAll().subscribe((data) => {

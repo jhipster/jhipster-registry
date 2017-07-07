@@ -5,12 +5,17 @@
     </div>
 
     <form #form="ngForm" (ngSubmit)="refresh()">
-        <div class="form-group">
+<!--        <div class="form-group">
             <label for="application"><strong>Application</strong></label>
            <select type="text" name="application" id="application" class="form-control" (click)="refresh()"
                    required [(ngModel)]="application">
                 <option *ngFor="let app of applicationList" [value]="app">{{app}}</option>
             </select>
+        </div>-->
+
+        <div class="form-group">
+            <label for="profile"><strong>app</strong></label>
+            <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application" required>
         </div>
 
         <div class="form-group">
@@ -25,9 +30,37 @@
         <input type="submit" style="display: none;"> <!-- tips to submit without button -->
     </form>
 
-    <div *ngIf="data">
+    <div *ngIf="configAsYaml">
         <h3>Configuration</h3>
-        <pre class="code-block">{{data}}</pre>
+        <ngb-tabset type="tabs">
+            <ngb-tab title="YAML" id="yaml">
+                <template ngbTabContent>
+                    <pre class="code-block">{{configAsYaml}}</pre>
+                </template>
+            </ngb-tab>
+            <ngb-tab title="Properties" id="properties">
+                <template ngbTabContent>
+                    <pre class="code-block">{{configAsProperties}}</pre>
+                </template>
+            </ngb-tab>
+            <ngb-tab title="JSON" id="json">
+                <template ngbTabContent>
+                    <pre class="code-block">{{configAsJson}}</pre>
+                </template>
+            </ngb-tab>
+            <ngb-tab title="Table" id="table">
+                <template ngbTabContent>
+                    <table class="table table-striped table-bordered table-responsive d-table">
+                        <tbody>
+                        <tr *ngFor="let property of configAsKeyValuePairs">
+                            <td>{{ property.key }}</td>
+                            <td>{{ property.value }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </template>
+            </ngb-tab>
+        </ngb-tabset>
     </div>
 
     <h3 class="head bottom">Configuration Source Information</h3>
