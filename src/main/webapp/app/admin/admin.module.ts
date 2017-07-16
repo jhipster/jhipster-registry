@@ -12,9 +12,11 @@ import {
     JhiHealthCheckComponent,
     JhiConfigurationComponent,
     JhiConfigurationService,
+    JhiLogfileComponent,
     JhiHealthService,
     JhiMetricsService,
-    LogsService
+    LogsService,
+    JhiLogfileService
 } from './';
 
 @NgModule({
@@ -28,7 +30,8 @@ import {
         JhiHealthCheckComponent,
         JhiHealthModalComponent,
         JhiMetricsMonitoringComponent,
-        JhiMetricsMonitoringModalComponent
+        JhiMetricsMonitoringModalComponent,
+        JhiLogfileComponent
     ],
     entryComponents: [
         JhiHealthModalComponent,
@@ -38,7 +41,8 @@ import {
         JhiConfigurationService,
         JhiHealthService,
         JhiMetricsService,
-        LogsService
+        LogsService,
+        JhiLogfileService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
