@@ -13,3 +13,8 @@ jhipster:
         authentication:
             jwt:
                 secret: my-secret-token-to-change-in-production
+
+# Enable /management/logfile endpoint for all apps
+logging:
+    path: /tmp
+    file: ${spring.application.name}.log
