@@ -1,0 +1,28 @@
+.log-viewer{
+    height: 90%;
+    font-family: monospace;
+    background: black;
+    color: white;
+}
+
+.to-top{
+    position: absolute;
+    display: block;
+    bottom: 50px;
+    right: 2px;
+    margin-right: 2px;
+    padding-right: 40px;
+    text-align: right;
+    color: white;
+    font-size: 1.3em;
+}
+
+.to-bottom{
+    position: absolute;
+    display: block;
+    bottom: 50px;
+    text-align: center;
+    padding-left: 20px;
+    color: white;
+    font-size: 1.3em;
+}

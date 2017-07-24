@@ -1,19 +1,23 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-
 import { JhiLogfileService } from './logfile.service';
 
 import { JhiRoutesService, Route } from '../../shared';
 
 @Component({
     selector: 'jhi-logfile',
-    templateUrl: './logfile.component.html'
+    templateUrl: './logfile.component.html',
+    styleUrls: [
+        'logfile.scss'
+    ]
 })
 export class JhiLogfileComponent implements OnInit, OnDestroy {
     activeRoute: Route;
     updatingLogfile: boolean;
     logtxt: string;
     subscription: Subscription;
+
+    @ViewChild('logfile') private logFileViewer: ElementRef;
 
     constructor(
         private jhiLogfileService: JhiLogfileService,
@@ -48,6 +52,14 @@ export class JhiLogfileComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    scrollToBottom() {
+        this.logFileViewer.nativeElement.scrollTop = this.logFileViewer.nativeElement.scrollHeight;
+    }
+
+    scrollToTop() {
+        this.logFileViewer.nativeElement.scrollTop = this.logFileViewer.nativeElement.scrolledUp;
     }
 
     ngOnDestroy() {
