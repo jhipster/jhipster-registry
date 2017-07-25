@@ -1,28 +1,26 @@
-.log-viewer{
+.log-viewer {
     height: 90%;
     font-family: monospace;
     background: black;
     color: white;
 }
 
-.to-top{
-    position: absolute;
+.log-navigation-button {
+    position: relative;
     display: block;
-    bottom: 50px;
-    right: 2px;
-    margin-right: 2px;
-    padding-right: 40px;
+    right: 5px;
+    margin-right: 5px;
+    padding-right: 10px;
     text-align: right;
     color: white;
-    font-size: 1.3em;
 }
 
-.to-bottom{
-    position: absolute;
-    display: block;
+.to-top {
+    @extend .log-navigation-button;
     bottom: 50px;
-    text-align: center;
-    padding-left: 20px;
-    color: white;
-    font-size: 1.3em;
+}
+
+.to-bottom {
+    @extend .log-navigation-button;
+    top: 30px;
 }
