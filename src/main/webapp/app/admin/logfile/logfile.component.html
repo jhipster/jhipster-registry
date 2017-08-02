@@ -1,0 +1,13 @@
+<div>
+    <h2>View logs</h2>
+
+    <jhi-route-selector></jhi-route-selector>
+
+    <div class="to-bottom" *ngIf="logtxt" (click)="scrollToBottom()"><i class="fa fa-arrow-circle-down"></i> Bottom</div>
+    <div class="form-group">
+        <textarea #logfile readonly class="form-control log-viewer" rows="30">
+{{logtxt}}
+        </textarea>
+    </div>
+    <div class="to-top" *ngIf="logtxt" (click)="scrollToTop()"><i class="fa fa-arrow-circle-up"></i> Top</div>
+</div>

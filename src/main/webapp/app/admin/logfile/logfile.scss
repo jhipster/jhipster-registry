@@ -1,0 +1,26 @@
+.log-viewer {
+    height: 90%;
+    font-family: monospace;
+    background: black;
+    color: white;
+}
+
+.log-navigation-button {
+    position: relative;
+    display: block;
+    right: 5px;
+    margin-right: 5px;
+    padding-right: 10px;
+    text-align: right;
+    color: white;
+}
+
+.to-top {
+    @extend .log-navigation-button;
+    bottom: 50px;
+}
+
+.to-bottom {
+    @extend .log-navigation-button;
+    top: 30px;
+}
