@@ -8,7 +8,6 @@ spring:
         name: jhipster-registry
     profiles:
         active: dev
-        include: native
     cloud:
         config:
             server:
