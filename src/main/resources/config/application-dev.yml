@@ -28,6 +28,9 @@ spring:
         password:
     messages:
         cache-seconds: 1
+    profiles:
+        active: dev
+        include: swagger
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
