@@ -89,3 +89,10 @@ eureka:
         enable-self-preservation: false
     dashboard:
         path: /registry
+
+jhipster:
+    swagger:
+        default-include-pattern: /(api|config)/.*
+        title: JHipster Registry API
+        description: JHipster Registry API documentation
+        version: ${info.project.version}

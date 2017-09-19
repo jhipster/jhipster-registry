@@ -108,6 +108,12 @@
                             <span>Logs</span>
                         </a>
                     </li>
+                    <li *ngIf="swaggerEnabled">
+                        <a class="dropdown-item" routerLink="docs" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-book" aria-hidden="true"></i>
+                            <span>API</span>
+                        </a>
+                    </li>
                     <li>
                         <a class="dropdown-item" routerLink="loggers" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
