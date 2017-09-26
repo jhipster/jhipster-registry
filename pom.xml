@@ -84,7 +84,6 @@
 
         <!-- Spring properties -->
         <spring-cloud.version>Dalston.RELEASE</spring-cloud.version>
-        <springfox.version>2.6.1</springfox.version>
         <undertow.version>1.4.10.Final</undertow.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <yarn.version>v0.21.3</yarn.version>
