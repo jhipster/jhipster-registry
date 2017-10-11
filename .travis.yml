@@ -10,7 +10,7 @@ install:
   - docker images
   - docker run --name jhipster-registry -p 8761:8761 -d -t jhipster/jhipster-registry:travis
 script:
-  - sleep 30
+  - sleep 45
   - docker ps
   - docker logs jhipster-registry
   - curl -v http://localhost:8761
