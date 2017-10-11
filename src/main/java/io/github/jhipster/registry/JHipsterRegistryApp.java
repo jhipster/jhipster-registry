@@ -94,13 +94,13 @@ public class JHipsterRegistryApp {
         if (secretKey == null ) {
             log.error("\n----------------------------------------------------------\n" +
                 "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
-                "Please read the documentation at https://jhipster.github.io/jhipster-registry/\n" +
+                "Please read the documentation at http://www.jhipster.tech/jhipster-registry/\n" +
                 "----------------------------------------------------------");
         } else if (secretKey.equals("this-secret-should-not-be-used-read-the-comment")) {
             log.error("\n----------------------------------------------------------\n" +
                 "Your JWT secret key is not configured using Spring Cloud Config, you will not be able to \n"+
                 "use the JHipster Registry dashboards to monitor external applications. \n" +
-                "Please read the documentation at https://jhipster.github.io/jhipster-registry/\n" +
+                "Please read the documentation at http://www.jhipster.tech/jhipster-registry/\n" +
                 "----------------------------------------------------------");
         }
     }

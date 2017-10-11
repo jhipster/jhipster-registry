@@ -1,7 +1,7 @@
 {
   "name": "JHipster Registry",
   "description": "This is the JHipster registry service, based on Spring Cloud Netflix, Eureka and Spring Cloud Config.",
-  "logo": "https://jhipster.github.io/images/logo/logo-jhipster-drink-coffee.png",
+  "logo": "http://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png",
   "env": {
     "JHIPSTER_PASSWORD": {
       "description": "Admin password for the registry (used to login after clicking 'View App'). Must be at least 5 characters.",

@@ -7,7 +7,7 @@ spring:
     application:
         name: jhipster-registry
     profiles:
-        active: prod
+        active: prod,git
     cloud:
         config:
             server:
