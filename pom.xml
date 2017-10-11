@@ -860,37 +860,38 @@
             -->
             <id>heroku</id>
             <build>
-              <plugins>
-                <plugin>
-                  <artifactId>maven-clean-plugin</artifactId>
-                  <executions>
-                    <execution>
-                      <id>clean-build-artifacts</id>
-                      <phase>install</phase>
-                      <goals>
-                          <goal>clean</goal>
-                      </goals>
-                      <configuration>
-                          <excludeDefaultDirectories>true</excludeDefaultDirectories>
-                          <filesets>
-                              <fileset>
-                                  <directory>node_modules</directory>
-                              </fileset>
-                              <fileset>
-                                  <directory>.heroku/node</directory>
-                              </fileset>
-                              <fileset>
-                                  <directory>target</directory>
-                                  <excludes>
-                                      <exclude>*.war</exclude>
-                                  </excludes>
-                              </fileset>
-                          </filesets>
-                      </configuration>
-                    </execution>
-                  </executions>
-                </plugin>
-              </plugins>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>clean-build-artifacts</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                                <configuration>
+                                    <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                                    <filesets>
+                                        <fileset>
+                                            <directory>node_modules</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>.heroku/node</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>target</directory>
+                                            <excludes>
+                                                <exclude>*.war</exclude>
+                                            </excludes>
+                                        </fileset>
+                                    </filesets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
     </profiles>
