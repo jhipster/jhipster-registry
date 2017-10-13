@@ -7,6 +7,8 @@ RUN \
     sleep 1 && \
     ./mvnw package -Pprod -DskipTests && \
     mv /code/target/*.war /jhipster-registry.war && \
+    mkdir /target && \
+    chmod g+rwx /target && \
     rm -Rf /code/ /root/.m2 /root/.cache /tmp/*
 
 FROM openjdk:8-jre-alpine
