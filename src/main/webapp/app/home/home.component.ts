@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
                 private eurekaStatusService: EurekaStatusService,
                 private applicationsService: JhiApplicationsService,
                 private healthService: JhiHealthService) {
-        this.version = 'v' + VERSION;
+        this.version = VERSION ? 'v' + VERSION : '';
         this.appInstances = [];
     }
 
