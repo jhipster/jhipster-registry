@@ -8,6 +8,8 @@ import { JhiApplicationsService } from '../registry';
 
 import { VERSION } from '../app.constants';
 import { EurekaStatusService } from './eureka.status.service';
+import {ProfileService} from '../layouts/profiles/profile.service';
+import {LoginOAuth2Service} from '../shared/oauth2/login-oauth2.service';
 
 @Component({
     selector: 'jhi-home',
@@ -27,10 +29,12 @@ export class HomeComponent implements OnInit {
 
     constructor(private principal: Principal,
                 private loginModalService: LoginModalService,
+                private loginOAuth2Service: LoginOAuth2Service,
                 private eventManager: EventManager,
                 private eurekaStatusService: EurekaStatusService,
                 private applicationsService: JhiApplicationsService,
-                private healthService: JhiHealthService) {
+                private healthService: JhiHealthService,
+                private profileService: ProfileService) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.appInstances = [];
     }
@@ -62,7 +66,13 @@ export class HomeComponent implements OnInit {
     }
 
     login() {
-        this.modalRef = this.loginModalService.open();
+        this.profileService.getProfileInfo().subscribe((profileInfo) => {
+            if (profileInfo.activeProfiles.indexOf('oauth2') > -1) {
+                this.loginOAuth2Service.login();
+            } else {
+                this.modalRef = this.loginModalService.open();
+            }
+        });
     }
 
     populateDashboard() {
