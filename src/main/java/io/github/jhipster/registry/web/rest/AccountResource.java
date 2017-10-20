@@ -50,9 +50,8 @@ public class AccountResource {
     public ResponseEntity<UserVM> getAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try{
-            User user = (User) authentication.getPrincipal();
-            UserVM userVM = new UserVM(user.getUsername(),
-                user.getAuthorities().stream()
+            UserVM userVM = new UserVM((String) authentication.getPrincipal(),
+                authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
             return new ResponseEntity<>(userVM, HttpStatus.OK);
         } catch (NullPointerException | ClassCastException e){
