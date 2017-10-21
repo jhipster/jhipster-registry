@@ -11,7 +11,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @EnableOAuth2Sso
 @Configuration
-@Profile("oauth2")
+@Profile(Constants.PROFILE_OAUTH2)
 public class OAuth2SsoConfiguration extends WebSecurityConfigurerAdapter {
 
     private final RequestMatcher authorizationHeaderRequestMatcher;

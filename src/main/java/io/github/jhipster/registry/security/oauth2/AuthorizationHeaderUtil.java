@@ -5,8 +5,6 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 
 public class AuthorizationHeaderUtil {
 
-    public static final String AUTHORIZATION = "Authorization";
-
     public static String getAuthorizationHeader() {
         OAuth2AuthenticationDetails details =
             (OAuth2AuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();

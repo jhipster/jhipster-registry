@@ -27,7 +27,7 @@ import io.github.jhipster.registry.security.oauth2.SimplePrincipalExtractor;
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Profile("oauth2")
+@Profile(Constants.PROFILE_OAUTH2)
 public class OAuth2SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     private static final String OAUTH2_PRINCIPAL_ATTRIBUTE = "preferred_username";

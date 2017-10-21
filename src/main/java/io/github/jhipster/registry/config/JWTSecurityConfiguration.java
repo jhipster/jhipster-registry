@@ -17,7 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Profile("!oauth2")
+@Profile("!" + Constants.PROFILE_OAUTH2)
 public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final Http401UnauthorizedEntryPoint authenticationEntryPoint;
