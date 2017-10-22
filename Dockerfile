@@ -16,4 +16,6 @@ ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     GIT_SEARCH_PATHS=central-config
 EXPOSE 8761
 COPY --from=builder /jhipster-registry.war .
+RUN mkdir /target && \
+    chmod g+rwx /target
 CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.war","--spring.cloud.config.server.git.uri=${GIT_URI}","--spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS}"]
