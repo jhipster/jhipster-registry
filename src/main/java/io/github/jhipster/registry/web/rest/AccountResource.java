@@ -52,12 +52,12 @@ public class AccountResource {
         try {
             String login;
             if (authentication.getPrincipal() instanceof User) {
-                log.debug(("The username `{}` has been found using JWT"));
                 User user = (User) authentication.getPrincipal();
                 login = user.getUsername();
+                log.debug("The username `{}` has been found using JWT", login);
             } else if (authentication.getPrincipal() instanceof String) {
-                log.debug(("The username `{}` has been found using OpenID Connect"));
                 login = (String) authentication.getPrincipal();
+                log.debug("The username `{}` has been found using OpenID Connect", login);
             } else {
                 log.debug("The username could not be found");
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
