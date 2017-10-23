@@ -848,6 +848,36 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>m2e</id><!--This profile is activated when eclipse interacts with maven (using m2e).-->
+                <activation>
+                    <property>
+                        <name>m2e.version</name>
+                    </property>
+                </activation>
+                <build>
+                    <plugins>
+                        <plugin>
+                            <!--eclipse do not support duplicated package-info.java, in both src and test.-->
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                <id>default-testCompile</id>
+                                <phase>test-compile</phase>
+                                <configuration>
+                                    <testExcludes>
+                                        <exclude>**/package-info.java</exclude>
+                                    </testExcludes>
+                                </configuration> 
+                                <goals>
+                                    <goal>testCompile</goal>
+                                </goals>
+                                </execution>                  
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </build>
+        </profile>
     </profiles>
 
 </project>
