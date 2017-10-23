@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.*;
 import org.springframework.context.annotation.*;
 import org.springframework.http.*;
@@ -79,6 +80,7 @@ public class OAuth2SecurityConfiguration extends ResourceServerConfigurerAdapter
         .and()
             .requestMatcher(authorizationHeaderRequestMatcher())
             .authorizeRequests()
+            .antMatchers("/services/**").authenticated()
             .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()

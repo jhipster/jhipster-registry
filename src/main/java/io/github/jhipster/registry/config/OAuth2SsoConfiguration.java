@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import io.github.jhipster.registry.security.AuthoritiesConstants;
+
 @EnableOAuth2Sso
 @Configuration
 @Profile(Constants.PROFILE_OAUTH2)
@@ -25,7 +27,12 @@ public class OAuth2SsoConfiguration extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .requestMatcher(new NegatedRequestMatcher(authorizationHeaderRequestMatcher))
+            .httpBasic()
+            .realmName("JHipster Registry")
+        .and()
             .authorizeRequests()
+            .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .anyRequest().permitAll();
     }
 }
