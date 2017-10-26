@@ -31,6 +31,7 @@ public class OAuth2SsoConfiguration extends WebSecurityConfigurerAdapter {
             .realmName("JHipster Registry")
         .and()
             .authorizeRequests()
+            .antMatchers("/services/**").authenticated()
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .anyRequest().permitAll();
