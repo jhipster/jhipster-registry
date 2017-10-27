@@ -92,7 +92,7 @@ eureka:
 
 jhipster:
     swagger:
-        default-include-pattern: /(api|config)/.*
+        default-include-pattern: /(api)/.*
         title: JHipster Registry API
         description: JHipster Registry API documentation
         version: ${info.project.version}
