@@ -8,8 +8,8 @@ import { JhiApplicationsService } from '../registry';
 
 import { VERSION } from '../app.constants';
 import { EurekaStatusService } from './eureka.status.service';
-import {ProfileService} from '../layouts/profiles/profile.service';
-import {LoginOAuth2Service} from '../shared/oauth2/login-oauth2.service';
+import { ProfileService } from '../layouts/profiles/profile.service';
+import { LoginOAuth2Service } from '../shared/oauth2/login-oauth2.service';
 
 @Component({
     selector: 'jhi-home',
