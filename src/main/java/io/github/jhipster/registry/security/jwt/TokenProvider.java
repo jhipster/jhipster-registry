@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,9 +16,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import io.github.jhipster.registry.config.Constants;
 import io.jsonwebtoken.*;
 
 @Component
+@Profile("!" + Constants.PROFILE_OAUTH2)
 public class TokenProvider {
 
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);

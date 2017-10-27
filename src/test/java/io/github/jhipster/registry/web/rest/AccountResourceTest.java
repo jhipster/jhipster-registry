@@ -16,8 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -67,12 +66,13 @@ public class AccountResourceTest {
         Authentication authentication = Mockito.mock(Authentication.class);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
 
-        Set<GrantedAuthority> authorities = new HashSet<>();
+        Collection authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
 
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
         Mockito.when(authentication.getPrincipal()).thenReturn(new User("user", "pass", authorities));
+        Mockito.when(authentication.getAuthorities()).thenReturn(authorities);
 
         mock.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))

@@ -2,11 +2,14 @@ package io.github.jhipster.registry.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.github.jhipster.registry.config.Constants;
 import io.github.jhipster.registry.security.jwt.JWTConfigurer;
 import io.github.jhipster.registry.security.jwt.TokenProvider;
 import io.github.jhipster.registry.web.rest.vm.LoginVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +31,7 @@ import java.util.Collections;
  */
 @RestController
 @RequestMapping("/api")
+@Profile("!" + Constants.PROFILE_OAUTH2)
 public class UserJWTController {
 
     private final Logger log = LoggerFactory.getLogger(UserJWTController.class);

@@ -4,7 +4,7 @@
 
     <groupId>io.github.jhipster.registry</groupId>
     <artifactId>jhipster-registry</artifactId>
-    <version>3.1.2</version>
+    <version>3.2.1</version>
     <packaging>war</packaging>
     <name>JHipster Registry</name>
     <description>JHipster service registry, made with Netflix Eureka and Spring Cloud Config</description>
@@ -290,6 +290,14 @@
             <artifactId>spring-boot-starter-cloud-connectors</artifactId>
         </dependency>
         <!-- security -->
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
@@ -839,6 +847,36 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>m2e</id><!--This profile is activated when eclipse interacts with maven (using m2e).-->
+                <activation>
+                    <property>
+                        <name>m2e.version</name>
+                    </property>
+                </activation>
+                <build>
+                    <plugins>
+                        <plugin>
+                            <!--eclipse do not support duplicated package-info.java, in both src and test.-->
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                <id>default-testCompile</id>
+                                <phase>test-compile</phase>
+                                <configuration>
+                                    <testExcludes>
+                                        <exclude>**/package-info.java</exclude>
+                                    </testExcludes>
+                                </configuration> 
+                                <goals>
+                                    <goal>testCompile</goal>
+                                </goals>
+                                </execution>                  
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </build>
         </profile>
     </profiles>
 
