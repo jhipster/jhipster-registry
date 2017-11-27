@@ -18,6 +18,10 @@ ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
 EXPOSE 8761
 RUN mkdir /target && \
     chmod g+rwx /target
-CMD ["java","${JAVA_OPTS}","-Djava.security.egd=file:/dev/./urandom","-jar","/jhipster-registry.war","--spring.cloud.config.server.git.uri=${GIT_URI}","--spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS}"]
+CMD java \
+        ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \
+        -jar /jhipster-registry.war \
+        --spring.cloud.config.server.git.uri=${GIT_URI} \
+        --spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS}
 
 COPY --from=builder /jhipster-registry.war .
