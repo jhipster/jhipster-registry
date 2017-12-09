@@ -33,7 +33,11 @@ public class OAuth2SsoConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/services/**").authenticated()
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/profile-info").permitAll()
+            .antMatchers("/api/**").authenticated()
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .anyRequest().permitAll();
     }
 }
