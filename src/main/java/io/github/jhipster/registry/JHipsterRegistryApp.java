@@ -48,7 +48,7 @@ public class JHipsterRegistryApp {
      * <p>
      * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
      * <p>
-     * You can find more information on how profiles work with JHipster on <a href="http://jhipster.github.io/profiles/">http://jhipster.github.io/profiles/</a>.
+     * You can find more information on how profiles work with JHipster on <a href="http://www.jhipster.tech/profiles/">http://www.jhipster.tech/profiles/</a>.
      */
     @PostConstruct
     public void initApplication() {
