@@ -62,7 +62,8 @@ public class ZuulUpdaterService {
 
                 if (zuulProperties.getRoutes().containsKey(instanceId)) {
                     log.debug("Instance '{}' already registered", instanceId);
-                    if (!zuulProperties.getRoutes().get(instanceId).getUrl().equals(url)) {
+                    if (!zuulProperties.getRoutes().get(instanceId).getUrl().equals(url) ||
+                        !((ZuulRouteDTO) zuulProperties.getRoutes().get(instanceId)).getStatus().equals(instanceInfos.getStatus().toString())) {
 
                         log.debug("Updating instance '{}' with new URL: {}", instanceId, url);
                         zuulProperties.getRoutes().put(instanceId, route);
