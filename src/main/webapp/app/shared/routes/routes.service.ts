@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { Route } from './route.model';
-import { SessionStorageService } from 'ng2-webstorage';
+import { SessionStorageService } from 'ngx-webstorage';
 
 @Injectable()
 export class JhiRoutesService {

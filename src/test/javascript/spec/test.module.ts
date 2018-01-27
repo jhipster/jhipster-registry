@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MockBackend } from '@angular/http/testing';
 import { Http, BaseRequestOptions } from '@angular/http';
-import { SessionStorageService } from 'ng2-webstorage';
+import { SessionStorageService } from 'ngx-webstorage';
 import { JhiRefreshService } from '../../../main/webapp/app/shared/refresh/refresh.service';
 import { LoginOAuth2Service } from '../../../main/webapp/app/shared/oauth2/login-oauth2.service';
 import { AuthSessionServerProvider } from '../../../main/webapp/app/shared/auth/auth-session.service';
