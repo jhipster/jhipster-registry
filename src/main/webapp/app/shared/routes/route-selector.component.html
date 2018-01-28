@@ -1,8 +1,8 @@
 <div class="route-selector col-xl-12 d-inline-flex" *ngIf="routes">
 
-    <div class="dropdown" ngbDropdown #dropId="ngbDropdown">
+    <div ngbDropdown #dropId="ngbDropdown">
         <button class="btn btn-outline-primary" id="sortMenu" ngbDropdownToggle [innerHTML]="getActiveRoute()"></button>
-        <div class="dropdown-menu" aria-labelledby="sortMenu" aria-expanded="true" (click)="$event.stopPropagation()">
+        <div ngbDropdownMenu aria-labelledby="sortMenu" aria-expanded="true" (click)="$event.stopPropagation()">
             <p class="d-flex">
                 <input type="search" class="form-control d-flex search" placeholder="Search an application..."
                        [(ngModel)]="searchedInstance" (click)="$event.stopPropagation()" (input)="searchByAppName($event)">
