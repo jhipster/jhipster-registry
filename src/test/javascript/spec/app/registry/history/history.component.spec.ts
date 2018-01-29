@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { JHipsterRegistryTestModule } from '../../../test.module';
 import { JhiHistoryComponent, JhiHistoryService } from '../../../../../../main/webapp/app/registry';
 
-
 describe('Component Tests', () => {
 
     describe('HistoryComponent', () => {
