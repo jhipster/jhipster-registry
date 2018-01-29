@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { SessionStorageService } from 'ngx-webstorage';
@@ -14,7 +13,6 @@ export class JhiRefreshService {
     refreshReload$: Observable<any>;
 
     constructor(
-        private http: Http,
         private sessionStorage: SessionStorageService
     ) {
         this.refreshChanged$ = this.refreshChangedSource.asObservable();

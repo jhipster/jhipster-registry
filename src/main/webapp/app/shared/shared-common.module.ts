@@ -1,6 +1,5 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { JhiAlertService } from 'ng-jhipster';
 import { GroupByPipe } from './pipe/group-by.pipe';
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/en';

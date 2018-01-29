@@ -1,9 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JhiEncryptionService } from './encryption.service';
-import { ProfileService } from '../../layouts/profiles/profile.service';
-import { JhiApplicationsService } from '../';
-import { JhiRefreshService } from '../../shared/refresh/refresh.service';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-encryption',
