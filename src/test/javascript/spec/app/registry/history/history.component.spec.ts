@@ -19,11 +19,7 @@ describe('Component Tests', () => {
                     JhiHistoryService
                 ]
             })
-            .overrideComponent(JhiHistoryComponent, {
-                set: {
-                    template: ''
-                }
-            })
+            .overrideTemplate(JhiHistoryComponent, '')
             .compileComponents();
         }));
 
