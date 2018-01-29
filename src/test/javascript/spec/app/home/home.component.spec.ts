@@ -37,11 +37,7 @@ describe('Component Tests', () => {
                     JhiHealthService
                 ]
             })
-            .overrideComponent(HomeComponent, {
-                set: {
-                    template: ''
-                }
-            })
+            .overrideTemplate(HomeComponent, '')
             .compileComponents();
         }));
 
