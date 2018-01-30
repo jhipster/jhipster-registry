@@ -2,9 +2,6 @@ os:
   - linux
 services:
   - docker
-before_install:
-  - wget -qO- https://get.docker.com/ | sh
-  - docker version
 install:
   - docker build -t jhipster/jhipster-registry:travis .
   - docker images

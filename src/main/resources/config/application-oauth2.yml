@@ -39,3 +39,5 @@ server:
     session:
         cookie:
             http-only: true
+            # custom session cookie name to prevent conflict with another application on the same domain
+            name: JSESSIONID_REGISTRY
