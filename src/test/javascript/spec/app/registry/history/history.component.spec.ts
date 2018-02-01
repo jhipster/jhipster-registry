@@ -26,6 +26,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(JhiHistoryComponent);
             comp = fixture.componentInstance;
+            fixture.detectChanges();
         });
 
         it('refresh data',
