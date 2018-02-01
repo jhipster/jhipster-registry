@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { JHipsterRegistryTestModule } from '../../../test.module';
 import { JhiHistoryComponent, JhiHistoryService } from '../../../../../../main/webapp/app/registry';
 
-
 describe('Component Tests', () => {
 
     describe('HistoryComponent', () => {
@@ -20,17 +19,14 @@ describe('Component Tests', () => {
                     JhiHistoryService
                 ]
             })
-            .overrideComponent(JhiHistoryComponent, {
-                set: {
-                    template: ''
-                }
-            })
+            .overrideTemplate(JhiHistoryComponent, '')
             .compileComponents();
         }));
 
         beforeEach(() => {
             fixture = TestBed.createComponent(JhiHistoryComponent);
             comp = fixture.componentInstance;
+            fixture.detectChanges();
         });
 
         it('refresh data',

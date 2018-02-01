@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JhiConfigService } from './config.service';
 import { ProfileService } from '../../layouts/profiles/profile.service';
 import { JhiApplicationsService } from '../';
