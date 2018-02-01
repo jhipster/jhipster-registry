@@ -12,13 +12,6 @@ import {
     JhiRefreshSelectorComponent
 } from './';
 
-// TODO
-// export function alertServiceProvider(sanitizer: Sanitizer) {
-//     // set below to true to make alerts look like toast
-//     const isToast = false;
-//     return new JhiAlertService(sanitizer, isToast);
-// }
-
 @NgModule({
     imports: [
         JHipsterRegistrySharedLibsModule
