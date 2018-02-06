@@ -19,11 +19,7 @@ describe('Component Tests', () => {
                     JhiApplicationsService
                 ]
             })
-            .overrideComponent(JhiApplicationsComponent, {
-                set: {
-                    template: ''
-                }
-            })
+            .overrideTemplate(JhiApplicationsComponent, '')
             .compileComponents();
         }));
 

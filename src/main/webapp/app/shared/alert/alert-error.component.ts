@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { EventManager, AlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Subscription } from 'rxjs/Rx';
 
 @Component({
@@ -16,7 +16,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
     alerts: any[];
     cleanHttpErrorListener: Subscription;
 
-    constructor(private alertService: AlertService, private eventManager: EventManager) {
+    constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager) {
         this.alerts = [];
 
         this.cleanHttpErrorListener = eventManager.subscribe('jHipsterRegistryApp.httpError', (response) => {

@@ -4,9 +4,9 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
-            <ngb-tabset type="tabs" class="nav-fill">
+            <ngb-tabset type="pills" class="nav-fill">
                 <ngb-tab title="Encrypt" id="encrypt">
-                    <template ngbTabContent>
+                    <ng-template ngbTabContent>
                         <form>
                             <textarea type="text" class="form-control my-1" id="textToEncrypt"
                                    required
@@ -14,10 +14,10 @@
                                       #name="ngModel"></textarea>
                             <button type="submit" class="btn btn-success" [disabled]="textToEncrypt === ''" (click)="encrypt()">Encrypt</button>
                         </form>
-                    </template>
+                    </ng-template>
                 </ngb-tab>
                 <ngb-tab title="Decrypt" id="decrypt">
-                    <template ngbTabContent>
+                    <ng-template ngbTabContent>
                         <form>
                             <textarea type="text" class="form-control my-1" id="encryptedText"
                                    required
@@ -25,7 +25,7 @@
                                    #name="ngModel"></textarea>
                             <button type="submit" class="btn btn-success" [disabled]="encryptedText === ''" (click)="decrypt()">Decrypt</button>
                         </form>
-                    </template>
+                    </ng-template>
                 </ngb-tab>
             </ngb-tabset>
 

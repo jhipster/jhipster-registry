@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { Observable } from 'rxjs';
-import { EventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { JHipsterRegistryTestModule } from '../../test.module';
 import { EurekaStatusService, HomeComponent } from '../../../../../main/webapp/app/home';
@@ -24,7 +24,7 @@ describe('Component Tests', () => {
                 providers: [
                     Principal,
                     AccountService,
-                    EventManager,
+                    JhiEventManager,
                     {
                         provide: LoginModalService,
                         useValue: {
@@ -37,11 +37,7 @@ describe('Component Tests', () => {
                     JhiHealthService
                 ]
             })
-            .overrideComponent(HomeComponent, {
-                set: {
-                    template: ''
-                }
-            })
+            .overrideTemplate(HomeComponent, '')
             .compileComponents();
         }));
 
