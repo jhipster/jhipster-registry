@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { Account, LoginModalService, Principal } from '../shared';
 import { JhiHealthService } from '../admin';
 import { JhiApplicationsService } from '../registry';
+import { JhiRefreshService} from '../shared/refresh/refresh.service';
+import { Subscription } from 'rxjs/Subscription';
 
 import { VERSION } from '../app.constants';
 import { EurekaStatusService } from './eureka.status.service';
@@ -18,7 +20,7 @@ import { LoginOAuth2Service } from '../shared/oauth2/login-oauth2.service';
         'home.scss'
     ]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
     account: Account;
     modalRef: NgbModalRef;
     updatingHealth: boolean;
@@ -27,6 +29,8 @@ export class HomeComponent implements OnInit {
     status: any;
     version: string;
 
+    refreshReloadSubscription: Subscription;
+
     constructor(private principal: Principal,
                 private loginModalService: LoginModalService,
                 private loginOAuth2Service: LoginOAuth2Service,
@@ -34,7 +38,8 @@ export class HomeComponent implements OnInit {
                 private eurekaStatusService: EurekaStatusService,
                 private applicationsService: JhiApplicationsService,
                 private healthService: JhiHealthService,
-                private profileService: ProfileService) {
+                private profileService: ProfileService,
+                private refreshService: JhiRefreshService) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.appInstances = [];
     }
@@ -45,11 +50,16 @@ export class HomeComponent implements OnInit {
             if (!account || !this.isAuthenticated()) {
                 this.login();
             } else {
+                this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.populateDashboard());
                 this.populateDashboard();
             }
         });
 
         this.registerAuthenticationSuccess();
+    }
+
+    ngOnDestroy() {
+        this.refreshReloadSubscription.unsubscribe();
     }
 
     registerAuthenticationSuccess() {
@@ -81,6 +91,7 @@ export class HomeComponent implements OnInit {
         });
 
         this.applicationsService.findAll().subscribe((data) => {
+            this.appInstances = [];
             for (const app of data.applications) {
                 for (const inst of app.instances) {
                     inst.name = app.name;
