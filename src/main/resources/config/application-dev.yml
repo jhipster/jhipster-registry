@@ -32,12 +32,10 @@ spring:
         active: dev
         include: swagger
     security:
-        basic:
-            enabled: true
         user:
             name: admin
             password: admin
-            roles: ADMIN
+            roles: USER,ADMIN
 
 # ===================================================================
 # To enable SSL, generate a certificate using:

@@ -38,11 +38,11 @@ public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final String password;
 
-    private final String roles;
+    private final String[] roles;
 
     public JWTSecurityConfiguration(@Value("${spring.security.user.name}") String username,
                                     @Value("${spring.security.user.password}") String password,
-                                    @Value("${spring.security.user.roles}") String roles,
+                                    @Value("${spring.security.user.roles}") String[] roles,
                                     AuthenticationManagerBuilder authenticationManagerBuilder,
                                     Http401UnauthorizedEntryPoint authenticationEntryPoint,
                                     TokenProvider tokenProvider) {
