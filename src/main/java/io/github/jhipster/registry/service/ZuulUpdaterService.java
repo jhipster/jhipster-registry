@@ -55,7 +55,7 @@ public class ZuulUpdaterService {
                 String url = instanceInfos.getHomePageUrl();
                 log.debug("Checking instance {} - {} ", instanceId, url);
 
-                ZuulRouteDTO route = new ZuulRouteDTO(instanceId,
+                ZuulRouteDTO route = new ZuulRouteDTO(instanceId, "/" +
                     application.getName().toLowerCase() + "/" + instanceId + "/**",
                     null, url, zuulProperties.isStripPrefix(), zuulProperties.getRetryable(), null,
                     instanceInfos.getStatus().toString());
