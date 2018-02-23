@@ -23,12 +23,11 @@ spring:
     mvc:
         favicon:
             enabled: false
+    security:
+        basic:
+            enabled: false
     thymeleaf:
         mode: XHTML
-
-security:
-    basic:
-        enabled: false
 
 server:
     port: 10344
