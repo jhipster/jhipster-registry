@@ -58,7 +58,6 @@ public class UserJWTControllerTest {
             .andExpect(content().string("{\"id_token\":\"fakeToken\"}"))
             .andExpect(status().isOk());
 
-
         // Authentication exception throws
         Mockito.doThrow(new AuthenticationException(null){}).when(tokenProvider)
             .createToken(Mockito.any(Authentication.class), Mockito.anyBoolean());
@@ -71,7 +70,6 @@ public class UserJWTControllerTest {
             .andReturn();
 
         assertTrue(res.getResponse().getContentAsString().startsWith("{\"AuthenticationException\""));
-
 
         // Bad credentials
         vm.setUsername("badcred");
