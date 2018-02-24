@@ -71,13 +71,6 @@ pre.code-block {
     border-radius: 5px;
 }
 
-.refresh-left-side {
-    .dropdown-menu {
-        left: initial;
-        right: 0;
-    }
-}
-
 /*FIXME this is to support grids in table class; */
 table td[class*=col-], table th[class*=col-] {
     position: static;
