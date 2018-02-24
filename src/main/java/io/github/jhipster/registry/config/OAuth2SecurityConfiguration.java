@@ -1,29 +1,24 @@
 package io.github.jhipster.registry.config;
 
-import java.util.Map;
-import java.util.Optional;
-
+import io.github.jhipster.registry.security.AuthoritiesConstants;
+import io.github.jhipster.registry.security.oauth2.SimpleAuthoritiesExtractor;
+import io.github.jhipster.registry.security.oauth2.SimplePrincipalExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.*;
-import org.springframework.context.annotation.*;
-import org.springframework.http.*;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.web.client.RestTemplate;
-
-import io.github.jhipster.registry.security.AuthoritiesConstants;
-import io.github.jhipster.registry.security.oauth2.SimpleAuthoritiesExtractor;
-import io.github.jhipster.registry.security.oauth2.SimplePrincipalExtractor;
 
 @Configuration
 @EnableResourceServer
@@ -85,34 +80,5 @@ public class OAuth2SecurityConfiguration extends ResourceServerConfigurerAdapter
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
-    }
-
-    @Bean
-    @ConditionalOnProperty("security.oauth2.resource.jwt.key-uri")
-    public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
-        return new JwtTokenStore(jwtAccessTokenConverter);
-    }
-
-    @Bean
-    @ConditionalOnProperty("security.oauth2.resource.jwt.key-uri")
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setVerifierKey(getKeyFromAuthorizationServer());
-        return converter;
-    }
-
-    private String getKeyFromAuthorizationServer() {
-        return Optional.ofNullable(
-            new RestTemplate()
-                .exchange(
-                    resourceServerProperties.getJwt().getKeyUri(),
-                    HttpMethod.GET,
-                    new HttpEntity<Void>(new HttpHeaders()),
-                    Map.class
-                )
-                .getBody()
-                .get("public_key"))
-            .map(publicKey -> String.format("-----BEGIN PUBLIC KEY-----\n%s\n-----END PUBLIC KEY-----", publicKey))
-            .orElse(resourceServerProperties.getJwt().getKeyValue());
     }
 }
