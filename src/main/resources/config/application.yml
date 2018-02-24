@@ -17,8 +17,6 @@
 spring:
     application:
         name: jhipster-registry
-    jackson:
-        serialization.write_dates_as_timestamps: false
     mvc:
         favicon:
             enabled: false
