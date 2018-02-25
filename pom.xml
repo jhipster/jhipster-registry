@@ -74,12 +74,14 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.0-20180219.202458-25</jhipster-dependencies.version>
-        <mapstruct.version>1.2.0.Final</mapstruct.version>
+        <jhipster-dependencies.version>2.0.0-20180224.150007-31</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.0.0.BUILD-SNAPSHOT</spring-boot.version>
+        <spring-boot.version>2.0.0.RC2</spring-boot.version>
+        <spring-cloud-netflix.version>2.0.0.BUILD-SNAPSHOT</spring-cloud-netflix.version>
+        <spring.cloud.version>Finchley.BUILD-SNAPSHOT</spring.cloud.version>
 
+        <mapstruct.version>1.2.0.Final</mapstruct.version>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>

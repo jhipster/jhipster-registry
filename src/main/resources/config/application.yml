@@ -46,10 +46,11 @@ management:
     endpoints:
         web:
             base-path: /management
-            expose: '*'
+            exposure:
+                include: ["configprops", "env", "health", "info", "threaddump"]
     endpoint:
         health:
-            show-details: true
+            show-details: when_authorized
     health:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
