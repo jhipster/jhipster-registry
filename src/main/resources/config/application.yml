@@ -92,6 +92,8 @@ eureka:
         enable-self-preservation: false
     dashboard:
         path: /registry
+    datacenter: JHipster-DataCenter
+    environment: JHipster-Environment
 
 jhipster:
     swagger:
