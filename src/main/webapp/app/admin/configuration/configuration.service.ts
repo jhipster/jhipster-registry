@@ -13,8 +13,7 @@ export class JhiConfigurationService {
     getConfigs(prefix: String = ''): Observable<any> {
         return this.http.get(prefix + 'management/configprops').map((res: Response) => {
             const properties: any[] = [];
-            const propertiesObject = res.json();
-
+            const propertiesObject = this.getConfigPropertiesObjects(res.json());
             for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
                     properties.push(propertiesObject[key]);
@@ -26,6 +25,22 @@ export class JhiConfigurationService {
                     (propertyA.prefix < propertyB.prefix) ? -1 : 1;
             });
         });
+    }
+
+    getConfigPropertiesObjects(res: Object) {
+        // This code is for Spring Boot 2
+        if (res['contexts'] !== undefined) {
+            for (const key in res['contexts']) {
+                // If the key is not bootstrap, it will be the ApplicationContext Id
+                // For default app, it is applicationName
+                // For microservice, it is applicationName-1
+                if (!key.startsWith('bootstrap')) {
+                    return res['contexts'][key]['beans'];
+                }
+            }
+        }
+        // Otherwise, return res.json(), which is for Spring Boot 1
+        return res;
     }
 
     getInstanceConfigs(instance: Route): Observable<any> {
@@ -40,20 +55,28 @@ export class JhiConfigurationService {
             const properties: any = {};
             const propertiesObject = res.json();
 
-            for (const key in propertiesObject) {
-                if (propertiesObject.hasOwnProperty(key)) {
-                    const valsObject = propertiesObject[key];
+            if (propertiesObject['propertySources'] !== undefined) {
+                // This is for Spring Boot 2
+                const propertySources = propertiesObject['propertySources'];
+                for (const propertyObject of propertySources) {
+                    const name = propertyObject['name'];
+                    const detailProperties = propertyObject['properties'];
                     const vals: any[] = [];
-
-                    for (const valKey in valsObject) {
-                        if (valsObject.hasOwnProperty(valKey)) {
-                            vals.push({key: valKey, val: valsObject[valKey]});
+                    for (const keyDetail in detailProperties) {
+                        if (detailProperties.hasOwnProperty(keyDetail)) {
+                            vals.push({key: keyDetail, val: detailProperties[keyDetail]['value']});
                         }
                     }
-                    properties[key] = vals;
+                    properties[name] = vals;
+                }
+            } else {
+                // This is for Spring Boot 1
+                for (const key in propertiesObject) {
+                    if (propertiesObject.hasOwnProperty(key)) {
+                        properties.push(propertiesObject[key]);
+                    }
                 }
             }
-
             return properties;
         });
     }
