@@ -73,7 +73,14 @@ export class JhiConfigurationService {
                 // This is for Spring Boot 1
                 for (const key in propertiesObject) {
                     if (propertiesObject.hasOwnProperty(key)) {
-                        properties.push(propertiesObject[key]);
+                        const valsObject = propertiesObject[key];
+                        const vals: any[] = [];
+                        for (const valKey in valsObject) {
+                            if (valsObject.hasOwnProperty(valKey)) {
+                                vals.push({key: valKey, val: valsObject[valKey]});
+                            }
+                        }
+                        properties[key] = vals;
                     }
                 }
             }
