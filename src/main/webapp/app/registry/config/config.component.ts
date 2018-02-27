@@ -68,7 +68,6 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
         });
 
         this.configService.getConfigAsProperties(this.application, this.profile, this.label).subscribe((response) => {
-            console.log(response);
             this.configAsProperties = response;
 
             const keyValueArray = [];

@@ -32,8 +32,8 @@ security:
             user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
             token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
             prefer-token-info: false
-            jwt:
-                key-uri: http://localhost:9080/auth/realms/jhipster
+            jwk:
+                key-set-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/certs
 
 server:
     session:

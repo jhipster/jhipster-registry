@@ -5,16 +5,8 @@
     </div>
 
     <form #form="ngForm" (ngSubmit)="refresh()">
-<!--        <div class="form-group">
-            <label for="application"><strong>Application</strong></label>
-           <select type="text" name="application" id="application" class="form-control" (click)="refresh()"
-                   required [(ngModel)]="application">
-                <option *ngFor="let app of applicationList" [value]="app">{{app}}</option>
-            </select>
-        </div>-->
-
         <div class="form-group">
-            <label for="profile"><strong>app</strong></label>
+            <label for="profile"><strong>Application</strong></label>
             <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application" required>
         </div>
 

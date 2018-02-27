@@ -27,7 +27,7 @@ export class JhiHealthService {
 
     transformHealthData(data): any {
         const response = [];
-        this.flattenHealthData(response, null, data);
+        this.flattenHealthData(response, null, data.details);
         return response;
     }
 
