@@ -18,8 +18,6 @@
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
 security:
-    basic:
-        enabled: false
     oauth2:
         client:
             access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
@@ -29,6 +27,7 @@ security:
             client-authentication-scheme: form
             scope: openid profile email
         resource:
+            filter-order: 3
             user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
             token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
             prefer-token-info: false
