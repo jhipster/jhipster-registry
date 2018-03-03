@@ -74,12 +74,12 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.0-20180226.130826-32</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.0-20180302.125522-36</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.0.0.RC2</spring-boot.version>
-        <spring-cloud-netflix.version>2.0.0.BUILD-SNAPSHOT</spring-cloud-netflix.version>
-        <spring.cloud.version>Finchley.BUILD-SNAPSHOT</spring.cloud.version>
+        <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
+        <spring-cloud-netflix.version>2.0.0.M7</spring-cloud-netflix.version>
+        <spring.cloud.version>Finchley.M7</spring.cloud.version>
 
         <mapstruct.version>1.2.0.Final</mapstruct.version>
         <!-- Plugin versions -->
@@ -297,10 +297,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-spectator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
