@@ -40,15 +40,22 @@
     "defaults": {
         "styleExt": "scss",
         "prefixInterfaces": false,
-        "inline": {
-            "style": true,
-            "template": false
+        "component" : {
+            "inlineStyle" : true,
+            "inlineTemplate": false,
+            "spec": false
         },
-        "spec": {
-            "component": false,
-            "directive": false,
-            "pipe": false,
-            "service": false
+        "directive" : {
+            "spec": false
+        },
+        "guard" : {
+            "spec": false
+        },
+        "pipe" : {
+            "spec": false
+        },
+        "service" : {
+            "spec": false
         }
     },
     "packageManager": "yarn"

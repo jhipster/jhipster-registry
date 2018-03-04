@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 import { Route } from '../../shared';
@@ -7,13 +7,13 @@ import { Route } from '../../shared';
 @Injectable()
 export class JhiConfigurationService {
 
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
     }
 
     getConfigs(prefix: String = ''): Observable<any> {
-        return this.http.get(prefix + 'management/configprops').map((res: Response) => {
+        return this.http.get(prefix + 'management/configprops', {observe: 'response'}).map((res: HttpResponse<any>) => {
             const properties: any[] = [];
-            const propertiesObject = this.getConfigPropertiesObjects(res.json());
+            const propertiesObject = this.getConfigPropertiesObjects(res.body);
             for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
                     properties.push(propertiesObject[key]);
@@ -51,9 +51,9 @@ export class JhiConfigurationService {
     }
 
     getEnv(prefix: String = ''): Observable<any> {
-        return this.http.get(prefix + 'management/env').map((res: Response) => {
+        return this.http.get(prefix + 'management/env', {observe: 'response'}).map((res: HttpResponse<any>) => {
             const properties: any = {};
-            const propertiesObject = res.json();
+            const propertiesObject = res.body;
 
             if (propertiesObject['propertySources'] !== undefined) {
                 // This is for Spring Boot 2

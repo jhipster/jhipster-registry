@@ -1,12 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgModule, ElementRef, Renderer } from '@angular/core';
-import { MockBackend } from '@angular/http/testing';
-import { Http, BaseRequestOptions } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SessionStorageService } from 'ngx-webstorage';
 import { JhiRefreshService } from '../../../main/webapp/app/shared/refresh/refresh.service';
 import { LoginOAuth2Service } from '../../../main/webapp/app/shared/oauth2/login-oauth2.service';
-import { AuthSessionServerProvider } from '../../../main/webapp/app/shared/auth/auth-session.service';
+import { AuthSessionServerProvider } from '../../../main/webapp/app/core/auth/auth-session.service';
 import { ProfileService } from '../../../main/webapp/app/layouts/profiles/profile.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
@@ -24,13 +23,11 @@ import { MockEventManager } from './helpers/mock-event-manager.service';
         JhiDataUtils,
         JhiDateUtils,
         JhiParseLinks,
-        MockBackend,
         SessionStorageService,
         JhiRefreshService,
         LoginOAuth2Service,
         AuthSessionServerProvider,
         ProfileService,
-        BaseRequestOptions,
         {
             provide: JhiEventManager,
             useClass:  MockEventManager
@@ -74,14 +71,8 @@ import { MockEventManager } from './helpers/mock-event-manager.service';
         {
             provide: NgbModal,
             useValue: null
-        },
-        {
-            provide: Http,
-            useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                return new Http(backendInstance, defaultOptions);
-            },
-            deps: [MockBackend, BaseRequestOptions]
         }
-    ]
+    ],
+    imports: [HttpClientTestingModule]
 })
 export class JHipsterRegistryTestModule {}

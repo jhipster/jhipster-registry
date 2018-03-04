@@ -49,7 +49,7 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
     }
 
     load() {
-        this.profileService.getProfileInfo().subscribe((response) => {
+        this.profileService.getProfileInfo().then((response) => {
             this.activeRegistryProfiles = response.activeProfiles;
             this.isNative = this.activeRegistryProfiles.includes('native');
             this.nativeSearchLocation = response.nativeSearchLocation;
@@ -62,13 +62,13 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
 
     refresh() {
         this.configService.getConfigAsYaml(this.application, this.profile, this.label).subscribe((response) => {
-            this.configAsYaml = response;
+            this.configAsYaml = response.body;
         }, () => {
             this.configAsYaml = '';
         });
 
         this.configService.getConfigAsProperties(this.application, this.profile, this.label).subscribe((response) => {
-            this.configAsProperties = response;
+            this.configAsProperties = response.body;
 
             const keyValueArray = [];
             this.configAsProperties.split('\n').forEach((property) => {
@@ -81,7 +81,7 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
         });
 
         this.configService.getConfigAsJson(this.application, this.profile, this.label).subscribe((response) => {
-            this.configAsJson = response;
+            this.configAsJson = response.body;
         }, () => {
             this.configAsJson = {};
         });

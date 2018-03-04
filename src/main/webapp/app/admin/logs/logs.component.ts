@@ -42,7 +42,7 @@ export class LogsComponent implements OnInit, OnDestroy {
         const log = new Log(name, level);
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
             this.logsService.changeInstanceLevel(this.activeRoute, log).subscribe(() => {
-                this.logsService.findInstanceAll(this.activeRoute).subscribe((loggers) => this.loggers = loggers);
+                this.logsService.findInstanceAll(this.activeRoute).subscribe((response) => this.loggers = response.body);
             });
         }
     }
@@ -50,8 +50,8 @@ export class LogsComponent implements OnInit, OnDestroy {
     displayActiveRouteLogs() {
         this.updatingLogs = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.logsService.findInstanceAll(this.activeRoute).subscribe((loggers) => {
-                this.loggers = loggers;
+            this.logsService.findInstanceAll(this.activeRoute).subscribe((response) => {
+                this.loggers = response.body;
                 this.updatingLogs = false;
             }, (error) => {
                 if (error.status === 503 || error.status === 500 || error.status === 404) {

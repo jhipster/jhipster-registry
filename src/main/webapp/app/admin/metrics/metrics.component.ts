@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -10,7 +10,7 @@ import { JhiRoutesService, Route } from '../../shared';
     selector: 'jhi-metrics',
     templateUrl: './metrics.component.html',
 })
-export class JhiMetricsMonitoringComponent implements OnInit {
+export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy  {
     metrics: any = {};
     cachesStats: any = {};
     servicesStats: any = {};
@@ -98,4 +98,8 @@ export class JhiMetricsMonitoringComponent implements OnInit {
         return input;
     }
 
+    ngOnDestroy() {
+        // prevent memory leak when component destroyed
+        this.subscription.unsubscribe();
+    }
 }

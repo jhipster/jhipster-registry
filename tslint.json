@@ -2,6 +2,9 @@
     "rulesDirectory": [
         "node_modules/codelyzer"
     ],
+    "extends": [
+        "tslint-config-prettier"
+    ],
     "rules": {
         "class-name": true,
         "comment-format": [
@@ -63,6 +66,7 @@
         ],
         "radix": true,
         "semicolon": [
+            true,
             "always"
         ],
         "triple-equals": [
