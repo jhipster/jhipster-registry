@@ -8,9 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
     selector: 'jhi-applications',
     templateUrl: './applications.component.html',
-    styleUrls: [
-        'applications.component.scss'
-    ]
+    styleUrls: ['applications.component.scss']
 })
 export class JhiApplicationsComponent implements OnInit, OnDestroy {
     application: any;
@@ -21,10 +19,7 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
     refreshReloadSubscription: Subscription;
     applicationsServiceSubscription: Subscription;
 
-    constructor(
-        private applicationsService: JhiApplicationsService,
-        private refreshService: JhiRefreshService
-    ) {}
+    constructor(private applicationsService: JhiApplicationsService, private refreshService: JhiRefreshService) {}
 
     ngOnInit() {
         this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
@@ -70,5 +65,4 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
             return 'badge-danger';
         }
     }
-
 }

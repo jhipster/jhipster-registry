@@ -8,9 +8,9 @@ import { JhiRoutesService, Route } from '../../shared';
 
 @Component({
     selector: 'jhi-metrics',
-    templateUrl: './metrics.component.html',
+    templateUrl: './metrics.component.html'
 })
-export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy  {
+export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
     metrics: any = {};
     cachesStats: any = {};
     servicesStats: any = {};
@@ -20,11 +20,7 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy  {
     activeRoute: Route;
     subscription: Subscription;
 
-    constructor(
-        private modalService: NgbModal,
-        private metricsService: JhiMetricsService,
-        private routesService: JhiRoutesService
-    ) {
+    constructor(private modalService: NgbModal, private metricsService: JhiMetricsService, private routesService: JhiRoutesService) {
         this.JCACHE_KEY = 'jcache.statistics';
     }
 
@@ -42,38 +38,41 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy  {
     displayActiveRouteMetrics() {
         this.updatingMetrics = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.metricsService.getInstanceMetrics(this.activeRoute).subscribe((metrics) => {
-                this.metrics = metrics;
-                this.updatingMetrics = false;
-                this.servicesStats = {};
-                this.cachesStats = {};
-                Object.keys(metrics.timers).forEach((key) => {
-                    const value = metrics.timers[key];
-                    if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
-                        this.servicesStats[key] = value;
-                    }
-                });
-                Object.keys(metrics.gauges).forEach((key) => {
-                    if (key.indexOf('jcache.statistics') !== -1) {
-                        const value = metrics.gauges[key].value;
-                        // remove gets or puts
-                        const index = key.lastIndexOf('.');
-                        const newKey = key.substr(0, index);
+            this.metricsService.getInstanceMetrics(this.activeRoute).subscribe(
+                (metrics) => {
+                    this.metrics = metrics;
+                    this.updatingMetrics = false;
+                    this.servicesStats = {};
+                    this.cachesStats = {};
+                    Object.keys(metrics.timers).forEach((key) => {
+                        const value = metrics.timers[key];
+                        if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
+                            this.servicesStats[key] = value;
+                        }
+                    });
+                    Object.keys(metrics.gauges).forEach((key) => {
+                        if (key.indexOf('jcache.statistics') !== -1) {
+                            const value = metrics.gauges[key].value;
+                            // remove gets or puts
+                            const index = key.lastIndexOf('.');
+                            const newKey = key.substr(0, index);
 
-                        // Keep the name of the domain
-                        this.cachesStats[newKey] = {
-                            'name': this.JCACHE_KEY.length,
-                            'value': value
-                        };
-                    }
-                });
-            }, (error) => {
-                if (error.status === 503 || error.status === 500 || error.status === 404) {
-                    if (error.status === 500 || error.status === 404) {
-                        this.routesService.routeDown(this.activeRoute);
+                            // Keep the name of the domain
+                            this.cachesStats[newKey] = {
+                                name: this.JCACHE_KEY.length,
+                                value: value
+                            };
+                        }
+                    });
+                },
+                (error) => {
+                    if (error.status === 503 || error.status === 500 || error.status === 404) {
+                        if (error.status === 500 || error.status === 404) {
+                            this.routesService.routeDown(this.activeRoute);
+                        }
                     }
                 }
-            });
+            );
         } else {
             this.routesService.routeDown(this.activeRoute);
         }
@@ -81,13 +80,16 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy  {
 
     refreshThreadDumpData() {
         this.metricsService.instanceThreadDump(this.activeRoute).subscribe((data) => {
-            const modalRef = this.modalService.open(JhiMetricsMonitoringModalComponent, {size: 'lg'});
+            const modalRef = this.modalService.open(JhiMetricsMonitoringModalComponent, { size: 'lg' });
             modalRef.componentInstance.threadDump = data;
-            modalRef.result.then((result) => {
-                // Left blank intentionally, nothing to do here
-            }, (reason) => {
-                // Left blank intentionally, nothing to do here
-            });
+            modalRef.result.then(
+                (result) => {
+                    // Left blank intentionally, nothing to do here
+                },
+                (reason) => {
+                    // Left blank intentionally, nothing to do here
+                }
+            );
         });
     }
 

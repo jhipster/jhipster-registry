@@ -9,7 +9,7 @@ export const errorRoute: Routes = [
         data: {
             authorities: [],
             pageTitle: 'Error page!'
-        },
+        }
     },
     {
         path: 'accessdenied',
@@ -17,6 +17,6 @@ export const errorRoute: Routes = [
         data: {
             authorities: [],
             pageTitle: 'Error page!'
-        },
+        }
     }
 ];

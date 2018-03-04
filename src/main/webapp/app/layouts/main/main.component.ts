@@ -9,15 +9,10 @@ import { StateStorageService } from '../../shared';
     templateUrl: './main.component.html'
 })
 export class JhiMainComponent implements OnInit {
-
-    constructor(
-        private titleService: Title,
-        private router: Router,
-        private $storageService: StateStorageService,
-    ) {}
+    constructor(private titleService: Title, private router: Router, private $storageService: StateStorageService) {}
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
-        let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : 'jHipsterRegistryApp';
+        let title: string = routeSnapshot.data && routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : 'jHipsterRegistryApp';
         if (routeSnapshot.firstChild) {
             title = this.getPageTitle(routeSnapshot.firstChild) || title;
         }
@@ -39,8 +34,8 @@ export class JhiMainComponent implements OnInit {
                     destinationData = destinationEvent.data;
                     destinationName = destinationEvent.url[0].path;
                 }
-                const from = {name: this.router.url.slice(1)};
-                const destination = {name: destinationName, data: destinationData};
+                const from = { name: this.router.url.slice(1) };
+                const destination = { name: destinationName, data: destinationData };
                 this.$storageService.storeDestinationState(destination, params, from);
             }
         });

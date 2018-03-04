@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 
 export class NotificationInterceptor implements HttpInterceptor {
-
     private alertService: JhiAlertService;
 
     // tslint:disable-next-line: no-unused-variable

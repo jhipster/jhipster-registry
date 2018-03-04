@@ -21,10 +21,7 @@ import {
 } from './';
 
 @NgModule({
-    imports: [
-        JHipsterRegistrySharedModule,
-        RouterModule.forChild(adminState)
-    ],
+    imports: [JHipsterRegistrySharedModule, RouterModule.forChild(adminState)],
     declarations: [
         LogsComponent,
         JhiConfigurationComponent,
@@ -35,17 +32,8 @@ import {
         JhiMetricsMonitoringModalComponent,
         JhiLogfileComponent
     ],
-    entryComponents: [
-        JhiHealthModalComponent,
-        JhiMetricsMonitoringModalComponent,
-    ],
-    providers: [
-        JhiConfigurationService,
-        JhiHealthService,
-        JhiMetricsService,
-        LogsService,
-        JhiLogfileService
-    ],
+    entryComponents: [JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
+    providers: [JhiConfigurationService, JhiHealthService, JhiMetricsService, LogsService, JhiLogfileService],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryAdminModule {}

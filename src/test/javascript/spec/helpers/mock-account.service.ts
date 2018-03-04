@@ -3,7 +3,6 @@ import { AccountService } from '../../../../main/webapp/app/core/auth/account.se
 import Spy = jasmine.Spy;
 
 export class MockAccountService extends SpyObject {
-
     getSpy: Spy;
     saveSpy: Spy;
     fakeResponse: any;

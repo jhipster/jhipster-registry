@@ -5,25 +5,22 @@ import { JhiHealthService } from '../../../../../../main/webapp/app/admin/health
 import { JhiRoutesService } from '../../../../../../main/webapp/app/shared/routes/routes.service';
 
 describe('Component Tests', () => {
-
     describe('JhiHealthCheckComponent', () => {
-
         let comp: JhiHealthCheckComponent;
         let fixture: ComponentFixture<JhiHealthCheckComponent>;
         let service: JhiHealthService;
 
-        beforeEach(async(() => {
-            TestBed.configureTestingModule({
-                imports: [JHipsterRegistryTestModule],
-                declarations: [JhiHealthCheckComponent],
-                providers: [
-                    JhiHealthService,
-                    JhiRoutesService
-                ]
+        beforeEach(
+            async(() => {
+                TestBed.configureTestingModule({
+                    imports: [JHipsterRegistryTestModule],
+                    declarations: [JhiHealthCheckComponent],
+                    providers: [JhiHealthService, JhiRoutesService]
+                })
+                    .overrideTemplate(JhiHealthCheckComponent, '')
+                    .compileComponents();
             })
-            .overrideTemplate(JhiHealthCheckComponent, '')
-            .compileComponents();
-        }));
+        );
 
         beforeEach(() => {
             fixture = TestBed.createComponent(JhiHealthCheckComponent);
@@ -60,30 +57,30 @@ describe('Component Tests', () => {
 
         it('should flatten health data with no subsystems', () => {
             const data = {
-                'status': 'UP',
-                'db': {
-                    'status': 'UP',
-                    'database': 'H2',
-                    'hello': '1'
+                status: 'UP',
+                db: {
+                    status: 'UP',
+                    database: 'H2',
+                    hello: '1'
                 },
-                'mail': {
-                    'status': 'UP',
-                    'error': 'mail.a.b.c'
+                mail: {
+                    status: 'UP',
+                    error: 'mail.a.b.c'
                 }
             };
             const expected = [
                 {
-                    'name': 'db',
-                    'status': 'UP',
-                    'details': {
-                        'database': 'H2',
-                        'hello': '1'
+                    name: 'db',
+                    status: 'UP',
+                    details: {
+                        database: 'H2',
+                        hello: '1'
                     }
                 },
                 {
-                    'name': 'mail',
-                    'error': 'mail.a.b.c',
-                    'status': 'UP'
+                    name: 'mail',
+                    error: 'mail.a.b.c',
+                    status: 'UP'
                 }
             ];
             expect(service.transformHealthData(data)).toEqual(expected);
@@ -91,56 +88,56 @@ describe('Component Tests', () => {
 
         it('should flatten health data with subsystems at level 1, main system has no additional information', () => {
             const data = {
-                'status': 'UP',
-                'db': {
-                    'status': 'UP',
-                    'database': 'H2',
-                    'hello': '1'
+                status: 'UP',
+                db: {
+                    status: 'UP',
+                    database: 'H2',
+                    hello: '1'
                 },
-                'mail': {
-                    'status': 'UP',
-                    'error': 'mail.a.b.c'
+                mail: {
+                    status: 'UP',
+                    error: 'mail.a.b.c'
                 },
-                'system': {
-                    'status': 'DOWN',
-                    'subsystem1': {
-                        'status': 'UP',
-                        'property1': 'system.subsystem1.property1'
+                system: {
+                    status: 'DOWN',
+                    subsystem1: {
+                        status: 'UP',
+                        property1: 'system.subsystem1.property1'
                     },
-                    'subsystem2': {
-                        'status': 'DOWN',
-                        'error': 'system.subsystem1.error',
-                        'property2': 'system.subsystem2.property2'
+                    subsystem2: {
+                        status: 'DOWN',
+                        error: 'system.subsystem1.error',
+                        property2: 'system.subsystem2.property2'
                     }
                 }
             };
             const expected = [
                 {
-                    'name': 'db',
-                    'status': 'UP',
-                    'details': {
-                        'database': 'H2',
-                        'hello': '1'
+                    name: 'db',
+                    status: 'UP',
+                    details: {
+                        database: 'H2',
+                        hello: '1'
                     }
                 },
                 {
-                    'name': 'mail',
-                    'error': 'mail.a.b.c',
-                    'status': 'UP'
+                    name: 'mail',
+                    error: 'mail.a.b.c',
+                    status: 'UP'
                 },
                 {
-                    'name': 'system.subsystem1',
-                    'status': 'UP',
-                    'details': {
-                        'property1': 'system.subsystem1.property1'
+                    name: 'system.subsystem1',
+                    status: 'UP',
+                    details: {
+                        property1: 'system.subsystem1.property1'
                     }
                 },
                 {
-                    'name': 'system.subsystem2',
-                    'error': 'system.subsystem1.error',
-                    'status': 'DOWN',
-                    'details': {
-                        'property2': 'system.subsystem2.property2'
+                    name: 'system.subsystem2',
+                    error: 'system.subsystem1.error',
+                    status: 'DOWN',
+                    details: {
+                        property2: 'system.subsystem2.property2'
                     }
                 }
             ];
@@ -149,64 +146,64 @@ describe('Component Tests', () => {
 
         it('should flatten health data with subsystems at level 1, main system has additional information', () => {
             const data = {
-                'status': 'UP',
-                'db': {
-                    'status': 'UP',
-                    'database': 'H2',
-                    'hello': '1'
+                status: 'UP',
+                db: {
+                    status: 'UP',
+                    database: 'H2',
+                    hello: '1'
                 },
-                'mail': {
-                    'status': 'UP',
-                    'error': 'mail.a.b.c'
+                mail: {
+                    status: 'UP',
+                    error: 'mail.a.b.c'
                 },
-                'system': {
-                    'status': 'DOWN',
-                    'property1': 'system.property1',
-                    'subsystem1': {
-                        'status': 'UP',
-                        'property1': 'system.subsystem1.property1'
+                system: {
+                    status: 'DOWN',
+                    property1: 'system.property1',
+                    subsystem1: {
+                        status: 'UP',
+                        property1: 'system.subsystem1.property1'
                     },
-                    'subsystem2': {
-                        'status': 'DOWN',
-                        'error': 'system.subsystem1.error',
-                        'property2': 'system.subsystem2.property2'
+                    subsystem2: {
+                        status: 'DOWN',
+                        error: 'system.subsystem1.error',
+                        property2: 'system.subsystem2.property2'
                     }
                 }
             };
             const expected = [
                 {
-                    'name': 'db',
-                    'status': 'UP',
-                    'details': {
-                        'database': 'H2',
-                        'hello': '1'
+                    name: 'db',
+                    status: 'UP',
+                    details: {
+                        database: 'H2',
+                        hello: '1'
                     }
                 },
                 {
-                    'name': 'mail',
-                    'error': 'mail.a.b.c',
-                    'status': 'UP'
+                    name: 'mail',
+                    error: 'mail.a.b.c',
+                    status: 'UP'
                 },
                 {
-                    'name': 'system',
-                    'status': 'DOWN',
-                    'details': {
-                        'property1': 'system.property1'
+                    name: 'system',
+                    status: 'DOWN',
+                    details: {
+                        property1: 'system.property1'
                     }
                 },
                 {
-                    'name': 'system.subsystem1',
-                    'status': 'UP',
-                    'details': {
-                        'property1': 'system.subsystem1.property1'
+                    name: 'system.subsystem1',
+                    status: 'UP',
+                    details: {
+                        property1: 'system.subsystem1.property1'
                     }
                 },
                 {
-                    'name': 'system.subsystem2',
-                    'error': 'system.subsystem1.error',
-                    'status': 'DOWN',
-                    'details': {
-                        'property2': 'system.subsystem2.property2'
+                    name: 'system.subsystem2',
+                    error: 'system.subsystem1.error',
+                    status: 'DOWN',
+                    details: {
+                        property2: 'system.subsystem2.property2'
                     }
                 }
             ];
@@ -215,62 +212,62 @@ describe('Component Tests', () => {
 
         it('should flatten health data with subsystems at level 1, main system has additional error', () => {
             const data = {
-                'status': 'UP',
-                'db': {
-                    'status': 'UP',
-                    'database': 'H2',
-                    'hello': '1'
+                status: 'UP',
+                db: {
+                    status: 'UP',
+                    database: 'H2',
+                    hello: '1'
                 },
-                'mail': {
-                    'status': 'UP',
-                    'error': 'mail.a.b.c'
+                mail: {
+                    status: 'UP',
+                    error: 'mail.a.b.c'
                 },
-                'system': {
-                    'status': 'DOWN',
-                    'error': 'show me',
-                    'subsystem1': {
-                        'status': 'UP',
-                        'property1': 'system.subsystem1.property1'
+                system: {
+                    status: 'DOWN',
+                    error: 'show me',
+                    subsystem1: {
+                        status: 'UP',
+                        property1: 'system.subsystem1.property1'
                     },
-                    'subsystem2': {
-                        'status': 'DOWN',
-                        'error': 'system.subsystem1.error',
-                        'property2': 'system.subsystem2.property2'
+                    subsystem2: {
+                        status: 'DOWN',
+                        error: 'system.subsystem1.error',
+                        property2: 'system.subsystem2.property2'
                     }
                 }
             };
             const expected = [
                 {
-                    'name': 'db',
-                    'status': 'UP',
-                    'details': {
-                        'database': 'H2',
-                        'hello': '1'
+                    name: 'db',
+                    status: 'UP',
+                    details: {
+                        database: 'H2',
+                        hello: '1'
                     }
                 },
                 {
-                    'name': 'mail',
-                    'error': 'mail.a.b.c',
-                    'status': 'UP'
+                    name: 'mail',
+                    error: 'mail.a.b.c',
+                    status: 'UP'
                 },
                 {
-                    'name': 'system',
-                    'error': 'show me',
-                    'status': 'DOWN'
+                    name: 'system',
+                    error: 'show me',
+                    status: 'DOWN'
                 },
                 {
-                    'name': 'system.subsystem1',
-                    'status': 'UP',
-                    'details': {
-                        'property1': 'system.subsystem1.property1'
+                    name: 'system.subsystem1',
+                    status: 'UP',
+                    details: {
+                        property1: 'system.subsystem1.property1'
                     }
                 },
                 {
-                    'name': 'system.subsystem2',
-                    'error': 'system.subsystem1.error',
-                    'status': 'DOWN',
-                    'details': {
-                        'property2': 'system.subsystem2.property2'
+                    name: 'system.subsystem2',
+                    error: 'system.subsystem1.error',
+                    status: 'DOWN',
+                    details: {
+                        property2: 'system.subsystem2.property2'
                     }
                 }
             ];

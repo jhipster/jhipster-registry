@@ -101,7 +101,12 @@
   "engines": {
     "node": ">=8.9.0"
   },
+  "lint-staged": {
+    "*.ts": ["prettier --write", "git add"]
+  },
   "scripts": {
+    "precommit": "lint-staged",
+    "prettier:format":"yarn prettier --write **/*.ts",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "yarn run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",

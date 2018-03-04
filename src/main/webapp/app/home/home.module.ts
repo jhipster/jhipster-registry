@@ -8,19 +8,10 @@ import { EurekaStatusService } from './eureka.status.service';
 import { JhiLoginModalComponent } from '../core/login/login.component';
 
 @NgModule({
-    imports: [
-        JHipsterRegistrySharedModule,
-        RouterModule.forRoot([ HOME_ROUTE ], { useHash: true })
-    ],
-    declarations: [
-        HomeComponent,
-    ],
-    entryComponents: [
-        JhiLoginModalComponent
-    ],
-    providers: [
-        EurekaStatusService
-    ],
+    imports: [JHipsterRegistrySharedModule, RouterModule.forRoot([HOME_ROUTE], { useHash: true })],
+    declarations: [HomeComponent],
+    entryComponents: [JhiLoginModalComponent],
+    providers: [EurekaStatusService],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryHomeModule {}

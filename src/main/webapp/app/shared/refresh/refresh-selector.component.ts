@@ -7,20 +7,15 @@ import { JhiRefreshService } from './refresh.service';
 @Component({
     selector: 'jhi-refresh-selector',
     templateUrl: './refresh-selector.component.html',
-    styleUrls: [
-        'refresh-selector.component.scss'
-    ]
+    styleUrls: ['refresh-selector.component.scss']
 })
 export class JhiRefreshSelectorComponent implements OnInit, OnDestroy {
-
     activeRefreshTime: number;
     refreshTimes: number[];
     refreshTimer: Subscription;
     refreshChangedSubscription: Subscription;
 
-    constructor(
-        private refreshService: JhiRefreshService,
-    ) {
+    constructor(private refreshService: JhiRefreshService) {
         this.refreshTimes = [0, 5, 10, 30, 60, 300];
         this.activeRefreshTime = this.refreshTimes[0];
     }
@@ -94,5 +89,4 @@ export class JhiRefreshSelectorComponent implements OnInit, OnDestroy {
         }
         return this.activeRefreshTime + ' sec.';
     }
-
 }

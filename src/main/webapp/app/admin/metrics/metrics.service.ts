@@ -7,7 +7,6 @@ import { SERVER_API_URL } from 'app/app.constants';
 
 @Injectable()
 export class JhiMetricsService {
-
     constructor(private http: HttpClient) {}
 
     // get the Registry's metrics
@@ -33,5 +32,4 @@ export class JhiMetricsService {
         }
         return this.threadDump();
     }
-
 }

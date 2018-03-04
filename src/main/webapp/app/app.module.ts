@@ -18,32 +18,19 @@ import { JHipsterRegistryModule } from './registry/registry.module';
 
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
-import {
-    JhiMainComponent,
-    NavbarComponent,
-    FooterComponent,
-    ProfileService,
-    PageRibbonComponent,
-    ErrorComponent
-} from './layouts';
+import { JhiMainComponent, NavbarComponent, FooterComponent, ProfileService, PageRibbonComponent, ErrorComponent } from './layouts';
 
 @NgModule({
     imports: [
         BrowserModule,
         JHipsterRegistryAppRoutingModule,
-        Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
+        Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
         JHipsterRegistrySharedModule,
         JHipsterRegistryHomeModule,
         JHipsterRegistryAdminModule,
         JHipsterRegistryModule
     ],
-    declarations: [
-        JhiMainComponent,
-        NavbarComponent,
-        ErrorComponent,
-        PageRibbonComponent,
-        FooterComponent
-    ],
+    declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
     providers: [
         ProfileService,
         PaginationConfig,
@@ -73,6 +60,6 @@ import {
             deps: [Injector]
         }
     ],
-    bootstrap: [ JhiMainComponent ]
+    bootstrap: [JhiMainComponent]
 })
 export class JHipsterRegistryAppModule {}

@@ -6,16 +6,15 @@ import { ProfileInfo } from './profile-info.model';
 
 @Injectable()
 export class ProfileService {
-
     private profileInfoUrl = SERVER_API_URL + 'api/profile-info';
     private profileInfo: Promise<ProfileInfo>;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
     getProfileInfo(): Promise<ProfileInfo> {
         if (!this.profileInfo) {
             this.profileInfo = this.http
-                .get<ProfileInfo>(this.profileInfoUrl, {observe: 'response'})
+                .get<ProfileInfo>(this.profileInfoUrl, { observe: 'response' })
                 .map((res: HttpResponse<any>) => {
                     const data = res.body;
                     const pi = new ProfileInfo();
