@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-
 import { JhiRoutesService } from './routes.service';
 import { Route } from './route.model';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
-import { JhiRefreshService } from '../refresh/refresh.service';
+import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
 
 @Component({
     selector: 'jhi-route-selector',

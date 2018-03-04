@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { JhiConfigurationService } from './configuration.service';
-import { JhiRoutesService, Route } from '../../shared';
+import { JhiRoutesService, Route } from 'app/shared';
 
 @Component({
     selector: 'jhi-configuration',

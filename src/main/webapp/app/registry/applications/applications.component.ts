@@ -2,7 +2,7 @@
 // TODO lint disabled as the filter pipe used in template seems to trigger this
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JhiApplicationsService } from './applications.service';
-import { JhiRefreshService } from '../../shared/refresh/refresh.service';
+import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({

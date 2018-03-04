@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { JhiHistoryService } from './history.service';
-import { JhiRefreshService } from '../../shared/refresh/refresh.service';
+import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({

@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Log } from './log.model';
 import { LogsService } from './logs.service';
 
-import { JhiRoutesService, Route } from '../../shared';
+import { JhiRoutesService, Route } from 'app/shared';
 
 @Component({
     selector: 'jhi-logs',

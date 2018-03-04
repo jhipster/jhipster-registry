@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JhiConfigService } from './config.service';
-import { ProfileService } from '../../layouts/profiles/profile.service';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { JhiApplicationsService } from '../';
-import { JhiRefreshService } from '../../shared/refresh/refresh.service';
+import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({

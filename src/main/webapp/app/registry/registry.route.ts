@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
-
 import { applicationsRoute, configRoute, encryptionRoute, historyRoute, replicasRoute, sshRoute } from './';
-
-import { UserRouteAccessService } from '../shared';
+import { UserRouteAccessService } from 'app/shared';
 
 const REGISTRY_ROUTES = [applicationsRoute, configRoute, encryptionRoute, historyRoute, replicasRoute, sshRoute];
 

@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { ProfileService } from '../profiles/profile.service';
-import { Principal, LoginModalService, LoginService } from '../../shared';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { Principal, LoginModalService, LoginService } from 'app/shared';
 
-import { VERSION } from '../../app.constants';
+import { VERSION } from 'app/app.constants';
 
 @Component({
     selector: 'jhi-navbar',
@@ -16,7 +16,6 @@ import { VERSION } from '../../app.constants';
 export class NavbarComponent implements OnInit {
     inProduction: boolean;
     isNavbarCollapsed: boolean;
-    languages: any[];
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
     version: string;

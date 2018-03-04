@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized } from '@angular/router';
 
 import { Title } from '@angular/platform-browser';
-import { StateStorageService } from '../../shared';
+import { StateStorageService } from 'app/shared';
 
 @Component({
     selector: 'jhi-main',
