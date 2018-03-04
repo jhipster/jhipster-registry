@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Principal } from '../auth/principal.service';
-import { AuthSessionServerProvider } from '../auth/auth-session.service';
+import { Principal } from '../../core/auth/principal.service';
+import { AuthSessionServerProvider } from '../../core/auth/auth-session.service';
 
 @Injectable()
 export class LoginOAuth2Service {

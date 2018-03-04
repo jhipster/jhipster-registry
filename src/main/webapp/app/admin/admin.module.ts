@@ -23,7 +23,7 @@ import {
 @NgModule({
     imports: [
         JHipsterRegistrySharedModule,
-        RouterModule.forRoot(adminState, { useHash: true })
+        RouterModule.forChild(adminState)
     ],
     declarations: [
         LogsComponent,

@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     login() {
-        this.profileService.getProfileInfo().subscribe((profileInfo) => {
+        this.profileService.getProfileInfo().then((profileInfo) => {
             if (profileInfo.activeProfiles.indexOf('oauth2') > -1) {
                 this.loginOAuth2Service.login();
             } else {

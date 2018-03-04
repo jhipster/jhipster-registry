@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class JhiSSHService {
 
-    constructor(private http: Http) {}
+    constructor(private http: HttpClient) {}
 
     getSshPublicKey(): Observable<any> {
-        return this.http.get('api/ssh/public_key').map((response: Response) => {
-            return response.text();
+        return this.http.get('api/ssh/public_key').map((response: HttpResponse<any>) => {
+            return response.body;
         });
     }
 }

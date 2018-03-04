@@ -54,7 +54,7 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
 
     beforeChange($event: NgbTabChangeEvent) {
         this.activate($event.nextId);
-    };
+    }
 
     private sortItems(items: any[]) {
         this.items = items.sort((a, b) => {
