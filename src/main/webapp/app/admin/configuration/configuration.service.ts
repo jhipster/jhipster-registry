@@ -6,12 +6,10 @@ import { Route } from '../../shared';
 
 @Injectable()
 export class JhiConfigurationService {
-
-    constructor(private http: HttpClient) {
-    }
+    constructor(private http: HttpClient) {}
 
     getConfigs(prefix: String = ''): Observable<any> {
-        return this.http.get(prefix + 'management/configprops', {observe: 'response'}).map((res: HttpResponse<any>) => {
+        return this.http.get(prefix + 'management/configprops', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any[] = [];
             const propertiesObject = this.getConfigPropertiesObjects(res.body);
             for (const key in propertiesObject) {
@@ -21,8 +19,7 @@ export class JhiConfigurationService {
             }
 
             return properties.sort((propertyA, propertyB) => {
-                return (propertyA.prefix === propertyB.prefix) ? 0 :
-                    (propertyA.prefix < propertyB.prefix) ? -1 : 1;
+                return propertyA.prefix === propertyB.prefix ? 0 : propertyA.prefix < propertyB.prefix ? -1 : 1;
             });
         });
     }
@@ -51,7 +48,7 @@ export class JhiConfigurationService {
     }
 
     getEnv(prefix: String = ''): Observable<any> {
-        return this.http.get(prefix + 'management/env', {observe: 'response'}).map((res: HttpResponse<any>) => {
+        return this.http.get(prefix + 'management/env', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any = {};
             const propertiesObject = res.body;
 
@@ -64,7 +61,7 @@ export class JhiConfigurationService {
                     const vals: any[] = [];
                     for (const keyDetail in detailProperties) {
                         if (detailProperties.hasOwnProperty(keyDetail)) {
-                            vals.push({key: keyDetail, val: detailProperties[keyDetail]['value']});
+                            vals.push({ key: keyDetail, val: detailProperties[keyDetail]['value'] });
                         }
                     }
                     properties[name] = vals;
@@ -77,7 +74,7 @@ export class JhiConfigurationService {
                         const vals: any[] = [];
                         for (const valKey in valsObject) {
                             if (valsObject.hasOwnProperty(valKey)) {
-                                vals.push({key: valKey, val: valsObject[valKey]});
+                                vals.push({ key: valKey, val: valsObject[valKey] });
                             }
                         }
                         properties[key] = vals;

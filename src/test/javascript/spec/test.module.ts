@@ -30,7 +30,7 @@ import { MockEventManager } from './helpers/mock-event-manager.service';
         ProfileService,
         {
             provide: JhiEventManager,
-            useClass:  MockEventManager
+            useClass: MockEventManager
         },
         {
             provide: NgbActiveModal,
@@ -38,7 +38,7 @@ import { MockEventManager } from './helpers/mock-event-manager.service';
         },
         {
             provide: ActivatedRoute,
-            useValue: new MockActivatedRoute({id: 123})
+            useValue: new MockActivatedRoute({ id: 123 })
         },
         {
             provide: Router,

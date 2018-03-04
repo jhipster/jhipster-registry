@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class JhiHistoryService {
-
     constructor(private http: HttpClient) {}
 
     findAll(): Observable<any> {

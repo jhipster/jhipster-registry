@@ -5,8 +5,7 @@ import { Route } from '../../shared';
 
 @Injectable()
 export class JhiLogfileService {
-
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
     // get the Registry's logfile
     getLogfile(): Observable<any> {

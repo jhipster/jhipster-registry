@@ -15,10 +15,7 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
 
     refreshReloadSubscription: Subscription;
 
-    constructor(
-        private historyService: JhiHistoryService,
-        private refreshService: JhiRefreshService
-    ) {}
+    constructor(private historyService: JhiHistoryService, private refreshService: JhiRefreshService) {}
 
     ngOnInit() {
         this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
@@ -46,7 +43,7 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
         const obj = this.data ? this.data[key] : null;
         if (obj) {
             for (const k of Object.keys(obj)) {
-                this.items.push({key: k, value: obj[k]});
+                this.items.push({ key: k, value: obj[k] });
             }
         }
         this.items = this.sortItems(this.items);
@@ -68,5 +65,4 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
         });
         return items;
     }
-
 }

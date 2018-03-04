@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class JhiConfigService {
-
     constructor(private http: HttpClient) {}
 
     getConfigAsYaml(application: string, profile: string, label: string): Observable<any> {

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class JhiSSHService {
-
     constructor(private http: HttpClient) {}
 
     getSshPublicKey(): Observable<any> {

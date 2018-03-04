@@ -18,27 +18,31 @@ export class JhiEncryptionComponent implements OnInit, OnDestroy {
         this.result = '';
     }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
-    ngOnDestroy() {
-    }
+    ngOnDestroy() {}
 
     encrypt() {
-        this.encryptionService.encrypt(this.textToEncrypt).subscribe((response) => {
-            this.result = response;
-            this.encryptedText = response;
-        }, () => {
-            this.result = '';
-        });
+        this.encryptionService.encrypt(this.textToEncrypt).subscribe(
+            (response) => {
+                this.result = response;
+                this.encryptedText = response;
+            },
+            () => {
+                this.result = '';
+            }
+        );
     }
 
     decrypt() {
-        this.encryptionService.decrypt(this.encryptedText).subscribe((response) => {
-            this.result = response;
-            this.textToEncrypt = response;
-        }, () => {
-            this.result = '';
-        });
+        this.encryptionService.decrypt(this.encryptedText).subscribe(
+            (response) => {
+                this.result = response;
+                this.textToEncrypt = response;
+            },
+            () => {
+                this.result = '';
+            }
+        );
     }
 }

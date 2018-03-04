@@ -7,19 +7,7 @@ import { NgJhipsterModule } from 'ng-jhipster';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
-    imports: [
-        NgbModule.forRoot(),
-        NgJhipsterModule.forRoot({
-        }),
-        InfiniteScrollModule
-    ],
-    exports: [
-        FormsModule,
-        HttpClientModule,
-        CommonModule,
-        NgbModule,
-        NgJhipsterModule,
-        InfiniteScrollModule
-    ]
+    imports: [NgbModule.forRoot(), NgJhipsterModule.forRoot({}), InfiniteScrollModule],
+    exports: [FormsModule, HttpClientModule, CommonModule, NgbModule, NgJhipsterModule, InfiniteScrollModule]
 })
 export class JHipsterRegistrySharedLibsModule {}

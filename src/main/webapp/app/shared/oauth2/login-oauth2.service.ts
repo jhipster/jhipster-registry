@@ -5,14 +5,10 @@ import { AuthSessionServerProvider } from '../../core/auth/auth-session.service'
 
 @Injectable()
 export class LoginOAuth2Service {
-
-    constructor(
-        private principal: Principal,
-        private authServerProvider: AuthSessionServerProvider
-    ) {}
+    constructor(private principal: Principal, private authServerProvider: AuthSessionServerProvider) {}
 
     login() {
-        let port = (location.port ? ':' + location.port : '');
+        let port = location.port ? ':' + location.port : '';
         if (port === ':9000') {
             port = ':8761';
         }

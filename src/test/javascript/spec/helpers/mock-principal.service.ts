@@ -3,7 +3,6 @@ import { Principal } from '../../../../main/webapp/app/core/auth/principal.servi
 import Spy = jasmine.Spy;
 
 export class MockPrincipal extends SpyObject {
-
     identitySpy: Spy;
     fakeResponse: any;
 

@@ -26,10 +26,11 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
 
     refreshReloadSubscription: Subscription;
 
-    constructor(private configService: JhiConfigService,
-                private profileService: ProfileService,
-                private applicationsService: JhiApplicationsService,
-                private refreshService: JhiRefreshService
+    constructor(
+        private configService: JhiConfigService,
+        private profileService: ProfileService,
+        private applicationsService: JhiApplicationsService,
+        private refreshService: JhiRefreshService
     ) {
         this.application = 'application';
         this.profile = 'prod';
@@ -61,30 +62,39 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
     }
 
     refresh() {
-        this.configService.getConfigAsYaml(this.application, this.profile, this.label).subscribe((response) => {
-            this.configAsYaml = response;
-        }, () => {
-            this.configAsYaml = '';
-        });
+        this.configService.getConfigAsYaml(this.application, this.profile, this.label).subscribe(
+            (response) => {
+                this.configAsYaml = response;
+            },
+            () => {
+                this.configAsYaml = '';
+            }
+        );
 
-        this.configService.getConfigAsProperties(this.application, this.profile, this.label).subscribe((response) => {
-            this.configAsProperties = response;
+        this.configService.getConfigAsProperties(this.application, this.profile, this.label).subscribe(
+            (response) => {
+                this.configAsProperties = response;
 
-            const keyValueArray = [];
-            this.configAsProperties.split('\n').forEach((property) => {
-                const keyValueSplit = property.split(': ');
-                keyValueArray.push({key: keyValueSplit[0], value: keyValueSplit[1]});
-            });
-            this.configAsKeyValuePairs = keyValueArray;
-        }, () => {
-            this.configAsProperties = '';
-        });
+                const keyValueArray = [];
+                this.configAsProperties.split('\n').forEach((property) => {
+                    const keyValueSplit = property.split(': ');
+                    keyValueArray.push({ key: keyValueSplit[0], value: keyValueSplit[1] });
+                });
+                this.configAsKeyValuePairs = keyValueArray;
+            },
+            () => {
+                this.configAsProperties = '';
+            }
+        );
 
-        this.configService.getConfigAsJson(this.application, this.profile, this.label).subscribe((response) => {
-            this.configAsJson = response;
-        }, () => {
-            this.configAsJson = {};
-        });
+        this.configService.getConfigAsJson(this.application, this.profile, this.label).subscribe(
+            (response) => {
+                this.configAsJson = response;
+            },
+            () => {
+                this.configAsJson = {};
+            }
+        );
 
         this.applicationsService.findAll().subscribe((data) => {
             if (data && data.applications) {

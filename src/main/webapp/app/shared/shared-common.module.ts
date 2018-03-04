@@ -13,22 +13,14 @@ import {
 } from './';
 
 @NgModule({
-    imports: [
-        JHipsterRegistrySharedLibsModule
-    ],
-    declarations: [
-        JhiAlertComponent,
-        JhiAlertErrorComponent,
-        JhiRouteSelectorComponent,
-        JhiRefreshSelectorComponent,
-        GroupByPipe
-    ],
+    imports: [JHipsterRegistrySharedLibsModule],
+    declarations: [JhiAlertComponent, JhiAlertErrorComponent, JhiRouteSelectorComponent, JhiRefreshSelectorComponent, GroupByPipe],
     providers: [
         Title,
         {
             provide: LOCALE_ID,
             useValue: 'en'
-        },
+        }
     ],
     exports: [
         JHipsterRegistrySharedLibsModule,

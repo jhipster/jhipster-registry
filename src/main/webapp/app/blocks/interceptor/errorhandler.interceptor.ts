@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 
 export class ErrorHandlerInterceptor implements HttpInterceptor {
-
     constructor(private eventManager: JhiEventManager) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

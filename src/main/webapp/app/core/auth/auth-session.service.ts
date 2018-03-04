@@ -4,16 +4,18 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthSessionServerProvider {
-
-    constructor(
-        private http: HttpClient
-    ) {}
+    constructor(private http: HttpClient) {}
 
     login(credentials): Observable<any> {
-        const data = 'j_username=' + encodeURIComponent(credentials.username) +
-            '&j_password=' + encodeURIComponent(credentials.password) +
-            '&remember-me=' + credentials.rememberMe + '&submit=Login';
-        const headers = new HttpHeaders ({
+        const data =
+            'j_username=' +
+            encodeURIComponent(credentials.username) +
+            '&j_password=' +
+            encodeURIComponent(credentials.password) +
+            '&remember-me=' +
+            credentials.rememberMe +
+            '&submit=Login';
+        const headers = new HttpHeaders({
             'Content-Type': 'application/x-www-form-urlencoded'
         });
 

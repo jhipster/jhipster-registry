@@ -5,7 +5,6 @@ import { Route } from '../../shared';
 
 @Injectable()
 export class JhiHealthService {
-
     separator: string;
 
     constructor(private http: HttpClient) {
@@ -20,7 +19,7 @@ export class JhiHealthService {
     // get the instance's health
     checkInstanceHealth(instance: Route): Observable<any> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
-            return this.http.get((instance.prefix + '/management/health'));
+            return this.http.get(instance.prefix + '/management/health');
         }
         return this.checkHealth();
     }
@@ -107,7 +106,7 @@ export class JhiHealthService {
         let result;
         if (path && name) {
             result = path + this.separator + name;
-        }  else if (path) {
+        } else if (path) {
             result = path;
         } else if (name) {
             result = name;

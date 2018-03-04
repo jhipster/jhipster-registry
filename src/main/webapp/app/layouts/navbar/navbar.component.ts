@@ -11,12 +11,9 @@ import { VERSION } from '../../app.constants';
 @Component({
     selector: 'jhi-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: [
-        'navbar.scss'
-    ]
+    styleUrls: ['navbar.scss']
 })
 export class NavbarComponent implements OnInit {
-
     inProduction: boolean;
     isNavbarCollapsed: boolean;
     languages: any[];

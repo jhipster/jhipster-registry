@@ -22,14 +22,8 @@ import {
 } from './';
 
 @NgModule({
-    imports: [
-        JHipsterRegistrySharedLibsModule,
-        JHipsterRegistrySharedCommonModule
-    ],
-    declarations: [
-        JhiLoginModalComponent,
-        HasAnyAuthorityDirective
-    ],
+    imports: [JHipsterRegistrySharedLibsModule, JHipsterRegistrySharedCommonModule],
+    declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
     providers: [
         JhiRoutesService,
         JhiRefreshService,
@@ -48,13 +42,7 @@ import {
         DatePipe
     ],
     entryComponents: [JhiLoginModalComponent],
-    exports: [
-        JHipsterRegistrySharedCommonModule,
-        JhiLoginModalComponent,
-        HasAnyAuthorityDirective,
-        DatePipe
-    ],
+    exports: [JHipsterRegistrySharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective, DatePipe],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
-
 })
 export class JHipsterRegistrySharedModule {}

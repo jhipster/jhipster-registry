@@ -5,7 +5,6 @@ import 'rxjs/add/operator/do';
 import { LoginService } from '../../core/login/login.service';
 
 export class AuthExpiredInterceptor implements HttpInterceptor {
-
     constructor(private injector: Injector) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

@@ -5,7 +5,7 @@ import { JhiEventManager } from 'ng-jhipster';
 import { Account, LoginModalService, Principal } from '../shared';
 import { JhiHealthService } from '../admin';
 import { JhiApplicationsService } from '../registry';
-import { JhiRefreshService} from '../shared/refresh/refresh.service';
+import { JhiRefreshService } from '../shared/refresh/refresh.service';
 import { Subscription } from 'rxjs/Subscription';
 
 import { VERSION } from '../app.constants';
@@ -16,9 +16,7 @@ import { LoginOAuth2Service } from '../shared/oauth2/login-oauth2.service';
 @Component({
     selector: 'jhi-home',
     templateUrl: './home.component.html',
-    styleUrls: [
-        'home.scss'
-    ]
+    styleUrls: ['home.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
     account: Account;
@@ -31,15 +29,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     refreshReloadSubscription: Subscription;
 
-    constructor(private principal: Principal,
-                private loginModalService: LoginModalService,
-                private loginOAuth2Service: LoginOAuth2Service,
-                private eventManager: JhiEventManager,
-                private eurekaStatusService: EurekaStatusService,
-                private applicationsService: JhiApplicationsService,
-                private healthService: JhiHealthService,
-                private profileService: ProfileService,
-                private refreshService: JhiRefreshService) {
+    constructor(
+        private principal: Principal,
+        private loginModalService: LoginModalService,
+        private loginOAuth2Service: LoginOAuth2Service,
+        private eventManager: JhiEventManager,
+        private eurekaStatusService: EurekaStatusService,
+        private applicationsService: JhiApplicationsService,
+        private healthService: JhiHealthService,
+        private profileService: ProfileService,
+        private refreshService: JhiRefreshService
+    ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.appInstances = [];
     }
@@ -100,13 +100,16 @@ export class HomeComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.healthService.checkHealth().subscribe((response) => {
-            this.healthData = this.healthService.transformHealthData(response);
-            this.updatingHealth = false;
-        }, (response) => {
-            this.healthData = this.healthService.transformHealthData(response.data);
-            this.updatingHealth = false;
-        });
+        this.healthService.checkHealth().subscribe(
+            (response) => {
+                this.healthData = this.healthService.transformHealthData(response);
+                this.updatingHealth = false;
+            },
+            (response) => {
+                this.healthData = this.healthService.transformHealthData(response.data);
+                this.updatingHealth = false;
+            }
+        );
     }
 
     baseName(name: string) {

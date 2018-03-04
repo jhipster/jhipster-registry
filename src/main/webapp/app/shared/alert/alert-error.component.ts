@@ -14,7 +14,6 @@ import { Subscription } from 'rxjs/Rx';
         </div>`
 })
 export class JhiAlertErrorComponent implements OnDestroy {
-
     alerts: any[];
     cleanHttpErrorListener: Subscription;
 
@@ -50,16 +49,15 @@ export class JhiAlertErrorComponent implements OnDestroy {
                             const fieldError = fieldErrors[i];
                             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
                             const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-                            const fieldName = convertedField.charAt(0).toUpperCase() +
-                                convertedField.slice(1);
-                            this.addErrorAlert(
-                                'Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, { fieldName });
+                            const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+                            this.addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, { fieldName });
                         }
                     } else if (httpErrorResponse.error !== '' && httpErrorResponse.json() && httpErrorResponse.error.message) {
                         this.addErrorAlert(
                             httpErrorResponse.error.message,
                             httpErrorResponse.error.message,
-                            httpErrorResponse.error.params);
+                            httpErrorResponse.error.params
+                        );
                     } else {
                         this.addErrorAlert(httpErrorResponse.error);
                     }

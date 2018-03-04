@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class JhiEncryptionService {
-
     constructor(private http: HttpClient) {}
 
     encrypt(textToEncrypt: string): Observable<any> {
