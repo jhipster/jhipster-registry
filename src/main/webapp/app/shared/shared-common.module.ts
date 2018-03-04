@@ -3,7 +3,6 @@ import { Title } from '@angular/platform-browser';
 import { GroupByPipe } from './pipe/group-by.pipe';
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/en';
-
 import {
     JHipsterRegistrySharedLibsModule,
     JhiAlertComponent,

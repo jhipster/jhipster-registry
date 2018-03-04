@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiHealthService } from './health.service';
 import { JhiHealthModalComponent } from './health-modal.component';
 
-import { JhiRoutesService, Route } from '../../shared';
+import { JhiRoutesService, Route } from 'app/shared';
 
 @Component({
     selector: 'jhi-health',

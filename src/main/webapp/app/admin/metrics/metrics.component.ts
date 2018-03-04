@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { JhiMetricsMonitoringModalComponent } from './metrics-modal.component';
 import { JhiMetricsService } from './metrics.service';
-import { JhiRoutesService, Route } from '../../shared';
+import { JhiRoutesService, Route } from 'app/shared';
 
 @Component({
     selector: 'jhi-metrics',
@@ -60,7 +60,7 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
                             // Keep the name of the domain
                             this.cachesStats[newKey] = {
                                 name: this.JCACHE_KEY.length,
-                                value: value
+                                value
                             };
                         }
                     });

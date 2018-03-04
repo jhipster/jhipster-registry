@@ -2,16 +2,16 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { Account, LoginModalService, Principal } from '../shared';
-import { JhiHealthService } from '../admin';
-import { JhiApplicationsService } from '../registry';
+import { Account, LoginModalService, Principal } from 'app/shared';
+import { JhiHealthService } from 'app/admin';
+import { JhiApplicationsService } from 'app/registry';
 import { JhiRefreshService } from '../shared/refresh/refresh.service';
 import { Subscription } from 'rxjs/Subscription';
 
-import { VERSION } from '../app.constants';
+import { VERSION } from 'app/app.constants';
 import { EurekaStatusService } from './eureka.status.service';
-import { ProfileService } from '../layouts/profiles/profile.service';
-import { LoginOAuth2Service } from '../shared/oauth2/login-oauth2.service';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
 
 @Component({
     selector: 'jhi-home',

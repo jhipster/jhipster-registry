@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginService } from './login.service';
-import { StateStorageService } from '../auth/state-storage.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 @Component({
     selector: 'jhi-login-modal',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Route } from '../../shared';
+import { Route } from 'app/shared';
 
 @Injectable()
 export class JhiLogfileService {

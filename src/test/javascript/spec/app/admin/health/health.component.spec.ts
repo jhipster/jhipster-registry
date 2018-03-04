@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+
 import { JHipsterRegistryTestModule } from '../../../test.module';
-import { JhiHealthCheckComponent } from '../../../../../../main/webapp/app/admin/health/health.component';
-import { JhiHealthService } from '../../../../../../main/webapp/app/admin/health/health.service';
-import { JhiRoutesService } from '../../../../../../main/webapp/app/shared/routes/routes.service';
+import { JhiHealthCheckComponent } from 'app/admin/health/health.component';
+import { JhiHealthService } from 'app/admin/health/health.service';
+import { JhiRoutesService } from 'app/shared/routes/routes.service';
 
 describe('Component Tests', () => {
     describe('JhiHealthCheckComponent', () => {
@@ -57,15 +58,17 @@ describe('Component Tests', () => {
 
         it('should flatten health data with no subsystems', () => {
             const data = {
-                status: 'UP',
-                db: {
+                details: {
                     status: 'UP',
-                    database: 'H2',
-                    hello: '1'
-                },
-                mail: {
-                    status: 'UP',
-                    error: 'mail.a.b.c'
+                    db: {
+                        status: 'UP',
+                        database: 'H2',
+                        hello: '1'
+                    },
+                    mail: {
+                        status: 'UP',
+                        error: 'mail.a.b.c'
+                    }
                 }
             };
             const expected = [
@@ -88,26 +91,28 @@ describe('Component Tests', () => {
 
         it('should flatten health data with subsystems at level 1, main system has no additional information', () => {
             const data = {
-                status: 'UP',
-                db: {
+                details: {
                     status: 'UP',
-                    database: 'H2',
-                    hello: '1'
-                },
-                mail: {
-                    status: 'UP',
-                    error: 'mail.a.b.c'
-                },
-                system: {
-                    status: 'DOWN',
-                    subsystem1: {
+                    db: {
                         status: 'UP',
-                        property1: 'system.subsystem1.property1'
+                        database: 'H2',
+                        hello: '1'
                     },
-                    subsystem2: {
+                    mail: {
+                        status: 'UP',
+                        error: 'mail.a.b.c'
+                    },
+                    system: {
                         status: 'DOWN',
-                        error: 'system.subsystem1.error',
-                        property2: 'system.subsystem2.property2'
+                        subsystem1: {
+                            status: 'UP',
+                            property1: 'system.subsystem1.property1'
+                        },
+                        subsystem2: {
+                            status: 'DOWN',
+                            error: 'system.subsystem1.error',
+                            property2: 'system.subsystem2.property2'
+                        }
                     }
                 }
             };
@@ -146,27 +151,29 @@ describe('Component Tests', () => {
 
         it('should flatten health data with subsystems at level 1, main system has additional information', () => {
             const data = {
-                status: 'UP',
-                db: {
+                details: {
                     status: 'UP',
-                    database: 'H2',
-                    hello: '1'
-                },
-                mail: {
-                    status: 'UP',
-                    error: 'mail.a.b.c'
-                },
-                system: {
-                    status: 'DOWN',
-                    property1: 'system.property1',
-                    subsystem1: {
+                    db: {
                         status: 'UP',
-                        property1: 'system.subsystem1.property1'
+                        database: 'H2',
+                        hello: '1'
                     },
-                    subsystem2: {
+                    mail: {
+                        status: 'UP',
+                        error: 'mail.a.b.c'
+                    },
+                    system: {
                         status: 'DOWN',
-                        error: 'system.subsystem1.error',
-                        property2: 'system.subsystem2.property2'
+                        property1: 'system.property1',
+                        subsystem1: {
+                            status: 'UP',
+                            property1: 'system.subsystem1.property1'
+                        },
+                        subsystem2: {
+                            status: 'DOWN',
+                            error: 'system.subsystem1.error',
+                            property2: 'system.subsystem2.property2'
+                        }
                     }
                 }
             };
@@ -212,27 +219,29 @@ describe('Component Tests', () => {
 
         it('should flatten health data with subsystems at level 1, main system has additional error', () => {
             const data = {
-                status: 'UP',
-                db: {
+                details: {
                     status: 'UP',
-                    database: 'H2',
-                    hello: '1'
-                },
-                mail: {
-                    status: 'UP',
-                    error: 'mail.a.b.c'
-                },
-                system: {
-                    status: 'DOWN',
-                    error: 'show me',
-                    subsystem1: {
+                    db: {
                         status: 'UP',
-                        property1: 'system.subsystem1.property1'
+                        database: 'H2',
+                        hello: '1'
                     },
-                    subsystem2: {
+                    mail: {
+                        status: 'UP',
+                        error: 'mail.a.b.c'
+                    },
+                    system: {
                         status: 'DOWN',
-                        error: 'system.subsystem1.error',
-                        property2: 'system.subsystem2.property2'
+                        error: 'show me',
+                        subsystem1: {
+                            status: 'UP',
+                            property1: 'system.subsystem1.property1'
+                        },
+                        subsystem2: {
+                            status: 'DOWN',
+                            error: 'system.subsystem1.error',
+                            property2: 'system.subsystem2.property2'
+                        }
                     }
                 }
             };
