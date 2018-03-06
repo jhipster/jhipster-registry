@@ -14,7 +14,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
@@ -98,7 +97,7 @@ public class JHipsterRegistryApp {
                 "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
                 "Please read the documentation at http://www.jhipster.tech/jhipster-registry/\n" +
                 "----------------------------------------------------------");
-        } else if (secretKey.equals("this-secret-should-not-be-used-read-the-comment")) {
+        } else if ("this-secret-should-not-be-used-read-the-comment".equals(secretKey)) {
             log.error("\n----------------------------------------------------------\n" +
                 "Your JWT secret key is not configured using Spring Cloud Config, you will not be able to \n"+
                 "use the JHipster Registry dashboards to monitor external applications. \n" +
