@@ -4,7 +4,7 @@
         <div ngbDropdownMenu aria-labelledby="sortMenu" aria-expanded="true" (click)="$event.stopPropagation()">
             <p class="d-flex">
                 <input type="search" class="form-control d-flex search" placeholder="Search an application..."
-                       [(ngModel)]="searchedInstance" (click)="$event.stopPropagation()" (input)="searchByAppName($event)">
+                       [(ngModel)]="searchedInstance" (click)="$event.stopPropagation()" (input)="searchByAppName()">
             </p>
             <div *ngFor="let app of routes | groupBy : 'appName'">
                 <span class="dropdown-header" (click)="$event.stopPropagation()">{{app.key}}</span>

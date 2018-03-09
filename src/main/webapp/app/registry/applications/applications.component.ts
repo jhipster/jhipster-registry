@@ -15,11 +15,14 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
     data: any;
     instances: any;
     activeInstance: any;
+    orderProp: string;
 
     refreshReloadSubscription: Subscription;
     applicationsServiceSubscription: Subscription;
 
-    constructor(private applicationsService: JhiApplicationsService, private refreshService: JhiRefreshService) {}
+    constructor(private applicationsService: JhiApplicationsService, private refreshService: JhiRefreshService) {
+        this.orderProp = 'name';
+    }
 
     ngOnInit() {
         this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
@@ -56,6 +59,24 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
         if (!found) {
             this.application = false;
         }
+    }
+
+    countInstances(app) {
+        let count = 0;
+        for (const instance of app) {
+            if (instance.status === 'UP') {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    checkInstanceLength(app) {
+        return this.countInstances(app) < app.length;
+    }
+
+    displayCountInstances(app) {
+        return this.countInstances(app) + '/' + app.length;
     }
 
     getBadgeClass(statusState) {
