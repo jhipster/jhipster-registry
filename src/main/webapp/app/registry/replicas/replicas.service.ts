@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class JhiReplicasService {
-
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) {}
 
     findAll(): Observable<any> {
-        return this.http.get('api/eureka/replicas').map((res: Response) => res.json());
+        return this.http.get('api/eureka/replicas').map((res: HttpResponse<any>) => res.body);
     }
 }

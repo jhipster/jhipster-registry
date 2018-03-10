@@ -3,9 +3,7 @@ import { SessionStorageService } from 'ngx-webstorage';
 
 @Injectable()
 export class StateStorageService {
-    constructor(
-        private $sessionStorage: SessionStorageService
-    ) {}
+    constructor(private $sessionStorage: SessionStorageService) {}
 
     getPreviousState() {
         return this.$sessionStorage.retrieve('previousState');
@@ -16,7 +14,7 @@ export class StateStorageService {
     }
 
     storePreviousState(previousStateName, previousStateParams) {
-        const previousState = { 'name': previousStateName, 'params': previousStateParams };
+        const previousState = { name: previousStateName, params: previousStateParams };
         this.$sessionStorage.store('previousState', previousState);
     }
 
@@ -34,16 +32,15 @@ export class StateStorageService {
 
     storeDestinationState(destinationState, destinationStateParams, fromState) {
         const destinationInfo = {
-            'destination': {
-                'name': destinationState.name,
-                'data': destinationState.data,
+            destination: {
+                name: destinationState.name,
+                data: destinationState.data
             },
-            'params': destinationStateParams,
-            'from': {
-                'name': fromState.name,
+            params: destinationStateParams,
+            from: {
+                name: fromState.name
             }
         };
         this.$sessionStorage.store('destinationState', destinationInfo);
     }
-
 }

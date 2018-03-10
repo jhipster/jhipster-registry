@@ -6,5 +6,5 @@ export class Route {
         public status: string,
         public serviceId: string,
         public serviceInstances: any[]
-    ) { }
+    ) {}
 }

@@ -3,7 +3,6 @@ import { Title } from '@angular/platform-browser';
 import { GroupByPipe } from './pipe/group-by.pipe';
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/en';
-
 import {
     JHipsterRegistrySharedLibsModule,
     JhiAlertComponent,
@@ -13,22 +12,14 @@ import {
 } from './';
 
 @NgModule({
-    imports: [
-        JHipsterRegistrySharedLibsModule
-    ],
-    declarations: [
-        JhiAlertComponent,
-        JhiAlertErrorComponent,
-        JhiRouteSelectorComponent,
-        JhiRefreshSelectorComponent,
-        GroupByPipe
-    ],
+    imports: [JHipsterRegistrySharedLibsModule],
+    declarations: [JhiAlertComponent, JhiAlertErrorComponent, JhiRouteSelectorComponent, JhiRefreshSelectorComponent, GroupByPipe],
     providers: [
         Title,
         {
             provide: LOCALE_ID,
             useValue: 'en'
-        },
+        }
     ],
     exports: [
         JHipsterRegistrySharedLibsModule,
