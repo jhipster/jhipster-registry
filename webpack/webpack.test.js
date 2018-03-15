@@ -1,4 +1,3 @@
-
 const webpack = require('webpack');
 const path = require('path');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
@@ -15,11 +14,23 @@ module.exports = (WATCH) => ({
     module: {
         rules: [
             {
-                test: /\.ts$/, enforce: 'pre', loader: 'tslint-loader', exclude: /node_modules/
+                test: /\.ts$/,
+                enforce: 'pre',
+                loader: 'tslint-loader',
+                exclude: /node_modules/
             },
             {
                 test: /\.ts$/,
-                loaders: ['awesome-typescript-loader', 'angular2-template-loader?keepUrl=true'],
+                use: [
+                    { loader: 'cache-loader' },
+                    { loader: 'ts-loader' },
+                    {
+                        loader: 'angular2-template-loader',
+                        options: {
+                            keepUrl: true
+                        }
+                    }
+                ],
                 exclude: /node_modules/
             },
             {
