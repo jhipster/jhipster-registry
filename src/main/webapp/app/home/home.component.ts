@@ -59,7 +59,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.refreshReloadSubscription.unsubscribe();
+        if (this.refreshReloadSubscription) {
+            this.refreshReloadSubscription.unsubscribe();
+        }
     }
 
     registerAuthenticationSuccess() {
