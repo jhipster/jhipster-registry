@@ -46,6 +46,11 @@
                     $.getJSON(this.baseUrl() + "/swagger-resources/configuration/ui", function(data) {
                         cb(data);
                     });
+                },
+                "getProfileInfo": function(cb) {
+                    $.getJSON(this.baseUrl() + "/api/profile-info", function(data) {
+                        cb(data);
+                    });
                 }
             };
             window.springfox = springfox;
@@ -54,9 +59,6 @@
             window.springfox.uiConfig(function(data) {
                 window.swaggerUi = new SwaggerUi({
                     dom_id: "swagger-ui-container",
-                    authorizations: {
-                        bearer: getApiKeyAuthorization()
-                    },
                     validatorUrl: data.validatorUrl,
                     supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
                     onComplete: function(swaggerApi, swaggerUi) {
@@ -86,12 +88,28 @@
                     window.swaggerUi.headerView.trigger('update-swagger-ui', {
                         url: selectedUrl
                     });
+                    addApiKeyAuthorization();
                 });
 
-                function getApiKeyAuthorization() {
-                    // working only with JWT authentication
-                    var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken") || sessionStorage.getItem("jhi-authenticationtoken"));
-                    return new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
+                function addApiKeyAuthorization() {
+                    window.springfox.getProfileInfo(function(data) {
+                        var oauth2 = false;
+                        for (var i = 0; i < data.activeProfiles.length; i++) {
+                            if (data.activeProfiles[i] === 'oauth2') {
+                                oauth2 = true;
+                            }
+                        }
+                        if (oauth2) {
+                            // OAuth2
+                            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
+                            window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
+                        } else {
+                            // working only with JWT authentication
+                            var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken") || sessionStorage.getItem("jhi-authenticationtoken"));
+                            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
+                            window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
+                        }
+                    });
                 }
 
                 function getCSRF() {
