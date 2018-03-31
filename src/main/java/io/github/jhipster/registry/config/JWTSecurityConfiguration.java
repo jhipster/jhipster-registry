@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,8 +24,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import javax.annotation.PostConstruct;
+
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Profile("!" + Constants.PROFILE_OAUTH2)
 public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -54,17 +58,21 @@ public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.tokenProvider = tokenProvider;
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager() {
+    @PostConstruct
+    public void init() {
         try {
-            return authenticationManagerBuilder
+            authenticationManagerBuilder
                 .userDetailsService(userDetailsService())
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .build();
+                .passwordEncoder(passwordEncoder());
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
         }
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Bean
