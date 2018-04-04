@@ -12,7 +12,10 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-
+logging:
+    level:
+        ROOT: TRACE
+        io.github.jhipster: TRACE
 spring:
     devtools:
         restart:
