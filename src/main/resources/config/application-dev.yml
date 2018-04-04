@@ -14,8 +14,8 @@
 # ===================================================================
 logging:
     level:
-        ROOT: TRACE
-        io.github.jhipster: TRACE
+        ROOT: DEBUG
+        io.github.jhipster: DEBUG
 spring:
     devtools:
         restart:
@@ -33,7 +33,7 @@ spring:
         cache-duration: 1
     profiles:
         active: dev
-        include: swagger
+        include: swagger, uaa
     security:
         user:
             name: admin

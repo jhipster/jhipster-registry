@@ -57,7 +57,7 @@ public class UAASecurityConfiguration extends ResourceServerConfigurerAdapter {
             .antMatchers("/eureka/**").permitAll()
             .antMatchers("/config/**").permitAll()
             .antMatchers("/api/profile-info").permitAll()
-            .antMatchers("/api/**").authenticated()
+            .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/swagger-resources/configuration/ui").permitAll();

@@ -29,9 +29,9 @@ import java.util.Collections;
 /**
  * Controller to authenticate users.
  */
+@Profile({"!" + Constants.PROFILE_OAUTH2, "!" + Constants.PROFILE_UAA})
 @RestController
 @RequestMapping("/api")
-@Profile("!" + Constants.PROFILE_OAUTH2)
 public class UserJWTController {
 
     private final Logger log = LoggerFactory.getLogger(UserJWTController.class);
