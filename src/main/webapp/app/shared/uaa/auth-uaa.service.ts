@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, URLSearchParams } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
-import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
 @Injectable()
 export class AuthUAAServerProvider {
-    constructor(
-        private http: Http,
-        private $localStorage: LocalStorageService,
-        private $sessionStorage: SessionStorageService
-    ) {}
+    constructor(private http: HttpClient, private $localStorage: LocalStorageService, private $sessionStorage: SessionStorageService) {}
 
     getToken() {
         return null;
@@ -33,8 +29,7 @@ export class AuthUAAServerProvider {
         }
     }
 
-    storeAuthenticationToken(jwt, rememberMe) {
-    }
+    storeAuthenticationToken(jwt, rememberMe) {}
 
     logout(): Observable<any> {
         return this.http.post('auth/logout', null);

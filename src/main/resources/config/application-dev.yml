@@ -33,7 +33,7 @@ spring:
         cache-duration: 1
     profiles:
         active: dev
-        include: swagger, uaa
+        include: swagger
     security:
         user:
             name: admin
