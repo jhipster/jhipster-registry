@@ -1,15 +1,13 @@
-import {Component, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiLogfileService } from './logfile.service';
 
-import { JhiRoutesService, Route } from '../../shared';
+import { JhiRoutesService, Route } from 'app/shared';
 
 @Component({
     selector: 'jhi-logfile',
     templateUrl: './logfile.component.html',
-    styleUrls: [
-        'logfile.scss'
-    ]
+    styleUrls: ['logfile.scss']
 })
 export class JhiLogfileComponent implements OnInit, OnDestroy {
     activeRoute: Route;
@@ -19,10 +17,7 @@ export class JhiLogfileComponent implements OnInit, OnDestroy {
 
     @ViewChild('logfile') private logFileViewer: ElementRef;
 
-    constructor(
-        private jhiLogfileService: JhiLogfileService,
-        private routesService: JhiRoutesService
-    ) { }
+    constructor(private jhiLogfileService: JhiLogfileService, private routesService: JhiRoutesService) {}
 
     ngOnInit() {
         this.subscription = this.routesService.routeChanged$.subscribe((route) => {
@@ -34,23 +29,27 @@ export class JhiLogfileComponent implements OnInit, OnDestroy {
     displayActiveRouteLog() {
         this.updatingLogfile = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.jhiLogfileService.getInstanceLogfile(this.activeRoute).subscribe((logtxt) => {
-                this.logtxt = logtxt;
-                this.updatingLogfile = false;
-            }, (error) => {
-                if (error.status === 503 || error.status === 500 || error.status === 404) {
-                    this.logtxt = 'No available logfile. \n'
-                        + 'Please check:\n '
-                        + '- if the microservice is up\n '
-                        + '- these properties are set: \n '
-                        + '    - logging.path\n '
-                        + '    - logging.file (to avoid using the same spring.log)\n\n'
-                        + 'See:\n '
-                        + '- https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html\n '
-                        + '- https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html';
+            this.jhiLogfileService.getInstanceLogfile(this.activeRoute).subscribe(
+                (logtxt) => {
+                    this.logtxt = logtxt;
                     this.updatingLogfile = false;
+                },
+                (error) => {
+                    if (error.status === 503 || error.status === 500 || error.status === 404) {
+                        this.logtxt =
+                            'No available logfile. \n' +
+                            'Please check:\n ' +
+                            '- if the microservice is up\n ' +
+                            '- these properties are set: \n ' +
+                            '    - logging.path\n ' +
+                            '    - logging.file (to avoid using the same spring.log)\n\n' +
+                            'See:\n ' +
+                            '- https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html\n ' +
+                            '- https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html';
+                        this.updatingLogfile = false;
+                    }
                 }
-            });
+            );
         }
     }
 

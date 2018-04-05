@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiHealthService } from './health.service';
 import { JhiHealthModalComponent } from './health-modal.component';
 
-import { JhiRoutesService, Route } from '../../shared';
+import { JhiRoutesService, Route } from 'app/shared';
 
 @Component({
     selector: 'jhi-health',
@@ -17,11 +17,7 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
     activeRoute: Route;
     subscription: Subscription;
 
-    constructor(
-        private modalService: NgbModal,
-        private healthService: JhiHealthService,
-        private routesService: JhiRoutesService
-    ) {}
+    constructor(private modalService: NgbModal, private healthService: JhiHealthService, private routesService: JhiRoutesService) {}
 
     ngOnInit() {
         this.subscription = this.routesService.routeChanged$.subscribe((route) => {
@@ -33,18 +29,21 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
     displayActiveRouteHealth() {
         this.updatingHealth = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.healthService.checkInstanceHealth(this.activeRoute).subscribe((health) => {
-                this.healthData = this.healthService.transformHealthData(health);
-                this.updatingHealth = false;
-            }, (error) => {
-                if (error.status === 503 || error.status === 500 || error.status === 404) {
-                    this.healthData = this.healthService.transformHealthData(error.json());
+            this.healthService.checkInstanceHealth(this.activeRoute).subscribe(
+                (health) => {
+                    this.healthData = this.healthService.transformHealthData(health);
                     this.updatingHealth = false;
-                    if (error.status === 500 || error.status === 404) {
-                        this.routesService.routeDown(this.activeRoute);
+                },
+                (error) => {
+                    if (error.status === 503 || error.status === 500 || error.status === 404) {
+                        this.healthData = this.healthService.transformHealthData(error.json());
+                        this.updatingHealth = false;
+                        if (error.status === 500 || error.status === 404) {
+                            this.routesService.routeDown(this.activeRoute);
+                        }
                     }
                 }
-            });
+            );
         } else {
             this.routesService.routeDown(this.activeRoute);
         }
@@ -52,13 +51,16 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
 
     // user click
     showHealth(health: any) {
-        const modalRef  = this.modalService.open(JhiHealthModalComponent);
+        const modalRef = this.modalService.open(JhiHealthModalComponent);
         modalRef.componentInstance.currentHealth = health;
-        modalRef.result.then((result) => {
-            // Left blank intentionally, nothing to do here
-        }, (reason) => {
-            // Left blank intentionally, nothing to do here
-        });
+        modalRef.result.then(
+            (result) => {
+                // Left blank intentionally, nothing to do here
+            },
+            (reason) => {
+                // Left blank intentionally, nothing to do here
+            }
+        );
     }
 
     baseName(name: string) {

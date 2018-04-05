@@ -1,11 +1,8 @@
-'use strict';
+const webpackConfig = require('../../../webpack/webpack.test.js');
 
-const path = require('path');
-const webpack = require('webpack');
-const WATCH = process.argv.indexOf('--watch') > -1;
-const LoaderOptionsPlugin = require("webpack/lib/LoaderOptionsPlugin");
+const WATCH = process.argv.includes('--watch');
 
-module.exports = function (config) {
+module.exports = (config) => {
     config.set({
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -30,61 +27,7 @@ module.exports = function (config) {
             'spec/entry.ts': ['webpack', 'sourcemap']
         },
 
-        webpack: {
-            resolve: {
-                extensions: ['.ts', '.js']
-            },
-            module: {
-                rules: [
-                    {
-                        test: /\.ts$/, enforce: 'pre', loader: 'tslint-loader', exclude: /(test|node_modules)/
-                    },
-                    {
-                        test: /\.ts$/,
-                        loaders: ['awesome-typescript-loader', 'angular2-template-loader?keepUrl=true'],
-                        exclude: /node_modules/
-                    },
-                    {
-                        test: /\.(html|css)$/,
-                        loader: 'raw-loader',
-                        exclude: /\.async\.(html|css)$/
-                    },
-                    {
-                        test: /\.async\.(html|css)$/,
-                        loaders: ['file?name=[name].[hash].[ext]', 'extract']
-                    },
-                    {
-                        test: /\.scss$/,
-                        loaders: ['to-string-loader', 'css-loader', 'sass-loader']
-                    },
-                    {
-                        test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
-                        loaders: ['file-loader?hash=sha512&digest=hex&name=[hash].[ext]']
-                    },
-                    {
-                        test: /src[\/|\\]main[\/|\\]webapp[\/|\\].+\.ts$/,
-                        enforce: 'post',
-                        exclude: /(test|node_modules)/,
-                        loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true'
-                    }]
-            },
-            devtool: 'inline-source-map',
-            plugins: [
-                new webpack.ContextReplacementPlugin(
-                    // The (\\|\/) piece accounts for path separators in *nix and Windows
-                    /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-                    root('./src') // location of your src
-                ),
-                new LoaderOptionsPlugin({
-                    options: {
-                        tslint: {
-                            emitErrors: !WATCH,
-                            failOnHint: false
-                        }
-                    }
-                })
-            ]
-        },
+        webpack: webpackConfig(WATCH),
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
@@ -103,6 +46,7 @@ module.exports = function (config) {
 
         remapIstanbulReporter: {
             reports: { // eslint-disable-line
+                'lcovonly': 'target/test-results/coverage/report-lcov/lcov.info',
                 'html': 'target/test-results/coverage',
                 'text-summary': null
             }
@@ -125,12 +69,13 @@ module.exports = function (config) {
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['PhantomJS'],
 
+        // Ensure all browsers can run tests written in .ts files
+        mime: {
+            'text/x-typescript': ['ts','tsx']
+        },
+
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: !WATCH
     });
 };
-
-function root(__path) {
-    return path.join(__dirname, __path);
-}

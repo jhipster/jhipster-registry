@@ -25,11 +25,13 @@ public class OAuth2SsoConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .requestMatcher(new NegatedRequestMatcher(authorizationHeaderRequestMatcher))
-            .httpBasic()
-            .realmName("JHipster Registry")
+            .csrf()
+            .disable()
+            .headers()
+            .frameOptions()
+            .disable()
         .and()
+            .requestMatcher(new NegatedRequestMatcher(authorizationHeaderRequestMatcher))
             .authorizeRequests()
             .antMatchers("/services/**").authenticated()
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)

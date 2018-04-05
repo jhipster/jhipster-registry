@@ -10,14 +10,14 @@
 
     <h3>Your SSH public key</h3>
 
-    <pre>{{data}}</pre>
+    <pre class="code-block">{{data}}</pre>
     <hr>
     <div class="text-center pad" >
         <a (click)="showMore = !showMore" class="btn btn-default">
             <span *ngIf="showMore">
                 <span class="fa fa-arrow-circle-down"></span>&nbsp;show more
             </span>
-        <span *ngIf="!showMore">
+            <span *ngIf="!showMore">
                 <span class="fa fa-arrow-circle-up"></span>&nbsp;show less
             </span>
         </a>

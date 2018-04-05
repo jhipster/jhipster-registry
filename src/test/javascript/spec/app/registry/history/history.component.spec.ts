@@ -4,43 +4,38 @@ import { Observable } from 'rxjs';
 import { JHipsterRegistryTestModule } from '../../../test.module';
 import { JhiHistoryComponent, JhiHistoryService } from '../../../../../../main/webapp/app/registry';
 
-
 describe('Component Tests', () => {
-
     describe('HistoryComponent', () => {
-
         let comp: JhiHistoryComponent;
         let fixture: ComponentFixture<JhiHistoryComponent>;
 
-        beforeEach(async(() => {
-            TestBed.configureTestingModule({
-                imports: [JHipsterRegistryTestModule],
-                declarations: [JhiHistoryComponent],
-                providers: [
-                    JhiHistoryService
-                ]
+        beforeEach(
+            async(() => {
+                TestBed.configureTestingModule({
+                    imports: [JHipsterRegistryTestModule],
+                    declarations: [JhiHistoryComponent],
+                    providers: [JhiHistoryService]
+                })
+                    .overrideTemplate(JhiHistoryComponent, '')
+                    .compileComponents();
             })
-            .overrideComponent(JhiHistoryComponent, {
-                set: {
-                    template: ''
-                }
-            })
-            .compileComponents();
-        }));
+        );
 
         beforeEach(() => {
             fixture = TestBed.createComponent(JhiHistoryComponent);
             comp = fixture.componentInstance;
+            fixture.detectChanges();
         });
 
-        it('refresh data',
+        it(
+            'refresh data',
             fakeAsync(
                 inject([JhiHistoryService], (service: JhiHistoryService) => {
                     const response = {
-                        'canceled': {
+                        canceled: {
                             '11052017': 'instance1'
                         },
-                        'registered': {
+                        registered: {
                             '11022017': 'instance2'
                         }
                     };
@@ -55,14 +50,15 @@ describe('Component Tests', () => {
             )
         );
 
-        it('activate registered tab',
+        it(
+            'activate registered tab',
             fakeAsync(
                 inject([JhiHistoryService], (service: JhiHistoryService) => {
                     const response = {
-                        'canceled': {
+                        canceled: {
                             '11052017': 'instance1'
                         },
-                        'registered': {
+                        registered: {
                             '11022017': 'instance2'
                         }
                     };
@@ -72,7 +68,7 @@ describe('Component Tests', () => {
                     tick();
                     comp.activate('registered');
 
-                    expect(comp.items[0]).toEqual({key: '11022017', value: 'instance2'});
+                    expect(comp.items[0]).toEqual({ key: '11022017', value: 'instance2' });
                 })
             )
         );

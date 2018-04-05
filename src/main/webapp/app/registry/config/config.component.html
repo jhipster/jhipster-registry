@@ -5,16 +5,8 @@
     </div>
 
     <form #form="ngForm" (ngSubmit)="refresh()">
-<!--        <div class="form-group">
-            <label for="application"><strong>Application</strong></label>
-           <select type="text" name="application" id="application" class="form-control" (click)="refresh()"
-                   required [(ngModel)]="application">
-                <option *ngFor="let app of applicationList" [value]="app">{{app}}</option>
-            </select>
-        </div>-->
-
         <div class="form-group">
-            <label for="profile"><strong>app</strong></label>
+            <label for="profile"><strong>Application</strong></label>
             <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application" required>
         </div>
 
@@ -32,25 +24,31 @@
 
     <div *ngIf="configAsYaml">
         <h3>Configuration</h3>
-        <ngb-tabset type="tabs">
+        <ngb-tabset type="pills">
             <ngb-tab title="YAML" id="yaml">
-                <template ngbTabContent>
+                <ng-template ngbTabContent>
                     <pre class="code-block">{{configAsYaml}}</pre>
-                </template>
+                </ng-template>
             </ngb-tab>
             <ngb-tab title="Properties" id="properties">
-                <template ngbTabContent>
+                <ng-template ngbTabContent>
                     <pre class="code-block">{{configAsProperties}}</pre>
-                </template>
+                </ng-template>
             </ngb-tab>
             <ngb-tab title="JSON" id="json">
-                <template ngbTabContent>
+                <ng-template ngbTabContent>
                     <pre class="code-block">{{configAsJson}}</pre>
-                </template>
+                </ng-template>
             </ngb-tab>
             <ngb-tab title="Table" id="table">
-                <template ngbTabContent>
+                <ng-template ngbTabContent>
                     <table class="table table-striped table-bordered table-responsive d-table">
+                        <thead>
+                        <tr>
+                            <th>Properties</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
                         <tbody>
                         <tr *ngFor="let property of configAsKeyValuePairs">
                             <td>{{ property.key }}</td>
@@ -58,7 +56,7 @@
                         </tr>
                         </tbody>
                     </table>
-                </template>
+                </ng-template>
             </ngb-tab>
         </ngb-tabset>
     </div>

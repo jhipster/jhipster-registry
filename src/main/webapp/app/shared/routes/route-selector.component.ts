@@ -1,20 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-
 import { JhiRoutesService } from './routes.service';
 import { Route } from './route.model';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
-import { JhiRefreshService } from '../refresh/refresh.service';
+import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
 
 @Component({
     selector: 'jhi-route-selector',
     templateUrl: './route-selector.component.html',
-    styleUrls: [
-        'route-selector.component.scss'
-    ]
+    styleUrls: ['route-selector.component.scss']
 })
 export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
-
     activeRoute: Route;
     routes: Route[];
     savedRoutes: Route[];
@@ -25,10 +21,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
 
     refreshReloadSubscription: Subscription;
 
-    constructor(
-        private routesService: JhiRoutesService,
-        private refreshService: JhiRefreshService
-    ) {}
+    constructor(private routesService: JhiRoutesService, private refreshService: JhiRefreshService) {}
 
     ngOnInit() {
         this.activeRoute = this.routesService.getSelectedInstance();
@@ -62,26 +55,30 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
 
     private updateRoute() {
         this.updatingRoutes = true;
-        this.routesService.findAll().subscribe((routes) => {
-            this.savedRoutes = routes;
-            this.routes = routes;
-            this.searchedInstance = '';
+        this.routesService.findAll().subscribe(
+            (routes) => {
+                this.savedRoutes = routes;
+                this.routes = routes;
+                this.searchedInstance = '';
 
-            if (this.activeRoute) { /** in case of new refresh call **/
-                this.setActiveRoute(this.activeRoute);
-            } else if (routes.length > 0) {
-                this.setActiveRoute(routes[0]);
-            }
-            this.updatingRoutes = false;
-        }, (error) => {
-            if (error.status === 503 || error.status === 500 || error.status === 404) {
-                if (error.status === 500 || error.status === 404) {
-                    this.downRoute(this.activeRoute);
-                    this.setActiveRoute(null);
+                if (this.activeRoute) {
+                    /** in case of new refresh call **/
+                    this.setActiveRoute(this.activeRoute);
+                } else if (routes.length > 0) {
+                    this.setActiveRoute(routes[0]);
                 }
                 this.updatingRoutes = false;
+            },
+            (error) => {
+                if (error.status === 503 || error.status === 500 || error.status === 404) {
+                    if (error.status === 500 || error.status === 404) {
+                        this.downRoute(this.activeRoute);
+                        this.setActiveRoute(null);
+                    }
+                    this.updatingRoutes = false;
+                }
             }
-        });
+        );
     }
 
     private downRoute(instance: Route) {
@@ -142,5 +139,4 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
             dropdown.close();
         }
     }
-
 }

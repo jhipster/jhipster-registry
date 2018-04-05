@@ -1,14 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JhiReplicasService } from './replicas.service';
-import { JhiRefreshService } from '../../shared/refresh/refresh.service';
+import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-replicas',
     templateUrl: './replicas.component.html',
-    styleUrls: [
-        'replicas.component.scss'
-    ]
+    styleUrls: ['replicas.component.scss']
 })
 export class JhiReplicasComponent implements OnInit, OnDestroy {
     showMore: boolean;
@@ -16,9 +14,7 @@ export class JhiReplicasComponent implements OnInit, OnDestroy {
 
     refreshReloadSubscription: Subscription;
 
-    constructor(private replicasService: JhiReplicasService,
-                private refreshService: JhiRefreshService
-    ) {
+    constructor(private replicasService: JhiReplicasService, private refreshService: JhiRefreshService) {
         this.showMore = true;
     }
 

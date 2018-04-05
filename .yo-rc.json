@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "4.3.0",
+    "jhipsterVersion": "4.13.3",
     "baseName": "JHipsterRegistry",
     "packageName": "io.github.jhipster.registry",
     "packageFolder": "io/github/jhipster/registry",
@@ -26,6 +26,8 @@
     "skipClient": false,
     "skipUserManagement": false,
     "clientPackageManager": "yarn",
-    "clientFramework": "angular2"
+    "clientFramework": "angularX",
+    "cacheProvider": "no",
+    "enableHibernateCache": false
   }
 }

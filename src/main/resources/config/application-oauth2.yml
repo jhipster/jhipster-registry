@@ -18,8 +18,6 @@
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
 security:
-    basic:
-        enabled: false
     oauth2:
         client:
             access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
@@ -32,12 +30,13 @@ security:
             user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
             token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
             prefer-token-info: false
-            jwt:
-                key-uri: http://localhost:9080/auth/realms/jhipster
+            jwk:
+                key-set-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/certs
 
 server:
-    session:
-        cookie:
-            http-only: true
-            # custom session cookie name to prevent conflict with another application on the same domain
-            name: JSESSIONID_REGISTRY
+    servlet:
+        session:
+            cookie:
+                http-only: true
+                # custom session cookie name to prevent conflict with another application on the same domain
+                name: JSESSIONID_REGISTRY

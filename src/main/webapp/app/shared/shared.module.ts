@@ -1,12 +1,13 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { CookieService } from 'ngx-cookie';
 
 import {
     JHipsterRegistrySharedLibsModule,
     JHipsterRegistrySharedCommonModule,
     CSRFService,
     AuthServerProvider,
+    AuthUAAServerProvider,
     AuthSessionServerProvider,
     AccountService,
     UserService,
@@ -14,9 +15,12 @@ import {
     LoginService,
     LoginModalService,
     LoginOAuth2Service,
+    LoginUAAService,
+    LoginUAAModalService,
     Principal,
     HasAnyAuthorityDirective,
     JhiLoginModalComponent,
+    JhiLoginUAAModalComponent,
     JhiRoutesService,
     JhiRefreshService
 } from './';
@@ -28,6 +32,7 @@ import {
     ],
     declarations: [
         JhiLoginModalComponent,
+        JhiLoginUAAModalComponent,
         HasAnyAuthorityDirective
     ],
     providers: [
@@ -39,22 +44,26 @@ import {
         LoginService,
         LoginModalService,
         LoginOAuth2Service,
+        LoginUAAService,
+        LoginUAAModalService,
+        LoginUAAService,
         AccountService,
         StateStorageService,
         Principal,
         CSRFService,
         AuthServerProvider,
+        AuthUAAServerProvider,
         UserService,
         DatePipe
     ],
-    entryComponents: [JhiLoginModalComponent],
+    entryComponents: [JhiLoginModalComponent, JhiLoginUAAModalComponent],
     exports: [
         JHipsterRegistrySharedCommonModule,
         JhiLoginModalComponent,
+        JhiLoginUAAModalComponent,
         HasAnyAuthorityDirective,
         DatePipe
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
-
 })
 export class JHipsterRegistrySharedModule {}

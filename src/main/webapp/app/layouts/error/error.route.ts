@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { UserRouteAccessService } from '../../shared';
 import { ErrorComponent } from './error.component';
 
 export const errorRoute: Routes = [
@@ -10,7 +9,7 @@ export const errorRoute: Routes = [
         data: {
             authorities: [],
             pageTitle: 'Error page!'
-        },
+        }
     },
     {
         path: 'accessdenied',
@@ -18,6 +17,6 @@ export const errorRoute: Routes = [
         data: {
             authorities: [],
             pageTitle: 'Error page!'
-        },
+        }
     }
 ];

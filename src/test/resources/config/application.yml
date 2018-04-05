@@ -16,24 +16,39 @@
 spring:
     application:
         name: JHipsterRegistry
-    jackson:
-        serialization.write_dates_as_timestamps: false
+    cloud:
+        config:
+            enabled: false
     mail:
         host: localhost
     mvc:
         favicon:
             enabled: false
+    security:
+        user:
+            name: admin
+            password: admin
+            roles: USER,ADMIN
     thymeleaf:
-        mode: XHTML
-
-security:
-    basic:
-        enabled: false
+        mode: HTML
 
 server:
     port: 10344
     address: localhost
 
+eureka:
+    client:
+        enabled: true
+        fetch-registry: false
+        register-with-eureka: false
+    server:
+        enable-self-preservation: false
+    instance:
+        instanceId: jhipsterRegistry
+management:
+    endpoints:
+        web:
+            base-path: /management
 # ===================================================================
 # JHipster specific properties
 #
@@ -63,4 +78,4 @@ jhipster:
 # http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
+# application:

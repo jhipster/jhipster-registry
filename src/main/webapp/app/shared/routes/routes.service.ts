@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Route } from './route.model';
-import { SessionStorageService } from 'ng2-webstorage';
+import { SessionStorageService } from 'ngx-webstorage';
 
 @Injectable()
 export class JhiRoutesService {
-
     // Observable sources
     private routeChangedSource = new Subject<Route>();
     private routeDownSource = new Subject<Route>();
@@ -16,17 +15,14 @@ export class JhiRoutesService {
     routeDown$: Observable<Route>;
     routeReload$: Observable<boolean>;
 
-    constructor(
-        private http: Http,
-        private sessionStorage: SessionStorageService
-    ) {
+    constructor(private http: HttpClient, private sessionStorage: SessionStorageService) {
         this.routeChanged$ = this.routeChangedSource.asObservable();
         this.routeDown$ = this.routeDownSource.asObservable();
         this.routeReload$ = this.routeReloadSource.asObservable();
     }
 
     findAll(): Observable<Route[]> {
-        return this.http.get('/api/routes').map((res: Response) => res.json());
+        return this.http.get<Route[]>('/api/routes');
     }
 
     routeChange(route: Route) {
@@ -48,5 +44,4 @@ export class JhiRoutesService {
     storeSelectedInstance(instance) {
         this.sessionStorage.store('instanceId', instance);
     }
-
 }

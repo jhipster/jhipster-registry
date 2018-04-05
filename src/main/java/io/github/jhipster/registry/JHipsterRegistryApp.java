@@ -8,15 +8,12 @@ import io.github.jhipster.config.JHipsterConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.autoconfigure.*;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
@@ -25,11 +22,9 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 
-@SpringBootApplication
 @EnableEurekaServer
 @EnableConfigServer
-@ComponentScan
-@EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class, MetricsDropwizardAutoConfiguration.class})
+@SpringBootApplication
 @EnableConfigurationProperties({ApplicationProperties.class})
 @EnableDiscoveryClient
 @EnableZuulProxy
@@ -69,13 +64,19 @@ public class JHipsterRegistryApp {
      * @param args the command line arguments
      * @throws UnknownHostException if the local host name could not be resolved into an address
      */
-    public static void main(String[] args) throws UnknownHostException {
+    public static void main(String[] args) {
         SpringApplication app = new SpringApplication(JHipsterRegistryApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         String protocol = "http";
         if (env.getProperty("server.ssl.key-store") != null) {
             protocol = "https";
+        }
+        String hostAddress = "localhost";
+        try {
+            hostAddress = InetAddress.getLocalHost().getHostAddress();
+        } catch (Exception e) {
+            log.warn("The host name could not be determined, using `localhost` as fallback");
         }
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
@@ -86,7 +87,7 @@ public class JHipsterRegistryApp {
             protocol,
             env.getProperty("server.port"),
             protocol,
-            InetAddress.getLocalHost().getHostAddress(),
+            hostAddress,
             env.getProperty("server.port"),
             env.getActiveProfiles());
 
@@ -96,7 +97,7 @@ public class JHipsterRegistryApp {
                 "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
                 "Please read the documentation at http://www.jhipster.tech/jhipster-registry/\n" +
                 "----------------------------------------------------------");
-        } else if (secretKey.equals("this-secret-should-not-be-used-read-the-comment")) {
+        } else if ("this-secret-should-not-be-used-read-the-comment".equals(secretKey)) {
             log.error("\n----------------------------------------------------------\n" +
                 "Your JWT secret key is not configured using Spring Cloud Config, you will not be able to \n"+
                 "use the JHipster Registry dashboards to monitor external applications. \n" +

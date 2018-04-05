@@ -1,35 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
-import { ProfileService } from '../profiles/profile.service';
-import { Principal, LoginModalService, LoginService } from '../../shared';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { Principal, LoginModalService, LoginService, LoginUAAService, LoginUAAModalService } from 'app/shared';
 
-import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
+import { VERSION } from 'app/app.constants';
 
 @Component({
     selector: 'jhi-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: [
-        'navbar.scss'
-    ]
+    styleUrls: ['navbar.scss']
 })
 export class NavbarComponent implements OnInit {
-
     inProduction: boolean;
     isNavbarCollapsed: boolean;
-    languages: any[];
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
     version: string;
+    activeProfiles: string[];
 
     constructor(
         private loginService: LoginService,
+        private loginUAAService: LoginUAAService,
         private principal: Principal,
         private loginModalService: LoginModalService,
+        private loginUAAModalService: LoginUAAModalService,
         private profileService: ProfileService,
-        private eventManager: EventManager,
+        private eventManager: JhiEventManager,
         private router: Router
     ) {
         this.version = VERSION ? 'v' + VERSION : '';
@@ -56,12 +55,20 @@ export class NavbarComponent implements OnInit {
     }
 
     login() {
-        this.modalRef = this.loginModalService.open();
+        if (this.activeProfiles.indexOf('uaa') > -1) {
+            this.modalRef = this.loginUAAModalService.open();
+        } else {
+            this.modalRef = this.loginModalService.open();
+        }
     }
 
     logout() {
         this.collapseNavbar();
-        this.loginService.logout();
+        if (this.activeProfiles.indexOf('uaa') > -1) {
+            this.loginUAAService.logout();
+        } else {
+            this.loginService.logout();
+        }
         this.router.navigate(['']);
     }
 
@@ -74,7 +81,8 @@ export class NavbarComponent implements OnInit {
     }
 
     getProfileInfo() {
-        this.profileService.getProfileInfo().subscribe((profileInfo) => {
+        this.profileService.getProfileInfo().then((profileInfo) => {
+            this.activeProfiles = profileInfo.activeProfiles;
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });
