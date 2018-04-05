@@ -28,11 +28,11 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>0.1.4</jhipster-dependencies.version>
+        <jhipster-dependencies.version>0.1.9</jhipster-dependencies.version>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
+        <spring-boot.version>1.5.11.RELEASE</spring-boot.version>
 
         <!-- Plugin versions -->
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
