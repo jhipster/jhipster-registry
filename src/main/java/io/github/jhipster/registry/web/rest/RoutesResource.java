@@ -48,6 +48,7 @@ public class RoutesResource {
         routeVMs.put(null, registryRoute());
 
         routes.forEach(route -> {
+            if(!isInstance(route.getId())) return;
             RouteVM routeVM = new RouteVM();
             routeVM.setPath(route.getFullPath());
             routeVM.setPrefix(route.getPrefix());
@@ -87,6 +88,9 @@ public class RoutesResource {
             return id.substring(0, id.indexOf(":"));
         }
         return id;
+    }
+    private boolean isInstance(String id) {
+        return id!=null && id.contains(":");
     }
 
 }
