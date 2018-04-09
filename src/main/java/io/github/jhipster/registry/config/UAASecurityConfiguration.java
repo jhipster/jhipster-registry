@@ -9,6 +9,8 @@ import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,6 +19,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.client.RestTemplate;
@@ -27,11 +31,13 @@ import org.springframework.web.filter.CorsFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Profile(Constants.PROFILE_UAA)
 public class UAASecurityConfiguration extends ResourceServerConfigurerAdapter {
+    private AuthenticationManager authenticationManager;
     private final OAuth2Properties oAuth2Properties;
 
     private final CorsFilter corsFilter;
 
-    public UAASecurityConfiguration(OAuth2Properties oAuth2Properties, CorsFilter corsFilter) {
+    public UAASecurityConfiguration(AuthenticationManager authenticationManager,OAuth2Properties oAuth2Properties, CorsFilter corsFilter) {
+        this.authenticationManager = authenticationManager;
         this.oAuth2Properties = oAuth2Properties;
         this.corsFilter = corsFilter;
     }
@@ -54,13 +60,16 @@ public class UAASecurityConfiguration extends ResourceServerConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
-            .antMatchers("/eureka/**").permitAll()
-            .antMatchers("/config/**").permitAll()
             .antMatchers("/api/profile-info").permitAll()
+            .antMatchers("/auth/login").permitAll()
             .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/swagger-resources/configuration/ui").permitAll();
+            .antMatchers("/swagger-resources/configuration/ui").permitAll()
+            .antMatchers("/*").permitAll()
+        .anyRequest().authenticated();
+        http.addFilterBefore(new BasicAuthenticationFilter(authenticationManager),
+            UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
