@@ -204,6 +204,16 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     @Test
+    public void testHeaderlessRequestForRefreshGrant() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "refresh_token");
+        params.add("refresh_token", REFRESH_TOKEN_VALUE);
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, new HttpHeaders());
+        expectedException.expect(HttpClientErrorException.class);
+        restTemplate.postForEntity("http://uaa/oauth/token",entity, OAuth2AccessToken.class);
+    }
+
+    @Test
     public void testLogout() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);

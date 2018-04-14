@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
-import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
 @Injectable()
 export class AuthUAAServerProvider {
-    constructor(private http: HttpClient, private $localStorage: LocalStorageService, private $sessionStorage: SessionStorageService) {}
+    constructor(private http: HttpClient) {}
 
     getToken() {
         return null;

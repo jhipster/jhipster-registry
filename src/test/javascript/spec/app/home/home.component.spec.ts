@@ -4,7 +4,7 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { JHipsterRegistryTestModule } from '../../test.module';
 import { EurekaStatusService, HomeComponent } from '../../../../../main/webapp/app/home';
-import { Account, AccountService, Principal, LoginModalService } from '../../../../../main/webapp/app/shared';
+import { Account, AccountService, Principal, LoginModalService, LoginUAAModalService } from '../../../../../main/webapp/app/shared';
 import { JhiApplicationsService } from '../../../../../main/webapp/app/registry';
 import { JhiHealthService } from '../../../../../main/webapp/app/admin/health/health.service';
 
@@ -26,6 +26,12 @@ describe('Component Tests', () => {
                         JhiEventManager,
                         {
                             provide: LoginModalService,
+                            useValue: {
+                                open() {}
+                            }
+                        },
+                        {
+                            provide: LoginUAAModalService,
                             useValue: {
                                 open() {}
                             }
