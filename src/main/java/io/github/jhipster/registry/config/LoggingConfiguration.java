@@ -76,6 +76,12 @@ public class LoggingConfiguration {
         asyncLogstashAppender.start();
 
         context.getLogger("ROOT").addAppender(asyncLogstashAppender);
+        
+        // Only forward metric log to logstash
+        ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) context.getLogger("metrics");
+        logger.addAppender(asyncLogstashAppender);
+        logger.setLevel(Level.ALL);
+        logger.setAdditive(false);
     }
 
     /**
