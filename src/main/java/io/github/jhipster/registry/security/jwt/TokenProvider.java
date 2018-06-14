@@ -2,6 +2,7 @@ package io.github.jhipster.registry.security.jwt;
 
 import io.github.jhipster.config.JHipsterProperties;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -34,6 +35,8 @@ public class TokenProvider {
     private long tokenValidityInMillisecondsForRememberMe;
 
     private final JHipsterProperties jHipsterProperties;
+    
+    private final Base64.Encoder encoder = Base64.getEncoder();
 
     public TokenProvider(JHipsterProperties jHipsterProperties) {
         this.jHipsterProperties = jHipsterProperties;
@@ -41,8 +44,8 @@ public class TokenProvider {
 
     @PostConstruct
     public void init() {
-        this.secretKey =
-            jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
+        this.secretKey = encoder.encodeToString(jHipsterProperties.getSecurity().getAuthentication().getJwt()
+            .getSecret().getBytes(StandardCharsets.UTF_8));
 
         this.tokenValidityInMilliseconds =
             1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
