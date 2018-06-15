@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -44,8 +45,14 @@ public class TokenProvider {
 
     @PostConstruct
     public void init() {
-        this.secretKey = encoder.encodeToString(jHipsterProperties.getSecurity().getAuthentication().getJwt()
-            .getSecret().getBytes(StandardCharsets.UTF_8));
+        
+        String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt()
+            .getSecret();
+        if (secret != null) {
+            this.secretKey = encoder.encodeToString(secret.getBytes(StandardCharsets.UTF_8));
+        } else {
+            this.secretKey = RandomStringUtils.random(16);
+        }
 
         this.tokenValidityInMilliseconds =
             1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
