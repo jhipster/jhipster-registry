@@ -6,15 +6,15 @@ import { Observable } from 'rxjs/Observable';
 export class JhiEncryptionService {
     constructor(private http: HttpClient) {}
 
-    encrypt(textToEncrypt: string): Observable<any> {
-        return this.http.post('config/encrypt', textToEncrypt).map((response: HttpResponse<any>) => {
-            return '{cipher}' + response.body;
+    encrypt(textToEncrypt: string): Observable<string> {
+        return this.http.post('config/encrypt', textToEncrypt, { responseType: 'text' }).map((response: string) => {
+            return '{cipher}' + response;
         });
     }
 
-    decrypt(textToDecrypt: string): Observable<any> {
-        return this.http.post('config/decrypt', textToDecrypt).map((response: HttpResponse<any>) => {
-            return response.body;
+    decrypt(textToDecrypt: string): Observable<string> {
+        return this.http.post('config/decrypt', textToDecrypt, { responseType: 'text' }).map((response: string) => {
+            return response;
         });
     }
 }
