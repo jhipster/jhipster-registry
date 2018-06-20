@@ -5,34 +5,29 @@ import { JHipsterRegistryTestModule } from '../../../test.module';
 import { JhiApplicationsComponent, JhiApplicationsService } from '../../../../../../main/webapp/app/registry';
 
 describe('Component Tests', () => {
-
     describe('ApplicationsComponent', () => {
-
         let comp: JhiApplicationsComponent;
         let fixture: ComponentFixture<JhiApplicationsComponent>;
 
-        beforeEach(async(() => {
-            TestBed.configureTestingModule({
-                imports: [JHipsterRegistryTestModule],
-                declarations: [JhiApplicationsComponent],
-                providers: [
-                    JhiApplicationsService
-                ]
+        beforeEach(
+            async(() => {
+                TestBed.configureTestingModule({
+                    imports: [JHipsterRegistryTestModule],
+                    declarations: [JhiApplicationsComponent],
+                    providers: [JhiApplicationsService]
+                })
+                    .overrideTemplate(JhiApplicationsComponent, '')
+                    .compileComponents();
             })
-            .overrideComponent(JhiApplicationsComponent, {
-                set: {
-                    template: ''
-                }
-            })
-            .compileComponents();
-        }));
+        );
 
         beforeEach(() => {
             fixture = TestBed.createComponent(JhiApplicationsComponent);
             comp = fixture.componentInstance;
         });
 
-        it('refresh data',
+        it(
+            'refresh data',
             fakeAsync(
                 inject([JhiApplicationsService], (service: JhiApplicationsService) => {
                     const response = {
@@ -75,5 +70,4 @@ describe('Component Tests', () => {
             )
         );
     });
-})
-;
+});

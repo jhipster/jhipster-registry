@@ -8,4 +8,7 @@ if (module['hot']) {
     module['hot'].accept();
 }
 
-platformBrowserDynamic().bootstrapModule(JHipsterRegistryAppModule);
+platformBrowserDynamic()
+    .bootstrapModule(JHipsterRegistryAppModule)
+    .then((success) => console.log(`Application started`))
+    .catch((err) => console.error(err));

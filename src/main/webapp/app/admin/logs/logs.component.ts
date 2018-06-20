@@ -4,14 +4,13 @@ import { Subscription } from 'rxjs/Subscription';
 import { Log } from './log.model';
 import { LogsService } from './logs.service';
 
-import { JhiRoutesService, Route } from '../../shared';
+import { JhiRoutesService, Route } from 'app/shared';
 
 @Component({
     selector: 'jhi-logs',
     templateUrl: './logs.component.html'
 })
 export class LogsComponent implements OnInit, OnDestroy {
-
     loggers: Log[];
     updatingLogs: boolean;
     filter: string;
@@ -21,10 +20,7 @@ export class LogsComponent implements OnInit, OnDestroy {
     activeRoute: Route;
     subscription: Subscription;
 
-    constructor(
-        private logsService: LogsService,
-        private routesService: JhiRoutesService
-    ) {
+    constructor(private logsService: LogsService, private routesService: JhiRoutesService) {
         this.filter = '';
         this.orderProp = 'name';
         this.reverse = false;
@@ -42,7 +38,7 @@ export class LogsComponent implements OnInit, OnDestroy {
         const log = new Log(name, level);
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
             this.logsService.changeInstanceLevel(this.activeRoute, log).subscribe(() => {
-                this.logsService.findInstanceAll(this.activeRoute).subscribe((loggers) => this.loggers = loggers);
+                this.logsService.findInstanceAll(this.activeRoute).subscribe((response) => (this.loggers = response.body));
             });
         }
     }
@@ -50,17 +46,20 @@ export class LogsComponent implements OnInit, OnDestroy {
     displayActiveRouteLogs() {
         this.updatingLogs = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.logsService.findInstanceAll(this.activeRoute).subscribe((loggers) => {
-                this.loggers = loggers;
-                this.updatingLogs = false;
-            }, (error) => {
-                if (error.status === 503 || error.status === 500 || error.status === 404) {
+            this.logsService.findInstanceAll(this.activeRoute).subscribe(
+                (response) => {
+                    this.loggers = response.body;
                     this.updatingLogs = false;
-                    if (error.status === 500 || error.status === 404) {
-                        this.routesService.routeDown(this.activeRoute);
+                },
+                (error) => {
+                    if (error.status === 503 || error.status === 500 || error.status === 404) {
+                        this.updatingLogs = false;
+                        if (error.status === 500 || error.status === 404) {
+                            this.routesService.routeDown(this.activeRoute);
+                        }
                     }
                 }
-            });
+            );
         } else {
             this.routesService.routeDown(this.activeRoute);
         }
@@ -70,5 +69,4 @@ export class LogsComponent implements OnInit, OnDestroy {
         // prevent memory leak when component destroyed
         this.subscription.unsubscribe();
     }
-
 }

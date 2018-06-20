@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { JHipsterRegistrySharedModule } from '../shared';
+import { JHipsterRegistrySharedModule } from 'app/shared';
 
 import {
     adminState,
@@ -21,10 +21,7 @@ import {
 } from './';
 
 @NgModule({
-    imports: [
-        JHipsterRegistrySharedModule,
-        RouterModule.forRoot(adminState, { useHash: true })
-    ],
+    imports: [JHipsterRegistrySharedModule, RouterModule.forChild(adminState)],
     declarations: [
         LogsComponent,
         JhiConfigurationComponent,
@@ -35,17 +32,8 @@ import {
         JhiMetricsMonitoringModalComponent,
         JhiLogfileComponent
     ],
-    entryComponents: [
-        JhiHealthModalComponent,
-        JhiMetricsMonitoringModalComponent,
-    ],
-    providers: [
-        JhiConfigurationService,
-        JhiHealthService,
-        JhiMetricsService,
-        LogsService,
-        JhiLogfileService
-    ],
+    entryComponents: [JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
+    providers: [JhiConfigurationService, JhiHealthService, JhiMetricsService, LogsService, JhiLogfileService],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JHipsterRegistryAdminModule {}

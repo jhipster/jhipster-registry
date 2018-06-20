@@ -1,19 +1,20 @@
 package io.github.jhipster.registry.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.jhipster.registry.JHipsterRegistryApp;
 import io.github.jhipster.registry.security.jwt.TokenProvider;
 import io.github.jhipster.registry.web.rest.vm.LoginVM;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -23,25 +24,28 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = JHipsterRegistryApp.class)
 public class UserJWTControllerTest {
 
+    @Autowired
     private TokenProvider tokenProvider;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
+
     private MockMvc mock;
 
     @Before
     public void setup() {
         tokenProvider = Mockito.mock(TokenProvider.class);
-        authenticationManager = Mockito.mock(AuthenticationManager.class);
 
         UserJWTController control = new UserJWTController(tokenProvider, authenticationManager);
         this.mock = MockMvcBuilders.standaloneSetup(control).build();
     }
 
     @Test
-    public void authorizeTest() throws Exception {
-
+    public void normalAuthentication() throws Exception {
         // Normal authentication
         LoginVM vm = new LoginVM();
         vm.setUsername("admin");
@@ -57,8 +61,10 @@ public class UserJWTControllerTest {
             .content(new ObjectMapper().writeValueAsString(vm)))
             .andExpect(content().string("{\"id_token\":\"fakeToken\"}"))
             .andExpect(status().isOk());
+    }
 
-
+    @Test
+    public void authenticationException() throws Exception {
         // Authentication exception throws
         Mockito.doThrow(new AuthenticationException(null){}).when(tokenProvider)
             .createToken(Mockito.any(Authentication.class), Mockito.anyBoolean());
@@ -71,14 +77,14 @@ public class UserJWTControllerTest {
             .andReturn();
 
         assertTrue(res.getResponse().getContentAsString().startsWith("{\"AuthenticationException\""));
+    }
 
-
-        // Bad credentials
+    @Test
+    public void badCredentials() throws Exception {
+        LoginVM vm = new LoginVM();
         vm.setUsername("badcred");
         vm.setPassword("badcred");
-
-        Mockito.doThrow(new BadCredentialsException("Bad credentials")).when(authenticationManager)
-            .authenticate(new UsernamePasswordAuthenticationToken(vm.getUsername(), vm.getPassword()));
+        vm.setRememberMe(true);
 
         mock.perform(post("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON_UTF8)

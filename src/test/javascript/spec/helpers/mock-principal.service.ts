@@ -1,20 +1,20 @@
 import { SpyObject } from './spyobject';
-import { Principal } from '../../../../main/webapp/app/shared/auth/principal.service';
+import { Principal } from 'app/core/auth/principal.service';
 import Spy = jasmine.Spy;
 
 export class MockPrincipal extends SpyObject {
-
     identitySpy: Spy;
-    fakeResponse: any;
 
     constructor() {
         super(Principal);
 
-        this.fakeResponse = {};
-        this.identitySpy = this.spy('identity').andReturn(Promise.resolve(this.fakeResponse));
+        this.setIdentitySpy({});
+    }
+    setIdentitySpy(json: any): any {
+        this.identitySpy = this.spy('identity').andReturn(Promise.resolve(json));
     }
 
     setResponse(json: any): void {
-        this.fakeResponse = json;
+        this.setIdentitySpy(json);
     }
 }

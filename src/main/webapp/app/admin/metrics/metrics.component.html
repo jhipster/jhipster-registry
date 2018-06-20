@@ -1,20 +1,22 @@
 <div>
-    <h2>Application Metrics</h2>
-    <jhi-route-selector></jhi-route-selector>
+    <div class="head">
+        <h2 class="d-inline-block">Application Metrics</h2>
+        <jhi-route-selector class="float-right refresh-left-side"></jhi-route-selector>
+    </div>
 
     <h3>JVM Metrics</h3>
     <div class="row" *ngIf="metrics && metrics.gauges">
         <div class="col-md-4">
             <b>Memory</b>
-            <p><span>Total Memory</span> ({{metrics.gauges['jvm.memory.total.used'].value / 1000000 | number:'1.0-0'}}M / {{metrics.gauges['jvm.memory.total.max'].value / 1000000 | number:'1.0-0'}}M)</p>
+            <p><span>Total Memory</span> ({{metrics.gauges['jvm.memory.total.used'].value / 1048576 | number:'1.0-0'}}M / {{metrics.gauges['jvm.memory.total.max'].value / 1048576 | number:'1.0-0'}}M)</p>
             <ngb-progressbar type="success" [max]="metrics.gauges['jvm.memory.total.max'].value" [value]="metrics.gauges['jvm.memory.total.used'].value" [striped]="true" [animated]="true">
                 <span>{{metrics.gauges['jvm.memory.total.used'].value * 100 / metrics.gauges['jvm.memory.total.max'].value  | number:'1.0-0'}}%</span>
             </ngb-progressbar>
-            <p><span>Heap Memory</span> ({{metrics.gauges['jvm.memory.heap.used'].value / 1000000 | number:'1.0-0'}}M / {{metrics.gauges['jvm.memory.heap.max'].value / 1000000 | number:'1.0-0'}}M)</p>
+            <p><span>Heap Memory</span> ({{metrics.gauges['jvm.memory.heap.used'].value / 1048576 | number:'1.0-0'}}M / {{metrics.gauges['jvm.memory.heap.max'].value / 1048576 | number:'1.0-0'}}M)</p>
             <ngb-progressbar [max]="metrics.gauges['jvm.memory.heap.max'].value" [value]="metrics.gauges['jvm.memory.heap.used'].value" [striped]="true" [animated]="true" type="success">
                 <span>{{metrics.gauges['jvm.memory.heap.used'].value * 100 / metrics.gauges['jvm.memory.heap.max'].value  | number:'1.0-0'}}%</span>
             </ngb-progressbar>
-            <p><span>Non-Heap Memory</span> ({{metrics.gauges['jvm.memory.non-heap.used'].value / 1000000 | number:'1.0-0'}}M / {{metrics.gauges['jvm.memory.non-heap.committed'].value / 1000000 | number:'1.0-0'}}M)</p>
+            <p><span>Non-Heap Memory</span> ({{metrics.gauges['jvm.memory.non-heap.used'].value / 1048576 | number:'1.0-0'}}M / {{metrics.gauges['jvm.memory.non-heap.committed'].value / 1048576 | number:'1.0-0'}}M)</p>
             <ngb-progressbar [max]="metrics.gauges['jvm.memory.non-heap.committed'].value" [value]="metrics.gauges['jvm.memory.non-heap.used'].value" [striped]="true" [animated]="true" type="success">
                 <span>{{metrics.gauges['jvm.memory.non-heap.used'].value * 100 / metrics.gauges['jvm.memory.non-heap.committed'].value  | number:'1.0-0'}}%</span>
             </ngb-progressbar>
@@ -161,13 +163,13 @@
             <tr *ngFor="let entry of servicesStats | keys">
                 <td>{{entry.key}}</td>
                 <td class="text-right">{{entry.value.count}}</td>
-                <td class="text-right">{{entry.value.mean * 1000 | number:'1.0-0'}}</td>
-                <td class="text-right">{{entry.value.min * 1000 | number:'1.0-0'}}</td>
-                <td class="text-right">{{entry.value.p50 * 1000 | number:'1.0-0'}}</td>
-                <td class="text-right">{{entry.value.p75 * 1000 | number:'1.0-0'}}</td>
-                <td class="text-right">{{entry.value.p95 * 1000 | number:'1.0-0'}}</td>
-                <td class="text-right">{{entry.value.p99 * 1000 | number:'1.0-0'}}</td>
-                <td class="text-right">{{entry.value.max * 1000 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.mean * 1024 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.min * 1024 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.p50 * 1024 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.p75 * 1024 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.p95 * 1024 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.p99 * 1024 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.max * 1024 | number:'1.0-0'}}</td>
             </tr>
             </tbody>
         </table>

@@ -1,28 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, URLSearchParams } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
 @Injectable()
 export class AuthServerProvider {
-    constructor(
-        private http: Http,
-        private $localStorage: LocalStorageService,
-        private $sessionStorage: SessionStorageService
-    ) {}
+    constructor(private http: HttpClient, private $localStorage: LocalStorageService, private $sessionStorage: SessionStorageService) {}
 
     getToken() {
         return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken');
     }
 
     login(credentials): Observable<any> {
-
         const data = {
             username: credentials.username,
             password: credentials.password,
             rememberMe: credentials.rememberMe
         };
-        return this.http.post('api/authenticate', data).map(authenticateSuccess.bind(this));
+        return this.http.post('api/authenticate', data, { observe: 'response' }).map(authenticateSuccess.bind(this));
 
         function authenticateSuccess(resp) {
             const bearerToken = resp.headers.get('Authorization');

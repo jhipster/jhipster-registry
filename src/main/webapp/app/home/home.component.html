@@ -2,10 +2,9 @@
     <h1 class="text-center">JHipster Registry <small>{{version}}</small></h1>
     <div class="row">
         <div class="col-md-12 text-center">
-            <div class="alert alert-success" *ngSwitchCase="true">
-                <span *ngIf="account"> You are logged in as user "{{account.login}}". </span>
+            <div *ngSwitchCase="true">
+                <jhi-refresh-selector class="float-right refresh-left-side"></jhi-refresh-selector>
             </div>
-
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span>You are not authenticated.</span>
                 <a class="alert-link" (click)="login()">Please sign in</a>

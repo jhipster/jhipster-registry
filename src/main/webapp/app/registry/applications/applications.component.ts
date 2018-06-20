@@ -2,29 +2,27 @@
 // TODO lint disabled as the filter pipe used in template seems to trigger this
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JhiApplicationsService } from './applications.service';
-import { JhiRefreshService } from '../../shared/refresh/refresh.service';
+import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-applications',
     templateUrl: './applications.component.html',
-    styleUrls: [
-        'applications.component.scss'
-    ]
+    styleUrls: ['applications.component.scss']
 })
 export class JhiApplicationsComponent implements OnInit, OnDestroy {
     application: any;
     data: any;
     instances: any;
     activeInstance: any;
+    orderProp: string;
 
     refreshReloadSubscription: Subscription;
     applicationsServiceSubscription: Subscription;
 
-    constructor(
-        private applicationsService: JhiApplicationsService,
-        private refreshService: JhiRefreshService
-    ) {}
+    constructor(private applicationsService: JhiApplicationsService, private refreshService: JhiRefreshService) {
+        this.orderProp = 'name';
+    }
 
     ngOnInit() {
         this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
@@ -63,6 +61,24 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
         }
     }
 
+    countInstances(app) {
+        let count = 0;
+        for (const instance of app) {
+            if (instance.status === 'UP') {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    checkInstanceLength(app) {
+        return this.countInstances(app) < app.length;
+    }
+
+    displayCountInstances(app) {
+        return this.countInstances(app) + '/' + app.length;
+    }
+
     getBadgeClass(statusState) {
         if (statusState && statusState === 'UP') {
             return 'badge-success';
@@ -70,5 +86,4 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
             return 'badge-danger';
         }
     }
-
 }

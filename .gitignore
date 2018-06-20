@@ -13,6 +13,7 @@
 node_tmp/
 node_modules/
 npm-debug.log.*
+/.cache-loader/*
 
 ######################
 # SASS
@@ -117,6 +118,7 @@ Desktop.ini
 # Logs
 ######################
 *.log
+*.log.*.gz
 
 ######################
 # Others

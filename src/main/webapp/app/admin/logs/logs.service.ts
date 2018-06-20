@@ -1,32 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
+import { SERVER_API_URL } from 'app/app.constants';
 import { Log } from './log.model';
-import { Route } from '../../shared';
+import { Route } from 'app/shared';
 
 @Injectable()
 export class LogsService {
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) {}
 
-    changeLevel(log: Log): Observable<Response> {
-        return this.http.put('management/logs', log);
+    changeLevel(log: Log): Observable<HttpResponse<any>> {
+        return this.http.put(SERVER_API_URL + 'management/logs', log, { observe: 'response' });
     }
 
-    changeInstanceLevel(instance: Route, log: Log): Observable<Response> {
+    changeInstanceLevel(instance: Route, log: Log): Observable<HttpResponse<any>> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
-            return this.http.put(instance.prefix + '/management/logs', log);
+            return this.http.put(instance.prefix + '/management/logs', log, { observe: 'response' });
         }
         return this.changeLevel(log);
     }
 
-    findAll(): Observable<Log[]> {
-        return this.http.get('management/logs').map((res: Response) => res.json());
+    findAll(): Observable<HttpResponse<Log[]>> {
+        return this.http.get<Log[]>(SERVER_API_URL + 'management/logs', { observe: 'response' });
     }
 
-    findInstanceAll(instance: Route): Observable<Log[]> {
+    findInstanceAll(instance: Route): Observable<HttpResponse<Log[]>> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
-            return this.http.get((instance.prefix + '/management/logs')).map((res: Response) => res.json());
+            return this.http.get<Log[]>(instance.prefix + '/management/logs', { observe: 'response' });
         }
         return this.findAll();
     }

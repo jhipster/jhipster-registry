@@ -27,10 +27,15 @@ spring:
         username:
         password:
     messages:
-        cache-seconds: 1
+        cache-duration: 1
     profiles:
         active: dev
         include: swagger
+    security:
+        user:
+            name: admin
+            password: admin
+            roles: USER,ADMIN
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
@@ -83,15 +88,8 @@ jhipster:
         from: JHipsterRegistry@localhost
         base-url: http://127.0.0.1:8761
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
-            enabled: false
-            host: localhost
-            port: 2003
-            prefix: JHipsterRegistry
-        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
-            enabled: false
-            endpoint: /prometheusMetrics
+        jmx:
+            enabled: true
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
@@ -101,15 +99,6 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
-            enabled: false
-            # edit spring.metrics.export.delay-millis to set report frequency
-
-security:
-    user:
-        name: admin
-        password: admin
-        role: USER,ADMIN
 
 # ===================================================================
 # Application specific properties
@@ -120,4 +109,4 @@ security:
 # http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
+# application:

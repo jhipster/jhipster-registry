@@ -1,11 +1,10 @@
-<div class="route-selector col-xl-12 d-inline-flex" *ngIf="routes">
-
-    <div class="dropdown" ngbDropdown #dropId="ngbDropdown">
+<div class="route-selector d-inline-flex" *ngIf="routes">
+    <div ngbDropdown #dropId="ngbDropdown" placement="bottom-right">
         <button class="btn btn-outline-primary" id="sortMenu" ngbDropdownToggle [innerHTML]="getActiveRoute()"></button>
-        <div class="dropdown-menu" aria-labelledby="sortMenu" aria-expanded="true" (click)="$event.stopPropagation()">
+        <div ngbDropdownMenu aria-labelledby="sortMenu" aria-expanded="true" (click)="$event.stopPropagation()">
             <p class="d-flex">
                 <input type="search" class="form-control d-flex search" placeholder="Search an application..."
-                       [(ngModel)]="searchedInstance" (click)="$event.stopPropagation()" (input)="searchByAppName($event)">
+                       [(ngModel)]="searchedInstance" (click)="$event.stopPropagation()" (input)="searchByAppName()">
             </p>
             <div *ngFor="let app of routes | groupBy : 'appName'">
                 <span class="dropdown-header" (click)="$event.stopPropagation()">{{app.key}}</span>

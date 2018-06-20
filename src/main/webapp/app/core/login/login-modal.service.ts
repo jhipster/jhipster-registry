@@ -6,9 +6,7 @@ import { JhiLoginModalComponent } from './login.component';
 @Injectable()
 export class LoginModalService {
     private isOpen = false;
-    constructor(
-        private modalService: NgbModal,
-    ) {}
+    constructor(private modalService: NgbModal) {}
 
     open(): NgbModalRef {
         if (this.isOpen) {
@@ -18,11 +16,14 @@ export class LoginModalService {
         const modalRef = this.modalService.open(JhiLoginModalComponent, {
             container: 'nav'
         });
-        modalRef.result.then((result) => {
-            this.isOpen = false;
-        }, (reason) => {
-            this.isOpen = false;
-        });
+        modalRef.result.then(
+            (result) => {
+                this.isOpen = false;
+            },
+            (reason) => {
+                this.isOpen = false;
+            }
+        );
         return modalRef;
     }
 }

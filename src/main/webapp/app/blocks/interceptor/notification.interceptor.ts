@@ -1,33 +1,42 @@
-import { HttpInterceptor } from 'ng-jhipster';
-import { RequestOptionsArgs, Response } from '@angular/http';
+import { JhiAlertService } from 'ng-jhipster';
+import { HttpInterceptor, HttpRequest, HttpResponse, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
 
-export class NotificationInterceptor extends HttpInterceptor {
+export class NotificationInterceptor implements HttpInterceptor {
+    private alertService: JhiAlertService;
 
-    constructor() {
-        super();
+    // tslint:disable-next-line: no-unused-variable
+    constructor(private injector: Injector) {
+        setTimeout(() => (this.alertService = injector.get(JhiAlertService)));
     }
 
-    requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
-        return options;
-    }
-
-    responseIntercept(observable: Observable<Response>): Observable<Response> {
-        return <Observable<Response>> observable.catch((error) => {
-            const arr = Array.from(error.headers._headers);
-            const headers = [];
-            let i;
-            for (i = 0; i < arr.length; i++) {
-                if (arr[i][0].endsWith('app-alert') || arr[i][0].endsWith('app-params')) {
-                    headers.push(arr[i][0]);
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        return next.handle(request).do(
+            (event: HttpEvent<any>) => {
+                if (event instanceof HttpResponse) {
+                    const arr = event.headers.keys();
+                    let alert = null;
+                    let alertParams = null;
+                    arr.forEach((entry) => {
+                        if (entry.endsWith('app-alert')) {
+                            alert = event.headers.get(entry);
+                        } else if (entry.endsWith('app-params')) {
+                            alertParams = event.headers.get(entry);
+                        }
+                    });
+                    if (alert) {
+                        if (typeof alert === 'string') {
+                            if (this.alertService) {
+                                const alertParam = alertParams;
+                                this.alertService.success(alert, { param: alertParam }, null);
+                            }
+                        }
+                    }
                 }
-            }
-            headers.sort();
-            const alertKey = headers.length >= 1 ? error.headers.get(headers[0]) : null;
-            if (typeof alertKey === 'string') {
-                // AlertService.success(alertKey, { param: response.headers(headers[1])});
-            }
-            return Observable.throw(error);
-        });
+            },
+            (err: any) => {}
+        );
     }
 }

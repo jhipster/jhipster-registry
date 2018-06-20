@@ -17,13 +17,16 @@
 spring:
     application:
         name: jhipster-registry
-    jackson:
-        serialization.write_dates_as_timestamps: false
     mvc:
         favicon:
             enabled: false
+    security:
+        user:
+            name: admin
+            password: admin
+            roles: USER,ADMIN
     thymeleaf:
-        mode: XHTML
+        mode: HTML
 
 server:
     port: 8761
@@ -40,18 +43,17 @@ zuul:
     strip-prefix: true
 
 management:
-    security:
-        roles: ADMIN
-    context-path: /management
+    endpoints:
+        web:
+            base-path: /management
+            exposure:
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile"]
+    endpoint:
+        health:
+            show-details: when_authorized
     health:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
-
-security:
-    user:
-        name: admin
-        password: admin
-        role: USER,ADMIN
 
 # ===================================================================
 # Eureka server configuration (eureka.server.*)
@@ -66,13 +68,14 @@ security:
 eureka:
     instance:
         appname: jhipster-registry
-        instanceId: jhipsterRegistry:${spring.application.instance_id:${random.value}}
+        instanceId: jhipsterRegistry:${spring.application.instance-id:${random.value}}
         prefer-ip-address: true
         lease-renewal-interval-in-seconds: 5
         lease-expiration-duration-in-seconds: 10
-        status-page-url-path: ${management.context-path}/info
-        health-check-url-path: ${management.context-path}/health
+        status-page-url-path: ${management.endpoints.web.base-path}/info
+        health-check-url-path: ${management.endpoints.web.base-path}/health
         metadata-map:
+            zone: primary # This is needed for the load balancer
             profile: ${spring.profiles.active}
             version: ${info.project.version}
     client:
@@ -82,13 +85,15 @@ eureka:
         instance-info-replication-interval-seconds: 10
         registry-fetch-interval-seconds: 10
         service-url:
-            defaultZone: http://admin:${security.user.password:admin}@localhost:${server.port}/eureka/
+            defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
     server:
         # see discussion about enable-self-preservation:
         # https://github.com/jhipster/generator-jhipster/issues/3654
         enable-self-preservation: false
     dashboard:
         path: /registry
+    datacenter: JHipster-DataCenter
+    environment: JHipster-Environment
 
 jhipster:
     swagger:

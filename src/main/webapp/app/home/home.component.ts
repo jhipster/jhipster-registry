@@ -1,24 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
-import { Account, LoginModalService, Principal } from '../shared';
-import { JhiHealthService } from '../admin';
-import { JhiApplicationsService } from '../registry';
+import { Account, LoginModalService, Principal } from 'app/shared';
+import { JhiHealthService } from 'app/admin';
+import { JhiApplicationsService } from 'app/registry';
+import { JhiRefreshService } from '../shared/refresh/refresh.service';
+import { Subscription } from 'rxjs/Subscription';
 
-import { VERSION } from '../app.constants';
+import { VERSION } from 'app/app.constants';
 import { EurekaStatusService } from './eureka.status.service';
-import { ProfileService } from '../layouts/profiles/profile.service';
-import { LoginOAuth2Service } from '../shared/oauth2/login-oauth2.service';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
 
 @Component({
     selector: 'jhi-home',
     templateUrl: './home.component.html',
-    styleUrls: [
-        'home.scss'
-    ]
+    styleUrls: ['home.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
     account: Account;
     modalRef: NgbModalRef;
     updatingHealth: boolean;
@@ -27,14 +27,19 @@ export class HomeComponent implements OnInit {
     status: any;
     version: string;
 
-    constructor(private principal: Principal,
-                private loginModalService: LoginModalService,
-                private loginOAuth2Service: LoginOAuth2Service,
-                private eventManager: EventManager,
-                private eurekaStatusService: EurekaStatusService,
-                private applicationsService: JhiApplicationsService,
-                private healthService: JhiHealthService,
-                private profileService: ProfileService) {
+    refreshReloadSubscription: Subscription;
+
+    constructor(
+        private principal: Principal,
+        private loginModalService: LoginModalService,
+        private loginOAuth2Service: LoginOAuth2Service,
+        private eventManager: JhiEventManager,
+        private eurekaStatusService: EurekaStatusService,
+        private applicationsService: JhiApplicationsService,
+        private healthService: JhiHealthService,
+        private profileService: ProfileService,
+        private refreshService: JhiRefreshService
+    ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.appInstances = [];
     }
@@ -45,11 +50,18 @@ export class HomeComponent implements OnInit {
             if (!account || !this.isAuthenticated()) {
                 this.login();
             } else {
+                this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.populateDashboard());
                 this.populateDashboard();
             }
         });
 
         this.registerAuthenticationSuccess();
+    }
+
+    ngOnDestroy() {
+        if (this.refreshReloadSubscription) {
+            this.refreshReloadSubscription.unsubscribe();
+        }
     }
 
     registerAuthenticationSuccess() {
@@ -66,7 +78,7 @@ export class HomeComponent implements OnInit {
     }
 
     login() {
-        this.profileService.getProfileInfo().subscribe((profileInfo) => {
+        this.profileService.getProfileInfo().then((profileInfo) => {
             if (profileInfo.activeProfiles.indexOf('oauth2') > -1) {
                 this.loginOAuth2Service.login();
             } else {
@@ -81,6 +93,7 @@ export class HomeComponent implements OnInit {
         });
 
         this.applicationsService.findAll().subscribe((data) => {
+            this.appInstances = [];
             for (const app of data.applications) {
                 for (const inst of app.instances) {
                     inst.name = app.name;
@@ -89,13 +102,16 @@ export class HomeComponent implements OnInit {
             }
         });
 
-        this.healthService.checkHealth().subscribe((response) => {
-            this.healthData = this.healthService.transformHealthData(response);
-            this.updatingHealth = false;
-        }, (response) => {
-            this.healthData = this.healthService.transformHealthData(response.data);
-            this.updatingHealth = false;
-        });
+        this.healthService.checkHealth().subscribe(
+            (response) => {
+                this.healthData = this.healthService.transformHealthData(response);
+                this.updatingHealth = false;
+            },
+            (response) => {
+                this.healthData = this.healthService.transformHealthData(response.data);
+                this.updatingHealth = false;
+            }
+        );
     }
 
     baseName(name: string) {

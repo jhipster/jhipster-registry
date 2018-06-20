@@ -1,7 +1,8 @@
-<div class="table-responsive" *ngIf="loggers">
-    <h2>Loggers</h2>
-
-    <jhi-route-selector></jhi-route-selector>
+<div *ngIf="loggers">
+    <div class="head">
+        <h2 class="d-inline-block">Loggers</h2>
+        <jhi-route-selector class="float-right refresh-left-side"></jhi-route-selector>
+    </div>
 
     <p>There are {{ loggers.length }} loggers.</p>
 

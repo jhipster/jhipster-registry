@@ -1,21 +1,18 @@
 const webpack = require('webpack');
-const path = require('path');
-const commonConfig = require('./webpack.common.js');
 const writeFilePlugin = require('write-file-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const ENV = 'dev';
-const execSync = require('child_process').execSync;
-const fs = require('fs');
-const ddlPath = './target/www/vendor.json';
+const WebpackNotifierPlugin = require('webpack-notifier');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const path = require('path');
 
-if (!fs.existsSync(ddlPath)) {
-    execSync('webpack --config webpack/webpack.vendor.js');
-}
+const utils = require('./utils.js');
+const commonConfig = require('./webpack.common.js');
+
+const ENV = 'development';
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
-    devtool: 'inline-source-map',
+    devtool: 'eval-source-map',
     devServer: {
         contentBase: './target/www',
         proxy: [{
@@ -27,27 +24,77 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 '/swagger-resources',
                 '/v2/api-docs',
                 '/h2-console',
-                "/config"
+                '/config',
+                '/auth'
             ],
             target: 'http://127.0.0.1:8761',
             secure: false
-        }]
+        }],
+        watchOptions: {
+            ignored: /node_modules/
+        }
+    },
+    entry: {
+        polyfills: './src/main/webapp/app/polyfills',
+        global: './src/main/webapp/content/scss/global.scss',
+        main: './src/main/webapp/app/app.main'
     },
     output: {
-        path: path.resolve('target/www'),
-        filename: '[name].bundle.js',
-        chunkFilename: '[id].chunk.js'
+        path: utils.root('target/www'),
+        filename: 'app/[name].bundle.js',
+        chunkFilename: 'app/[id].chunk.js'
     },
     module: {
         rules: [{
             test: /\.ts$/,
-            loaders: [
-                'tslint-loader'
-            ],
+            enforce: 'pre',
+            loaders: 'tslint-loader',
             exclude: ['node_modules', new RegExp('reflect-metadata\\' + path.sep + 'Reflect\\.ts')]
+        },
+        {
+            test: /\.ts$/,
+            use: [
+                { loader: 'angular2-template-loader' },
+                { loader: 'cache-loader' },
+                {
+                    loader: 'thread-loader',
+                    options: {
+                        // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+                        workers: require('os').cpus().length - 1
+                    }
+                },
+                {
+                    loader: 'ts-loader',
+                    options: {
+                        transpileOnly: true,
+                        happyPackMode: true
+                    }
+                },
+                { loader: 'angular-router-loader' }
+            ],
+            exclude: ['node_modules']
+        },
+        {
+            test: /\.scss$/,
+            loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
+            exclude: /(vendor\.scss|global\.scss)/
+        },
+        {
+            test: /(vendor\.scss|global\.scss)/,
+            loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+        },
+        {
+            test: /\.css$/,
+            loaders: ['to-string-loader', 'css-loader'],
+            exclude: /(vendor\.css|global\.css)/
+        },
+        {
+            test: /(vendor\.css|global\.css)/,
+            loaders: ['style-loader', 'css-loader']
         }]
     },
     plugins: [
+        new ForkTsCheckerWebpackPlugin(),
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
@@ -57,12 +104,18 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }, {
             reload: false
         }),
-        new ExtractTextPlugin('styles.css'),
-        new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.NamedModulesPlugin(),
+        new webpack.ContextReplacementPlugin(
+            /angular(\\|\/)core(\\|\/)/,
+            path.resolve(__dirname, './src/main/webapp')
+        ),
         new writeFilePlugin(),
         new webpack.WatchIgnorePlugin([
-            path.resolve('./src/test'),
-        ])
-    ]
+            utils.root('src/test'),
+        ]),
+        new WebpackNotifierPlugin({
+            title: 'JHipster',
+            contentImage: path.join(__dirname, 'logo-jhipster.png')
+        })
+    ],
+    mode: 'development'
 });

@@ -4,17 +4,16 @@ import { Pipe, PipeTransform } from '@angular/core';
     name: 'groupBy'
 })
 export class GroupByPipe implements PipeTransform {
-
-    transform(collection: Object[] , term: string) {
+    transform(collection: Object[], term: string) {
         const newValue = [];
 
         collection.forEach((col) => {
             const keyVal = this.deepFind(col, term);
-            const index = newValue.findIndex( (myObj) => myObj.key === keyVal);
+            const index = newValue.findIndex((myObj) => myObj.key === keyVal);
             if (index >= 0) {
                 newValue[index].value.push(col);
             } else {
-                newValue.push({key: keyVal, value: [col]});
+                newValue.push({ key: keyVal, value: [col] });
             }
         });
         return newValue;
@@ -35,5 +34,4 @@ export class GroupByPipe implements PipeTransform {
         });
         return current;
     }
-
 }

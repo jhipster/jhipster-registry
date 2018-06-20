@@ -1,33 +1,36 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-import { Route } from '../../shared';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { Route } from 'app/shared';
 
 @Injectable()
 export class JhiHealthService {
-
     separator: string;
 
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
         this.separator = '.';
     }
 
     // get the Registry's health
     checkHealth(): Observable<any> {
-        return this.http.get('management/health').map((res: Response) => res.json());
+        return this.http.get('management/health');
     }
 
     // get the instance's health
     checkInstanceHealth(instance: Route): Observable<any> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
-            return this.http.get((instance.prefix + '/management/health')).map((res: Response) => res.json());
+            return this.http.get(instance.prefix + '/management/health');
         }
         return this.checkHealth();
     }
 
     transformHealthData(data): any {
         const response = [];
-        this.flattenHealthData(response, null, data);
+        if (data.details !== undefined) {
+            this.flattenHealthData(response, null, data.details);
+        } else {
+            this.flattenHealthData(response, null, data);
+        }
         return response;
     }
 
@@ -103,7 +106,7 @@ export class JhiHealthService {
         let result;
         if (path && name) {
             result = path + this.separator + name;
-        }  else if (path) {
+        } else if (path) {
             result = path;
         } else if (name) {
             result = name;
