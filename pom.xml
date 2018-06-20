@@ -15,7 +15,7 @@
         <java.version>1.8</java.version>
         <scala.version>2.12.1</scala.version>
         <node.version>v8.11.2</node.version>
-        <yarn.version>v1.6.0</yarn.version>
+        <yarn.version>v1.7.0</yarn.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
