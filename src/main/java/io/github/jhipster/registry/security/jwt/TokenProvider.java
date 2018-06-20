@@ -44,6 +44,12 @@ public class TokenProvider {
 
     @PostConstruct
     public void init() {
+        if ("this-secret-should-not-be-used-read-the-comment"
+            .equals(jHipsterProperties.getSecurity().getAuthentication().getJwt()
+            .getSecret())) {
+
+            log.error("WARNING! You are using the default JWT secret token, this **must** be changed in production!");
+        }
         this.secretKey = encoder.encodeToString(jHipsterProperties.getSecurity().getAuthentication().getJwt()
             .getSecret().getBytes(StandardCharsets.UTF_8));
 
