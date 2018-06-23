@@ -75,6 +75,9 @@ jhipster:
         allow-credentials: true
         max-age: 1800
     security:
+        client-authorization:
+          client-id: internal
+          client-secret: internal
         authentication:
             jwt:
                 # The secret key should come from a Spring Cloud Config server, and not from this file
