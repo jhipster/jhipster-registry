@@ -4,6 +4,7 @@ import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
@@ -16,12 +17,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * Created by on 23.06.18.
- *
- * @author David Steiman
- */
+import static io.github.jhipster.registry.config.Constants.PROFILE_UAA;
+
 @Service
+@Profile(PROFILE_UAA)
 public class OAuth2ClientCredentialsService {
 
     private RestTemplate restTemplate;
@@ -58,9 +57,9 @@ public class OAuth2ClientCredentialsService {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         final String authString = jHipsterProperties.getSecurity().getClientAuthorization().getClientId() + ":" + jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret();
         final String authorization = "Basic " + Base64.encodeBase64String(authString.getBytes());
-        headers.add("Authorization",  authorization);
+        headers.add("Authorization", authorization);
 
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("grant_type", "client_credentials");
 
         HttpEntity<?> requestEntity = new HttpEntity<>(map, headers);

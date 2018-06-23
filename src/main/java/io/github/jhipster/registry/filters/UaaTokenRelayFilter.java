@@ -6,16 +6,14 @@ import com.netflix.zuul.exception.ZuulException;
 import io.github.jhipster.registry.security.oauth2.OAuth2ClientCredentialsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import static io.github.jhipster.registry.config.Constants.PROFILE_UAA;
 import static io.github.jhipster.registry.filters.OAuth2TokenRelayFilter.AUTHORIZATION_HEADER;
 
-/**
- * Created by on 23.06.18.
- *
- * @author David Steiman
- */
 @Component
+@Profile(PROFILE_UAA)
 public class UaaTokenRelayFilter extends ZuulFilter {
 
     Logger log = LoggerFactory.getLogger(UaaTokenRelayFilter.class);

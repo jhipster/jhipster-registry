@@ -3,14 +3,13 @@ package io.github.jhipster.registry.config;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
-/**
- * Created by on 23.06.18.
- *
- * @author David Steiman
- */
+import static io.github.jhipster.registry.config.Constants.PROFILE_UAA;
+
 @Configuration
+@Profile(PROFILE_UAA)
 public class UaaConfiguration {
 
     @Bean
