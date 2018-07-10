@@ -7,7 +7,8 @@
     <form #form="ngForm" (ngSubmit)="refresh()">
         <div class="form-group">
             <label for="profile"><strong>Application</strong></label>
-            <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application" required>
+            <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application"
+                   required>
         </div>
 
         <div class="form-group">
@@ -61,24 +62,20 @@
         </ngb-tabset>
     </div>
 
-    <h3 class="head bottom">Configuration Source Information</h3>
-    <table class="table table-striped ">
+    <h3 class="head bottom">Configuration Sources</h3>
+    <table class="table table-striped">
         <thead>
-        <tr>
-            <th>Type</th>
-            <th *ngIf="!isNative">Repository URI</th>
-            <th>Location</th>
-        </tr>
+            <th>Index</th>
+            <th>Configuration</th>
         </thead>
         <tbody>
-        <tr *ngIf="isNative">
-            <td>Native (Local Filesystem)</td>
-            <td>{{ nativeSearchLocation }}</td>
-        </tr>
-        <tr *ngIf="!isNative">
-            <td>Git</td>
-            <td>{{ gitUri }}</td>
-            <td>/{{ gitSearchLocation }}</td>
+        <tr *ngFor="let source of configurationSources; let index=index">
+            <td>{{ index }}</td>
+            <td>
+                <ul>
+                    <li *ngFor="let prop of getKeys(source)">{{ prop }}: {{ source[prop] | json}}</li>
+                </ul>
+            </td>
         </tr>
         </tbody>
     </table>

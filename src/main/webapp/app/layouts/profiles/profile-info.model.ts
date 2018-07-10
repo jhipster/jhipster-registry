@@ -3,7 +3,5 @@ export class ProfileInfo {
     ribbonEnv: string;
     inProduction: boolean;
     swaggerEnabled: boolean;
-    nativeSearchLocation?: string;
-    gitUri?: string;
-    gitSearchLocation?: string;
+    configurationSources: Array<any>;
 }

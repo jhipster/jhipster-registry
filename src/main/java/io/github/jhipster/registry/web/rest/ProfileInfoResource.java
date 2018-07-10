@@ -1,8 +1,8 @@
 package io.github.jhipster.registry.web.rest;
 
 import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.registry.config.ConfigServerConfig;
 import io.github.jhipster.registry.config.DefaultProfileUtil;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Resource to return information about the currently running Spring profiles.
@@ -23,24 +24,19 @@ public class ProfileInfoResource {
 
     private final JHipsterProperties jHipsterProperties;
 
-    @Value("${spring.cloud.config.server.native.search-locations:}")
-    private String nativeSearchLocation;
+    private final ConfigServerConfig configServerConfig;
 
-    @Value("${spring.cloud.config.server.git.uri:}")
-    private String gitUri;
-
-    @Value("${spring.cloud.config.server.git.search-paths:}")
-    private String gitSearchLocation;
-
-    public ProfileInfoResource(Environment env, JHipsterProperties jHipsterProperties) {
+    public ProfileInfoResource(Environment env, JHipsterProperties jHipsterProperties, ConfigServerConfig configServerConfig) {
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
+        this.configServerConfig = configServerConfig;
     }
 
     @GetMapping("/profile-info")
     public ProfileInfoVM getActiveProfiles() {
         String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
-        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles), nativeSearchLocation, gitUri, gitSearchLocation);
+
+        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles), configServerConfig.getComposite());
     }
 
     private String getRibbonEnv(String[] activeProfiles) {
@@ -63,19 +59,12 @@ public class ProfileInfoResource {
 
         private String ribbonEnv;
 
-        private String nativeSearchLocation;
+        private List<Map<String, Object>> configurationSources;
 
-        private String gitUri;
-
-        private String gitSearchLocation;
-
-        ProfileInfoVM(String[] activeProfiles, String ribbonEnv, String nativeSearchLocation, String gitUri,
-                      String gitSearchLocation) {
+        ProfileInfoVM(String[] activeProfiles, String ribbonEnv, List<Map<String, Object>> configurationSources) {
             this.activeProfiles = activeProfiles;
             this.ribbonEnv = ribbonEnv;
-            this.nativeSearchLocation = nativeSearchLocation;
-            this.gitUri = gitUri;
-            this.gitSearchLocation = gitSearchLocation;
+            this.configurationSources = configurationSources;
         }
 
         public String[] getActiveProfiles() {
@@ -86,16 +75,8 @@ public class ProfileInfoResource {
             return ribbonEnv;
         }
 
-        public String getNativeSearchLocation() {
-            return nativeSearchLocation;
-        }
-
-        public String getGitUri() {
-            return gitUri;
-        }
-
-        public String getGitSearchLocation() {
-            return gitSearchLocation;
+        public List<Map<String, Object>> getConfigurationSources() {
+            return configurationSources;
         }
     }
 }

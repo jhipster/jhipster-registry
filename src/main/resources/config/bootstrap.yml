@@ -7,16 +7,16 @@ spring:
     application:
         name: jhipster-registry
     profiles:
-        active: dev,native
+        active: dev
+        include: composite
     cloud:
         config:
             server:
-                git:
-                    uri: https://github.com/jhipster/jhipster-registry-sample-config
-                native:
-                    search-locations: file:./central-config
-                prefix: /config
                 bootstrap: true
+                composite:
+                    - type: native
+                      search-locations: file:./central-config
+                prefix: /config
             fail-fast: true
             # name of the config server's property source (file.yml) that we want to use
             name: jhipster-registry

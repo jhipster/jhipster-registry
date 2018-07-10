@@ -15,9 +15,7 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
     label: string;
     activeRegistryProfiles: any;
     isNative: boolean;
-    nativeSearchLocation: string;
-    gitUri: string;
-    gitSearchLocation: string;
+    configurationSources: Array<any>;
     configAsYaml: any;
     configAsProperties: any;
     configAsJson: any;
@@ -53,9 +51,7 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
         this.profileService.getProfileInfo().then((response) => {
             this.activeRegistryProfiles = response.activeProfiles;
             this.isNative = this.activeRegistryProfiles.includes('native');
-            this.nativeSearchLocation = response.nativeSearchLocation;
-            this.gitUri = response.gitUri;
-            this.gitSearchLocation = response.gitSearchLocation;
+            this.configurationSources = response.configurationSources;
         });
 
         this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
@@ -111,5 +107,9 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    getKeys(obj: Object) {
+        return Object.keys(obj);
     }
 }
