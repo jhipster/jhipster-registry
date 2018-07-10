@@ -6,6 +6,10 @@ This is the [JHipster](http://www.jhipster.tech/) registry service, based on [Sp
 
 Full documentation is available on the [JHipster documentation for microservices](http://www.jhipster.tech/microservices-architecture).
 
+##Pre-requirements
+
+ 1. plz make sure that nodejs version is between 6 and 9 (I have test it in node8)
+
 ## Deploy to Heroku
 
 Click this button to deploy your own instance of the registry:
