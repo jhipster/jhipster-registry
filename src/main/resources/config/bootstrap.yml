@@ -12,11 +12,11 @@ spring:
     cloud:
         config:
             server:
-                prefix: /config
                 bootstrap: true
                 composite:
                     - type: native
                       search-locations: file:./central-config
+                prefix: /config
             fail-fast: true
             # name of the config server's property source (file.yml) that we want to use
             name: jhipster-registry

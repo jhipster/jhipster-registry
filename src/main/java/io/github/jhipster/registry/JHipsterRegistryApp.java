@@ -105,5 +105,9 @@ public class JHipsterRegistryApp {
                 "Please read the documentation at http://www.jhipster.tech/jhipster-registry/\n" +
                 "----------------------------------------------------------");
         }
+        String configServerStatus = env.getProperty("configserver.status");
+        log.info("\n----------------------------------------------------------\n\t" +
+                "Config Server: \t{}\n----------------------------------------------------------",
+            configServerStatus == null ? "Not found or not setup for this application" : configServerStatus);
     }
 }

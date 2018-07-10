@@ -4,10 +4,8 @@
 # ===================================================================
 
 spring:
-    application:
-        name: jhipster-registry
     profiles:
-        include: git
+        active: prod
     cloud:
         config:
             server:
@@ -22,7 +20,3 @@ spring:
             profile: prod # profile(s) of the property source
             label: master # toggle to switch to a different version of the configuration as stored in git
             # it can be set to any label, branch or commit of the config source git repository
-
-info:
-    project:
-        version: #project.version#
