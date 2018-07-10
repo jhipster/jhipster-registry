@@ -1,6 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { JHipsterRegistrySharedModule } from '../shared';
+import { CommonModule } from '@angular/common';
 
 import {
     registryState,
@@ -19,7 +20,7 @@ import {
 } from './';
 
 @NgModule({
-    imports: [JHipsterRegistrySharedModule, RouterModule.forRoot(registryState, { useHash: true })],
+    imports: [JHipsterRegistrySharedModule, CommonModule, RouterModule.forRoot(registryState, { useHash: true })],
     declarations: [
         JhiApplicationsComponent,
         JhiConfigComponent,

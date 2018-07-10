@@ -20,8 +20,7 @@ export class ProfileService {
                     const pi = new ProfileInfo();
                     pi.activeProfiles = data.activeProfiles;
                     pi.ribbonEnv = data.ribbonEnv;
-                    pi.nativeSearchLocation = data.nativeSearchLocation;
-                    pi.gitSearchLocation = data.gitSearchLocation;
+                    pi.configurationSources = data.configurationSources;
                     pi.inProduction = data.activeProfiles.includes('prod');
                     pi.swaggerEnabled = data.activeProfiles.includes('swagger');
                     return pi;

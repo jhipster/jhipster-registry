@@ -17,6 +17,9 @@ spring:
                 composite:
                     - type: native
                       search-locations: file:./central-config
+                    - type: git
+                      uri: https://github.com/jhipster/jhipster-registry-sample-config
+                      ble: yolo
             fail-fast: true
             # name of the config server's property source (file.yml) that we want to use
             name: jhipster-registry

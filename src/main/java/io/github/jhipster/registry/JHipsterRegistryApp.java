@@ -1,6 +1,7 @@
 package io.github.jhipster.registry;
 
 import io.github.jhipster.registry.config.ApplicationProperties;
+import io.github.jhipster.registry.config.ConfigServerConfig;
 import io.github.jhipster.registry.config.DefaultProfileUtil;
 
 import io.github.jhipster.config.JHipsterConstants;
@@ -25,7 +26,7 @@ import java.util.Collection;
 @EnableEurekaServer
 @EnableConfigServer
 @SpringBootApplication
-@EnableConfigurationProperties({ApplicationProperties.class})
+@EnableConfigurationProperties({ApplicationProperties.class, ConfigServerConfig.class})
 @EnableDiscoveryClient
 @EnableZuulProxy
 public class JHipsterRegistryApp {
