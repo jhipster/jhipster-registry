@@ -7,7 +7,8 @@
     <form #form="ngForm" (ngSubmit)="refresh()">
         <div class="form-group">
             <label for="profile"><strong>Application</strong></label>
-            <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application" required>
+            <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application"
+                   required>
         </div>
 
         <div class="form-group">
@@ -72,7 +73,7 @@
             <td>{{ index }}</td>
             <td>
                 <ul>
-                    <li *ngFor="let prop of getKeys(source)">{{ prop }}: {{ source[prop] }}</li>
+                    <li *ngFor="let prop of getKeys(source)">{{ prop }}: {{ source[prop] | json}}</li>
                 </ul>
             </td>
         </tr>
