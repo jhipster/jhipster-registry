@@ -70,6 +70,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
             Marker metricsMarker = MarkerFactory.getMarker("metrics");
             final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
                 .outputTo(LoggerFactory.getLogger("metrics"))
+                .markWith(metricsMarker)
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
