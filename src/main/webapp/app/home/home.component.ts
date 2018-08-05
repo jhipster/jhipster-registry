@@ -12,6 +12,7 @@ import { VERSION } from 'app/app.constants';
 import { EurekaStatusService } from './eureka.status.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
+import { LoginUAAModalService } from 'app/shared/uaa/login-uaa-modal.service';
 
 @Component({
     selector: 'jhi-home',
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     constructor(
         private principal: Principal,
         private loginModalService: LoginModalService,
+        private loginUAAModalService: LoginUAAModalService,
         private loginOAuth2Service: LoginOAuth2Service,
         private eventManager: JhiEventManager,
         private eurekaStatusService: EurekaStatusService,
@@ -81,6 +83,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.profileService.getProfileInfo().then((profileInfo) => {
             if (profileInfo.activeProfiles.indexOf('oauth2') > -1) {
                 this.loginOAuth2Service.login();
+            }
+            if (profileInfo.activeProfiles.indexOf('uaa') > -1) {
+                this.modalRef = this.loginUAAModalService.open();
             } else {
                 this.modalRef = this.loginModalService.open();
             }

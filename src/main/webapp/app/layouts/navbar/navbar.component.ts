@@ -4,7 +4,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { Principal, LoginModalService, LoginService } from 'app/shared';
+import { Principal, LoginModalService, LoginService, LoginUAAService, LoginUAAModalService } from 'app/shared';
 
 import { VERSION } from 'app/app.constants';
 
@@ -19,11 +19,14 @@ export class NavbarComponent implements OnInit {
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
     version: string;
+    activeProfiles: string[];
 
     constructor(
         private loginService: LoginService,
+        private loginUAAService: LoginUAAService,
         private principal: Principal,
         private loginModalService: LoginModalService,
+        private loginUAAModalService: LoginUAAModalService,
         private profileService: ProfileService,
         private eventManager: JhiEventManager,
         private router: Router
@@ -52,12 +55,20 @@ export class NavbarComponent implements OnInit {
     }
 
     login() {
-        this.modalRef = this.loginModalService.open();
+        if (this.activeProfiles.indexOf('uaa') > -1) {
+            this.modalRef = this.loginUAAModalService.open();
+        } else {
+            this.modalRef = this.loginModalService.open();
+        }
     }
 
     logout() {
         this.collapseNavbar();
-        this.loginService.logout();
+        if (this.activeProfiles.indexOf('uaa') > -1) {
+            this.loginUAAService.logout();
+        } else {
+            this.loginService.logout();
+        }
         this.router.navigate(['']);
     }
 
@@ -71,6 +82,7 @@ export class NavbarComponent implements OnInit {
 
     getProfileInfo() {
         this.profileService.getProfileInfo().then((profileInfo) => {
+            this.activeProfiles = profileInfo.activeProfiles;
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });
