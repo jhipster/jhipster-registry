@@ -93,7 +93,8 @@ public class JHipsterRegistryApp {
             env.getActiveProfiles());
 
         String secretKey = env.getProperty("jhipster.security.authentication.jwt.secret");
-        if (secretKey == null ) {
+        String base64SecretKey = env.getProperty("jhipster.security.authentication.jwt.base64-secret");
+        if (secretKey == null && base64SecretKey == null) {
             log.error("\n----------------------------------------------------------\n" +
                 "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
                 "Please read the documentation at http://www.jhipster.tech/jhipster-registry/\n" +
