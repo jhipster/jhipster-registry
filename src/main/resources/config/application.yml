@@ -80,7 +80,7 @@ eureka:
             version: ${info.project.version}
     client:
         enabled: true
-        fetch-registry: false
+        fetch-registry: true
         register-with-eureka: false
         instance-info-replication-interval-seconds: 10
         registry-fetch-interval-seconds: 10
