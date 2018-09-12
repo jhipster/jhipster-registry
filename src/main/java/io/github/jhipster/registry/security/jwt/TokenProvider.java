@@ -48,16 +48,18 @@ public class TokenProvider {
     public void init() {
         String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
         String base64secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
-        if (StringUtils.isEmpty(base64secret) &&
-            "this-secret-should-not-be-used-read-the-comment"
-                .equals(secret)) {
-
-            log.error("WARNING! You are using the default JWT secret token, this **must** be changed in production!");
-        }
         byte[] keyBytes;
         if (StringUtils.isEmpty(base64secret)) {
-            log.info("Warning: the JWT key used is not Base64-encoded. " +
+            log.info("The JWT key used is not Base64-encoded. " +
                 "We recommend using the `jhipster.security.authentication.jwt.base64-secret` key for optimum security.");
+
+            if (StringUtils.isEmpty(secret)) {
+                log.error("\n----------------------------------------------------------\n" +
+                    "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
+                    "Please read the documentation at https://www.jhipster.tech/jhipster-registry/\n" +
+                    "----------------------------------------------------------");
+                throw new RuntimeException("No JWT secret key is configured, the application cannot start.");
+            }
             keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         } else {
             log.debug("Using a Base64-encoded JWT secret key");

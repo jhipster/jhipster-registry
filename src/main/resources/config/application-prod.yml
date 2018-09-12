@@ -71,7 +71,6 @@ jhipster:
                 # The secret key should come from a Spring Cloud Config server, and not from this file
                 # If using the "native" profile, it should be located in the "central-config" directory
                 # If using the "git" profile, it should come from an external Git repository
-                secret: this-secret-should-not-be-used-read-the-comment
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000

@@ -93,20 +93,6 @@ public class JHipsterRegistryApp {
             env.getProperty("server.port"),
             env.getActiveProfiles());
 
-        String secretKey = env.getProperty("jhipster.security.authentication.jwt.secret");
-        String base64SecretKey = env.getProperty("jhipster.security.authentication.jwt.base64-secret");
-        if (StringUtils.isEmpty(secretKey) && StringUtils.isEmpty(base64SecretKey)) {
-            log.error("\n----------------------------------------------------------\n" +
-                "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
-                "Please read the documentation at https://www.jhipster.tech/jhipster-registry/\n" +
-                "----------------------------------------------------------");
-        } else if ("this-secret-should-not-be-used-read-the-comment".equals(secretKey)) {
-            log.error("\n----------------------------------------------------------\n" +
-                "Your JWT secret key is not configured using Spring Cloud Config, you will not be able to \n"+
-                "use the JHipster Registry dashboards to monitor external applications. \n" +
-                "Please read the documentation at https://www.jhipster.tech/jhipster-registry/\n" +
-                "----------------------------------------------------------");
-        }
         String configServerStatus = env.getProperty("configserver.status");
         log.info("\n----------------------------------------------------------\n\t" +
                 "Config Server: \t{}\n----------------------------------------------------------",
