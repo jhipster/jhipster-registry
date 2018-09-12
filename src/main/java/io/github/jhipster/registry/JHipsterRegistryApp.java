@@ -16,6 +16,7 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -94,7 +95,7 @@ public class JHipsterRegistryApp {
 
         String secretKey = env.getProperty("jhipster.security.authentication.jwt.secret");
         String base64SecretKey = env.getProperty("jhipster.security.authentication.jwt.base64-secret");
-        if (secretKey == null && base64SecretKey == null) {
+        if (StringUtils.isEmpty(secretKey) && StringUtils.isEmpty(base64SecretKey)) {
             log.error("\n----------------------------------------------------------\n" +
                 "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
                 "Please read the documentation at https://www.jhipster.tech/jhipster-registry/\n" +

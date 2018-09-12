@@ -46,21 +46,22 @@ public class TokenProvider {
 
     @PostConstruct
     public void init() {
-        if ("this-secret-should-not-be-used-read-the-comment"
-            .equals(jHipsterProperties.getSecurity().getAuthentication().getJwt()
-            .getSecret())) {
+        String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
+        String base64secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
+        if (StringUtils.isEmpty(base64secret) &&
+            "this-secret-should-not-be-used-read-the-comment"
+                .equals(secret)) {
 
             log.error("WARNING! You are using the default JWT secret token, this **must** be changed in production!");
         }
         byte[] keyBytes;
-        String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
-        if (!StringUtils.isEmpty(secret)) {
-            log.warn("Warning: the JWT key used is not Base64-encoded. " +
+        if (StringUtils.isEmpty(base64secret)) {
+            log.info("Warning: the JWT key used is not Base64-encoded. " +
                 "We recommend using the `jhipster.security.authentication.jwt.base64-secret` key for optimum security.");
             keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         } else {
             log.debug("Using a Base64-encoded JWT secret key");
-            keyBytes = Decoders.BASE64.decode(jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret());
+            keyBytes = Decoders.BASE64.decode(base64secret);
         }
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.tokenValidityInMilliseconds =
