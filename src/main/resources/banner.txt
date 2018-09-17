@@ -7,4 +7,4 @@
   ${AnsiColor.GREEN} ╚═════╝ ${AnsiColor.RED} ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝
 
 ${AnsiColor.BRIGHT_BLUE}:: JHipster Registry :: Running Spring Boot ${spring-boot.version} ::
-:: http://www.jhipster.tech ::${AnsiColor.DEFAULT}
+:: https://www.jhipster.tech ::${AnsiColor.DEFAULT}
