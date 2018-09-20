@@ -9,7 +9,11 @@
     },
     "JAVA_OPTS": {
       "description": "Java runtime options.",
-      "value": "-Xmx256m -Xss512k -Dfile.encoding=UTF-8"
+      "value": "-Xmx300m -Xss512k -XX:CICompilerCount=2 -XX:ReservedCodeCacheSize=50m -XX:MaxMetaspaceSize=80m -XX:ParallelGCThreads=3 -Dfile.encoding=UTF-8"
+    },
+    "SPRING_OPTS": {
+      "description": "Spring Boot options.",
+      "value": "--server.undertow.io-threads=1 --server.undertow.eager-filter-init=false"
     },
     "MAVEN_CUSTOM_OPTS": {
         "description": "Options for the Maven build.",
