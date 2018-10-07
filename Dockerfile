@@ -17,7 +17,8 @@ ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     JAVA_OPTS="" \
     SPRING_PROFILES_ACTIVE=prod
 EXPOSE 8761
-RUN mkdir /target && \
+RUN apk add --no-cache curl && \
+    mkdir /target && \
     chmod g+rwx /target
 CMD java \
         ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \
