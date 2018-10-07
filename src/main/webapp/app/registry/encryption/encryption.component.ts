@@ -35,7 +35,7 @@ export class JhiEncryptionComponent implements OnInit, OnDestroy {
     }
 
     decrypt() {
-        this.encryptionService.decrypt(this.encryptedText).subscribe(
+        this.encryptionService.decrypt(this.encryptedText.replace(/^{cipher}/, '')).subscribe(
             (response) => {
                 this.result = response;
                 this.textToEncrypt = response;
