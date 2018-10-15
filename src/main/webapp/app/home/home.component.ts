@@ -68,6 +68,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.eventManager.subscribe('authenticationSuccess', (message) => {
             this.principal.identity().then((account) => {
                 this.account = account;
+                this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.populateDashboard());
                 this.populateDashboard();
             });
         });
