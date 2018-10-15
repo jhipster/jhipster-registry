@@ -90,6 +90,7 @@ eureka:
         # see discussion about enable-self-preservation:
         # https://github.com/jhipster/generator-jhipster/issues/3654
         enable-self-preservation: false
+        peer-node-read-timeout-ms: 1000
     dashboard:
         path: /registry
     datacenter: JHipster-DataCenter
