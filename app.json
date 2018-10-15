@@ -15,17 +15,13 @@
       "description": "Spring Boot options.",
       "value": "--server.undertow.io-threads=1 --server.undertow.eager-filter-init=false"
     },
-    "MAVEN_CUSTOM_OPTS": {
-        "description": "Options for the Maven build.",
-        "value": "-Pprod,heroku -DskipTests"
-    },
-    "NPM_CONFIG_PRODUCTION": {
-        "description": "Set to false to install devDependencies",
-        "value": "false"
+    "JHIPSTER_REGISTRY_VERSION": {
+      "description": "Version of the registry to deploy.",
+      "value": "4.0.4"
     }
   },
   "buildpacks": [
-    {"url": "heroku/nodejs"},
-    {"url": "heroku/java"}
+    {"url": "heroku/jvm"},
+    {"url": "https://github.com/jkutner/jhipster-registry-buildpack"}
   ]
 }
