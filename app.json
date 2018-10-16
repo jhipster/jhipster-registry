@@ -17,11 +17,11 @@
     },
     "JHIPSTER_REGISTRY_VERSION": {
       "description": "Version of the registry to deploy.",
-      "value": "4.0.4"
+      "value": "4.0.5"
     }
   },
   "buildpacks": [
     {"url": "heroku/jvm"},
-    {"url": "https://github.com/jkutner/jhipster-registry-buildpack"}
+    {"url": "https://github.com/jhipster/jhipster-registry-buildpack"}
   ]
 }
