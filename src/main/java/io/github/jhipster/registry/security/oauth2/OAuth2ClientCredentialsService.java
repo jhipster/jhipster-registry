@@ -63,7 +63,8 @@ public class OAuth2ClientCredentialsService {
         map.add("grant_type", "client_credentials");
 
         HttpEntity<?> requestEntity = new HttpEntity<>(map, headers);
-        ResponseEntity<DefaultOAuth2AccessToken> responseEntity = this.restTemplate.exchange("http://UAA/oauth/token", HttpMethod.POST, requestEntity, DefaultOAuth2AccessToken.class);
+        String uaaServiceId = jHipsterProperties.getSecurity().getClientAuthorization().getTokenServiceId();
+        ResponseEntity<DefaultOAuth2AccessToken> responseEntity = this.restTemplate.exchange("http://" + uaaServiceId + "/oauth/token", HttpMethod.POST, requestEntity, DefaultOAuth2AccessToken.class);
 
         if (!responseEntity.getStatusCode().is2xxSuccessful()) {
             //TODO
