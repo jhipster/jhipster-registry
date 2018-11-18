@@ -23,12 +23,12 @@ export class JhiMetricsService {
     }
 
     threadDump(): Observable<any> {
-        return this.http.get(SERVER_API_URL + 'management/dump');
+        return this.http.get(SERVER_API_URL + 'management/threaddump');
     }
 
     instanceThreadDump(instance: Route): Observable<any> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
-            return this.http.get(instance.prefix + '/management/dump');
+            return this.http.get(instance.prefix + '/management/threaddump');
         }
         return this.threadDump();
     }
