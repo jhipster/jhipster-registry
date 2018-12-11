@@ -13,6 +13,7 @@ import com.netflix.eureka.util.StatusInfo;
 import io.github.jhipster.registry.web.rest.vm.EurekaVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ import java.util.Map;
 /**
  * Controller for viewing Eureka data.
  */
+@Profile("eureka")
 @RestController
 @RequestMapping("/api")
 public class EurekaResource {

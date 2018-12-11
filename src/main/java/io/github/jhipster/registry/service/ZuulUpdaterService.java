@@ -1,26 +1,35 @@
 package io.github.jhipster.registry.service;
 
-import com.netflix.appinfo.InstanceInfo;
-import com.netflix.discovery.shared.Application;
-import com.netflix.eureka.EurekaServerContextHolder;
 import io.github.jhipster.registry.service.dto.ZuulRouteDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.RoutesRefreshedEvent;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static io.github.jhipster.config.JHipsterDefaults.Cache.Hazelcast.ManagementCenter.url;
+import static io.github.jhipster.registry.config.Constants.PROFILE_CONSUL;
+import static io.github.jhipster.registry.config.Constants.PROFILE_EUREKA;
 
 /**
  * Updates Zuul proxies depending on available application instances.
  *
  * This uses directly the Eureka server, so it only works with the Eureka option.
  */
+@Profile("proxy")
 @Service
 public class ZuulUpdaterService {
 
@@ -32,59 +41,64 @@ public class ZuulUpdaterService {
 
     private final ApplicationEventPublisher publisher;
 
+    private final Environment environment;
+
+    private final DiscoveryClient discoveryClient;
+
     public ZuulUpdaterService(RouteLocator routeLocator, ZuulProperties zuulProperties,
-                              ApplicationEventPublisher publisher) {
+                              ApplicationEventPublisher publisher, Environment environment,
+                              DiscoveryClient discoveryClient) {
         this.routeLocator = routeLocator;
         this.zuulProperties = zuulProperties;
         this.publisher = publisher;
+        this.environment = environment;
+        this.discoveryClient = discoveryClient;
     }
 
-    @Scheduled(fixedDelay = 5_000)
+    @Scheduled(fixedDelayString = "${jhipster-registry.proxy.zuul-updater-frequency-ms:5000}")
     public void updateZuulRoutes() {
         boolean isDirty = false;
+        List<String> services = discoveryClient.getServices();
+        ArrayList<ServiceInstance> allInstances = new ArrayList<>();
+        for (String service : services) {
+            List<ServiceInstance> serviceInstances = discoveryClient.getInstances(service)
+                .stream()
+                .filter(serviceInstance -> this.getInstanceIdFromInstance(serviceInstance) != null)
+                .collect(Collectors.toList());
 
-        List<Application> applications = EurekaServerContextHolder
-            .getInstance().getServerContext().getRegistry().getApplications().getRegisteredApplications();
+            for (ServiceInstance instance : serviceInstances) {
+                allInstances.add(instance);
+                String serviceName = service.toLowerCase();
+                String instanceId = getInstanceIdFromInstance(instance);
+                if (instanceId != null) {
+                    String uri = instance.getUri().toString();
+                    log.debug("Checking instance {} - {} ", serviceName, uri);
+                    ZuulRouteDTO route = new ZuulRouteDTO(instanceId, "/" +
+                        serviceName + "/" + instanceId + "/**",
+                        null, uri, zuulProperties.isStripPrefix(), zuulProperties.getRetryable(), null,
+                        "UP");
 
-        for (Application application : applications) {
-
-            for (InstanceInfo instanceInfos : application.getInstances()) {
-                if(!instanceInfos.getStatus().equals(InstanceInfo.InstanceStatus.UP) &&
-                    !instanceInfos.getStatus().equals(InstanceInfo.InstanceStatus.STARTING)) continue;
-                String instanceId = instanceInfos.getId();
-                String url = instanceInfos.getHomePageUrl();
-                log.debug("Checking instance {} - {} ", instanceId, url);
-
-                ZuulRouteDTO route = new ZuulRouteDTO(instanceId, "/" +
-                    application.getName().toLowerCase() + "/" + instanceId + "/**",
-                    null, url, zuulProperties.isStripPrefix(), zuulProperties.getRetryable(), null,
-                    instanceInfos.getStatus().toString());
-
-                if (zuulProperties.getRoutes().containsKey(instanceId)) {
-                    log.debug("Instance '{}' already registered", instanceId);
-                    if (!zuulProperties.getRoutes().get(instanceId).getUrl().equals(url) ||
-                        !((ZuulRouteDTO) zuulProperties.getRoutes().get(instanceId)).getStatus().equals(instanceInfos.getStatus().toString())) {
-
-                        log.debug("Updating instance '{}' with new URL: {}", instanceId, url);
+                    if (zuulProperties.getRoutes().containsKey(instanceId)) {
+                        log.debug("Instance '{}' already registered", instanceId);
+                        if (!zuulProperties.getRoutes().get(instanceId).getUrl().equals(uri)) {
+                            log.debug("Updating instance '{}' with new URL: {}", instanceId, uri);
+                            zuulProperties.getRoutes().put(instanceId, route);
+                            isDirty = true;
+                        }
+                    } else {
+                        log.debug("Adding instance '{}' with URL: {}", instanceId, url);
                         zuulProperties.getRoutes().put(instanceId, route);
                         isDirty = true;
-                    }
-                } else {
-                    log.debug("Adding instance '{}' with URL: {}", instanceId, url);
-                    zuulProperties.getRoutes().put(instanceId, route);
-                    isDirty = true;
+                        }
                 }
             }
         }
-        List<String> zuulRoutesToRemove = new ArrayList<>();
-        for (String key : zuulProperties.getRoutes().keySet()) {
-            if (applications.stream()
-                .flatMap(application -> application.getInstances().stream())
-                .filter(instanceInfo -> instanceInfo.getId().equals(key))
-                .count() == 0) {
 
-                log.debug("Removing instance '{}'", key);
-                zuulRoutesToRemove.add(key);
+        List<String> zuulRoutesToRemove = new ArrayList<>();
+        for (String route : zuulProperties.getRoutes().keySet()) {
+            if(allInstances.stream().noneMatch(instance -> route.equals(getInstanceIdFromInstance(instance)))) {
+                log.debug("Removing instance '{}'", route);
+                zuulRoutesToRemove.add(route);
                 isDirty = true;
             }
         }
@@ -96,4 +110,20 @@ public class ZuulUpdaterService {
             this.publisher.publishEvent(new RoutesRefreshedEvent(routeLocator));
         }
     }
+
+    private String getInstanceIdFromInstance(ServiceInstance instance) {
+        if (isProfileActive(PROFILE_EUREKA)) {
+            EurekaDiscoveryClient.EurekaServiceInstance eurekaInstance = (EurekaDiscoveryClient.EurekaServiceInstance) instance;
+            return eurekaInstance.getInstanceInfo().getInstanceId();
+        }
+        if (isProfileActive(PROFILE_CONSUL)) {
+            return instance.getMetadata().get("instanceId");
+        }
+        return instance.getServiceId();
+    }
+
+    private boolean isProfileActive(String profile) {
+        return Arrays.asList(this.environment.getActiveProfiles()).contains(profile);
+    }
 }
+

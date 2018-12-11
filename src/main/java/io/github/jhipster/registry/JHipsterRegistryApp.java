@@ -24,12 +24,9 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 
-@EnableEurekaServer
-@EnableConfigServer
 @SpringBootApplication
 @EnableConfigurationProperties({ApplicationProperties.class, ConfigServerConfig.class})
 @EnableDiscoveryClient
-@EnableZuulProxy
 public class JHipsterRegistryApp {
 
     private static final Logger log = LoggerFactory.getLogger(JHipsterRegistryApp.class);

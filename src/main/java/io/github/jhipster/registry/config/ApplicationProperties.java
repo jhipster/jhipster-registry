@@ -3,13 +3,18 @@ package io.github.jhipster.registry.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Properties specific to JHipster.
+ * Properties specific to the JHipster Registry.
  *
- * <p>
- *     Properties are configured in the application.yml file.
- * </p>
  */
-@ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "jhipster-registry.proxy", ignoreUnknownFields = false)
 public class ApplicationProperties {
+    private Integer zuulUpdaterFrequencyMs;
 
+    public Integer getZuulUpdaterFrequencyMs() {
+        return zuulUpdaterFrequencyMs;
+    }
+
+    public void setZuulUpdaterFrequencyMs(Integer zuulUpdaterFrequencyMs) {
+        this.zuulUpdaterFrequencyMs = zuulUpdaterFrequencyMs;
+    }
 }

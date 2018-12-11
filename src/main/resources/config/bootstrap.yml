@@ -8,21 +8,30 @@ spring:
         name: jhipster-registry
     profiles:
         active: dev
-        include: composite
     cloud:
+        # Setting Spring Cloud Config defaults (with no activated profiles)
         config:
+            # Disable Spring Cloud Config embedded server as it is enabled only for the "configserver" profile
             server:
-                bootstrap: true
-                composite:
-                    - type: native
-                      search-locations: file:./central-config
-                prefix: /config
-            fail-fast: true
-            # name of the config server's property source (file.yml) that we want to use
-            name: jhipster-registry
-            profile: dev # profile(s) of the property source
-            label: master # toggle to switch to a different version of the configuration as stored in git
-            # it can be set to any label, branch or commit of the config source git repository
+                enabled: false
+            # Disable Spring Cloud Config client as it is enabled only for the "configserver" profile
+            enabled: false
+        consul:
+            # Disable Spring Cloud Consul discovery as it is enabled only for the "consul" profile
+            discovery:
+                enabled: false
+            # Disable retrieving the JHipster registry's config from consul
+            config:
+                enabled: false
+        kubernetes:
+            discovery:
+                enabled: false
+            config:
+                enabled: false
+    banner:
+        mode: OFF
+    main:
+        banner-mode: off
 
 info:
     project:
@@ -31,3 +40,9 @@ info:
 # uncomment to enable encryption features
 #encrypt:
 #    key: my-secret-encryption-key-to-change-in-production
+
+
+# Disable Eureka client discovery by default as it is enabled only in the eureka profile
+eureka:
+    client:
+        enabled: false

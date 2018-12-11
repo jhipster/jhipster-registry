@@ -86,6 +86,9 @@ jhipster:
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
+
+    swagger:
+        default-include-pattern: /.*
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: JHipsterRegistry@localhost
         base-url: http://127.0.0.1:8761

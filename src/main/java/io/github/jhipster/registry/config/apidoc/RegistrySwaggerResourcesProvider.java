@@ -13,7 +13,12 @@ import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * Retrieves all registered microservices Swagger resources.
@@ -29,8 +34,8 @@ public class RegistrySwaggerResourcesProvider implements SwaggerResourcesProvide
 
     private final DiscoveryClient discoveryClient;
 
-    public RegistrySwaggerResourcesProvider(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
-        this.routeLocator = routeLocator;
+    public RegistrySwaggerResourcesProvider(Optional<RouteLocator> routeLocator, DiscoveryClient discoveryClient) {
+        this.routeLocator = routeLocator.orElse(null);
         this.discoveryClient = discoveryClient;
     }
 
@@ -42,7 +47,13 @@ public class RegistrySwaggerResourcesProvider implements SwaggerResourcesProvide
         resources.add(swaggerResource("jhipster-registry", "/v2/api-docs"));
 
         //Add the registered microservices swagger docs as additional swagger resources
-        List<Route> routes = routeLocator.getRoutes();
+        List<Route> routes = ofNullable(routeLocator)
+            .map(RouteLocator::getRoutes)
+            .orElse(Collections.emptyList())
+            .stream()
+            .filter(route -> !"consul".equals(route.getId()))
+            .collect(Collectors.toList());
+
         routes.forEach(route -> {
             resources.add(swaggerResource(route.getId(), route.getFullPath().replace("**", "v2/api-docs")));
         });

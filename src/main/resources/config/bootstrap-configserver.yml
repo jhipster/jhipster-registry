@@ -1,0 +1,20 @@
+# ===================================================================
+# Spring Cloud Config bootstrap configuration for the "dev" profile
+# In prod profile, properties will be overwriten by the ones defined in bootstrap-prod.yml
+# ===================================================================
+
+spring:
+    profiles:
+        # Only the "composite" mode of the Spring Cloud config server is supported by the JHipster Registry
+        include: composite
+    cloud:
+        config:
+            server:
+                enabled: true
+                bootstrap: true
+                composite:
+                    - type: native
+                      search-locations: file:./central-config
+                prefix: /config
+            fail-fast: true
+            name: jhipster-registry

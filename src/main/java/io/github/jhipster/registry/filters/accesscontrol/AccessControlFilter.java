@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Zuul filter for restricting access to backend micro-services endpoints.
@@ -23,8 +24,8 @@ public class AccessControlFilter extends ZuulFilter {
 
     private final JHipsterProperties jHipsterProperties;
 
-    public AccessControlFilter(RouteLocator routeLocator, JHipsterProperties jHipsterProperties) {
-        this.routeLocator = routeLocator;
+    public AccessControlFilter(Optional<RouteLocator> routeLocator, JHipsterProperties jHipsterProperties) {
+        this.routeLocator = routeLocator.orElse(null);
         this.jHipsterProperties = jHipsterProperties;
     }
 

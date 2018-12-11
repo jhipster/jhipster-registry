@@ -1,0 +1,53 @@
+# ===================================================================
+# Eureka server configuration (eureka.server.*)
+#
+# Full list of properties with default values at:
+# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
+#
+# Documentation at:
+# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
+# ===================================================================
+
+eureka:
+    instance:
+        appname: jhipster-registry
+        instance-id: jhipsterRegistry:${spring.application.instance-id:${random.value}}
+        prefer-ip-address: true
+        lease-renewal-interval-in-seconds: 5
+        lease-expiration-duration-in-seconds: 10
+        status-page-url-path: ${management.endpoints.web.base-path}/info
+        health-check-url-path: ${management.endpoints.web.base-path}/health
+        metadata-map:
+            zone: primary # This is needed for the load balancer
+            profile: ${spring.profiles.active}
+            version: ${info.project.version}
+    client:
+        enabled: true
+        fetch-registry: true
+        register-with-eureka: false
+        instance-info-replication-interval-seconds: 10
+        registry-fetch-interval-seconds: 10
+        service-url:
+            defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
+    server:
+        # see discussion about enable-self-preservation:
+        # https://github.com/jhipster/generator-jhipster/issues/3654
+        enable-self-preservation: false
+    dashboard:
+        path: /registry
+    datacenter: JHipster-DataCenter
+    environment: JHipster-Environment
+
+ribbon:
+    eureka:
+        enabled: true
+
+spring:
+    autoconfigure:
+        exclude:
+            # Disable consul autoconfigurations
+            - org.springframework.cloud.consul.serviceregistry.ConsulAutoServiceRegistrationAutoConfiguration
+            - org.springframework.cloud.consul.serviceregistry.ConsulServiceRegistryAutoConfiguration
+            # Disable kubernetes autoconfigurations
+            - org.springframework.cloud.kubernetes.KubernetesAutoConfiguration
+            - org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClientAutoConfiguration

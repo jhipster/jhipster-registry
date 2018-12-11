@@ -1,0 +1,8 @@
+# ===================================================================
+# Spring Cloud Config bootstrap configuration for the "dev" profile
+# In prod profile, properties will be overwriten by the ones defined in bootstrap-prod.yml
+# ===================================================================
+
+zuul:
+    prefix: /services/ #slash before and after
+    strip-prefix: true

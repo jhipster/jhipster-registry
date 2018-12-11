@@ -23,5 +23,24 @@ To run the cloned repository;
 * For development run `./mvnw -Pdev,webpack` to just start in development or run `./mvnw` and run `yarn && yarn start` for hot reload of client side code.
 * For production profile run `./mvnw -Pprod`
 
+## Available profiles
+
+### Security
+
+- `oauth2`: authentication with an OAuth2 provider
+- `uaa` :  authentication with a JHipster UAA
+
+### Discovery
+
+- `eureka`: service discovery with the Eureka registry (start an embedded Eureka server)
+
+### Configuration
+
+- `configserver`: centralized configuration with Spring Cloud Config (start an embedded Spring Cloud Config server)
+
+### Others
+
+- `proxy`: enable the embedded Zuul proxy (to access microservices endpoints)
+
 [travis-image]: https://travis-ci.org/jhipster/jhipster-registry.svg?branch=master
 [travis-url]: https://travis-ci.org/jhipster/jhipster-registry

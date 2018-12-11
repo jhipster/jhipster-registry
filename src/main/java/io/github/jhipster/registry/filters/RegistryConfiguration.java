@@ -1,5 +1,7 @@
 package io.github.jhipster.registry.filters;
 
+import java.util.Optional;
+
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.registry.filters.accesscontrol.AccessControlFilter;
 import io.github.jhipster.registry.filters.responserewriting.SwaggerBasePathRewritingFilter;
@@ -23,7 +25,7 @@ public class RegistryConfiguration {
     public static class AccessControlFilterConfiguration {
 
         @Bean
-        public AccessControlFilter accessControlFilter(RouteLocator routeLocator, JHipsterProperties jHipsterProperties){
+        public AccessControlFilter accessControlFilter(Optional<RouteLocator> routeLocator, JHipsterProperties jHipsterProperties){
             return new AccessControlFilter(routeLocator, jHipsterProperties);
         }
     }

@@ -14,9 +14,8 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+
 spring:
-    application:
-        name: jhipster-registry
     mvc:
         favicon:
             enabled: false
@@ -34,20 +33,12 @@ server:
 logging:
     file: target/jhipster-registry.log
 
-ribbon:
-    eureka:
-        enabled: true
-
-zuul:
-    prefix: /services/ #slash before and after
-    strip-prefix: true
-
 management:
     endpoints:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile"]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "scheduledtasks", "service-registry"]
     endpoint:
         health:
             show-details: when_authorized
@@ -55,49 +46,13 @@ management:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
 
-# ===================================================================
-# Eureka server configuration (eureka.server.*)
-#
-# Full list of properties with default values at:
-# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
-#
-# Documentation at:
-# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
-# ===================================================================
-
-eureka:
-    instance:
-        appname: jhipster-registry
-        instanceId: jhipsterRegistry:${spring.application.instance-id:${random.value}}
-        prefer-ip-address: true
-        lease-renewal-interval-in-seconds: 5
-        lease-expiration-duration-in-seconds: 10
-        status-page-url-path: ${management.endpoints.web.base-path}/info
-        health-check-url-path: ${management.endpoints.web.base-path}/health
-        metadata-map:
-            zone: primary # This is needed for the load balancer
-            profile: ${spring.profiles.active}
-            version: ${info.project.version}
-    client:
-        enabled: true
-        fetch-registry: false
-        register-with-eureka: false
-        instance-info-replication-interval-seconds: 10
-        registry-fetch-interval-seconds: 10
-        service-url:
-            defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
-    server:
-        # see discussion about enable-self-preservation:
-        # https://github.com/jhipster/generator-jhipster/issues/3654
-        enable-self-preservation: false
-    dashboard:
-        path: /registry
-    datacenter: JHipster-DataCenter
-    environment: JHipster-Environment
-
 jhipster:
     swagger:
         default-include-pattern: /(api|config)/.*
         title: JHipster Registry API
         description: JHipster Registry API documentation
         version: ${info.project.version}
+
+jhipster-registry:
+    proxy:
+        zuul-updater-frequency-ms: 5000
