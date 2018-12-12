@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.github.jhipster.config.JHipsterDefaults.Cache.Hazelcast.ManagementCenter.url;
-import static io.github.jhipster.registry.config.Constants.PROFILE_CONSUL;
+import static io.github.jhipster.registry.config.Constants.PROFILE_CONSULDISCOVERY;
 import static io.github.jhipster.registry.config.Constants.PROFILE_EUREKA;
 
 /**
@@ -116,7 +116,7 @@ public class ZuulUpdaterService {
             EurekaDiscoveryClient.EurekaServiceInstance eurekaInstance = (EurekaDiscoveryClient.EurekaServiceInstance) instance;
             return eurekaInstance.getInstanceInfo().getInstanceId();
         }
-        if (isProfileActive(PROFILE_CONSUL)) {
+        if (isProfileActive(PROFILE_CONSULDISCOVERY)) {
             return instance.getMetadata().get("instanceId");
         }
         return instance.getServiceId();

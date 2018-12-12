@@ -20,23 +20,32 @@ There are a few limitations when deploying to Heroku.
 ## Running locally
 
 To run the cloned repository;
-* For development run `./mvnw -Pdev,webpack` to just start in development or run `./mvnw` and run `yarn && yarn start` for hot reload of client side code.
-* For production profile run `./mvnw -Pprod`
+* For development run for example:
+
+    - `./mvnw -Pdev,eureka,configserver,proxy` for an embedded Eureka server and Spring Cloud config server and proxy to access microservice APIs.
+    - `./mvnw -Pdev,consuldiscovery,consulconfig,proxy` to use Consul discovery and configuration.
+    - `./mvnw -Pdev,kubernetes,proxy` to use Kubernetes discovery and configuration.
+
+* Run `yarn && yarn start` for hot reload of client side code.
 
 ## Available profiles
 
-### Security
+### Security (choose one or don't set any for JWT)
 
 - `oauth2`: authentication with an OAuth2 provider
 - `uaa` :  authentication with a JHipster UAA
 
-### Discovery
+### Discovery (choose one)
 
 - `eureka`: service discovery with the Eureka registry (start an embedded Eureka server)
+- `consuldiscovery`: service discovery with Consul (requires a Consul server)
+- `kubernetes`: service discovery with Kubernetes (works only in Kubernetes)
 
-### Configuration
+### Configuration ()
 
 - `configserver`: centralized configuration with Spring Cloud Config (start an embedded Spring Cloud Config server)
+- `consulconfig`: centralized configuration based on the Consul KV store (requires a Consul server)
+- `kubernetes`: centralized configuration based on the Kuberentes Configmaps store (works only in Kubernetes)
 
 ### Others
 

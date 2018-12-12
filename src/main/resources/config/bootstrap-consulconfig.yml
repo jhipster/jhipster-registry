@@ -1,0 +1,17 @@
+# ===================================================================
+# Profile to enable Consul config for the registry
+# ===================================================================
+
+spring:
+    cloud:
+        consul:
+            config:
+                enabled: true
+                fail-fast: true
+                format: yaml
+                profile-separator: "-"
+    autoconfigure:
+        exclude:
+            # Disable kubernetes autoconfigurations
+            - org.springframework.cloud.kubernetes.KubernetesAutoConfiguration
+            - org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClientAutoConfiguration

@@ -12,9 +12,11 @@ spring:
             server:
                 enabled: true
                 bootstrap: true
-                composite:
-                    - type: native
-                      search-locations: file:./central-config
                 prefix: /config
             fail-fast: true
             name: jhipster-registry
+    autoconfigure:
+        exclude:
+            # Disable kubernetes autoconfigurations
+            - org.springframework.cloud.kubernetes.KubernetesAutoConfiguration
+            - org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClientAutoConfiguration

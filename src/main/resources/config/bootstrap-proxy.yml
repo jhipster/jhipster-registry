@@ -6,3 +6,7 @@
 zuul:
     prefix: /services/ #slash before and after
     strip-prefix: true
+
+jhipster-registry:
+    proxy:
+        zuul-updater-frequency-ms: 5000

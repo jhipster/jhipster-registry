@@ -1,0 +1,25 @@
+# ===================================================================
+# Profile to enable Consul discovery
+# ===================================================================
+spring:
+    cloud:
+        consul:
+            discovery:
+                tags:
+                    - profile=${spring.profiles.active}
+                    - version=${info.project.version:}
+                    - git-version=${git.commit.id.describe:}
+                    - git-commit=${git.commit.id.abbrev:}
+                    - git-branch=${git.branch:}
+                    - instanceId=${spring.cloud.consul.discovery.instanceId}
+                enabled: true
+                instanceId: jhipsterRegistry:${spring.application.instance-id:${random.value}}
+            port: 8500
+        service-registry:
+            auto-registration:
+                enabled: false # The registry will not register itself to consul
+    autoconfigure:
+        exclude:
+            # Disable kubernetes autoconfigurations
+            - org.springframework.cloud.kubernetes.KubernetesAutoConfiguration
+            - org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClientAutoConfiguration

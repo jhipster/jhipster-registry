@@ -12,7 +12,7 @@ public class Constants {
       Discovery.
      */
     public static final String PROFILE_EUREKA = "eureka";
-    public static final String PROFILE_CONSUL = "consul";
+    public static final String PROFILE_CONSULDISCOVERY = "consuldiscovery";
     public static final String PROFILE_KUBERNTETES = "kubernetes";
 
 

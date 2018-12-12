@@ -24,14 +24,11 @@ spring:
             config:
                 enabled: false
         kubernetes:
+            enabled: false
             discovery:
                 enabled: false
             config:
                 enabled: false
-    banner:
-        mode: OFF
-    main:
-        banner-mode: off
 
 info:
     project:

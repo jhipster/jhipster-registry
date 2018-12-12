@@ -1,0 +1,17 @@
+# ===================================================================
+# Spring Boot bootrap configuration for the "prod" profile.
+#
+# This profile is used for backward compatibility to automatically enable
+# the eureka, proxy and configserver profile
+# ===================================================================
+
+spring:
+    cloud:
+        config:
+            server:
+                composite:
+                    - type: native
+                      search-locations: file:./central-config
+
+server:
+    port: 8761

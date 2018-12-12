@@ -1,0 +1,15 @@
+# ===================================================================
+# Profile to enable Consul discovery
+# ===================================================================
+spring:
+    cloud:
+        kubernetes:
+            config:
+                enabled: true
+            discovery:
+                enabled: true
+    autoconfigure:
+        exclude:
+            # Disable consul autoconfigurations
+            - org.springframework.cloud.consul.serviceregistry.ConsulAutoServiceRegistrationAutoConfiguration
+            - org.springframework.cloud.consul.serviceregistry.ConsulServiceRegistryAutoConfiguration
