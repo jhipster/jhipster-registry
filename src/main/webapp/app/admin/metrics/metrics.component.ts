@@ -81,7 +81,7 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
     refreshThreadDumpData() {
         this.metricsService.instanceThreadDump(this.activeRoute).subscribe((data) => {
             const modalRef = this.modalService.open(JhiMetricsMonitoringModalComponent, { size: 'lg' });
-            modalRef.componentInstance.threadDump = data;
+            modalRef.componentInstance.threadDump = data.threads;
             modalRef.result.then(
                 (result) => {
                     // Left blank intentionally, nothing to do here
