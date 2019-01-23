@@ -196,7 +196,7 @@
     </table>
 
     <h3>Endpoints requests (time in millisecond)</h3>
-    <div class="table-responsive" *ngIf="!updatingMetrics">
+    <div class="table-responsive" *ngIf="!updatingMetrics && metrics && metrics.endpointsRequests">
         <table class="table table-striped">
             <thead>
             <tr>
