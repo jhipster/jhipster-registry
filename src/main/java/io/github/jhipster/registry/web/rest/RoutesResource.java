@@ -1,6 +1,5 @@
 package io.github.jhipster.registry.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import com.netflix.appinfo.InstanceInfo;
 import io.github.jhipster.registry.service.dto.ZuulRouteDTO;
 import io.github.jhipster.registry.web.rest.vm.RouteVM;
@@ -40,7 +39,6 @@ public class RoutesResource {
     }
 
     @GetMapping("/routes")
-    @Timed
     public ResponseEntity<List<RouteVM>> getRoutes() {
 
         List<Route> routes = routeLocator.getRoutes();

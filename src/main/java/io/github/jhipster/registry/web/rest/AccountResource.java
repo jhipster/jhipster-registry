@@ -13,8 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.userdetails.User;
 
-import com.codahale.metrics.annotation.Timed;
-
 import io.github.jhipster.registry.web.rest.vm.UserVM;
 
 /**
@@ -33,7 +31,6 @@ public class AccountResource {
      * @return the login if the user is authenticated
      */
     @GetMapping("/authenticate")
-    @Timed
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
@@ -46,7 +43,6 @@ public class AccountResource {
      * Error) if the user couldn't be returned
      */
     @GetMapping("/account")
-    @Timed
     public ResponseEntity<UserVM> getAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
