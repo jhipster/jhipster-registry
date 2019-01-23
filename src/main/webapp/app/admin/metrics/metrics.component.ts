@@ -92,21 +92,6 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
         }
     }
 
-    refreshThreadDumpData() {
-        this.metricsService.instanceThreadDump(this.activeRoute).subscribe((data) => {
-            const modalRef = this.modalService.open(JhiMetricsMonitoringModalComponent, { size: 'lg' });
-            modalRef.componentInstance.threadDump = data.threads;
-            modalRef.result.then(
-                (result) => {
-                    // Left blank intentionally, nothing to do here
-                },
-                (reason) => {
-                    // Left blank intentionally, nothing to do here
-                }
-            );
-        });
-    }
-
     filterNaN(input) {
         if (isNaN(input)) {
             return 0;
@@ -140,7 +125,7 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
     }
 
     open() {
-        const modalRef = this.modalService.open(JhiMetricsMonitoringModalComponent);
+        const modalRef = this.modalService.open(JhiMetricsMonitoringModalComponent, { size: 'lg' });
         modalRef.componentInstance.threadDump = this.threadData;
     }
 
