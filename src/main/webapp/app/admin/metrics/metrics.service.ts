@@ -11,13 +11,13 @@ export class JhiMetricsService {
 
     // get the Registry's metrics
     getMetrics(): Observable<any> {
-        return this.http.get(SERVER_API_URL + 'management/metrics');
+        return this.http.get(SERVER_API_URL + 'management/jhi-metrics');
     }
 
     // get the instance's metrics
     getInstanceMetrics(instance: Route): Observable<any> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
-            return this.http.get(instance.prefix + '/management/metrics');
+            return this.http.get(instance.prefix + '/management/jhi-metrics');
         }
         return this.getMetrics();
     }

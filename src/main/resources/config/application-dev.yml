@@ -89,10 +89,8 @@ jhipster:
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: JHipsterRegistry@localhost
         base-url: http://127.0.0.1:8761
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx:
-            enabled: true
-        logs: # Reports Dropwizard metrics in the logs
+    metrics:
+        logs:  # Reports metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
     logging:
