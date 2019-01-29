@@ -129,6 +129,14 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
         modalRef.componentInstance.threadDump = this.threadData;
     }
 
+    isObjectExisting(metrics: any, key: string) {
+        return metrics && metrics[key];
+    }
+
+    isObjectExistingAndNotEmpty(metrics: any, key: string) {
+        return this.isObjectExisting(metrics, key) && JSON.stringify(metrics[key]) !== '{}';
+    }
+
     ngOnDestroy() {
         // prevent memory leak when component destroyed
         this.subscription.unsubscribe();

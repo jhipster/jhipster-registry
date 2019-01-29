@@ -97,49 +97,170 @@
         </div>
     </div>
 
-    <h3>Garbage collector statistics</h3>
-    <div class="row">
-        <div class="col-md-4">
-            <div *ngIf="metrics.garbageCollector">
-                    <span>
-                        GC Live Data Size/GC Max Data Size
-                        ({{metrics.garbageCollector['jvm.gc.live.data.size'] / 1048576 | number:'1.0-0'}}M
-                        / {{metrics.garbageCollector['jvm.gc.max.data.size'] / 1048576 | number:'1.0-0'}}M)</span>
+    <div *ngIf="isObjectExisting(metrics, 'garbageCollector')">
+        <h3>Garbage collector statistics</h3>
+        <div class="row" *ngIf="!updatingMetrics">
+            <div class="col-md-4">
+                <span>
+                    GC Live Data Size/GC Max Data Size
+                    ({{metrics.garbageCollector['jvm.gc.live.data.size'] / 1048576 | number:'1.0-0'}}M
+                    / {{metrics.garbageCollector['jvm.gc.max.data.size'] / 1048576 | number:'1.0-0'}}M)
+                </span>
                 <ngb-progressbar [max]="metrics.garbageCollector['jvm.gc.max.data.size']"
                                  [value]="metrics.garbageCollector['jvm.gc.live.data.size']" [striped]="true"
                                  [animated]="false" type="success">
                     <span>{{100 * metrics.garbageCollector['jvm.gc.live.data.size'] / metrics.garbageCollector['jvm.gc.max.data.size'] | number:'1.0-2'}}%</span>
                 </ngb-progressbar>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div *ngIf="metrics.garbageCollector">
-                    <span>
-                        GC Memory Promoted/GC Memory Allocated
-                        ({{metrics.garbageCollector['jvm.gc.memory.promoted'] / 1048576 | number:'1.0-0'}}M
-                        / {{metrics.garbageCollector['jvm.gc.memory.allocated'] / 1048576 | number:'1.0-0'}}M)</span>
+            <div class="col-md-4">
+                <span>
+                    GC Memory Promoted/GC Memory Allocated
+                    ({{metrics.garbageCollector['jvm.gc.memory.promoted'] / 1048576 | number:'1.0-0'}}M
+                    / {{metrics.garbageCollector['jvm.gc.memory.allocated'] / 1048576 | number:'1.0-0'}}M)
+                </span>
                 <ngb-progressbar [max]="metrics.garbageCollector['jvm.gc.memory.allocated']"
                                  [value]="metrics.garbageCollector['jvm.gc.memory.promoted']" [striped]="true"
                                  [animated]="false" type="success">
                     <span>{{100 * metrics.garbageCollector['jvm.gc.memory.promoted'] / metrics.garbageCollector['jvm.gc.memory.allocated'] | number:'1.0-2'}}%</span>
                 </ngb-progressbar>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="row" *ngIf="metrics.garbageCollector">
-                <div class="col-md-9">Classes loaded</div>
-                <div class="col-md-3 text-right">{{metrics.garbageCollector.classesLoaded}}</div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-9">Classes loaded</div>
+                    <div class="col-md-3 text-right">{{metrics.garbageCollector.classesLoaded}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-9">Classes unloaded</div>
+                    <div class="col-md-3 text-right">{{metrics.garbageCollector.classesUnloaded}}</div>
+                </div>
             </div>
-            <div class="row" *ngIf="metrics.garbageCollector">
-                <div class="col-md-9">Classes unloaded</div>
-                <div class="col-md-3 text-right">{{metrics.garbageCollector.classesUnloaded}}</div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-right">Count</th>
+                        <th class="text-right">Mean</th>
+                        <th class="text-right">Min</th>
+                        <th class="text-right">p50</th>
+                        <th class="text-right">p75</th>
+                        <th class="text-right">p95</th>
+                        <th class="text-right">p99</th>
+                        <th class="text-right">Max</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>jvm.gc.pause</td>
+                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause'].count}}</td>
+                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause'].mean | number:'1.0-3'}}</td>
+                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.0'] | number:'1.0-3'}}</td>
+                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.5'] | number:'1.0-3'}}</td>
+                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.75'] | number:'1.0-3'}}</td>
+                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.95'] | number:'1.0-3'}}</td>
+                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.99'] | number:'1.0-3'}}</td>
+                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause'].max | number:'1.0-3'}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="table-responsive" *ngIf="!updatingMetrics && metrics.garbageCollector">
+    </div>
+
+    <div class="well well-lg" *ngIf="updatingMetrics && !metrics">Updating...</div>
+
+    <div *ngIf="isObjectExisting(metrics, 'http.server.requests')">
+        <h3>HTTP requests (time in millisecond)</h3>
+        <table class="table table-striped" *ngIf="!updatingMetrics">
+            <thead>
+            <tr>
+                <th>Code</th>
+                <th>Count</th>
+                <th class="text-right">Mean</th>
+                <th class="text-right">Max</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let entry of metrics['http.server.requests']['percode'] | keys">
+                <td>{{entry.key}}</td>
+                <td>
+                    <ngb-progressbar [max]="metrics['http.server.requests']['all'].count" [value]="entry.value.count" [striped]="true"
+                                     [animated]="false" type="success">
+                        <span>{{entry.value.count}}</span>
+                    </ngb-progressbar>
+                </td>
+                <td class="text-right">
+                    {{filterNaN(entry.value.mean) | number:'1.0-2'}}
+                </td>
+                <td class="text-right">{{entry.value.max | number:'1.0-2'}}</td>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="isObjectExisting(metrics, 'services')">
+        <h3>Endpoints requests (time in millisecond)</h3>
+        <div class="table-responsive" *ngIf="!updatingMetrics">
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th></th>
+                    <th>Method</th>
+                    <th>Endpoint url</th>
+                    <th class="text-right">Count</th>
+                    <th class="text-right">Mean</th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-container *ngFor="let entry of metrics.services | keys">
+                    <tr *ngFor="let method of entry.value | keys">
+                        <td>{{method.key}}</td>
+                        <td>{{entry.key}}</td>
+                        <td class="text-right">{{method.value.count}}</td>
+                        <td class="text-right">{{method.value.mean | number:'1.0-3'}}</td>
+                    </tr>
+                </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="isObjectExistingAndNotEmpty(metrics, 'cache')">
+        <h3>Cache statistics</h3>
+        <div class="table-responsive" *ngIf="!updatingMetrics">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Cache name</th>
+                    <th class="text-right">Cache Hits</th>
+                    <th class="text-right">Cache Puts</th>
+                    <th class="text-right">Cache Size</th>
+                    <th class="text-right">Cache Entry Memory</th>
+                    <th class="text-right">Cache Entries</th>
+                    <th class="text-right">Cache Partition Gets</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let entry of metrics.cache | keys">
+                    <td>{{entry.key}}</td>
+                    <td class="text-right">{{entry.value['cache.gets.hit']}}</td>
+                    <td class="text-right">{{entry.value['cache.puts']}}</td>
+                    <td class="text-right">{{entry.value['cache.size']}}</td>
+                    <td class="text-right">{{entry.value['cache.entry.memory']}}</td>
+                    <td class="text-right">{{entry.value['cache.entries']}}</td>
+                    <td class="text-right">{{entry.value['cache.partition.gets']}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="isObjectExistingAndNotEmpty(metrics, 'databases')">
+        <h3>DataSource statistics (time in millisecond)</h3>
+        <div class="table-responsive" *ngIf="!updatingMetrics">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><span>Connection Pool Usage</span>
+                    </th>
                     <th class="text-right">Count</th>
                     <th class="text-right">Mean</th>
                     <th class="text-right">Min</th>
@@ -151,156 +272,43 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>jvm.gc.pause</td>
-                    <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause'].count}}</td>
-                    <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause'].mean | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.0'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.5'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.75'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.95'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.99'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause'].max | number:'1.0-3'}}</td>
+                <tr *ngIf="metrics.databases.acquire">
+                    <td>Acquire</td>
+                    <td class="text-right">{{metrics.databases.acquire.count}}</td>
+                    <td class="text-right">{{filterNaN(metrics.databases.acquire.mean) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.databases.acquire['0.0'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.acquire['0.5'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.acquire['0.75'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.acquire['0.95'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.acquire['0.99'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.databases.acquire.max) | number:'1.0-2'}}</td>
+                </tr>
+                <tr *ngIf="metrics.databases.creation">
+                    <td>Creation</td>
+                    <td class="text-right">{{metrics.databases.creation.count}}</td>
+                    <td class="text-right">{{filterNaN(metrics.databases.creation.mean) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.databases.creation['0.0'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.creation['0.5'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.creation['0.75'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.creation['0.95'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.creation['0.99'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.databases.creation.max) | number:'1.0-2'}}
+                    </td>
+                </tr>
+                <tr *ngIf="metrics.databases.usage">
+                    <td>Usage</td>
+                    <td class="text-right">{{metrics.databases.usage.count}}</td>
+                    <td class="text-right">{{filterNaN(metrics.databases.usage.mean) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.databases.usage['0.0'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.usage['0.5'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.usage['0.75'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.usage['0.95'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{metrics.databases.usage['0.99'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.databases.usage.max) | number:'1.0-2'}}</td>
                 </tr>
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <div class="well well-lg" *ngIf="updatingMetrics && !metrics">Updating...</div>
-
-    <h3>HTTP requests (time in millisecond)</h3>
-    <table class="table table-striped" *ngIf="!updatingMetrics && metrics && metrics['http.server.requests']">
-        <thead>
-        <tr>
-            <th>Code</th>
-            <th>Count</th>
-            <th class="text-right">Mean</th>
-            <th class="text-right">Max</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let entry of metrics['http.server.requests']['percode'] | keys">
-            <td>{{entry.key}}</td>
-            <td>
-                <ngb-progressbar [max]="metrics['http.server.requests']['all'].count" [value]="entry.value.count" [striped]="true"
-                                 [animated]="false" type="success">
-                    <span>{{entry.value.count}}</span>
-                </ngb-progressbar>
-            </td>
-            <td class="text-right">
-                {{filterNaN(entry.value.mean) | number:'1.0-2'}}
-            </td>
-            <td class="text-right">{{entry.value.max | number:'1.0-2'}}</td>
-        </tbody>
-    </table>
-
-    <h3>Endpoints requests (time in millisecond)</h3>
-    <div class="table-responsive" *ngIf="!updatingMetrics && metrics && metrics.endpointsRequests">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Method</th>
-                <th>Endpoint url</th>
-                <th class="text-right">Count</th>
-                <th class="text-right">Mean</th>
-            </tr>
-            </thead>
-            <tbody>
-            <ng-container *ngFor="let entry of metrics.endpointsRequests | keys">
-                <tr *ngFor="let method of entry.value | keys">
-                    <td>{{method.key}}</td>
-                    <td>{{entry.key}}</td>
-                    <td class="text-right">{{method.value.count}}</td>
-                    <td class="text-right">{{method.value.mean | number:'1.0-3'}}</td>
-                </tr>
-            </ng-container>
-            </tbody>
-        </table>
-    </div>
-
-    <h3>Cache statistics</h3>
-    <div class="table-responsive" *ngIf="!updatingMetrics">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Cache name</th>
-                <th class="text-right">Cache Hits</th>
-                <th class="text-right">Cache Puts</th>
-                <th class="text-right">Cache Size</th>
-                <th class="text-right">Cache Entry Memory</th>
-                <th class="text-right">Cache Entries</th>
-                <th class="text-right">Cache Partition Gets</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let entry of metrics.cache | keys">
-                <td>{{entry.key}}</td>
-                <td class="text-right">{{entry.value['cache.gets.hit']}}</td>
-                <td class="text-right">{{entry.value['cache.puts']}}</td>
-                <td class="text-right">{{entry.value['cache.size']}}</td>
-                <td class="text-right">{{entry.value['cache.entry.memory']}}</td>
-                <td class="text-right">{{entry.value['cache.entries']}}</td>
-                <td class="text-right">{{entry.value['cache.partition.gets']}}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h3>DataSource statistics (time in millisecond)</h3>
-    <div class="table-responsive" *ngIf="!updatingMetrics && metrics && metrics.databases">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th><span>Connection Pool Usage</span>
-                </th>
-                <th class="text-right">Count</th>
-                <th class="text-right">Mean</th>
-                <th class="text-right">Min</th>
-                <th class="text-right">p50</th>
-                <th class="text-right">p75</th>
-                <th class="text-right">p95</th>
-                <th class="text-right">p99</th>
-                <th class="text-right">Max</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngIf="metrics.databases.acquire">
-                <td>Acquire</td>
-                <td class="text-right">{{metrics.databases.acquire.count}}</td>
-                <td class="text-right">{{filterNaN(metrics.databases.acquire.mean) | number:'1.0-2'}}</td>
-                <td class="text-right">{{metrics.databases.acquire['0.0'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.acquire['0.5'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.acquire['0.75'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.acquire['0.95'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.acquire['0.99'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{filterNaN(metrics.databases.acquire.max) | number:'1.0-2'}}</td>
-            </tr>
-            <tr *ngIf="metrics.databases.creation">
-                <td>Creation</td>
-                <td class="text-right">{{metrics.databases.creation.count}}</td>
-                <td class="text-right">{{filterNaN(metrics.databases.creation.mean) | number:'1.0-2'}}</td>
-                <td class="text-right">{{metrics.databases.creation['0.0'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.creation['0.5'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.creation['0.75'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.creation['0.95'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.creation['0.99'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{filterNaN(metrics.databases.creation.max) | number:'1.0-2'}}
-                </td>
-            </tr>
-            <tr *ngIf="metrics.databases.usage">
-                <td>Usage</td>
-                <td class="text-right">{{metrics.databases.usage.count}}</td>
-                <td class="text-right">{{filterNaN(metrics.databases.usage.mean) | number:'1.0-2'}}</td>
-                <td class="text-right">{{metrics.databases.usage['0.0'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.usage['0.5'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.usage['0.75'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.usage['0.95'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{metrics.databases.usage['0.99'] | number:'1.0-3'}}</td>
-                <td class="text-right">{{filterNaN(metrics.databases.usage.max) | number:'1.0-2'}}</td>
-            </tr>
-            </tbody>
-        </table>
     </div>
 
 </div>
