@@ -3,7 +3,7 @@
         <span class="times-text">Refresh now <i class="fa fa-refresh"></i></span>
     </button>
     <button class="btn btn-outline-primary times" id="refreshMenu" ngbDropdownToggle>
-        <i [ngClass]="classTime()" ></i>&nbsp; <span class="times-text" [innerHTML]="getActiveRefreshTime()"></span>
+        <i [ngClass]="classTime()" ></i>&nbsp; <span class="times-text">{{getActiveRefreshTime()}}</span>
     </button>
     <div ngbDropdownMenu aria-labelledby="refreshMenu" aria-expanded="true">
         <span class="dropdown-header">Refresh times (in seconds)</span>
