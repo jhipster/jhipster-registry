@@ -19,6 +19,7 @@ export class ProfileService {
                     const data = res.body;
                     const pi = new ProfileInfo();
                     pi.activeProfiles = data.activeProfiles;
+                    pi.label = data.label;
                     pi.ribbonEnv = data.ribbonEnv;
                     pi.configurationSources = data.configurationSources;
                     pi.inProduction = data.activeProfiles.includes('prod');

@@ -50,8 +50,10 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
     load() {
         this.profileService.getProfileInfo().then((response) => {
             this.activeRegistryProfiles = response.activeProfiles;
+            this.label = response.label;
             this.isNative = this.activeRegistryProfiles.includes('native');
             this.configurationSources = response.configurationSources;
+            this.refresh();
         });
 
         this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());

@@ -36,7 +36,7 @@ public class ProfileInfoResource {
     public ProfileInfoVM getActiveProfiles() {
         String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
 
-        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles), configServerConfig.getComposite());
+        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles), configServerConfig.getServer().getComposite(), configServerConfig.getLabel());
     }
 
     private String getRibbonEnv(String[] activeProfiles) {
@@ -57,18 +57,25 @@ public class ProfileInfoResource {
 
         private String[] activeProfiles;
 
+        private String label;
+
         private String ribbonEnv;
 
         private List<Map<String, Object>> configurationSources;
 
-        ProfileInfoVM(String[] activeProfiles, String ribbonEnv, List<Map<String, Object>> configurationSources) {
+        ProfileInfoVM(String[] activeProfiles, String ribbonEnv, List<Map<String, Object>> configurationSources, String label) {
             this.activeProfiles = activeProfiles;
             this.ribbonEnv = ribbonEnv;
             this.configurationSources = configurationSources;
+            this.label = label;
         }
 
         public String[] getActiveProfiles() {
             return activeProfiles;
+        }
+
+        public String getLabel() {
+            return label;
         }
 
         public String getRibbonEnv() {
