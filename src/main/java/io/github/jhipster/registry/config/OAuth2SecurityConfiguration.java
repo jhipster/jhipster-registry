@@ -76,6 +76,8 @@ public class OAuth2SecurityConfiguration extends ResourceServerConfigurerAdapter
             .requestMatcher(authorizationHeaderRequestMatcher())
             .authorizeRequests()
             .antMatchers("/services/**").authenticated()
+            .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
