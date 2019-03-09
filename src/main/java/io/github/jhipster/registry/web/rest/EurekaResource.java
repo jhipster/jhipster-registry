@@ -1,6 +1,5 @@
 package io.github.jhipster.registry.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.config.ConfigurationManager;
 import com.netflix.discovery.shared.Application;
@@ -11,6 +10,7 @@ import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl;
 import com.netflix.eureka.resources.StatusResource;
 import com.netflix.eureka.util.StatusInfo;
 import io.github.jhipster.registry.web.rest.vm.EurekaVM;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

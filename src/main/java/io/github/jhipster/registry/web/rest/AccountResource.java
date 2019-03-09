@@ -3,6 +3,7 @@ package io.github.jhipster.registry.web.rest;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.userdetails.User;
-
-import com.codahale.metrics.annotation.Timed;
 
 import io.github.jhipster.registry.web.rest.vm.UserVM;
 
