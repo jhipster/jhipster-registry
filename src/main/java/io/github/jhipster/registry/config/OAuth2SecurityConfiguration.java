@@ -64,6 +64,8 @@ public class OAuth2SecurityConfiguration extends ResourceServerConfigurerAdapter
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+            .cors()
+        .and()
             .csrf()
             .disable()
             .headers()
