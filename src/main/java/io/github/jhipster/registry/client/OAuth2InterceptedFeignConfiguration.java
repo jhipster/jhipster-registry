@@ -1,7 +1,5 @@
 package io.github.jhipster.registry.client;
 
-import java.io.IOException;
-
 import io.github.jhipster.registry.security.oauth2.AuthorizationHeaderUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

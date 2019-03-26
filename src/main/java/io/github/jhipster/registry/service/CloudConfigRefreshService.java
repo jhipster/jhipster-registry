@@ -21,9 +21,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
+import static com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
 import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_K8S;
 import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
 import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 /**
  * Kubernetes (K8s) cloud config refresher service
@@ -97,7 +99,7 @@ public class CloudConfigRefreshService {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                 log.debug("Registering" + dir + " in watcher service");
-                //dir.register(watcherService, new WatchEvent.Kind[]{ENTRY_MODIFY}, HIGH);
+                dir.register(watcherService, new WatchEvent.Kind[]{ENTRY_MODIFY}, HIGH);
                 return CONTINUE;
             }
 
