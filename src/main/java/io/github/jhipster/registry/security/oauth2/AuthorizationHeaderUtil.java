@@ -1,5 +1,6 @@
 package io.github.jhipster.registry.security.oauth2;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import static io.github.jhipster.registry.config.Constants.PROFILE_OAUTH2;
+
 @Component
+@Profile(PROFILE_OAUTH2)
 public class AuthorizationHeaderUtil {
 
     private final OAuth2AuthorizedClientService clientService;
