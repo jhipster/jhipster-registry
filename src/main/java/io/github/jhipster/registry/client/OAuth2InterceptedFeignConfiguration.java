@@ -5,8 +5,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import feign.RequestInterceptor;
+import org.springframework.context.annotation.Profile;
+
+import static io.github.jhipster.registry.config.Constants.PROFILE_OAUTH2;
 
 @Configuration
+@Profile(PROFILE_OAUTH2)
 public class OAuth2InterceptedFeignConfiguration {
 
     @Bean(name = "oauth2RequestInterceptor")
