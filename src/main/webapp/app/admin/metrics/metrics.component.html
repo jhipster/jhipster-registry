@@ -100,7 +100,7 @@
     <div *ngIf="isObjectExisting(metrics, 'garbageCollector')">
         <h3>Garbage collector statistics</h3>
         <div class="row" *ngIf="!updatingMetrics">
-            <div class="col-md-4">
+            <div class="col-md-4" *ngIf="metrics.garbageCollector['jvm.gc.live.data.size'] && metrics.garbageCollector['jvm.gc.max.data.size']">
                 <span>
                     GC Live Data Size/GC Max Data Size
                     ({{metrics.garbageCollector['jvm.gc.live.data.size'] / 1048576 | number:'1.0-0'}}M
@@ -112,7 +112,7 @@
                     <span>{{100 * metrics.garbageCollector['jvm.gc.live.data.size'] / metrics.garbageCollector['jvm.gc.max.data.size'] | number:'1.0-2'}}%</span>
                 </ngb-progressbar>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" *ngIf="metrics.garbageCollector['jvm.gc.memory.promoted'] && metrics.garbageCollector['jvm.gc.memory.allocated']">
                 <span>
                     GC Memory Promoted/GC Memory Allocated
                     ({{metrics.garbageCollector['jvm.gc.memory.promoted'] / 1048576 | number:'1.0-0'}}M
@@ -134,7 +134,7 @@
                     <div class="col-md-3 text-right">{{metrics.garbageCollector.classesUnloaded}}</div>
                 </div>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" *ngIf="metrics.garbageCollector['jvm.gc.pause']">
                 <table class="table table-striped">
                     <thead>
                     <tr>
