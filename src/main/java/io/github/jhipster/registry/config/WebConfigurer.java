@@ -6,8 +6,6 @@ import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.embedded.undertow.UndertowServletWebServer;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.server.*;
 import io.undertow.UndertowOptions;
@@ -148,10 +146,14 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         CorsConfiguration config = jHipsterProperties.getCors();
         if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
             log.debug("Registering CORS filter");
+            source.registerCorsConfiguration("/eureka/**", config);
             source.registerCorsConfiguration("/api/**", config);
             source.registerCorsConfiguration("/v2/api-docs", config);
             source.registerCorsConfiguration("/*/api/**", config);
         }
+
+        // default is to deny all CORS requests
+        source.registerCorsConfiguration("/**", new CorsConfiguration());
         return new CorsFilter(source);
     }
 
