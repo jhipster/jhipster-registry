@@ -40,7 +40,6 @@ public class RoutesResource {
     }
 
     @GetMapping("/routes")
-    @Timed
     public ResponseEntity<List<RouteVM>> getRoutes() {
 
         List<Route> routes = routeLocator.getRoutes();

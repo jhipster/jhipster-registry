@@ -1,6 +1,9 @@
 <div ngbDropdown placement="bottom-right">
-    <button class="btn btn-outline-primary times" [ngClass]="classTime()" id="refreshMenu" ngbDropdownToggle>
-        &nbsp; <span class="times-text" [innerHTML]="getActiveRefreshTime()"></span>
+    <button class="btn btn-outline-primary" (click)="manualRefresh()">
+        <span class="times-text">Refresh now <i class="fa fa-refresh"></i></span>
+    </button>
+    <button class="btn btn-outline-primary times" id="refreshMenu" ngbDropdownToggle>
+        <i [ngClass]="classTime()" ></i>&nbsp; <span class="times-text">{{getActiveRefreshTime()}}</span>
     </button>
     <div ngbDropdownMenu aria-labelledby="refreshMenu" aria-expanded="true">
         <span class="dropdown-header">Refresh times (in seconds)</span>
@@ -10,9 +13,5 @@
                 <ng-template #disabledTemplate>disabled</ng-template>
             </button>
         </div>
-        <div class="dropdown-divider"></div>
-        <button class="dropdown-item manual-refresh" (click)="manualRefresh()">
-            Refresh now &nbsp;<span class="fa fa-refresh"></span>
-        </button>
     </div>
 </div>

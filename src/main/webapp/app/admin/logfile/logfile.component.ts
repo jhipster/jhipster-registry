@@ -37,10 +37,10 @@ export class JhiLogfileComponent implements OnInit, OnDestroy {
                 (error) => {
                     if (error.status === 503 || error.status === 500 || error.status === 404) {
                         this.logtxt =
-                            'No available logfile. \n' +
+                            'No available logfile. Please note that it is not available by default, you need to set up the Spring Boot properties below! \n' +
                             'Please check:\n ' +
                             '- if the microservice is up\n ' +
-                            '- these properties are set: \n ' +
+                            '- if these properties are set: \n ' +
                             '    - logging.path\n ' +
                             '    - logging.file (to avoid using the same spring.log)\n\n' +
                             'See:\n ' +

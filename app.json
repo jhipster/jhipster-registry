@@ -9,19 +9,19 @@
     },
     "JAVA_OPTS": {
       "description": "Java runtime options.",
-      "value": "-Xmx256m -Xss512k -Dfile.encoding=UTF-8"
+      "value": "-Xmx300m -Xss512k -XX:CICompilerCount=2 -XX:ReservedCodeCacheSize=50m -XX:MaxMetaspaceSize=80m -XX:ParallelGCThreads=3 -Dfile.encoding=UTF-8"
     },
-    "MAVEN_CUSTOM_OPTS": {
-        "description": "Options for the Maven build.",
-        "value": "-Pprod,heroku -DskipTests"
+    "SPRING_OPTS": {
+      "description": "Spring Boot options.",
+      "value": "--server.undertow.io-threads=1 --server.undertow.eager-filter-init=false"
     },
-    "NPM_CONFIG_PRODUCTION": {
-        "description": "Set to false to install devDependencies",
-        "value": "false"
+    "JHIPSTER_REGISTRY_VERSION": {
+      "description": "Version of the registry to deploy.",
+      "value": "4.1.1"
     }
   },
   "buildpacks": [
-    {"url": "heroku/nodejs"},
-    {"url": "heroku/java"}
+    {"url": "heroku/jvm"},
+    {"url": "https://github.com/jhipster/jhipster-registry-buildpack"}
   ]
 }

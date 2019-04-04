@@ -2,6 +2,7 @@ package io.github.jhipster.registry.service.dto;
 
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -11,7 +12,7 @@ public class ZuulRouteDTO extends ZuulProperties.ZuulRoute {
 
     private String status;
 
-    public ZuulRouteDTO(String id, String path, String serviceId, String url, boolean stripPrefix, Boolean retryable, Set<String> sensitiveHeaders, String status) {
+    public ZuulRouteDTO(String id, String path, String serviceId, String url, boolean stripPrefix, Boolean retryable, @NotNull Set<String> sensitiveHeaders, String status) {
         super(id, path, serviceId, url, stripPrefix, retryable, sensitiveHeaders);
         this.status = status;
     }

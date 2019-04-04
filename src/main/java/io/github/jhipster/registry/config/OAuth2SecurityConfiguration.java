@@ -44,6 +44,8 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+            .cors()
+        .and()
             .csrf()
             .disable()
             .headers()
@@ -53,9 +55,14 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
+            .httpBasic()
+            .realmName("JHipster Registry")
+        .and()
             .requestMatcher(authorizationHeaderRequestMatcher())
             .authorizeRequests()
             .antMatchers("/services/**").authenticated()
+            .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)

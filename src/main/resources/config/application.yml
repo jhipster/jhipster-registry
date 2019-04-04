@@ -47,13 +47,28 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile"]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhimetrics"]
     endpoint:
         health:
             show-details: when_authorized
     health:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
+    metrics:
+        enable:
+            http: true
+            jvm: true
+            logback: true
+            process: true
+            system: true
+        distribution:
+            percentiles-histogram:
+                all: true
+            percentiles:
+                all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+        web:
+            server:
+                auto-time-requests: true
 
 # ===================================================================
 # Eureka server configuration (eureka.server.*)
@@ -90,6 +105,7 @@ eureka:
         # see discussion about enable-self-preservation:
         # https://github.com/jhipster/generator-jhipster/issues/3654
         enable-self-preservation: false
+        peer-node-read-timeout-ms: 1000
     dashboard:
         path: /registry
     datacenter: JHipster-DataCenter

@@ -41,7 +41,6 @@ public class EurekaResource {
      * GET  /eureka/applications : get Eureka applications information
      */
     @GetMapping("/eureka/applications")
-    @Timed
     public ResponseEntity<EurekaVM> eureka() {
         EurekaVM eurekaVM = new EurekaVM();
         eurekaVM.setApplications(getApplications());
@@ -75,7 +74,6 @@ public class EurekaResource {
      * GET  /eureka/lastn : get Eureka registrations
      */
     @GetMapping("/eureka/lastn")
-    @Timed
     public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
         Map<String, Map<Long, String>> lastn = new HashMap<>();
         PeerAwareInstanceRegistryImpl registry = (PeerAwareInstanceRegistryImpl) getRegistry();
@@ -100,7 +98,6 @@ public class EurekaResource {
      * GET  /eureka/replicas : get Eureka replicas
      */
     @GetMapping("/eureka/replicas")
-    @Timed
     public ResponseEntity<List<String>> replicas() {
         List<String> replicas = new ArrayList<>();
         getServerContext().getPeerEurekaNodes().getPeerNodesView().forEach(
@@ -122,7 +119,6 @@ public class EurekaResource {
      * GET  /eureka/status : get Eureka status
      */
     @GetMapping("/eureka/status")
-    @Timed
     public ResponseEntity<EurekaVM> eurekaStatus() {
 
         EurekaVM eurekaVM = new EurekaVM();

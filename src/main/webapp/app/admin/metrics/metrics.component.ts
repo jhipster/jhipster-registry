@@ -12,8 +12,14 @@ import { JhiRoutesService, Route } from 'app/shared';
 })
 export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
     metrics: any = {};
-    cachesStats: any = {};
-    servicesStats: any = {};
+    threadData: any = {};
+    threadStats: {
+        threadDumpRunnable: number;
+        threadDumpWaiting: number;
+        threadDumpTimedWaiting: number;
+        threadDumpBlocked: number;
+        threadDumpAll: number;
+    };
     updatingMetrics = true;
     JCACHE_KEY: string;
 
@@ -41,28 +47,36 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
             this.metricsService.getInstanceMetrics(this.activeRoute).subscribe(
                 (metrics) => {
                     this.metrics = metrics;
-                    this.updatingMetrics = false;
-                    this.servicesStats = {};
-                    this.cachesStats = {};
-                    Object.keys(metrics.timers).forEach((key) => {
-                        const value = metrics.timers[key];
-                        if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
-                            this.servicesStats[key] = value;
-                        }
-                    });
-                    Object.keys(metrics.gauges).forEach((key) => {
-                        if (key.indexOf('jcache.statistics') !== -1) {
-                            const value = metrics.gauges[key].value;
-                            // remove gets or puts
-                            const index = key.lastIndexOf('.');
-                            const newKey = key.substr(0, index);
+                    this.metricsService.instanceThreadDump(this.activeRoute).subscribe((data) => {
+                        this.threadData = data.threads;
 
-                            // Keep the name of the domain
-                            this.cachesStats[newKey] = {
-                                name: this.JCACHE_KEY.length,
-                                value
-                            };
-                        }
+                        this.threadStats = {
+                            threadDumpRunnable: 0,
+                            threadDumpWaiting: 0,
+                            threadDumpTimedWaiting: 0,
+                            threadDumpBlocked: 0,
+                            threadDumpAll: 0
+                        };
+
+                        this.threadData.forEach((value) => {
+                            if (value.threadState === 'RUNNABLE') {
+                                this.threadStats.threadDumpRunnable += 1;
+                            } else if (value.threadState === 'WAITING') {
+                                this.threadStats.threadDumpWaiting += 1;
+                            } else if (value.threadState === 'TIMED_WAITING') {
+                                this.threadStats.threadDumpTimedWaiting += 1;
+                            } else if (value.threadState === 'BLOCKED') {
+                                this.threadStats.threadDumpBlocked += 1;
+                            }
+                        });
+
+                        this.threadStats.threadDumpAll =
+                            this.threadStats.threadDumpRunnable +
+                            this.threadStats.threadDumpWaiting +
+                            this.threadStats.threadDumpTimedWaiting +
+                            this.threadStats.threadDumpBlocked;
+
+                        this.updatingMetrics = false;
                     });
                 },
                 (error) => {
@@ -78,26 +92,49 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
         }
     }
 
-    refreshThreadDumpData() {
-        this.metricsService.instanceThreadDump(this.activeRoute).subscribe((data) => {
-            const modalRef = this.modalService.open(JhiMetricsMonitoringModalComponent, { size: 'lg' });
-            modalRef.componentInstance.threadDump = data;
-            modalRef.result.then(
-                (result) => {
-                    // Left blank intentionally, nothing to do here
-                },
-                (reason) => {
-                    // Left blank intentionally, nothing to do here
-                }
-            );
-        });
-    }
-
     filterNaN(input) {
         if (isNaN(input)) {
             return 0;
         }
         return input;
+    }
+
+    convertMillisecondsToDuration(ms) {
+        const times = {
+            year: 31557600000,
+            month: 2629746000,
+            day: 86400000,
+            hour: 3600000,
+            minute: 60000,
+            second: 1000
+        };
+        let time_string = '';
+        let plural = '';
+        for (const key in times) {
+            if (Math.floor(ms / times[key]) > 0) {
+                if (Math.floor(ms / times[key]) > 1) {
+                    plural = 's';
+                } else {
+                    plural = '';
+                }
+                time_string += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
+                ms = ms - times[key] * Math.floor(ms / times[key]);
+            }
+        }
+        return time_string;
+    }
+
+    open() {
+        const modalRef = this.modalService.open(JhiMetricsMonitoringModalComponent, { size: 'lg' });
+        modalRef.componentInstance.threadDump = this.threadData;
+    }
+
+    isObjectExisting(metrics: any, key: string) {
+        return metrics && metrics[key];
+    }
+
+    isObjectExistingAndNotEmpty(metrics: any, key: string) {
+        return this.isObjectExisting(metrics, key) && JSON.stringify(metrics[key]) !== '{}';
     }
 
     ngOnDestroy() {
