@@ -11,7 +11,7 @@ export class JhiMetricsService {
 
     // get the Registry's metrics
     getMetrics(): Observable<any> {
-        return this.http.get(SERVER_API_URL + 'management/jhi-metrics');
+        return this.http.get(SERVER_API_URL + 'management/jhimetrics');
     }
 
     // get the instance's metrics

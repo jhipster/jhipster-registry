@@ -47,7 +47,7 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhi-metrics"]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhimetrics"]
     endpoint:
         health:
             show-details: when_authorized
@@ -55,19 +55,12 @@ management:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
     metrics:
-        binders:
-            jvm:
-                enabled: true
-            processor:
-                enabled: true
-            uptime:
-                enabled: true
-            logback:
-                enabled: true
-            files:
-                enabled: true
-            integration:
-                enabled: true
+        enable:
+            http: true
+            jvm: true
+            logback: true
+            process: true
+            system: true
         distribution:
             percentiles-histogram:
                 all: true
