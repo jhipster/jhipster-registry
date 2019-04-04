@@ -33,7 +33,7 @@ public class LoggingAspect {
     /**
      * Pointcut that matches all repositories, services and Web REST endpoints.
      */
-    @Pointcut("within(io.github.jhipster.registry.repository..*) || within(io.github.jhipster.registry.service..*) || within(io.github.jhipster.registry.web.rest..*)")
+    @Pointcut("within(io.github.jhipster.registry.service..*) || within(io.github.jhipster.registry.web.rest..*)")
     public void loggingPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
