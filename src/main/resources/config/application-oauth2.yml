@@ -17,8 +17,3 @@ server:
                 http-only: true
                 # custom session cookie name to prevent conflict with another application on the same domain
                 name: JSESSIONID_REGISTRY
-
-application:
-    oauth2:
-        principal-attribute: preferred_username
-        authorities-attribute: roles
