@@ -2,27 +2,24 @@ package io.github.jhipster.registry.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jhipster.registry.web.rest.vm.LoggerVM;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(MockitoJUnitRunner.class)
 public class LogsResourceTest {
 
     private MockMvc mock;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.mock = MockMvcBuilders.standaloneSetup(new LogsResource()).build();
     }
@@ -52,8 +49,8 @@ public class LogsResourceTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andReturn();
 
-        assertTrue(res.getResponse().getContentAsString().contains("\"name\":\""+logger.getName()
-            +"\",\"level\":\""+logger.getLevel()+"\""));
+        assertThat(res.getResponse().getContentAsString()).contains("\"name\":\""+logger.getName()
+            +"\",\"level\":\""+logger.getLevel()+"\"");
     }
 
 }

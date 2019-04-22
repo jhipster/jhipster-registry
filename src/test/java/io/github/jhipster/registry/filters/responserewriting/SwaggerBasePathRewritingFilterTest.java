@@ -2,7 +2,7 @@ package io.github.jhipster.registry.filters.responserewriting;
 
 import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 
 import static io.github.jhipster.registry.filters.responserewriting.SwaggerBasePathRewritingFilter.gzipData;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static springfox.documentation.swagger2.web.Swagger2Controller.DEFAULT_URL;
 
 /**
@@ -28,7 +28,7 @@ public class SwaggerBasePathRewritingFilterTest {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", DEFAULT_URL);
         RequestContext.getCurrentContext().setRequest(request);
 
-        assertTrue(filter.shouldFilter());
+        assertThat(filter.shouldFilter()).isTrue();
     }
 
     /**
@@ -41,7 +41,7 @@ public class SwaggerBasePathRewritingFilterTest {
         request.setParameter("debug", "true");
         RequestContext.getCurrentContext().setRequest(request);
 
-        assertTrue(filter.shouldFilter());
+        assertThat(filter.shouldFilter()).isTrue();
     }
 
     @Test
@@ -50,7 +50,7 @@ public class SwaggerBasePathRewritingFilterTest {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/management/info");
         RequestContext.getCurrentContext().setRequest(request);
 
-        assertFalse(filter.shouldFilter());
+        assertThat(filter.shouldFilter()).isFalse();
     }
 
     @Test
@@ -68,8 +68,8 @@ public class SwaggerBasePathRewritingFilterTest {
 
         filter.run();
 
-        assertEquals("UTF-8", response.getCharacterEncoding());
-        assertEquals("{\"basePath\":\"/service1\"}", context.getResponseBody());
+        assertThat(response.getCharacterEncoding()).isEqualTo("UTF-8");
+        assertThat(context.getResponseBody()).isEqualTo("{\"basePath\":\"/service1\"}");
     }
 
     @Test
@@ -86,10 +86,10 @@ public class SwaggerBasePathRewritingFilterTest {
 
         filter.run();
 
-        assertEquals("UTF-8", response.getCharacterEncoding());
+        assertThat(response.getCharacterEncoding()).isEqualTo("UTF-8");
 
         InputStream responseDataStream = new GZIPInputStream(context.getResponseDataStream());
         String responseBody = IOUtils.toString(responseDataStream, StandardCharsets.UTF_8);
-        assertEquals("{\"basePath\":\"/service1\"}", responseBody);
+        assertThat(responseBody).isEqualTo("{\"basePath\":\"/service1\"}");
     }
 }

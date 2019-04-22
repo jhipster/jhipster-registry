@@ -3,74 +3,72 @@ package io.github.jhipster.registry.web.rest.vm;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import io.github.jhipster.registry.utils.TestUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoggerVMTest {
 
     @Test
-    public void getNameTest() throws Exception {
+    public void getNameTest() {
         LoggerVM vm = new LoggerVM();
-        assertNull(vm.getName());
+        assertThat(vm.getName()).isNull();
 
         Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         vm = new LoggerVM(logger);
-        assertEquals(Logger.ROOT_LOGGER_NAME, vm.getName());
+        assertThat(vm.getName()).isEqualTo(Logger.ROOT_LOGGER_NAME);
     }
 
     @Test
-    public void setNameTest() throws Exception {
+    public void setNameTest() {
         LoggerVM vm = new LoggerVM();
         vm.setName(null);
-        assertNull(vm.getName());
+        assertThat(vm.getName()).isNull();
 
         vm = new LoggerVM();
         vm.setName("fakeName");
-        assertEquals("fakeName", vm.getName());
+        assertThat(vm.getName()).isEqualTo("fakeName");
 
         Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         vm = new LoggerVM(logger);
         vm.setName("fakeRootName");
-        assertEquals("fakeRootName", vm.getName());
+        assertThat(vm.getName()).isEqualTo("fakeRootName");
     }
 
     @Test
-    public void getLevelTest() throws Exception {
+    public void getLevelTest() {
         LoggerVM vm = new LoggerVM();
-        assertNull(vm.getLevel());
+        assertThat(vm.getLevel()).isNull();
 
         Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         vm = new LoggerVM(logger);
-        assertEquals(Level.ERROR.toString(), vm.getLevel());
+        assertThat(vm.getLevel()).isEqualTo(Level.ERROR.toString());
     }
 
     @Test
-    public void setLevelTest() throws Exception {
+    public void setLevelTest() {
         LoggerVM vm = new LoggerVM();
         vm.setLevel(null);
-        assertNull(vm.getLevel());
+        assertThat(vm.getLevel()).isNull();
 
         vm = new LoggerVM();
         vm.setLevel("fakeLevel");
-        assertEquals("fakeLevel", vm.getLevel());
+        assertThat(vm.getLevel()).isEqualTo("fakeLevel");
 
         Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         vm = new LoggerVM(logger);
         vm.setLevel(Level.OFF.toString());
-        assertEquals(Level.OFF.toString(), vm.getLevel());
+        assertThat(vm.getLevel()).isEqualTo(Level.OFF.toString());
     }
 
     @Test
-    public void toStringTestTest() throws Exception {
+    public void toStringTestTest() {
         Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         LoggerVM vm = new LoggerVM(logger);
-        assertTrue(vm.toString().startsWith(LoggerVM.class.getSimpleName()));
+        assertThat(vm.toString()).startsWith(LoggerVM.class.getSimpleName());
         String json = vm.toString().replace(LoggerVM.class.getSimpleName(), "");
-        assertTrue(TestUtils.isValid(json));
+        assertThat(TestUtils.isValid(json)).isTrue();
     }
 
 }
