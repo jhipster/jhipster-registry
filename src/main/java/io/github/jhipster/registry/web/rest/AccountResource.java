@@ -3,7 +3,6 @@ package io.github.jhipster.registry.web.rest;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
-import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.userdetails.User;
 
@@ -55,6 +55,8 @@ public class AccountResource {
             } else if (authentication.getPrincipal() instanceof String) {
                 login = (String) authentication.getPrincipal();
                 log.debug("The username `{}` has been found using OpenID Connect", login);
+            } else if (authentication instanceof OAuth2AuthenticationToken) {
+                login = ((OAuth2AuthenticationToken) authentication).getPrincipal().getName();
             } else {
                 log.debug("The username could not be found");
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
