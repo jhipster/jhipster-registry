@@ -4,9 +4,9 @@ import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.http.*;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Objects;
 
 import static io.github.jhipster.registry.config.Constants.PROFILE_UAA;
 
@@ -61,13 +62,13 @@ public class OAuth2ClientCredentialsService {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("grant_type", "client_credentials");
 
-        /*HttpEntity<?> requestEntity = new HttpEntity<>(map, headers);
+        HttpEntity<?> requestEntity = new HttpEntity<>(map, headers);
         ResponseEntity<DefaultOAuth2AccessToken> responseEntity = this.restTemplate.exchange("http://UAA/oauth/token", HttpMethod.POST, requestEntity, DefaultOAuth2AccessToken.class);
 
         if (!responseEntity.getStatusCode().is2xxSuccessful()) {
             //TODO
         }
 
-        accessToken = Objects.requireNonNull(responseEntity.getBody()).getValue();*/
+        accessToken = Objects.requireNonNull(responseEntity.getBody()).getValue();
     }
 }

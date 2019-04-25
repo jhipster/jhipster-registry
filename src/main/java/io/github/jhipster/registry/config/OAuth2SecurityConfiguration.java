@@ -1,39 +1,59 @@
 package io.github.jhipster.registry.config;
 
 import io.github.jhipster.registry.security.AuthoritiesConstants;
-import io.github.jhipster.registry.security.oauth2.AudienceValidator;
+import io.github.jhipster.registry.security.oauth2.SimpleAuthoritiesExtractor;
+import io.github.jhipster.registry.security.oauth2.SimplePrincipalExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
-import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
-import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @Configuration
+@EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Profile(Constants.PROFILE_OAUTH2)
-public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class OAuth2SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
-    @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
-    private String issuerUri;
+    private static final String OAUTH2_PRINCIPAL_ATTRIBUTE = "preferred_username";
+
+    private static final String OAUTH2_AUTHORITIES_ATTRIBUTE = "roles";
+
+    private ResourceServerProperties resourceServerProperties;
+
+    public OAuth2SecurityConfiguration(ResourceServerProperties resourceServerProperties) {
+        this.resourceServerProperties = resourceServerProperties;
+    }
+
+    @Bean
+    @Primary
+    public UserInfoTokenServices userInfoTokenServices(PrincipalExtractor principalExtractor, AuthoritiesExtractor authoritiesExtractor) {
+        UserInfoTokenServices userInfoTokenServices = new UserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());
+        userInfoTokenServices.setPrincipalExtractor(principalExtractor);
+        userInfoTokenServices.setAuthoritiesExtractor(authoritiesExtractor);
+        return userInfoTokenServices;
+    }
+
+    @Bean
+    public PrincipalExtractor principalExtractor() {
+        return new SimplePrincipalExtractor(OAUTH2_PRINCIPAL_ATTRIBUTE);
+    }
+
+    @Bean
+    public AuthoritiesExtractor authoritiesExtractor() {
+        return new SimpleAuthoritiesExtractor(OAUTH2_AUTHORITIES_ATTRIBUTE);
+    }
 
     @Bean
     @Qualifier("authorizationHeaderRequestMatcher")
@@ -62,51 +82,10 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/services/**").authenticated()
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/management/health").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-        .and()
-            .oauth2Login()
-        .and()
-            .oauth2ResourceServer().jwt();
-    }
-
-    @Bean
-    @SuppressWarnings("unchecked")
-    public GrantedAuthoritiesMapper userAuthoritiesMapper() {
-        return (authorities) -> {
-            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
-
-            authorities.forEach(authority -> {
-                OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
-                Collection<String> groups = (Collection<String>) userInfo.getClaims().get("groups");
-                if (groups == null) {
-                    groups = (Collection<String>) userInfo.getClaims().get("roles");
-                }
-                mappedAuthorities.addAll(groups.stream()
-                    .filter(group -> group.startsWith("ROLE_"))
-                    .map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
-            });
-
-            return mappedAuthorities;
-        };
-    }
-
-    @Bean
-    JwtDecoder jwtDecoder() {
-        NimbusJwtDecoderJwkSupport jwtDecoder = (NimbusJwtDecoderJwkSupport)
-            JwtDecoders.fromOidcIssuerLocation(issuerUri);
-
-        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator();
-        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
-        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
-
-        jwtDecoder.setJwtValidator(withAudience);
-
-        return jwtDecoder;
+            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
     }
 }

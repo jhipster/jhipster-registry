@@ -16,18 +16,14 @@ import java.util.Optional;
 public class OAuth2TokenRelayFilter extends ZuulFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public AuthorizationHeaderUtil authorizationHeaderUtil;
 
-    public OAuth2TokenRelayFilter(AuthorizationHeaderUtil authorizationHeaderUtil) {
-        this.authorizationHeaderUtil = authorizationHeaderUtil;
-    }
 
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         // Add specific authorization headers for OAuth2
-        Optional<String> authorizationHeader = authorizationHeaderUtil.getAuthorizationHeader();
-        authorizationHeader.ifPresent(s -> ctx.addZuulRequestHeader(AUTHORIZATION_HEADER, s));
+        ctx.addZuulRequestHeader(AUTHORIZATION_HEADER,
+            AuthorizationHeaderUtil.getAuthorizationHeader());
         return null;
     }
 
