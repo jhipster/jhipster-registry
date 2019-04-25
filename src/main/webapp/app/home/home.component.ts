@@ -5,7 +5,7 @@ import { JhiEventManager } from 'ng-jhipster';
 import { Account, LoginModalService, Principal } from 'app/shared';
 import { JhiHealthService } from 'app/admin';
 import { JhiApplicationsService } from 'app/registry';
-import { JhiRefreshService } from '../shared/refresh/refresh.service';
+import { JhiRefreshService } from 'app/shared';
 import { Subscription } from 'rxjs/Subscription';
 
 import { VERSION } from 'app/app.constants';
