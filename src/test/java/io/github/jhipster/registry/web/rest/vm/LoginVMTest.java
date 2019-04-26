@@ -1,118 +1,115 @@
 package io.github.jhipster.registry.web.rest.vm;
 
 import io.github.jhipster.registry.utils.TestUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginVMTest {
 
     private static Validator validator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
 
     @Test
-    public void getUsernameTest(){
+    public void getUsernameTest() {
         LoginVM vm = new LoginVM();
-        assertNull(vm.getUsername());
+        assertThat(vm.getUsername()).isNull();
 
         vm.setUsername("fakeUsername");
-        assertEquals("fakeUsername", vm.getUsername());
+        assertThat(vm.getUsername()).isEqualTo("fakeUsername");
     }
 
     @Test
-    public void setUsernameTest(){
+    public void setUsernameTest() {
         LoginVM vm = new LoginVM();
-        assertNull(vm.getUsername());
+        assertThat(vm.getUsername()).isNull();
         vm.setUsername(null);
-        assertNull(vm.getUsername());
+        assertThat(vm.getUsername()).isNull();
         vm.setUsername("fakeUsername");
-        assertEquals("fakeUsername", vm.getUsername());
+        assertThat(vm.getUsername()).isEqualTo("fakeUsername");
 
         // Contraints tests
         vm = new LoginVM();
         vm.setPassword("goodPassword");
 
-        assertFalse(validator.validate(vm).isEmpty());
+        assertThat(validator.validate(vm)).isNotEmpty();
         vm.setUsername("");
-        assertFalse(validator.validate(vm).isEmpty());
+        assertThat(validator.validate(vm)).isNotEmpty();
         vm.setUsername("badUsernameTooLongbadUsernameTooLongbadUsernameTooLongbadUsernameTooLongbadUsernameTooLong");
-        assertFalse(validator.validate(vm).isEmpty());
+        assertThat(validator.validate(vm)).isNotEmpty();
         vm.setUsername("goodUsername");
-        assertTrue(validator.validate(vm).isEmpty());
+        assertThat(validator.validate(vm)).isEmpty();
     }
 
     @Test
-    public void getPasswordTest(){
+    public void getPasswordTest() {
         LoginVM vm = new LoginVM();
-        assertNull(vm.getPassword());
+        assertThat(vm.getPassword()).isNull();
 
         vm.setPassword("fakePassword");
-        assertEquals("fakePassword", vm.getPassword());
+        assertThat(vm.getPassword()).isEqualTo("fakePassword");
     }
 
     @Test
-    public void setPasswordTest(){
+    public void setPasswordTest() {
         LoginVM vm = new LoginVM();
-        assertNull(vm.getPassword());
+        assertThat(vm.getPassword()).isNull();
         vm.setPassword(null);
-        assertNull(vm.getPassword());
+        assertThat(vm.getPassword()).isNull();
         vm.setPassword("fakePassword");
-        assertEquals("fakePassword", vm.getPassword());
+        assertThat(vm.getPassword()).isEqualTo("fakePassword");
 
         // Contraints tests
         vm = new LoginVM();
         vm.setUsername("goodUsername");
         vm.setPassword("goodPassword");
-        assertTrue(validator.validate(vm).isEmpty());
+        assertThat(validator.validate(vm)).isEmpty();
     }
 
 
     @Test
-    public void isRememberMeTest(){
+    public void isRememberMeTest() {
         LoginVM vm = new LoginVM();
-        assertNull(vm.isRememberMe());
+        assertThat(vm.isRememberMe()).isNull();
 
         vm.setRememberMe(true);
-        assertTrue(vm.isRememberMe());
+        assertThat(vm.isRememberMe()).isTrue();
     }
 
     @Test
-    public void setRememberMeTest(){
+    public void setRememberMeTest() {
         LoginVM vm = new LoginVM();
-        assertNull(vm.isRememberMe());
+        assertThat(vm.isRememberMe()).isNull();
         vm.setRememberMe(null);
-        assertNull(vm.isRememberMe());
+        assertThat(vm.isRememberMe()).isNull();
         vm.setRememberMe(true);
-        assertTrue(vm.isRememberMe());
+        assertThat(vm.isRememberMe()).isTrue();
     }
 
     @Test
-    public void toStringTest(){
+    public void toStringTest() {
         LoginVM vm = new LoginVM();
 
-        assertTrue(vm.toString().startsWith(LoginVM.class.getSimpleName()));
+        assertThat(vm.toString()).startsWith(LoginVM.class.getSimpleName());
         String json = vm.toString().replace(LoginVM.class.getSimpleName(), "");
-        assertTrue(TestUtils.isValid(json));
+        assertThat(TestUtils.isValid(json)).isTrue();
 
         vm = new LoginVM();
         vm.setUsername("fakeUsername");
         vm.setPassword("fakePassword");
         vm.setRememberMe(true);
         json = vm.toString().replace(LoginVM.class.getSimpleName(), "");
-        assertTrue(TestUtils.isValid(json));
+        assertThat(TestUtils.isValid(json)).isTrue();
     }
 
 }
