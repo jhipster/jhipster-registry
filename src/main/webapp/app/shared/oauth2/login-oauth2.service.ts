@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Principal } from 'app/core/auth/principal.service';
 import { AuthSessionServerProvider } from 'app/core/auth/auth-session.service';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { SERVER_API_URL } from 'app/app.constants';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class LoginOAuth2Service {
-    constructor(private principal: Principal, private authServerProvider: AuthSessionServerProvider) {}
+    constructor(private http: HttpClient) {}
 
     login() {
         let port = location.port ? ':' + location.port : '';
@@ -23,8 +27,12 @@ export class LoginOAuth2Service {
         location.href = `//${location.hostname}${port}${contextPath}oauth2/authorization/oidc`;
     }
 
-    logout() {
-        this.authServerProvider.logout().subscribe();
-        this.principal.authenticate(null);
+    logout(): Observable<any> {
+        // logout from the server
+        return this.http.post(SERVER_API_URL + 'api/logout', {}, { observe: 'response' }).pipe(
+            map((response: HttpResponse<any>) => {
+                return response;
+            })
+        );
     }
 }

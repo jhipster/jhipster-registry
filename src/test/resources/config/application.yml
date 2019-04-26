@@ -19,6 +19,8 @@ spring:
     cloud:
         config:
             enabled: false
+    main:
+        allow-bean-definition-overriding: true
     mail:
         host: localhost
     mvc:

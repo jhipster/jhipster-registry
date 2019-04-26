@@ -320,7 +320,6 @@
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
-
         <pluginManagement>
             <plugins>
                 <plugin>

@@ -12,7 +12,7 @@ import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.inter
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 import { JHipsterRegistrySharedModule, UserRouteAccessService } from './shared';
 import { JHipsterRegistryAppRoutingModule } from './app-routing.module';
-import { JHipsterRegistryHomeModule } from './home/home.module';
+import { JHipsterRegistryHomeModule } from 'app/home';
 import { JHipsterRegistryAdminModule } from './admin/admin.module';
 import { JHipsterRegistryModule } from './registry/registry.module';
 
