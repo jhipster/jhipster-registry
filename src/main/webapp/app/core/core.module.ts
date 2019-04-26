@@ -6,7 +6,6 @@ import locale from '@angular/common/locales/en';
 import {
     LoginService,
     LoginModalService,
-    LoginOAuth2Service,
     AccountService,
     StateStorageService,
     Principal,
@@ -22,7 +21,6 @@ import {
     declarations: [],
     providers: [
         LoginService,
-        LoginOAuth2Service,
         LoginModalService,
         Title,
         {
