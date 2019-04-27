@@ -601,7 +601,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -641,7 +640,6 @@
             </plugin>
             <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
-
     </build>
 
     <profiles>

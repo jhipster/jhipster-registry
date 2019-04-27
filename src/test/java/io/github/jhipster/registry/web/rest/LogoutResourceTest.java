@@ -5,7 +5,6 @@ import io.github.jhipster.registry.config.Constants;
 import io.github.jhipster.registry.config.TestSecurityConfiguration;
 import io.github.jhipster.registry.security.AuthoritiesConstants;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -40,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {JHipsterRegistryApp.class, TestSecurityConfiguration.class})
-@Profile(Constants.PROFILE_OAUTH2)
+@ActiveProfiles("oauth2")
 public class LogoutResourceTest {
 
     @Autowired
@@ -71,7 +72,7 @@ public class LogoutResourceTest {
         this.restLogoutMockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
-    @Test @Ignore
+    @Test
     public void getLogoutInformation() throws Exception {
         String logoutUrl = this.registrations.findByRegistrationId("oidc").getProviderDetails()
             .getConfigurationMetadata().get("end_session_endpoint").toString();

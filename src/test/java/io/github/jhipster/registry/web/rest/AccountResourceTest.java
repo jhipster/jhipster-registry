@@ -1,7 +1,9 @@
 package io.github.jhipster.registry.web.rest;
 
 import io.github.jhipster.registry.security.AuthoritiesConstants;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -29,6 +31,11 @@ public class AccountResourceTest {
     @Before
     public void setup() {
         this.mock = MockMvcBuilders.standaloneSetup(new AccountResource()).build();
+    }
+
+    @After
+    public void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -59,6 +66,7 @@ public class AccountResourceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testGetExistingAccount() throws Exception {
 
         Authentication authentication = Mockito.mock(Authentication.class);
