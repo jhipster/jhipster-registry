@@ -4,7 +4,7 @@
 
     <groupId>io.github.jhipster.registry</groupId>
     <artifactId>jhipster-registry</artifactId>
-    <version>4.1.1</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>JHipster Registry</name>
     <description>JHipster service registry, made with Netflix Eureka and Spring Cloud Config</description>
@@ -34,7 +34,7 @@
         <jhipster-dependencies.version>3.0.0-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.1.3.RELEASE</spring-boot.version>
+        <spring-boot.version>2.1.4.RELEASE</spring-boot.version>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <hibernate.version>5.3.7.Final</hibernate.version>
@@ -310,12 +310,16 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
         </dependency>
+        <!-- Java 11+ support -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -597,7 +601,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -637,7 +640,6 @@
             </plugin>
             <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
-
     </build>
 
     <profiles>

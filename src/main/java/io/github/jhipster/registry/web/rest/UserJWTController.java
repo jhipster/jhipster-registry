@@ -1,12 +1,10 @@
 package io.github.jhipster.registry.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.github.jhipster.registry.config.Constants;
 import io.github.jhipster.registry.security.jwt.JWTConfigurer;
 import io.github.jhipster.registry.security.jwt.TokenProvider;
 import io.github.jhipster.registry.web.rest.vm.LoginVM;
-import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;

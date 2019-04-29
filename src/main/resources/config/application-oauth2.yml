@@ -7,8 +7,8 @@ spring:
                         issuer-uri: http://localhost:9080/auth/realms/jhipster
                 registration:
                     oidc:
-                        client-id: web_app
-                        client-secret: web_app
+                        client-id: jhipster-registry
+                        client-secret: jhipster-registry
 
 server:
     servlet:
@@ -17,8 +17,3 @@ server:
                 http-only: true
                 # custom session cookie name to prevent conflict with another application on the same domain
                 name: JSESSIONID_REGISTRY
-
-application:
-    oauth2:
-        principal-attribute: preferred_username
-        authorities-attribute: roles
