@@ -45,4 +45,10 @@ import {
     exports: [JHipsterRegistrySharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective, DatePipe],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class JHipsterRegistrySharedModule {}
+export class JHipsterRegistrySharedModule {
+    static forRoot() {
+        return {
+            ngModule: JHipsterRegistrySharedModule
+        };
+    }
+}

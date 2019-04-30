@@ -25,7 +25,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, ProfileService, Pag
         BrowserModule,
         JHipsterRegistryAppRoutingModule,
         NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-' }),
-        JHipsterRegistrySharedModule,
+        JHipsterRegistrySharedModule.forRoot(),
         JHipsterRegistryHomeModule,
         JHipsterRegistryAdminModule,
         JHipsterRegistryModule

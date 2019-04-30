@@ -12,4 +12,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     imports: [NgbModule, NgJhipsterModule.forRoot({}), InfiniteScrollModule, CookieModule.forRoot(), FontAwesomeModule, ReactiveFormsModule],
     exports: [FormsModule, HttpClientModule, CommonModule, NgbModule, NgJhipsterModule, InfiniteScrollModule, FontAwesomeModule, ReactiveFormsModule]
 })
-export class JHipsterRegistrySharedLibsModule {}
+export class JHipsterRegistrySharedLibsModule {
+    static forRoot() {
+        return {
+            ngModule: JHipsterRegistrySharedLibsModule
+        };
+    }
+}
