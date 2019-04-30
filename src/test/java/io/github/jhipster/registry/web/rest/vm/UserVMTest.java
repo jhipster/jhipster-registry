@@ -1,8 +1,8 @@
 package io.github.jhipster.registry.web.rest.vm;
 
 import io.github.jhipster.registry.utils.TestUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -10,17 +10,14 @@ import javax.validation.ValidatorFactory;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserVMTest {
 
 
     private static Validator validator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
@@ -29,50 +26,50 @@ public class UserVMTest {
     @Test
     public void constructorTest() {
         UserVM vm = new UserVM(null, null);
-        assertFalse(validator.validate(vm).isEmpty());
+        assertThat(validator.validate(vm)).isNotEmpty();
         vm = new UserVM("", null);
-        assertFalse(validator.validate(vm).isEmpty());
+        assertThat(validator.validate(vm)).isNotEmpty();
         vm = new UserVM("badLoginTooLongbadLoginTooLongbadLoginTooLongbadLoginTooLong", null);
-        assertFalse(validator.validate(vm).isEmpty());
+        assertThat(validator.validate(vm)).isNotEmpty();
         vm = new UserVM("goodLogin", null);
-        assertTrue(validator.validate(vm).isEmpty());
+        assertThat(validator.validate(vm)).isEmpty();
     }
 
     @Test
     public void getLoginTest() {
         UserVM vm = new UserVM();
-        assertNull(vm.getLogin());
+        assertThat(vm.getLogin()).isNull();
 
         vm = new UserVM("login", null);
-        assertEquals("login", vm.getLogin());
+        assertThat(vm.getLogin()).isEqualTo("login");
     }
 
     @Test
-    public void getAuthoritiesTest() throws Exception {
+    public void getAuthoritiesTest() {
         UserVM vm = new UserVM();
-        assertNull(vm.getAuthorities());
+        assertThat(vm.getAuthorities()).isNull();
 
-        Set<String> set = new HashSet<>();
-        set.add("authorities1");
-        set.add("authorities2");
-        vm = new UserVM("login", set);
-        assertEquals(set, vm.getAuthorities());
+        Set<String> authorities = new HashSet<>();
+        authorities.add("authorities1");
+        authorities.add("authorities2");
+        vm = new UserVM("login", authorities);
+        assertThat(vm.getAuthorities()).isEqualTo(authorities);
     }
 
     @Test
-    public void toStringTest() throws Exception {
+    public void toStringTest() {
         UserVM vm = new UserVM();
 
-        assertTrue(vm.toString().startsWith(UserVM.class.getSimpleName()));
+        assertThat(vm.toString()).startsWith(UserVM.class.getSimpleName());
         String json = vm.toString().replace(UserVM.class.getSimpleName(), "");
-        assertTrue(TestUtils.isValid(json));
+        assertThat(TestUtils.isValid(json)).isTrue();
 
-        Set<String> set = new HashSet<>();
-        set.add("authorities1");
-        set.add("authorities2");
-        vm = new UserVM("fakeLogin",set);
+        Set<String> authorities = new HashSet<>();
+        authorities.add("authorities1");
+        authorities.add("authorities2");
+        vm = new UserVM("fakeLogin", authorities);
         json = vm.toString().replace(UserVM.class.getSimpleName(), "");
-        assertTrue(TestUtils.isValid(json));
+        assertThat(TestUtils.isValid(json)).isTrue();
     }
 
 }

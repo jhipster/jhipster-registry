@@ -17,7 +17,7 @@ export class JhiMetricsService {
     // get the instance's metrics
     getInstanceMetrics(instance: Route): Observable<any> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
-            return this.http.get(instance.prefix + '/management/jhi-metrics');
+            return this.http.get(instance.prefix + '/management/jhimetrics');
         }
         return this.getMetrics();
     }

@@ -1,34 +1,33 @@
 package io.github.jhipster.registry.web.rest.errors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FieldErrorVMTest {
 
     @Test
-    public void getObjectNameTest() throws Exception {
+    public void getObjectNameTest() {
         FieldErrorVM vm = new FieldErrorVM(null, null, null);
-        assertNull(vm.getObjectName());
+        assertThat(vm.getObjectName()).isNull();
         vm = new FieldErrorVM("dto", "field", "message");
-        assertEquals("dto", vm.getObjectName());
+        assertThat(vm.getObjectName()).isEqualTo("dto");
     }
 
     @Test
-    public void getFieldTest() throws Exception {
+    public void getFieldTest() {
         FieldErrorVM vm = new FieldErrorVM(null, null, null);
-        assertNull(vm.getField());
+        assertThat(vm.getField()).isNull();
         vm = new FieldErrorVM("dto", "field", "message");
-        assertEquals("field", vm.getField());
+        assertThat(vm.getField()).isEqualTo("field");
     }
 
     @Test
-    public void getMessageTest() throws Exception {
+    public void getMessageTest() {
         FieldErrorVM vm = new FieldErrorVM(null, null, null);
-        assertNull(vm.getMessage());
+        assertThat(vm.getMessage()).isNull();
         vm = new FieldErrorVM("dto", "field", "message");
-        assertEquals("message", vm.getMessage());
+        assertThat(vm.getMessage()).isEqualTo("message");
     }
 
 }

@@ -4,9 +4,8 @@ import io.github.jhipster.registry.JHipsterRegistryApp;
 import io.github.jhipster.registry.config.Constants;
 import io.github.jhipster.registry.config.TestSecurityConfiguration;
 import io.github.jhipster.registry.security.AuthoritiesConstants;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
@@ -33,13 +32,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link LogoutResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {JHipsterRegistryApp.class, TestSecurityConfiguration.class})
 @ActiveProfiles("oauth2")
 public class LogoutResourceTest {
@@ -58,7 +55,7 @@ public class LogoutResourceTest {
 
     private MockMvc restLogoutMockMvc;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         Map<String, Object> claims = new HashMap<>();
         claims.put("groups", "ROLE_USER");
