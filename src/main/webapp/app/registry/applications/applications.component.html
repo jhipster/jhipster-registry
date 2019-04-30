@@ -7,7 +7,7 @@
     <div class="apps col-md-5" *ngIf="data">
         <ul class="list-group">
             <li class="list-group-item {{app.active}}" *ngFor="let app of data.applications | orderBy:orderProp" (click)="show(app.name)">
-                <span class="fa fa-alert" *ngIf="checkInstanceLength(app.instances)">&nbsp;</span> {{app.name}}
+                <fa-icon icon="alert" *ngIf="checkInstanceLength(app.instances)"></fa-icon> {{app.name}}
                 <span class="badge badge-pill font-weight-normal badge-info">{{displayCountInstances(app.instances)}}</span>
             </li>
         </ul>

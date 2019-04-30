@@ -1,10 +1,11 @@
-/* after changing this file run 'yarn run webpack:build:vendor' or 'yarn install' or 'yarn run webpack:build' */
-$fa-font-path: '~font-awesome/fonts';
+/* after changing this file run 'npm run webpack:build' */
 
 /***************************
 put Sass variables here:
 eg $input-color: red;
 ****************************/
+// Override Boostrap variables
+// Import Bootstrap source files from node_modules
+@import '~bootstrap/scss/bootstrap';
 
-@import 'node_modules/bootstrap/scss/bootstrap';
-@import 'node_modules/font-awesome/scss/font-awesome';
+/* jhipster-needle-scss-add-vendor JHipster will add new css style */

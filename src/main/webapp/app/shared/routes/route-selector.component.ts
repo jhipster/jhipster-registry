@@ -67,7 +67,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
                     this.setActiveRoute(routes[0]);
                 }
                 this.updatingRoutes = false;
-            },error => {
+            }, error => {
                 if (error.status === 503 || error.status === 500 || error.status === 404) {
                     if (error.status === 500 || error.status === 404) {
                         this.downRoute(this.activeRoute);

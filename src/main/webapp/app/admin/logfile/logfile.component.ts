@@ -32,7 +32,7 @@ export class JhiLogfileComponent implements OnInit, OnDestroy {
             this.jhiLogfileService.getInstanceLogfile(this.activeRoute).subscribe(logtxt => {
                     this.logtxt = logtxt;
                     this.updatingLogfile = false;
-                },error => {
+                }, error => {
                     if (error.status === 503 || error.status === 500 || error.status === 404) {
                         this.logtxt =
                             'No available logfile. Please note that it is not available by default, you need to set up the Spring Boot properties below! \n' +

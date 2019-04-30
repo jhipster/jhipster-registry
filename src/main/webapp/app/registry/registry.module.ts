@@ -18,9 +18,10 @@ import {
     JhiReplicasService,
     JhiSSHService
 } from './';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
-    imports: [JHipsterRegistrySharedModule, CommonModule, RouterModule.forRoot(registryState, { useHash: true })],
+    imports: [JHipsterRegistrySharedModule, CommonModule, RouterModule.forRoot(registryState, {useHash: true}), FontAwesomeModule],
     declarations: [
         JhiApplicationsComponent,
         JhiConfigComponent,

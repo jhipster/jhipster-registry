@@ -3,7 +3,7 @@ import './vendor.ts';
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ngx-webstorage';
+import { LocalStorageService, SessionStorageService, NgxWebstorageModule } from 'ngx-webstorage';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
@@ -24,7 +24,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, ProfileService, Pag
     imports: [
         BrowserModule,
         JHipsterRegistryAppRoutingModule,
-        Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
+        NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-' }),
         JHipsterRegistrySharedModule,
         JHipsterRegistryHomeModule,
         JHipsterRegistryAdminModule,

@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     registerAuthenticationSuccess() {
-        this.eventManager.subscribe('authenticationSuccess',message => {
+        this.eventManager.subscribe('authenticationSuccess', message => {
             this.principal.identity().then(account => {
                 this.account = account;
                 this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.populateDashboard());
@@ -106,7 +106,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.healthService.checkHealth().subscribe(response => {
                 this.healthData = this.healthService.transformHealthData(response);
                 this.updatingHealth = false;
-            },response => {
+            }, response => {
                 this.healthData = this.healthService.transformHealthData(response.data);
                 this.updatingHealth = false;
             }
