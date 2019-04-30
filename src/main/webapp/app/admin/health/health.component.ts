@@ -78,6 +78,8 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // prevent memory leak when component destroyed
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 }

@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angu
 import { Observable } from 'rxjs';
 
 import { JHipsterRegistryTestModule } from '../../../test.module';
-import { JhiApplicationsComponent, JhiApplicationsService } from '../../../../../../main/webapp/app/registry';
+import { JhiApplicationsComponent, JhiApplicationsService } from 'app/registry';
+import { JhiRefreshService } from 'app/shared';
 
 describe('Component Tests', () => {
     describe('ApplicationsComponent', () => {
@@ -14,7 +15,7 @@ describe('Component Tests', () => {
                 TestBed.configureTestingModule({
                     imports: [JHipsterRegistryTestModule],
                     declarations: [JhiApplicationsComponent],
-                    providers: [JhiApplicationsService]
+                    providers: [JhiApplicationsService, JhiRefreshService]
                 })
                     .overrideTemplate(JhiApplicationsComponent, '')
                     .compileComponents();
