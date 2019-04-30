@@ -39,7 +39,7 @@ export class NavbarComponent implements OnInit {
     }
 
     registerAuthenticationSuccess() {
-        this.eventManager.subscribe('authenticationSuccess', (message) => {
+        this.eventManager.subscribe('authenticationSuccess',message => {
             this.getProfileInfo();
         });
     }
@@ -58,9 +58,9 @@ export class NavbarComponent implements OnInit {
 
     logout() {
         this.collapseNavbar();
-        this.profileService.getProfileInfo().then((profileInfo) => {
+        this.profileService.getProfileInfo().then(profileInfo => {
             if (profileInfo.activeProfiles.indexOf('oauth2') > -1) {
-                this.loginOAuth2Service.logout().subscribe((response) => {
+                this.loginOAuth2Service.logout().subscribe(response => {
                     const data = response.body;
                     let logoutUrl = data.logoutUrl;
                     // if Keycloak, uri has protocol/openid-connect/token
@@ -88,7 +88,7 @@ export class NavbarComponent implements OnInit {
     }
 
     getProfileInfo() {
-        this.profileService.getProfileInfo().then((profileInfo) => {
+        this.profileService.getProfileInfo().then(profileInfo => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });

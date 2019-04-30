@@ -21,7 +21,7 @@ export class JhiRefreshSelectorComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.activeRefreshTime = this.refreshService.getSelectedRefreshTime();
-        this.refreshChangedSubscription = this.refreshService.refreshChanged$.subscribe((empty) => this.launchTimer(true));
+        this.refreshChangedSubscription = this.refreshService.refreshChanged$.subscribe(empty => this.launchTimer(true));
         this.launchTimer(false);
     }
 
@@ -39,7 +39,7 @@ export class JhiRefreshSelectorComponent implements OnInit, OnDestroy {
 
     /** Change active time only if exists, else 0 **/
     setActiveRefreshTime(time: number) {
-        if (time && this.refreshTimes.findIndex((t) => t === time) !== -1) {
+        if (time && this.refreshTimes.findIndex(t => t === time) !== -1) {
             this.activeRefreshTime = time;
         } else {
             this.activeRefreshTime = this.refreshTimes[0];

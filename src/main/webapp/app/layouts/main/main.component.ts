@@ -20,7 +20,7 @@ export class JhiMainComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.router.events.subscribe((event) => {
+        this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
             }

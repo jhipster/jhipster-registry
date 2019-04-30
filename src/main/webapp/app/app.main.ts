@@ -10,5 +10,5 @@ if (module['hot']) {
 
 platformBrowserDynamic()
     .bootstrapModule(JHipsterRegistryAppModule)
-    .then((success) => console.log(`Application started`))
-    .catch((err) => console.error(err));
+    .then(success => console.log(`Application started`))
+    .catch(err => console.error(err));

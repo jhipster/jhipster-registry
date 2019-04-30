@@ -25,7 +25,7 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.refresh());
         this.refresh();
     }
 
@@ -35,7 +35,7 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
     }
 
     refresh() {
-        this.applicationsServiceSubscription = this.applicationsService.findAll().subscribe((data) => {
+        this.applicationsServiceSubscription = this.applicationsService.findAll().subscribe(data => {
             this.data = data;
             if (this.application) {
                 this.show(this.application);

@@ -14,7 +14,7 @@ export class JhiSSHComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.sshService.getSshPublicKey().subscribe((response) => {
+        this.sshService.getSshPublicKey().subscribe(response => {
             this.data = response;
         });
     }
