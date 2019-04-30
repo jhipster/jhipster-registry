@@ -1,6 +1,6 @@
 {
-  "name": "Blog",
-  "short_name": "Blog",
+  "name": "JHipster Registry",
+  "short_name": "Registry",
   "icons": [
       {
           "src": "./content/images/jhipster_family_member_2_head-192.png",
