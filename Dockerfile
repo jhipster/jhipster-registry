@@ -12,12 +12,12 @@ RUN \
     apt-get clean && \
     rm -Rf /code/ /root/.m2 /root/.cache /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
-FROM openjdk:11-jre-slim-stretch
+FROM openjdk:8-jre-alpine
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     JAVA_OPTS="" \
     SPRING_PROFILES_ACTIVE=prod
 EXPOSE 8761
-RUN apt-get install -y curl && \
+RUN apk add --no-cache curl && \
     mkdir /target && \
     chmod g+rwx /target
 CMD java \
