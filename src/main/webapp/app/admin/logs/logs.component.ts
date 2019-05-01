@@ -49,7 +49,7 @@ export class LogsComponent implements OnInit, OnDestroy {
             this.logsService.findInstanceAll(this.activeRoute).subscribe(response => {
                     this.loggers = response.body;
                     this.updatingLogs = false;
-                },error => {
+                }, error => {
                     if (error.status === 503 || error.status === 500 || error.status === 404) {
                         this.updatingLogs = false;
                         if (error.status === 500 || error.status === 404) {

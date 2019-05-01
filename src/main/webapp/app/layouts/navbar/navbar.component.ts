@@ -39,7 +39,7 @@ export class NavbarComponent implements OnInit {
     }
 
     registerAuthenticationSuccess() {
-        this.eventManager.subscribe('authenticationSuccess',message => {
+        this.eventManager.subscribe('authenticationSuccess', message => {
             this.getProfileInfo();
         });
     }

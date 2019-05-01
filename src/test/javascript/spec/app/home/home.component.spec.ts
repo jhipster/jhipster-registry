@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
-
 import { JHipsterRegistryTestModule } from '../../test.module';
-import { EurekaStatusService, HomeComponent } from '../../../../../main/webapp/app/home';
-import { Account, AccountService, Principal, LoginModalService } from '../../../../../main/webapp/app/shared';
-import { JhiApplicationsService } from '../../../../../main/webapp/app/registry';
-import { JhiHealthService } from '../../../../../main/webapp/app/admin/health/health.service';
+import { EurekaStatusService, HomeComponent } from 'app/home';
+import { Account, AccountService, Principal, LoginModalService } from 'app/core';
+import { JhiApplicationsService } from 'app/registry';
+import { JhiHealthService } from 'app/admin';
+import { JhiRefreshService, LoginOAuth2Service } from 'app/shared';
+import { ProfileService } from 'app/layouts';
 
 describe('Component Tests', () => {
     describe('HomeComponent', () => {
@@ -32,7 +33,10 @@ describe('Component Tests', () => {
                         },
                         EurekaStatusService,
                         JhiApplicationsService,
-                        JhiHealthService
+                        JhiHealthService,
+                        LoginOAuth2Service,
+                        ProfileService,
+                        JhiRefreshService
                     ]
                 })
                     .overrideTemplate(HomeComponent, '')

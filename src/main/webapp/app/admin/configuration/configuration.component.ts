@@ -49,7 +49,7 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
                             this.configKeys.push(Object.keys(config.properties));
                         }
                     }
-                },error => {
+                }, error => {
                     this.updatingConfig = false;
                     this.routesService.routeDown(this.activeRoute);
                 }

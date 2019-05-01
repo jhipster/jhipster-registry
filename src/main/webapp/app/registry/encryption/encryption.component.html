@@ -39,15 +39,15 @@
         <div class="text-center pad" >
             <a (click)="showMore = !showMore" class="btn btn-default">
                 <span *ngIf="showMore">
-                    <span class="fa fa-arrow-circle-down"></span>&nbsp;show more
+                    <fa-icon icon="arrow-circle-down"></fa-icon>&nbsp;show more
                 </span>
                     <span *ngIf="!showMore">
-                    <span class="fa fa-arrow-circle-up"></span>&nbsp;show less
+                    <fa-icon icon="arrow-circle-up"></fa-icon> show less
                 </span>
             </a>
         </div>
         <div [ngbCollapse]="showMore">
-            <h3><span class="fa fa-info-circle"></span> Using Encryption</h3>
+            <h3><fa-icon icon="info-circle"></fa-icon> Using Encryption</h3>
             <p>
                 In order to not leave your secrets in plain text at rest, encrypt them using this UI. Then store the encrypted value like this:
             </p>

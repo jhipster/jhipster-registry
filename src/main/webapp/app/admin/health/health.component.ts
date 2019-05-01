@@ -32,7 +32,7 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
             this.healthService.checkInstanceHealth(this.activeRoute).subscribe(health => {
                     this.healthData = this.healthService.transformHealthData(health);
                     this.updatingHealth = false;
-                },error => {
+                }, error => {
                     if (error.status === 503 || error.status === 500 || error.status === 404) {
                         this.healthData = this.healthService.transformHealthData(error.json());
                         this.updatingHealth = false;
@@ -53,7 +53,7 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
         modalRef.componentInstance.currentHealth = health;
         modalRef.result.then(result => {
                 // Left blank intentionally, nothing to do here
-            },reason => {
+            }, reason => {
                 // Left blank intentionally, nothing to do here
             }
         );
@@ -78,6 +78,8 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // prevent memory leak when component destroyed
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 }

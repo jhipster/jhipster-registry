@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { Observable } from 'rxjs';
-
 import { JHipsterRegistryTestModule } from '../../../test.module';
-import { JhiHistoryComponent, JhiHistoryService } from '../../../../../../main/webapp/app/registry';
+import { JhiHistoryComponent, JhiHistoryService } from 'app/registry';
+import { JhiRefreshService } from 'app/shared';
 
 describe('Component Tests', () => {
     describe('HistoryComponent', () => {
@@ -14,7 +14,7 @@ describe('Component Tests', () => {
                 TestBed.configureTestingModule({
                     imports: [JHipsterRegistryTestModule],
                     declarations: [JhiHistoryComponent],
-                    providers: [JhiHistoryService]
+                    providers: [JhiHistoryService, JhiRefreshService]
                 })
                     .overrideTemplate(JhiHistoryComponent, '')
                     .compileComponents();
