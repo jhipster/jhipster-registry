@@ -318,6 +318,11 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
+        <!-- Needed to enable log reporting to logstash through Dropwizard console reporter -->
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+        </dependency>
         <!-- Java 11+ support -->
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
