@@ -7,7 +7,7 @@ RUN \
     rm -Rf target node_modules && \
     chmod +x /code/mvnw && \
     sleep 1 && \
-    JHI_DISABLE_WEBPACK_LOGS=true ./mvnw package -Pprod -DskipTests && \
+    JHI_DISABLE_WEBPACK_LOGS=true ./mvnw package -ntp -Pprod -DskipTests && \
     mv /code/target/*.jar /jhipster-registry.jar && \
     apt-get clean && \
     rm -Rf /code/ /root/.m2 /root/.cache /tmp/* /var/lib/apt/lists/* /var/tmp/*
