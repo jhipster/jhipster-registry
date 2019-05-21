@@ -2,33 +2,34 @@ package io.github.jhipster.registry.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jhipster.registry.JHipsterRegistryApp;
+import io.github.jhipster.registry.config.Constants;
 import io.github.jhipster.registry.security.jwt.TokenProvider;
 import io.github.jhipster.registry.web.rest.vm.LoginVM;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = JHipsterRegistryApp.class)
 public class UserJWTControllerTest {
 
-    @Autowired
+    @MockBean
     private TokenProvider tokenProvider;
 
     @Autowired
@@ -36,10 +37,8 @@ public class UserJWTControllerTest {
 
     private MockMvc mock;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        tokenProvider = Mockito.mock(TokenProvider.class);
-
         UserJWTController control = new UserJWTController(tokenProvider, authenticationManager);
         this.mock = MockMvcBuilders.standaloneSetup(control).build();
     }
@@ -52,7 +51,7 @@ public class UserJWTControllerTest {
         vm.setPassword("admin");
         vm.setRememberMe(true);
 
-        Mockito.doReturn("fakeToken").when(tokenProvider)
+        doReturn("fakeToken").when(tokenProvider)
             .createToken(Mockito.any(Authentication.class), Mockito.anyBoolean());
 
         mock.perform(post("/api/authenticate")
@@ -66,7 +65,7 @@ public class UserJWTControllerTest {
     @Test
     public void authenticationException() throws Exception {
         // Authentication exception throws
-        Mockito.doThrow(new AuthenticationException(null){}).when(tokenProvider)
+        doThrow(new AuthenticationException(null){}).when(tokenProvider)
             .createToken(Mockito.any(Authentication.class), Mockito.anyBoolean());
 
         MvcResult res = mock.perform(post("/api/authenticate")
@@ -76,7 +75,7 @@ public class UserJWTControllerTest {
             .andExpect(status().isUnauthorized())
             .andReturn();
 
-        assertTrue(res.getResponse().getContentAsString().startsWith("{\"AuthenticationException\""));
+        assertThat(res.getResponse().getContentAsString()).startsWith("{\"AuthenticationException\"");
     }
 
     @Test
@@ -95,26 +94,26 @@ public class UserJWTControllerTest {
     }
 
     @Test
-    public void getIdTokenTest() throws Exception {
-        assertNotNull(new UserJWTController.JWTToken("id").getIdToken());
-        assertEquals("id", new UserJWTController.JWTToken("id").getIdToken());
-        assertNull(new UserJWTController.JWTToken(null).getIdToken());
+    public void getIdTokenTest() {
+        assertThat(new UserJWTController.JWTToken("id").getIdToken()).isNotNull();
+        assertThat(new UserJWTController.JWTToken("id").getIdToken()).isEqualTo("id");
+        assertThat(new UserJWTController.JWTToken(null).getIdToken()).isNull();
     }
 
     @Test
-    public void setIdTokenTest() throws Exception {
+    public void setIdTokenTest() {
         UserJWTController.JWTToken token = new UserJWTController.JWTToken("id");
-        assertNotNull(token.getIdToken());
+        assertThat(token.getIdToken()).isNotNull();
 
-        assertNotEquals("id2", token.getIdToken());
+        assertThat(token.getIdToken()).isNotEqualTo("id2");
         token.setIdToken("id2");
-        assertEquals("id2", token.getIdToken());
+        assertThat(token.getIdToken()).isEqualTo("id2");
 
         token.setIdToken(null);
-        assertNull(token.getIdToken());
+        assertThat(token.getIdToken()).isNull();
 
         token = new UserJWTController.JWTToken(null);
         token.setIdToken(null);
-        assertNull(token.getIdToken());
+        assertThat(token.getIdToken()).isNull();
     }
 }

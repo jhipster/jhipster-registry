@@ -1,7 +1,6 @@
 package io.github.jhipster.registry.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.github.jhipster.registry.config.Constants;
 import io.github.jhipster.registry.security.jwt.JWTConfigurer;
 import io.github.jhipster.registry.security.jwt.TokenProvider;

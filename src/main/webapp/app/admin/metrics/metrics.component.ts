@@ -31,7 +31,7 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.routesService.routeChanged$.subscribe((route) => {
+        this.subscription = this.routesService.routeChanged$.subscribe(route => {
             this.activeRoute = route;
             this.displayActiveRouteMetrics();
         });
@@ -44,10 +44,9 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
     displayActiveRouteMetrics() {
         this.updatingMetrics = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.metricsService.getInstanceMetrics(this.activeRoute).subscribe(
-                (metrics) => {
+            this.metricsService.getInstanceMetrics(this.activeRoute).subscribe(metrics => {
                     this.metrics = metrics;
-                    this.metricsService.instanceThreadDump(this.activeRoute).subscribe((data) => {
+                    this.metricsService.instanceThreadDump(this.activeRoute).subscribe(data => {
                         this.threadData = data.threads;
 
                         this.threadStats = {
@@ -58,7 +57,7 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
                             threadDumpAll: 0
                         };
 
-                        this.threadData.forEach((value) => {
+                        this.threadData.forEach(value => {
                             if (value.threadState === 'RUNNABLE') {
                                 this.threadStats.threadDumpRunnable += 1;
                             } else if (value.threadState === 'WAITING') {
@@ -78,8 +77,7 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
 
                         this.updatingMetrics = false;
                     });
-                },
-                (error) => {
+                }, error => {
                     if (error.status === 503 || error.status === 500 || error.status === 404) {
                         if (error.status === 500 || error.status === 404) {
                             this.routesService.routeDown(this.activeRoute);

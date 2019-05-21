@@ -15,15 +15,15 @@
     <div class="text-center pad" >
         <a (click)="showMore = !showMore" class="btn btn-default">
             <span *ngIf="showMore">
-                <span class="fa fa-arrow-circle-down"></span>&nbsp;show more
+                <fa-icon icon="arrow-circle-down"></fa-icon>&nbsp;show more
             </span>
             <span *ngIf="!showMore">
-                <span class="fa fa-arrow-circle-up"></span>&nbsp;show less
+                <fa-icon icon="arrow-circle-up"></fa-icon>&nbsp;show less
             </span>
         </a>
     </div>
 	<div [ngbCollapse]="showMore">
-        <h3><span class="fa fa-info-circle"></span> Using SSH with Docker</h3>
+        <h3><fa-icon icon="info-circle"></fa-icon> Using SSH with Docker</h3>
         <p>
             Here are detailed instruction when using the JHipster Registry Docker image, available at
             <a href="https://hub.docker.com/r/jhipster/jhipster-registry/" target="_blank">jhipster/jhipster-registry/</a>.

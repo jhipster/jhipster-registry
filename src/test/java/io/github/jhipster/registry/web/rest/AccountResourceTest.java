@@ -1,11 +1,9 @@
 package io.github.jhipster.registry.web.rest;
 
 import io.github.jhipster.registry.security.AuthoritiesConstants;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,17 +16,25 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Collection;
 import java.util.HashSet;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(MockitoJUnitRunner.class)
 public class AccountResourceTest {
 
     private MockMvc mock;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.mock = MockMvcBuilders.standaloneSetup(new AccountResource()).build();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -59,18 +65,19 @@ public class AccountResourceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testGetExistingAccount() throws Exception {
 
-        Authentication authentication = Mockito.mock(Authentication.class);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
 
         Collection authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
 
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-        Mockito.when(authentication.getPrincipal()).thenReturn(new User("user", "pass", authorities));
-        Mockito.when(authentication.getAuthorities()).thenReturn(authorities);
+        when(authentication.getPrincipal()).thenReturn(new User("user", "pass", authorities));
+        when(authentication.getAuthorities()).thenReturn(authorities);
 
         mock.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))

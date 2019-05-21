@@ -18,7 +18,7 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
     constructor(private historyService: JhiHistoryService, private refreshService: JhiRefreshService) {}
 
     ngOnInit() {
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.refresh());
         this.refresh();
     }
 
@@ -27,7 +27,7 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
     }
 
     refresh() {
-        this.historyService.findAll().subscribe((data) => {
+        this.historyService.findAll().subscribe(data => {
             this.data = data;
             if (this.activeKey) {
                 this.activate(this.activeKey);

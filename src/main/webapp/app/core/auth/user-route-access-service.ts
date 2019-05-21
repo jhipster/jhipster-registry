@@ -26,7 +26,7 @@ export class UserRouteAccessService implements CanActivate {
     checkLogin(authorities: string[], url: string): Promise<boolean> {
         const principal = this.principal;
         return Promise.resolve(
-            principal.identity().then((account) => {
+            principal.identity().then(account => {
                 if (account && principal.hasAnyAuthorityDirect(authorities)) {
                     return true;
                 }

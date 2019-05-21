@@ -1,70 +1,42 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 
 /* ==========================================================================
 Navbar
 ========================================================================== */
+
 .navbar-version {
-    font-size: 10px;
-    color: #ccc
+  font-size: 0.65em;
+  color: $navbar-dark-color;
 }
 
-.jh-navbar {
-    background-color: #353d47;
-    padding: .2em 1em;
-    .profile-image {
-        margin: -10px 0px;
-        height: 40px;
-        width: 40px;
-        border-radius: 50%;
-    }
-    .dropdown-item.active, .dropdown-item.active:focus, .dropdown-item.active:hover {
-        background-color: #353d47;
-    }
-    .dropdown-toggle::after {
-        margin-left: 0.15em;
-    }
-    ul.navbar-nav {
-        padding: 0.5em;
-        .nav-item {
-            margin-left: 1.5rem;
-        }
-    }
-    a.nav-link {
-        font-weight: 400;
-    }
-    .jh-navbar-toggler {
-        color: #ccc;
-        font-size: 1.5em;
-        padding: 10px;
-        &:hover {
-            color: #fff;
-        }
-    }
+.profile-image {
+  height: 1.75em;
+  width: 1.75em;
 }
 
-@media screen and (max-width: 992px) {
-    .jh-logo-container {
-        width: 100%;
-    }
-}
+.navbar {
+  padding: 0.2rem 1rem;
 
-.navbar-title {
-    display: inline-block;
-    vertical-align: middle;
+  ul.navbar-nav {
+    .nav-item {
+      margin-left: 0.5em;
+    }
+  }
+
+  a.nav-link {
+    font-weight: 400;
+  }
 }
 
 /* ==========================================================================
 Logo styles
 ========================================================================== */
-.navbar-brand {
-    &.logo {
-        padding: 5px 15px;
-        .logo-img {
-            height: 45px;
-            width: 70px;
-            display: inline-block;
-            vertical-align: middle;
-            background: url("../../../content/images/logo-jhipster.png") no-repeat center center;
-            background-size: contain;
-        }
-    }
+.logo-img {
+  height: 45px;
+  width: 45px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
+  background-size: contain;
 }

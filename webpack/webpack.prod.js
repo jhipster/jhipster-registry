@@ -1,8 +1,10 @@
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const Visualizer = require('webpack-visualizer-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const path = require('path');
@@ -11,8 +13,7 @@ const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
-const extractSASS = new ExtractTextPlugin(`[name]-sass.[hash].css`);
-const extractCSS = new ExtractTextPlugin(`[name].[hash].css`);
+const sass = require('sass');
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
     // Enable source maps. Please note that this will slow down the build.
@@ -24,38 +25,57 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         main: './src/main/webapp/app/app.main'
     },
     output: {
-        path: utils.root('target/www'),
+        path: utils.root('target/classes/static/'),
         filename: 'app/[name].[hash].bundle.js',
         chunkFilename: 'app/[id].[hash].chunk.js'
     },
     module: {
         rules: [{
             test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-            use: [ '@ngtools/webpack' ]
+            loader: '@ngtools/webpack'
         },
         {
             test: /\.scss$/,
-            loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
+            use: ['to-string-loader', 'css-loader', {
+                loader: 'sass-loader',
+                options: { implementation: sass }
+            }],
             exclude: /(vendor\.scss|global\.scss)/
         },
         {
             test: /(vendor\.scss|global\.scss)/,
-            use: extractSASS.extract({
-                fallback: 'style-loader',
-                use: ['css-loader', 'postcss-loader', 'sass-loader']
-            })
+            use: [
+                {
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                        publicPath: '../'
+                    }
+                },
+                'css-loader',
+                'postcss-loader',
+                {
+                    loader: 'sass-loader',
+                    options: { implementation: sass }
+                }
+            ]
         },
         {
             test: /\.css$/,
-            loaders: ['to-string-loader', 'css-loader'],
+            use: ['to-string-loader', 'css-loader'],
             exclude: /(vendor\.css|global\.css)/
         },
         {
             test: /(vendor\.css|global\.css)/,
-            use: extractCSS.extract({
-                fallback: 'style-loader',
-                use: ['css-loader']
-            })
+            use: [
+                {
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                        publicPath: '../'
+                    }
+                },
+                'css-loader',
+                'postcss-loader'
+            ]
         }]
     },
     optimization: {
@@ -70,10 +90,14 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             }
         },
         minimizer: [
-            new UglifyJSPlugin({
+            new TerserPlugin({
                 parallel: true,
-                uglifyOptions: {
+                cache: true,
+                terserOptions: {
+                    ecma: 6,
                     ie8: false,
+                    toplevel: true,
+                    module: true,
                     // sourceMap: true, // Enable source maps. Please note that this will slow down the build
                     compress: {
                         dead_code: true,
@@ -87,20 +111,39 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                         toplevel: true,
                         if_return: true,
                         inline: true,
-                        join_vars: true
+                        join_vars: true,
+                        ecma: 6,
+                        module: true,
+                        toplevel: true
                     },
                     output: {
                         comments: false,
                         beautify: false,
-                        indent_level: 2
+                        indent_level: 2,
+                        ecma: 6
+                    },
+                    mangle: {
+                        module: true,
+                        toplevel: true
                     }
                 }
-            })
+            }),
+            new OptimizeCSSAssetsPlugin({})
         ]
     },
     plugins: [
-        extractSASS,
-        extractCSS,
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: 'content/[name].[contenthash].css',
+            chunkFilename: 'content/[id].css'
+        }),
+        new MomentLocalesPlugin({
+            localesToKeep: [
+                    'en'
+                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array
+                ]
+        }),
         new Visualizer({
             // Webpack statistics in target folder
             filename: '../stats.html'
@@ -116,7 +159,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }),
         new WorkboxPlugin.GenerateSW({
           clientsClaim: true,
-          skipWaiting: true,
+          skipWaiting: true
         })
     ],
     mode: 'production'

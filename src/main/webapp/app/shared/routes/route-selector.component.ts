@@ -27,9 +27,9 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         this.activeRoute = this.routesService.getSelectedInstance();
 
         this.updateRoute();
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((reload) => this.updateRoute());
-        this.routeReloadSubscription = this.routesService.routeReload$.subscribe((reload) => this.updateRoute());
-        this.routeDownSubscription = this.routesService.routeDown$.subscribe((route) => {
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(reload => this.updateRoute());
+        this.routeReloadSubscription = this.routesService.routeReload$.subscribe(reload => this.updateRoute());
+        this.routeDownSubscription = this.routesService.routeDown$.subscribe(route => {
             this.downRoute(route);
             this.setActiveRoute(null);
         });
@@ -44,7 +44,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
 
     /** Change active route only if exists, else choose Registry **/
     setActiveRoute(instance: Route) {
-        if (instance && this.routes && this.routes.findIndex((r) => r.appName === instance.appName) !== -1) {
+        if (instance && this.routes && this.routes.findIndex(r => r.appName === instance.appName) !== -1) {
             this.activeRoute = instance;
         } else if (this.routes && this.routes.length > 0) {
             this.activeRoute = this.routes[0];
@@ -55,8 +55,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
 
     private updateRoute() {
         this.updatingRoutes = true;
-        this.routesService.findAll().subscribe(
-            (routes) => {
+        this.routesService.findAll().subscribe(routes => {
                 this.savedRoutes = routes;
                 this.routes = routes;
                 this.searchedInstance = '';
@@ -68,8 +67,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
                     this.setActiveRoute(routes[0]);
                 }
                 this.updatingRoutes = false;
-            },
-            (error) => {
+            }, error => {
                 if (error.status === 503 || error.status === 500 || error.status === 404) {
                     if (error.status === 500 || error.status === 404) {
                         this.downRoute(this.activeRoute);
@@ -122,7 +120,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
         if (this.searchedInstance === '') {
             this.routes = this.savedRoutes;
         } else {
-            this.routes = this.savedRoutes.filter((route) => {
+            this.routes = this.savedRoutes.filter(route => {
                 return route.appName.includes(this.searchedInstance);
             });
         }

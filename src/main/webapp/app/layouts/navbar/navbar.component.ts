@@ -4,7 +4,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { Principal, LoginModalService, LoginService } from 'app/shared';
+import { Principal, LoginModalService, LoginService, LoginOAuth2Service } from 'app/shared';
 
 import { VERSION } from 'app/app.constants';
 
@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
 
     constructor(
         private loginService: LoginService,
+        private loginOAuth2Service: LoginOAuth2Service,
         private principal: Principal,
         private loginModalService: LoginModalService,
         private profileService: ProfileService,
@@ -38,7 +39,7 @@ export class NavbarComponent implements OnInit {
     }
 
     registerAuthenticationSuccess() {
-        this.eventManager.subscribe('authenticationSuccess', (message) => {
+        this.eventManager.subscribe('authenticationSuccess', message => {
             this.getProfileInfo();
         });
     }
@@ -57,8 +58,25 @@ export class NavbarComponent implements OnInit {
 
     logout() {
         this.collapseNavbar();
-        this.loginService.logout();
-        this.router.navigate(['']);
+        this.profileService.getProfileInfo().then(profileInfo => {
+            if (profileInfo.activeProfiles.indexOf('oauth2') > -1) {
+                this.loginOAuth2Service.logout().subscribe(response => {
+                    const data = response.body;
+                    let logoutUrl = data.logoutUrl;
+                    // if Keycloak, uri has protocol/openid-connect/token
+                    if (logoutUrl.indexOf('/protocol') > -1) {
+                        logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
+                    } else {
+                        // Okta
+                        logoutUrl = logoutUrl + '?id_token_hint=' + data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
+                    }
+                    window.location.href = logoutUrl;
+                });
+            } else {
+                this.loginService.logout();
+                this.router.navigate(['']);
+            }
+        });
     }
 
     toggleNavbar() {
@@ -70,7 +88,7 @@ export class NavbarComponent implements OnInit {
     }
 
     getProfileInfo() {
-        this.profileService.getProfileInfo().then((profileInfo) => {
+        this.profileService.getProfileInfo().then(profileInfo => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });

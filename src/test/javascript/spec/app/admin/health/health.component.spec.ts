@@ -27,7 +27,6 @@ describe('Component Tests', () => {
             fixture = TestBed.createComponent(JhiHealthCheckComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(JhiHealthService);
-            fixture.detectChanges();
         });
 
         describe('baseName and subSystemName', () => {

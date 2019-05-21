@@ -20,7 +20,7 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
     constructor(private modalService: NgbModal, private healthService: JhiHealthService, private routesService: JhiRoutesService) {}
 
     ngOnInit() {
-        this.subscription = this.routesService.routeChanged$.subscribe((route) => {
+        this.subscription = this.routesService.routeChanged$.subscribe(route => {
             this.activeRoute = route;
             this.displayActiveRouteHealth();
         });
@@ -29,12 +29,10 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
     displayActiveRouteHealth() {
         this.updatingHealth = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.healthService.checkInstanceHealth(this.activeRoute).subscribe(
-                (health) => {
+            this.healthService.checkInstanceHealth(this.activeRoute).subscribe(health => {
                     this.healthData = this.healthService.transformHealthData(health);
                     this.updatingHealth = false;
-                },
-                (error) => {
+                }, error => {
                     if (error.status === 503 || error.status === 500 || error.status === 404) {
                         this.healthData = this.healthService.transformHealthData(error.json());
                         this.updatingHealth = false;
@@ -53,11 +51,9 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
     showHealth(health: any) {
         const modalRef = this.modalService.open(JhiHealthModalComponent);
         modalRef.componentInstance.currentHealth = health;
-        modalRef.result.then(
-            (result) => {
+        modalRef.result.then(result => {
                 // Left blank intentionally, nothing to do here
-            },
-            (reason) => {
+            }, reason => {
                 // Left blank intentionally, nothing to do here
             }
         );
@@ -82,6 +78,8 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // prevent memory leak when component destroyed
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 }

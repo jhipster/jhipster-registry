@@ -32,7 +32,7 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.routesService.routeChanged$.subscribe((route) => {
+        this.subscription = this.routesService.routeChanged$.subscribe(route => {
             this.activeRoute = route;
             this.displayActiveRouteConfig();
         });
@@ -41,8 +41,7 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
     displayActiveRouteConfig() {
         this.updatingConfig = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.configurationService.getInstanceConfigs(this.activeRoute).subscribe(
-                (configuration) => {
+            this.configurationService.getInstanceConfigs(this.activeRoute).subscribe(configuration => {
                     this.configuration = configuration;
                     this.updatingConfig = false;
                     for (const config of configuration) {
@@ -50,14 +49,13 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
                             this.configKeys.push(Object.keys(config.properties));
                         }
                     }
-                },
-                (error) => {
+                }, error => {
                     this.updatingConfig = false;
                     this.routesService.routeDown(this.activeRoute);
                 }
             );
 
-            this.configurationService.getInstanceEnv(this.activeRoute).subscribe((configuration) => {
+            this.configurationService.getInstanceEnv(this.activeRoute).subscribe(configuration => {
                 this.allConfiguration = configuration;
             });
         } else {

@@ -3,7 +3,7 @@ import './vendor.ts';
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ngx-webstorage';
+import { LocalStorageService, SessionStorageService, NgxWebstorageModule } from 'ngx-webstorage';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
@@ -12,7 +12,7 @@ import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.inter
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 import { JHipsterRegistrySharedModule, UserRouteAccessService } from './shared';
 import { JHipsterRegistryAppRoutingModule } from './app-routing.module';
-import { JHipsterRegistryHomeModule } from './home/home.module';
+import { JHipsterRegistryHomeModule } from 'app/home';
 import { JHipsterRegistryAdminModule } from './admin/admin.module';
 import { JHipsterRegistryModule } from './registry/registry.module';
 
@@ -24,8 +24,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, ProfileService, Pag
     imports: [
         BrowserModule,
         JHipsterRegistryAppRoutingModule,
-        Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
-        JHipsterRegistrySharedModule,
+        NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-' }),
+        JHipsterRegistrySharedModule.forRoot(),
         JHipsterRegistryHomeModule,
         JHipsterRegistryAdminModule,
         JHipsterRegistryModule

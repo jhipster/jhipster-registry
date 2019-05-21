@@ -7,9 +7,9 @@ export class GroupByPipe implements PipeTransform {
     transform(collection: Object[], term: string) {
         const newValue = [];
 
-        collection.forEach((col) => {
+        collection.forEach(col => {
             const keyVal = this.deepFind(col, term);
-            const index = newValue.findIndex((myObj) => myObj.key === keyVal);
+            const index = newValue.findIndex(myObj => myObj.key === keyVal);
             if (index >= 0) {
                 newValue[index].value.push(col);
             } else {
@@ -23,7 +23,7 @@ export class GroupByPipe implements PipeTransform {
         const paths = path.toString().split(/[.\[\]]/);
         let current = obj;
 
-        paths.forEach((onePath) => {
+        paths.forEach(onePath => {
             if (onePath !== '') {
                 if (!current[onePath]) {
                     return undefined;

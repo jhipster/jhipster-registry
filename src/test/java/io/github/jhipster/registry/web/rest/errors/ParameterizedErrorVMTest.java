@@ -1,42 +1,40 @@
 package io.github.jhipster.registry.web.rest.errors;
 
+import io.github.jhipster.registry.utils.TestUtils;
+import org.junit.jupiter.api.Test;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Test;
 
-import io.github.jhipster.registry.utils.TestUtils;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParameterizedErrorVMTest {
 
     @Test
     public void getMessageTest() {
         ParameterizedErrorVM vm = new ParameterizedErrorVM(null, null);
-        assertNull(vm.getMessage());
+        assertThat(vm.getMessage()).isNull();
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("param1", "param1");
         paramMap.put("param2", "param2");
         vm = new ParameterizedErrorVM("message", paramMap);
-        assertEquals("message", vm.getMessage());
+        assertThat(vm.getMessage()).isEqualTo("message");
     }
 
     @Test
     public void getParamsTest() {
         ParameterizedErrorVM vm = new ParameterizedErrorVM(null, null);
-        assertNull(vm.getMessage());
+        assertThat(vm.getMessage()).isNull();
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("param1", "param1");
         paramMap.put("param2", "param2");
         vm = new ParameterizedErrorVM("message", paramMap);
-        assertTrue(vm.getParams().size() == 2);
+        assertThat(vm.getParams()).hasSize(2);
     }
 
     @Test
     public void isSerializable() {
-        assertTrue(TestUtils.isSerializable(new ParameterizedErrorVM(null, null)));
+        assertThat(TestUtils.isSerializable(new ParameterizedErrorVM(null, null))).isTrue();
     }
 
 }

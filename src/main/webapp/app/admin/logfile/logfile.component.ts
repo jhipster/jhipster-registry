@@ -20,7 +20,7 @@ export class JhiLogfileComponent implements OnInit, OnDestroy {
     constructor(private jhiLogfileService: JhiLogfileService, private routesService: JhiRoutesService) {}
 
     ngOnInit() {
-        this.subscription = this.routesService.routeChanged$.subscribe((route) => {
+        this.subscription = this.routesService.routeChanged$.subscribe(route => {
             this.activeRoute = route;
             this.displayActiveRouteLog();
         });
@@ -29,12 +29,10 @@ export class JhiLogfileComponent implements OnInit, OnDestroy {
     displayActiveRouteLog() {
         this.updatingLogfile = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.jhiLogfileService.getInstanceLogfile(this.activeRoute).subscribe(
-                (logtxt) => {
+            this.jhiLogfileService.getInstanceLogfile(this.activeRoute).subscribe(logtxt => {
                     this.logtxt = logtxt;
                     this.updatingLogfile = false;
-                },
-                (error) => {
+                }, error => {
                     if (error.status === 503 || error.status === 500 || error.status === 404) {
                         this.logtxt =
                             'No available logfile. Please note that it is not available by default, you need to set up the Spring Boot properties below! \n' +

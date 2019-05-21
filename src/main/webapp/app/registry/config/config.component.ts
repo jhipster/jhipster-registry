@@ -48,18 +48,17 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
     }
 
     load() {
-        this.profileService.getProfileInfo().then((response) => {
+        this.profileService.getProfileInfo().then(response => {
             this.activeRegistryProfiles = response.activeProfiles;
             this.isNative = this.activeRegistryProfiles.includes('native');
             this.configurationSources = response.configurationSources;
         });
 
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.refresh());
     }
 
     refresh() {
-        this.configService.getConfigAsYaml(this.application, this.profile, this.label).subscribe(
-            (response) => {
+        this.configService.getConfigAsYaml(this.application, this.profile, this.label).subscribe(response => {
                 this.configAsYaml = response;
             },
             () => {
@@ -67,12 +66,11 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.configService.getConfigAsProperties(this.application, this.profile, this.label).subscribe(
-            (response) => {
+        this.configService.getConfigAsProperties(this.application, this.profile, this.label).subscribe(response => {
                 this.configAsProperties = response;
 
                 const keyValueArray = [];
-                this.configAsProperties.split('\n').forEach((property) => {
+                this.configAsProperties.split('\n').forEach(property => {
                     const keyValueSplit = property.split(': ');
                     keyValueArray.push({ key: keyValueSplit[0], value: keyValueSplit[1] });
                 });
@@ -83,8 +81,7 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.configService.getConfigAsJson(this.application, this.profile, this.label).subscribe(
-            (response) => {
+        this.configService.getConfigAsJson(this.application, this.profile, this.label).subscribe(response => {
                 this.configAsJson = response;
             },
             () => {
@@ -92,10 +89,10 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.applicationsService.findAll().subscribe((data) => {
+        this.applicationsService.findAll().subscribe(data => {
             if (data && data.applications) {
                 this.applicationList = ['application'];
-                data.applications.forEach((application) => {
+                data.applications.forEach(application => {
                     const instanceId = application.instances[0].instanceId;
                     let applicationName;
                     if (instanceId.indexOf(':') === -1) {

@@ -9,6 +9,6 @@ if (module['hot']) {
 }
 
 platformBrowserDynamic()
-    .bootstrapModule(JHipsterRegistryAppModule)
-    .then((success) => console.log(`Application started`))
-    .catch((err) => console.error(err));
+    .bootstrapModule(JHipsterRegistryAppModule, { preserveWhitespaces: true })
+    .then(success => console.log(`Application started`))
+    .catch(err => console.error(err));

@@ -19,7 +19,7 @@ export class JhiReplicasComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.refresh());
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.refresh());
         this.refresh();
     }
 
@@ -28,7 +28,7 @@ export class JhiReplicasComponent implements OnInit, OnDestroy {
     }
 
     refresh() {
-        this.replicasService.findAll().subscribe((replicas) => {
+        this.replicasService.findAll().subscribe(replicas => {
             this.replicas = replicas;
         });
     }

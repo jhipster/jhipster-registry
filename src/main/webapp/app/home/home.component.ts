@@ -5,7 +5,7 @@ import { JhiEventManager } from 'ng-jhipster';
 import { Account, LoginModalService, Principal } from 'app/shared';
 import { JhiHealthService } from 'app/admin';
 import { JhiApplicationsService } from 'app/registry';
-import { JhiRefreshService } from '../shared/refresh/refresh.service';
+import { JhiRefreshService } from 'app/shared';
 import { Subscription } from 'rxjs/Subscription';
 
 import { VERSION } from 'app/app.constants';
@@ -45,12 +45,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.principal.identity().then((account) => {
+        this.principal.identity().then(account => {
             this.account = account;
             if (!account || !this.isAuthenticated()) {
                 this.login();
             } else {
-                this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.populateDashboard());
+                this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.populateDashboard());
                 this.populateDashboard();
             }
         });
@@ -65,10 +65,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     registerAuthenticationSuccess() {
-        this.eventManager.subscribe('authenticationSuccess', (message) => {
-            this.principal.identity().then((account) => {
+        this.eventManager.subscribe('authenticationSuccess', message => {
+            this.principal.identity().then(account => {
                 this.account = account;
-                this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe((empty) => this.populateDashboard());
+                this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.populateDashboard());
                 this.populateDashboard();
             });
         });
@@ -79,7 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     login() {
-        this.profileService.getProfileInfo().then((profileInfo) => {
+        this.profileService.getProfileInfo().then(profileInfo => {
             if (profileInfo.activeProfiles.indexOf('oauth2') > -1) {
                 this.loginOAuth2Service.login();
             } else {
@@ -89,11 +89,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     populateDashboard() {
-        this.eurekaStatusService.findAll().subscribe((data) => {
+        this.eurekaStatusService.findAll().subscribe(data => {
             this.status = data.status;
         });
 
-        this.applicationsService.findAll().subscribe((data) => {
+        this.applicationsService.findAll().subscribe(data => {
             this.appInstances = [];
             for (const app of data.applications) {
                 for (const inst of app.instances) {
@@ -103,12 +103,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.healthService.checkHealth().subscribe(
-            (response) => {
+        this.healthService.checkHealth().subscribe(response => {
                 this.healthData = this.healthService.transformHealthData(response);
                 this.updatingHealth = false;
-            },
-            (response) => {
+            }, response => {
                 this.healthData = this.healthService.transformHealthData(response.data);
                 this.updatingHealth = false;
             }

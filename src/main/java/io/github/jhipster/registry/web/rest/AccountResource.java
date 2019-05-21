@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.userdetails.User;
 
@@ -53,6 +54,8 @@ public class AccountResource {
                 log.debug("The username `{}` has been found using JWT", login);
             } else if (authentication.getPrincipal() instanceof String) {
                 login = (String) authentication.getPrincipal();
+            } else if (authentication instanceof OAuth2AuthenticationToken) {
+                login = ((OAuth2AuthenticationToken) authentication).getPrincipal().getName();
                 log.debug("The username `{}` has been found using OpenID Connect", login);
             } else {
                 log.debug("The username could not be found");

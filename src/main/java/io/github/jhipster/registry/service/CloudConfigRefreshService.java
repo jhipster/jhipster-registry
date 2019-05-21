@@ -152,6 +152,7 @@ public class CloudConfigRefreshService {
 
     /**
      * Generates hash value
+     *
      * @param file File
      * @return hasCode int
      */
