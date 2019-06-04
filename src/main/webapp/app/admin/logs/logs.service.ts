@@ -10,24 +10,24 @@ import { Route } from 'app/shared';
 export class LogsService {
     constructor(private http: HttpClient) {}
 
-    changeLevel(log: Log): Observable<HttpResponse<any>> {
-        return this.http.put(SERVER_API_URL + 'management/logs', log, { observe: 'response' });
+    changeLevel(name: string, configuredLevel: string): Observable<HttpResponse<any>> {
+        return this.http.post(SERVER_API_URL + 'management/loggers/' + name, { configuredLevel }, { observe: 'response' });
     }
 
-    changeInstanceLevel(instance: Route, log: Log): Observable<HttpResponse<any>> {
+    changeInstanceLevel(instance: Route, name: string, configuredLevel: string): Observable<HttpResponse<any>> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
-            return this.http.put(instance.prefix + '/management/logs', log, { observe: 'response' });
+            return this.http.post(instance.prefix + '/management/loggers/' + name, { configuredLevel }, { observe: 'response' });
         }
-        return this.changeLevel(log);
+        return this.changeLevel(name, configuredLevel);
     }
 
-    findAll(): Observable<HttpResponse<Log[]>> {
-        return this.http.get<Log[]>(SERVER_API_URL + 'management/logs', { observe: 'response' });
+    findAll(): Observable<HttpResponse<any>> {
+        return this.http.get<any>(SERVER_API_URL + 'management/loggers', { observe: 'response' });
     }
 
-    findInstanceAll(instance: Route): Observable<HttpResponse<Log[]>> {
+    findInstanceAll(instance: Route): Observable<HttpResponse<any>> {
         if (instance && instance.prefix && instance.prefix.length > 0) {
-            return this.http.get<Log[]>(instance.prefix + '/management/logs', { observe: 'response' });
+            return this.http.get<any>(instance.prefix + '/management/loggers', { observe: 'response' });
         }
         return this.findAll();
     }
