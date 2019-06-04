@@ -9,14 +9,17 @@ import { SessionStorageService } from 'ngx-webstorage';
 export class JhiRoutesService {
     // Observable sources
     private routeChangedSource = new Subject<Route>();
+    private routesChangedSource = new Subject<Route[]>();
     private routeDownSource = new Subject<Route>();
     private routeReloadSource = new Subject<boolean>();
     routeChanged$: Observable<Route>;
+    routesChanged$: Observable<Route[]>;
     routeDown$: Observable<Route>;
     routeReload$: Observable<boolean>;
 
     constructor(private http: HttpClient, private sessionStorage: SessionStorageService) {
         this.routeChanged$ = this.routeChangedSource.asObservable();
+        this.routesChanged$ = this.routesChangedSource.asObservable();
         this.routeDown$ = this.routeDownSource.asObservable();
         this.routeReload$ = this.routeReloadSource.asObservable();
     }
@@ -27,6 +30,10 @@ export class JhiRoutesService {
 
     routeChange(route: Route) {
         this.routeChangedSource.next(route);
+    }
+
+    routesChange(routes: Route[]) {
+      this.routesChangedSource.next(routes);
     }
 
     reloadRoutes() {
