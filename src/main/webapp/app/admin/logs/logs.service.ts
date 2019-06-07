@@ -15,16 +15,16 @@ export class LogsService {
     }
 
     changeInstanceLevel(instances: Route[], name: string, configuredLevel: string): Observable<any> {
-        const observables: Observable<HttpResponse<any>>[] = [];
+        const changeInstanceLevelResponses: Observable<HttpResponse<any>>[] = [];
         for (let i = 0; i < instances.length; i++) {
           if (instances[i] && instances[i].prefix && instances[i].prefix.length > 0) {
-            observables.push(this.http.post(instances[i].prefix + '/management/loggers/' + name, { configuredLevel }, { observe: 'response' }));
+            changeInstanceLevelResponses.push(this.http.post(instances[i].prefix + '/management/loggers/' + name, { configuredLevel }, { observe: 'response' }));
           } else {
-            observables.push(this.changeLevel(name, configuredLevel));
+            changeInstanceLevelResponses.push(this.changeLevel(name, configuredLevel));
           }
         }
 
-        return Observable.forkJoin(observables);
+        return Observable.forkJoin(changeInstanceLevelResponses);
     }
 
     findAll(): Observable<HttpResponse<any>> {
