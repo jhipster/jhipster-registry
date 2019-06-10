@@ -18,7 +18,9 @@ export class LogsComponent implements OnInit, OnDestroy {
     reverse: boolean;
 
     activeRoute: Route;
-    subscription: Subscription;
+    routes: Route[];
+    activeRouteSubscription: Subscription;
+    routesSubscription: Subscription;
 
     constructor(private logsService: LogsService, private routesService: JhiRoutesService) {
         this.filter = '';
@@ -28,18 +30,28 @@ export class LogsComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loggers = [];
-        this.subscription = this.routesService.routeChanged$.subscribe(route => {
+        this.activeRouteSubscription = this.routesService.routeChanged$.subscribe(route => {
             this.activeRoute = route;
             this.displayActiveRouteLogs();
+        });
+
+        this.routesSubscription = this.routesService.routesChanged$.subscribe(routes => {
+          this.routes = routes;
         });
     }
 
     changeLevel(name: string, level: string) {
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.logsService.changeInstanceLevel(this.activeRoute, name, level).subscribe(() => {
+            this.logsService.changeInstanceLevel(this.searchByAppName(), name, level).subscribe(() => {
                 this.logsService.findInstanceAll(this.activeRoute).subscribe(response => this.extractLoggers(response));
             });
         }
+    }
+
+    searchByAppName() {
+      return this.routes.filter(route => {
+        return route.appName === this.activeRoute.appName;
+      });
     }
 
     private extractLoggers(response) {
@@ -69,6 +81,7 @@ export class LogsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // prevent memory leak when component destroyed
-        this.subscription.unsubscribe();
+        this.activeRouteSubscription.unsubscribe();
+        this.routesSubscription.unsubscribe();
     }
 }
