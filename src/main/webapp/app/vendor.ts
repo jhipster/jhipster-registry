@@ -15,6 +15,9 @@ import {
     faBan,
     faTimes,
     faArrowLeft,
+    faArrowCircleDown,
+    faArrowCircleUp,
+    faInfoCircle,
     faSave,
     faPlus,
     faPencilAlt,
@@ -58,6 +61,9 @@ library.add(faEye);
 library.add(faBan);
 library.add(faTimes);
 library.add(faArrowLeft);
+library.add(faArrowCircleDown);
+library.add(faArrowCircleUp);
+library.add(faInfoCircle);
 library.add(faSave);
 library.add(faPlus);
 library.add(faPencilAlt);
