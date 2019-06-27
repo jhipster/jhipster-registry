@@ -61,13 +61,14 @@ public class OAuth2ClientCredentialsService {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("grant_type", "client_credentials");
 
-        /*HttpEntity<?> requestEntity = new HttpEntity<>(map, headers);
-        ResponseEntity<DefaultOAuth2AccessToken> responseEntity = this.restTemplate.exchange("http://UAA/oauth/token", HttpMethod.POST, requestEntity, DefaultOAuth2AccessToken.class);
+        HttpEntity<?> requestEntity = new HttpEntity<>(map, headers);
+        String uaaServiceId = jHipsterProperties.getSecurity().getClientAuthorization().getTokenServiceId();
+        ResponseEntity<DefaultOAuth2AccessToken> responseEntity = this.restTemplate.exchange("http://" + uaaServiceId + "/oauth/token", HttpMethod.POST, requestEntity, DefaultOAuth2AccessToken.class);
 
         if (!responseEntity.getStatusCode().is2xxSuccessful()) {
             //TODO
         }
 
-        accessToken = Objects.requireNonNull(responseEntity.getBody()).getValue();*/
+        accessToken = Objects.requireNonNull(responseEntity.getBody()).getValue();
     }
 }
