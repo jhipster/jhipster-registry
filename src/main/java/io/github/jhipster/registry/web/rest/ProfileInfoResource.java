@@ -41,9 +41,6 @@ public class ProfileInfoResource {
 
     private String getRibbonEnv(String[] activeProfiles) {
         String[] displayOnActiveProfiles = {};
-        if (displayOnActiveProfiles == null) {
-            return null;
-        }
         List<String> ribbonProfiles = new ArrayList<>(Arrays.asList(displayOnActiveProfiles));
         List<String> springBootProfiles = Arrays.asList(activeProfiles);
         ribbonProfiles.retainAll(springBootProfiles);
