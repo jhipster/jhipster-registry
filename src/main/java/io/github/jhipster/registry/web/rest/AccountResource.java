@@ -35,10 +35,10 @@ public class AccountResource {
 
     private static final String AUTH = "/protocol/openid-connect/auth";
 
-    @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
+    @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri:#{null}")
     private String issuerUri;
 
-    @Value("${spring.security.oauth2.client.registration.oidc.client-id}")
+    @Value("${spring.security.oauth2.client.registration.oidc.client-id:#{null}}")
     private String clientId;
 
     /**
@@ -72,13 +72,16 @@ public class AccountResource {
             String uri = request.getRequestURL().toString();
             uri = uri.substring(0, uri.indexOf("/api/account"));
 
-            StringBuilder redirect = new StringBuilder(issuerUri).append(AUTH)
-                .append("?client_id=").append(clientId)
-                .append("&response_type=code")
-                .append("&redirect_uri=").append(uri);
+            String redirectUrl = "dummy";
+            if (issuerUri != null) {
+                StringBuilder redirect = new StringBuilder(issuerUri).append(AUTH)
+                    .append("?client_id=").append(clientId)
+                    .append("&response_type=code")
+                    .append("&redirect_uri=").append(uri);
 
-            String redirectUrl = redirect.toString();
-            log.info("redirect url: " + redirectUrl);
+                redirectUrl = redirect.toString();
+                log.info("redirect url: " + redirectUrl);
+            }
             UserVM userVM = UserVM.createRedirect(redirectUrl);
             // TODO: should be HttpStatus.UNAUTHORIZED but angular client is not prepared to handle this
             return new ResponseEntity<>(userVM, HttpStatus.OK);

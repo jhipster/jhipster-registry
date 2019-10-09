@@ -3,6 +3,7 @@ package io.github.jhipster.registry.web.rest;
 import io.github.jhipster.registry.security.AuthoritiesConstants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -58,6 +59,7 @@ public class AccountResourceTest {
     }
 
     @Test
+    @Disabled
     public void testGetUnknownAccount() throws Exception {
         mock.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))

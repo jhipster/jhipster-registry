@@ -33,12 +33,6 @@ public class LogoutResource {
 
     private static final String LOGOUT = "/protocol/openid-connect/logout";
 
-    @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
-    private String issuerUri;
-
-    @Value("${spring.security.oauth2.client.registration.oidc.client-id}")
-    private String clientId;
-
     @Autowired
     private OAuth2ClientContext clientContext;
 
