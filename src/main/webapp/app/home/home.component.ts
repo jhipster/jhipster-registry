@@ -13,13 +13,15 @@ import { EurekaStatusService } from './eureka.status.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
 
+import {User} from '../../../types/custom';
+
 @Component({
     selector: 'jhi-home',
     templateUrl: './home.component.html',
     styleUrls: ['home.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-    account: Account;
+    account: User;
     modalRef: NgbModalRef;
     updatingHealth: boolean;
     healthData: any;
@@ -47,7 +49,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.principal.identity().then(account => {
             this.account = account;
-            if (!account || !this.isAuthenticated()) {
+            // we accept unauthenticated login tries as the user might not has the role 'ROLE_ADMIN'
+            if (!account /* || !this.isAuthenticated() */) {
                 this.login();
             } else {
                 this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.populateDashboard());

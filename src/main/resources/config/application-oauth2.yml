@@ -4,11 +4,27 @@ spring:
             client:
                 provider:
                     oidc:
-                        issuer-uri: http://localhost:9080/auth/realms/jhipster
+                        # issuer-uri: http://localhost:9080/auth/realms/jhipster
+                        issuer-uri: https://keycloak:8543/auth/realms/jhipster
+                # Attention: Without this there will be no bean of type OAuth2AuthorizedClientService
                 registration:
                     oidc:
                         client-id: jhipster-registry
-                        client-secret: jhipster-registry
+                        client-secret: 246777c9-03f9-4ff5-8f13-430fd4944e33
+
+# Attention: Without this there is the obscure 'Not a URI because there is not client' error'
+# Hence some values are placed 2-times in configuration.
+security:
+    oauth2:
+        client:
+            access-token-uri: https://keycloak:8543/auth/realms/jhipster/protocol/openid-connect/token
+            user-authorization-uri: https://keycloak:8543/auth/realms/jhipster/protocol/openid-connect/auth
+            client-id: jhipster-registry
+            client-secret: 246777c9-03f9-4ff5-8f13-430fd4944e33
+        resource:
+            user-info-uri: https://keycloak:8543/auth/realms/jhipster/protocol/openid-connect/userinfo
+            token-info-uri: https://keycloak:8543/auth/realms/jhipster/protocol/openid-connect/token/introspect
+            prefer-token-info: false
 
 server:
     servlet:

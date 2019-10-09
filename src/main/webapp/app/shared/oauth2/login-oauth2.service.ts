@@ -12,9 +12,6 @@ export class LoginOAuth2Service {
 
     login() {
         let port = location.port ? ':' + location.port : '';
-        if (port === ':9000') {
-            port = ':8761';
-        }
         let contextPath = location.pathname;
         if (contextPath.endsWith('accessdenied')) {
             contextPath = contextPath.substring(0, contextPath.indexOf('accessdenied'));
@@ -24,7 +21,8 @@ export class LoginOAuth2Service {
         }
         // If you have configured multiple OIDC providers, then, you can update this URL to /login.
         // It will show a Spring Security generated login page with links to configured OIDC providers.
-        location.href = `//${location.hostname}${port}${contextPath}oauth2/authorization/oidc`;
+        // location.href = `//${location.hostname}${port}${contextPath}oauth2/authorization/oidc`;
+        location.href = `//${location.hostname}${port}/login`;
     }
 
     logout(): Observable<any> {

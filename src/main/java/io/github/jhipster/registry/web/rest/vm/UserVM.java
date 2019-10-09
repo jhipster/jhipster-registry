@@ -7,21 +7,29 @@ import java.util.Set;
 /**
  * View Model object for representing a user, with his authorities.
  */
-public class UserVM {
+public final class UserVM {
 
-    @NotNull
-    @Size(min = 1, max = 50)
-    private String login;
+    private final String login;
 
-    private Set<String> authorities;
+    private final Set<String> authorities;
 
-    public UserVM() {
+    private final String redirect;
+
+    public static UserVM createUser(String login, Set<String> authorities) {
+        return new UserVM(login, authorities, null);
     }
 
-    public UserVM(String login, Set<String> authorities) {
+    public static UserVM createRedirect(String redirect) {
+        return new UserVM(null, null, redirect);
+    }
 
+    private UserVM(String login, Set<String> authorities, String redirect) {
+        if ((redirect != null && login != null) || (login != null && authorities == null)) {
+            throw new IllegalArgumentException();
+        }
         this.login = login;
         this.authorities = authorities;
+        this.redirect = redirect;
     }
 
     public String getLogin() {
@@ -32,11 +40,16 @@ public class UserVM {
         return authorities;
     }
 
+    public String getRedirect() {
+        return redirect;
+    }
+
     @Override
     public String toString() {
         return "UserVM{" +
             "login='" + login + '\'' +
             ", authorities=" + authorities +
+            ", redirect=" + redirect +
             "}";
     }
 }

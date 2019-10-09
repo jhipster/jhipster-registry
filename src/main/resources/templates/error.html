@@ -151,12 +151,13 @@
         <span>Message:</span>&nbsp;<span th:text="${message}"></span><br/>
     </span>
 
-    <script th:inline="text">
+    <!-- we don't want to phone with google by default, won't we? -->
+    <!-- script th:inline="text">
         /*<![CDATA[*/
         var GOOG_FIXURL_LANG = '[[${#locale.language}]]', GOOG_FIXURL_SITE = location.host;
         /*]]>*/
     </script>
-    <script src="https://linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script>
+    <script src="https://linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script -->
 </div>
 </body>
 </html>

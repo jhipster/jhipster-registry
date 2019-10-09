@@ -12,7 +12,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "target/classes/static/app",
     "lib": ["es7", "dom"],
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": ["node_modules/@types", "src/main/webapp/types"],
     "baseUrl": "./",
     "paths": {
       "app/*": ["src/main/webapp/app/*"]
