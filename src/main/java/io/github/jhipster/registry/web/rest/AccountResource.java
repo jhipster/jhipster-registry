@@ -69,18 +69,18 @@ public class AccountResource {
         Set<String> authorities = new HashSet<>();
         authentication.getAuthorities().forEach(ga -> authorities.add(ga.getAuthority()));
         if (!authorities.contains(AuthoritiesConstants.ADMIN)) {
-            String uri = request.getRequestURL().toString();
-            uri = uri.substring(0, uri.indexOf("/api/account"));
-
             String redirectUrl = "dummy";
             if (issuerUri != null) {
+                String uri = request.getRequestURL().toString();
+                uri = uri.substring(0, uri.indexOf("/api/account"));
+
                 StringBuilder redirect = new StringBuilder(issuerUri).append(AUTH)
                     .append("?client_id=").append(clientId)
                     .append("&response_type=code")
                     .append("&redirect_uri=").append(uri);
 
                 redirectUrl = redirect.toString();
-                log.info("redirect url: " + redirectUrl);
+                log.debug("redirect url: " + redirectUrl);
             }
             UserVM userVM = UserVM.createRedirect(redirectUrl);
             // TODO: should be HttpStatus.UNAUTHORIZED but angular client is not prepared to handle this

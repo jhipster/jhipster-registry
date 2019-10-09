@@ -4,7 +4,6 @@ import io.github.jhipster.registry.config.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,8 +30,6 @@ public class LogoutResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(LogoutResource.class);
 
-    private static final String LOGOUT = "/protocol/openid-connect/logout";
-
     @Autowired
     private OAuth2ClientContext clientContext;
 
@@ -57,7 +54,6 @@ public class LogoutResource {
         Map<String, String> logoutDetails = new HashMap<>();
         logoutDetails.put("logoutUrl", logoutUrl);
 
-        String refreshToken = clientContext.getAccessToken().getRefreshToken().getValue();
         clientContext.setAccessToken(null);
         SecurityContextLogoutHandler handler = new SecurityContextLogoutHandler();
         handler.logout(request, response, authentication);

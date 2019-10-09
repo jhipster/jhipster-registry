@@ -43,13 +43,8 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(OAuth2SecurityConfiguration.class);
 
-    private static final String USERINFO = "/protocol/openid-connect/userinfo";
-
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
-
-    @Value("${spring.security.oauth2.client.registration.oidc.client-id}")
-    private String clientId;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
