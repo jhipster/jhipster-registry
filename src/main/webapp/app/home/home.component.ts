@@ -13,7 +13,7 @@ import { EurekaStatusService } from './eureka.status.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
 
-import {User} from '../../../types/custom';
+import {User} from 'app/types/custom';
 
 @Component({
     selector: 'jhi-home',

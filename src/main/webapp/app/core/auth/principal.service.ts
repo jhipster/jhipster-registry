@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { AccountService } from './account.service';
-import {User} from '../../../types/custom';
+import {User} from 'app/types/custom';
 
 @Injectable()
 export class Principal {
@@ -98,6 +98,8 @@ export class Principal {
     }
 
     getImageUrl(): String {
-        return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
+        // TODO: there is no imageUrl on User from server
+        // return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
+        return null;
     }
 }
