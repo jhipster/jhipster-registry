@@ -758,7 +758,7 @@
         <profile>
             <id>oauth2</id>
             <properties>
-                <profile.swagger>,oauth2</profile.swagger>
+                <profile.oauth2>,oauth2</profile.oauth2>
             </properties>
         </profile>
         <profile>
