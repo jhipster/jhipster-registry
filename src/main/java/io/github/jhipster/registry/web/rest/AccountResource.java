@@ -1,14 +1,9 @@
 package io.github.jhipster.registry.web.rest;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
-
 import io.github.jhipster.registry.security.AuthoritiesConstants;
+import io.github.jhipster.registry.web.rest.vm.UserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +12,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager;
-import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import io.github.jhipster.registry.web.rest.vm.UserVM;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing the current user's account.
@@ -44,12 +40,6 @@ public class AccountResource {
 
     @Value("${spring.security.oauth2.client.registration.oidc.client-id}")
     private String clientId;
-
-    @Autowired
-    private OAuth2AuthenticationManager authenticationManager;
-
-    @Autowired
-    private OAuth2ClientContext clientContext;
 
     /**
      * GET  /authenticate : check if the user is authenticated, and return its login.

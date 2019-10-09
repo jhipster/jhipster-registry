@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -40,7 +39,6 @@ import static java.util.stream.Collectors.toList;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Profile(Constants.PROFILE_OAUTH2)
 @EnableOAuth2Sso
-// @EnableOAuth2Client
 public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(OAuth2SecurityConfiguration.class);
@@ -87,7 +85,8 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/profile-info").permitAll()
-            .antMatchers("/api/**").authenticated()
+            // rest endpoints are protected individually by @Secured (and should normally require ROLE_ADMIN)
+            // .antMatchers("/api/**").authenticated()
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)

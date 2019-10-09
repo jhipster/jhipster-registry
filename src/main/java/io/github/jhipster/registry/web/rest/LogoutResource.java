@@ -9,16 +9,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
-import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.OAuth2RefreshToken;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,9 +38,6 @@ public class LogoutResource {
 
     @Value("${spring.security.oauth2.client.registration.oidc.client-id}")
     private String clientId;
-
-    @Autowired
-    private OAuth2RestTemplate oAuth2RestTemplate;
 
     @Autowired
     private OAuth2ClientContext clientContext;

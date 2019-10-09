@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { AccountService } from './account.service';
-import {User} from 'app/types/custom';
+import { User } from 'app/types/custom';
 
 @Injectable()
 export class Principal {
