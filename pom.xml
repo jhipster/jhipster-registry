@@ -749,6 +749,12 @@
             </properties>
         </profile>
         <profile>
+            <id>oauth2</id>
+            <properties>
+                <profile.swagger>,oauth2</profile.swagger>
+            </properties>
+        </profile>
+        <profile>
             <id>webpack</id>
             <activation>
                 <file>
