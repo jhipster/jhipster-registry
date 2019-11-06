@@ -16,7 +16,7 @@ public class AudienceValidator implements OAuth2TokenValidator<Jwt> {
 
     private static final OAuth2Error error = new OAuth2Error("invalid_token", "The required audience is missing", null);
 
-    @Value("${oauth2.audience}")
+    @Value("${oauth2.audience:messaging}")
     private String audience;
 
     @Override
