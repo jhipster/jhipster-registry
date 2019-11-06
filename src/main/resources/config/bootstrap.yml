@@ -31,3 +31,7 @@ info:
 # uncomment to enable encryption features
 #encrypt:
 #    key: my-secret-encryption-key-to-change-in-production
+
+# allow bigger HTTP headers (useful with OAuth2/Openid/Keycloak)
+server:
+    max-http-header-size: 128000

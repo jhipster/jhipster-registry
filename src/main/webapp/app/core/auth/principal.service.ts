@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { AccountService } from './account.service';
+import {User} from 'app/types/custom';
 
 @Injectable()
 export class Principal {
-    private userIdentity: any;
+    private userIdentity: User | null;
     private authenticated = false;
-    private authenticationState = new Subject<any>();
+    private authenticationState = new Subject<User | null>();
 
     constructor(private account: AccountService) {}
 
@@ -49,7 +50,7 @@ export class Principal {
         );
     }
 
-    identity(force?: boolean): Promise<any> {
+    identity(force?: boolean): Promise<User | null> {
         if (force === true) {
             this.userIdentity = undefined;
         }
@@ -65,12 +66,12 @@ export class Principal {
             .get()
             .toPromise()
             .then(response => {
-                const account = response.body;
-                if (account) {
+                const account: User = response.body;
+                if (account && account.login) {
                     this.userIdentity = account;
                     this.authenticated = true;
                 } else {
-                    this.userIdentity = null;
+                    this.userIdentity = account;
                     this.authenticated = false;
                 }
                 this.authenticationState.next(this.userIdentity);
@@ -97,6 +98,8 @@ export class Principal {
     }
 
     getImageUrl(): String {
-        return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
+        // return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
+        // TODO
+        return null;
     }
 }

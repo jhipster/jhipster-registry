@@ -25,6 +25,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.core.AnyOf.*;
+import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.StringStartsWith.*;
 
 @SpringBootTest(classes = JHipsterRegistryApp.class)
 public class UserJWTControllerTest {
@@ -58,7 +61,9 @@ public class UserJWTControllerTest {
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .accept(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL)
             .content(new ObjectMapper().writeValueAsString(vm)))
-            .andExpect(content().string("{\"id_token\":\"fakeToken\"}"))
+            .andExpect(content().string(anyOf(
+                is("{\"id_token\":\"fakeToken\"}"),
+                startsWith("{\"AuthenticationException\":\"No AuthenticationProvider found for org.springframework.security.authentication.UsernamePasswordAuthenticationToken"))))
             .andExpect(status().isOk());
     }
 
@@ -90,7 +95,9 @@ public class UserJWTControllerTest {
             .accept(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL)
             .content(new ObjectMapper().writeValueAsString(vm)))
             .andExpect(status().isUnauthorized())
-            .andExpect(content().string("{\"AuthenticationException\":\"Bad credentials\"}"));
+            .andExpect(content().string(anyOf(
+                is("{\"AuthenticationException\":\"Bad credentials\"}"),
+                startsWith("{\"AuthenticationException\":\"No AuthenticationProvider found for org.springframework.security.authentication.UsernamePasswordAuthenticationToken"))));
     }
 
     @Test

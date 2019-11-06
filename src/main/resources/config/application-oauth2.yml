@@ -1,14 +1,50 @@
+kc:
+    base-url: http://localhost:8080/auth
+    # base-url: https://keycloak:8543/auth
+    realm: jhipster
+    realm-url: ${kc.base-url}/realms/${kc.realm}
+
+oauth2:
+    # UAA
+    # audience: messaging
+    # kc
+    audience: account
+
 spring:
     security:
         oauth2:
             client:
-                provider:
-                    oidc:
-                        issuer-uri: http://localhost:9080/auth/realms/jhipster
                 registration:
-                    oidc:
+                    registry:
+                        client-name: JHipster-Registry-Localhost
                         client-id: jhipster-registry
-                        client-secret: jhipster-registry
+                        client-secret: 1bc30319-d785-48cf-9a32-b41f13aefc3b
+                        provider: keycloak
+                        authorization-grant-type: authorization_code
+                        scope: openid, profile
+                        redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+                        # redirect-uri-template: "{baseUrl}/#/applications"
+                        # redirect-uri-template: "{baseUrl}/#/"
+                provider:
+                    keycloak:
+                        authorization-uri: ${kc.realm-url}/protocol/openid-connect/auth
+                        jwk-set-uri: ${kc.realm-url}/protocol/openid-connect/certs
+                        token-uri: ${kc.realm-url}/protocol/openid-connect/token
+                        #
+                        # without user-info-uri, no user-info is retrieved and GrantedAuthorities are always set to ["ROLE_USER"]
+                        # however, user-info is retrieved only if scopes contains at least one of 'profile, email, address, phone'
+                        # (see OidcUserService.shouldRetrieveUserInfo for details)
+                        #
+                        # another problem is that the access token returned by kc normally only contains 'openid'
+                        # (see OAuth2AccessTokenResponseHttpMessageConverter.OAuth2AccessTokenResponseConverter.convert for details)
+                        #
+                        #  Maybe the user info endpoint is not needed since Keycloak can use self-contained value tokens
+                        #  Well, this is configurable in kc and you could decide against it (and I _have_ decided against)
+                        user-info-uri: ${kc.realm-url}//protocol/openid-connect/userinfo
+
+                        # would be cool if there was a end-session-uri to propagate logouts
+
+                        user-name-attribute: preferred_username
 
 server:
     servlet:

@@ -10,7 +10,7 @@ import javax.validation.ValidatorFactory;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class UserVMTest {
 
@@ -24,41 +24,31 @@ public class UserVMTest {
     }
 
     @Test
-    public void constructorTest() {
-        UserVM vm = new UserVM(null, null);
-        assertThat(validator.validate(vm)).isNotEmpty();
-        vm = new UserVM("", null);
-        assertThat(validator.validate(vm)).isNotEmpty();
-        vm = new UserVM("badLoginTooLongbadLoginTooLongbadLoginTooLongbadLoginTooLong", null);
-        assertThat(validator.validate(vm)).isNotEmpty();
-        vm = new UserVM("goodLogin", null);
-        assertThat(validator.validate(vm)).isEmpty();
-    }
-
-    @Test
     public void getLoginTest() {
-        UserVM vm = new UserVM();
+        UserVM vm = UserVM.createUser(null, null);
         assertThat(vm.getLogin()).isNull();
 
-        vm = new UserVM("login", null);
-        assertThat(vm.getLogin()).isEqualTo("login");
+        assertThatIllegalArgumentException().isThrownBy(() -> {
+            UserVM vm1 = UserVM.createUser("login", null);
+            assertThat(vm1.getLogin()).isEqualTo("login");
+        });
     }
 
     @Test
     public void getAuthoritiesTest() {
-        UserVM vm = new UserVM();
+        UserVM vm = UserVM.createUser(null, null);
         assertThat(vm.getAuthorities()).isNull();
 
         Set<String> authorities = new HashSet<>();
         authorities.add("authorities1");
         authorities.add("authorities2");
-        vm = new UserVM("login", authorities);
+        vm = UserVM.createUser("login", authorities);
         assertThat(vm.getAuthorities()).isEqualTo(authorities);
     }
 
     @Test
     public void toStringTest() {
-        UserVM vm = new UserVM();
+        UserVM vm = UserVM.createUser(null, null);
 
         assertThat(vm.toString()).startsWith(UserVM.class.getSimpleName());
         String json = vm.toString().replace(UserVM.class.getSimpleName(), "");
@@ -67,7 +57,7 @@ public class UserVMTest {
         Set<String> authorities = new HashSet<>();
         authorities.add("authorities1");
         authorities.add("authorities2");
-        vm = new UserVM("fakeLogin", authorities);
+        vm = UserVM.createUser("fakeLogin", authorities);
         json = vm.toString().replace(UserVM.class.getSimpleName(), "");
         assertThat(TestUtils.isValid(json)).isTrue();
     }

@@ -111,6 +111,11 @@
             <artifactId>jhipster-framework</artifactId>
         </dependency>
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hppc</artifactId>
         </dependency>
@@ -303,10 +308,6 @@
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-jwt</artifactId>
         </dependency>
@@ -345,6 +346,11 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
+                        <compilerArgs>
+                            <arg>-Xpkginfo:always</arg>
+                        </compilerArgs>
+                        <!-- setting this to 'false' makes compilation incremental (sic!) -->
+                        <useIncrementalCompilation>false</useIncrementalCompilation>
                         <annotationProcessorPaths>
                             <path>
                                 <groupId>org.mapstruct</groupId>
@@ -729,6 +735,12 @@
             <id>tls</id>
             <properties>
                 <profile.tls>,tls</profile.tls>
+            </properties>
+        </profile>
+        <profile>
+            <id>oauth2</id>
+            <properties>
+                <profile.swagger>,oauth2</profile.swagger>
             </properties>
         </profile>
         <profile>

@@ -62,15 +62,26 @@ export class NavbarComponent implements OnInit {
             if (profileInfo.activeProfiles.indexOf('oauth2') > -1) {
                 this.loginOAuth2Service.logout().subscribe(response => {
                     const data = response.body;
-                    let logoutUrl = data.logoutUrl;
+                    let {logoutUrl, redirectUrl} = data;
                     // if Keycloak, uri has protocol/openid-connect/token
-                    if (logoutUrl.indexOf('/protocol') > -1) {
-                        logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
+                    if (logoutUrl) {
+                      if (logoutUrl.indexOf('/protocol') > -1) {
+                          logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
+                      } else {
+                          // Okta
+                          logoutUrl = logoutUrl + '?id_token_hint=' + data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
+                      }
+                      window.location.href = logoutUrl;
+                    } else if (redirectUrl) {
+                      window.sessionStorage.clear();
+                      window.localStorage.clear();
+                      // window.location.href = '/login';
+                      window.location.reload();
                     } else {
-                        // Okta
-                        logoutUrl = logoutUrl + '?id_token_hint=' + data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
+                      window.sessionStorage.clear();
+                      window.localStorage.clear();
+                      window.location.reload();
                     }
-                    window.location.href = logoutUrl;
                 });
             } else {
                 this.loginService.logout();
