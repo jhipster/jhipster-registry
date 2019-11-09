@@ -34,15 +34,23 @@ describe('Component Tests', () => {
         expect(comp.orderProp).toBe('prefix');
         expect(comp.reverse).toBe(false);
       });
-      it('Should call load all on init', () => {
+      it('Should refresh config data', () => {
         // GIVEN
+        comp.activeRoute = {
+          path: 'pathApp1',
+          prefix: 'prefixApp1',
+          appName: 'appName1',
+          status: 'UP',
+          serviceId: '1',
+          serviceInstances: []
+        };
         const body = [{ config: 'test', properties: 'test' }, { config: 'test2' }];
         const envConfig = { envConfig: 'test' };
         spyOn(service, 'getConfigs').and.returnValue(of(body));
         spyOn(service, 'getEnv').and.returnValue(of(envConfig));
 
         // WHEN
-        comp.ngOnInit();
+        comp.refreshActiveRouteConfig();
 
         // THEN
         expect(service.getConfigs).toHaveBeenCalled();

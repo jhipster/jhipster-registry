@@ -27,7 +27,7 @@ describe('Component Tests', () => {
     });
 
     describe('refresh', () => {
-      it('should call refresh on init', () => {
+      it('should refresh metrics data', () => {
         // GIVEN
         const response = {
           timers: {
@@ -41,13 +41,21 @@ describe('Component Tests', () => {
             unrelatedKey: 'test'
           }
         };
-        spyOn(service, 'getMetrics').and.returnValue(of(response));
+        comp.activeRoute = {
+          path: 'pathApp1',
+          prefix: 'prefixApp1',
+          appName: 'appName1',
+          status: 'UP',
+          serviceId: '1',
+          serviceInstances: []
+        };
+        spyOn(service, 'getInstanceMetrics').and.returnValue(of(response));
 
         // WHEN
-        comp.ngOnInit();
+        comp.refreshActiveRouteMetrics();
 
         // THEN
-        expect(service.getMetrics).toHaveBeenCalled();
+        expect(service.getInstanceMetrics).toHaveBeenCalled();
       });
     });
   });

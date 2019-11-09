@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { JhiMetricsService } from './metrics.service';
 import { Route } from 'app/shared/routes/route.model';
 import { JhiRoutesService } from 'app/shared/routes/routes.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-metrics',
@@ -22,18 +23,18 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
   };
   updatingMetrics = true;
   JCACHE_KEY: string;
-
   activeRoute: Route;
-  subscription: Subscription;
+
+  unSubscribeUn$ = new Subject();
 
   constructor(private modalService: NgbModal, private metricsService: JhiMetricsService, private routesService: JhiRoutesService) {
     this.JCACHE_KEY = 'jcache.statistics';
   }
 
   ngOnInit() {
-    this.subscription = this.routesService.routeChanged$.subscribe(route => {
+    this.routesService.routeChanged$.pipe(takeUntil(this.unSubscribeUn$)).subscribe(route => {
       this.activeRoute = route;
-      this.displayActiveRouteMetrics();
+      this.refreshActiveRouteMetrics();
     });
   }
 
@@ -41,7 +42,7 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
     this.routesService.reloadRoutes();
   }
 
-  displayActiveRouteMetrics() {
+  refreshActiveRouteMetrics() {
     this.updatingMetrics = true;
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
       this.metricsService.getInstanceMetrics(this.activeRoute).subscribe(
@@ -102,6 +103,7 @@ export class JhiMetricsMonitoringComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
-    this.subscription.unsubscribe();
+    this.unSubscribeUn$.next();
+    this.unSubscribeUn$.complete();
   }
 }

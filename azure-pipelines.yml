@@ -18,32 +18,32 @@
 #
 
 pool:
-    vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
 
 steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: "10.15.3"
-      displayName: "Install Node.js"
-    - script: npm install -g npm
-      displayName: 'TOOLS: update NPM'
-    - script: npm install
-      displayName: 'Install dependencies'
-    - script: |
-        ./mvnw -ntp test
-      displayName: 'TEST: Back'
-    - script: |
-        npm test
-      displayName: 'TEST: Front'
-    - script: docker build -t jhipster/jhipster-registry:travis .
-      displayName: 'Build Docker image'
-    - script: |
-        docker images
-        docker run --name jhipster-registry -p 8761:8761 -d -t jhipster/jhipster-registry:travis
-      displayName: 'Run application'
-    - script: |
-          sleep 90
-          docker ps
-          docker logs jhipster-registry
-          curl -v http://localhost:8761
-      displayName: 'Check if app is running'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.13.0'
+    displayName: 'Install Node.js'
+  - script: npm install -g npm
+    displayName: 'TOOLS: update NPM'
+  - script: npm install
+    displayName: 'Install dependencies'
+  - script: |
+      ./mvnw -ntp test
+    displayName: 'TEST: Back'
+  - script: |
+      npm test
+    displayName: 'TEST: Front'
+  - script: docker build -t jhipster/jhipster-registry:travis .
+    displayName: 'Build Docker image'
+  - script: |
+      docker images
+      docker run --name jhipster-registry -p 8761:8761 -d -t jhipster/jhipster-registry:travis
+    displayName: 'Run application'
+  - script: |
+      sleep 90
+      docker ps
+      docker logs jhipster-registry
+      curl -v http://localhost:8761
+    displayName: 'Check if app is running'

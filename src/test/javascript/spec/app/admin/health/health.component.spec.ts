@@ -290,29 +290,46 @@ describe('Component Tests', () => {
     });
 
     describe('refresh', () => {
-      it('should call refresh on init', () => {
+      it('should refresh health data', () => {
         // GIVEN
-        spyOn(service, 'checkHealth').and.returnValue(of(new HttpResponse()));
+        comp.activeRoute = {
+          path: 'pathApp1',
+          prefix: 'prefixApp1',
+          appName: 'appName1',
+          status: 'UP',
+          serviceId: '1',
+          serviceInstances: []
+        };
+        spyOn(service, 'checkInstanceHealth').and.returnValue(of(new HttpResponse()));
         spyOn(service, 'transformHealthData').and.returnValue({ data: 'test' });
 
         // WHEN
-        comp.ngOnInit();
+        comp.refreshActiveRouteHealth();
 
         // THEN
-        expect(service.checkHealth).toHaveBeenCalled();
+        expect(service.checkInstanceHealth).toHaveBeenCalled();
         expect(service.transformHealthData).toHaveBeenCalled();
         expect(comp.healthData).toEqual({ data: 'test' });
       });
+
       it('should handle a 503 on refreshing health data', () => {
         // GIVEN
-        spyOn(service, 'checkHealth').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: 'Mail down' })));
+        comp.activeRoute = {
+          path: 'pathApp1',
+          prefix: 'prefixApp1',
+          appName: 'appName1',
+          status: 'UP',
+          serviceId: '1',
+          serviceInstances: []
+        };
+        spyOn(service, 'checkInstanceHealth').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: 'Mail down' })));
         spyOn(service, 'transformHealthData').and.returnValue({ health: 'down' });
 
         // WHEN
-        comp.ngOnInit();
+        comp.refreshActiveRouteHealth();
 
         // THEN
-        expect(service.checkHealth).toHaveBeenCalled();
+        expect(service.checkInstanceHealth).toHaveBeenCalled();
         expect(service.transformHealthData).toHaveBeenCalled();
         expect(comp.healthData).toEqual({ health: 'down' });
       });

@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Log } from './log.model';
 import { LogsService } from './logs.service';
 import { Route } from 'app/shared/routes/route.model';
 import { JhiRoutesService } from 'app/shared/routes/routes.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-logs',
@@ -18,8 +19,7 @@ export class LogsComponent implements OnInit, OnDestroy {
 
   activeRoute: Route;
   routes: Route[];
-  activeRouteSubscription: Subscription;
-  routesSubscription: Subscription;
+  subscribeUn$ = new Subject();
 
   constructor(private logsService: LogsService, private routesService: JhiRoutesService) {
     this.filter = '';
@@ -29,14 +29,12 @@ export class LogsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loggers = [];
-    this.activeRouteSubscription = this.routesService.routeChanged$.subscribe(route => {
+    this.routesService.routeChanged$.pipe(takeUntil(this.subscribeUn$)).subscribe(route => {
       this.activeRoute = route;
-      this.displayActiveRouteLogs();
+      this.refreshActiveRouteLogs();
     });
 
-    this.routesSubscription = this.routesService.routesChanged$.subscribe(routes => {
-      this.routes = routes;
-    });
+    this.routesService.routesChanged$.pipe(takeUntil(this.subscribeUn$)).subscribe(routes => (this.routes = routes));
   }
 
   changeLevel(name: string, level: string) {
@@ -57,7 +55,7 @@ export class LogsComponent implements OnInit, OnDestroy {
     this.loggers = Object.entries(response.body.loggers).map(e => new Log(e[0], e[1]['effectiveLevel']));
   }
 
-  displayActiveRouteLogs() {
+  refreshActiveRouteLogs() {
     this.updatingLogs = true;
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
       this.logsService.findInstanceAll(this.activeRoute).subscribe(
@@ -81,7 +79,7 @@ export class LogsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
-    this.activeRouteSubscription.unsubscribe();
-    this.routesSubscription.unsubscribe();
+    this.subscribeUn$.next();
+    this.subscribeUn$.complete();
   }
 }

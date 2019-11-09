@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { of } from 'rxjs';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { of, throwError } from 'rxjs';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { JHipsterRegistryTestModule } from '../../../test.module';
 import { LogsComponent } from 'app/admin/logs/logs.component';
@@ -35,11 +35,23 @@ describe('Component Tests', () => {
         expect(comp.orderProp).toBe('name');
         expect(comp.reverse).toBe(false);
       });
-      it('Should call load all on init', () => {
+    });
+    describe('refresh', () => {
+      it('Should refresh logs data', () => {
         // GIVEN
         const headers = new HttpHeaders().append('link', 'link;link');
         const log = new Log('main', 'WARN');
-        spyOn(service, 'findAll').and.returnValue(
+        const activeRoute = {
+          path: 'pathApp1',
+          prefix: 'prefixApp1',
+          appName: 'appName1',
+          status: 'UP',
+          serviceId: '1',
+          serviceInstances: []
+        };
+        comp.activeRoute = activeRoute;
+        comp.routes = [activeRoute];
+        spyOn(service, 'findInstanceAll').and.returnValue(
           of(
             new HttpResponse({
               body: {
@@ -55,19 +67,50 @@ describe('Component Tests', () => {
         );
 
         // WHEN
-        comp.ngOnInit();
+        comp.refreshActiveRouteLogs();
 
         // THEN
-        expect(service.findAll).toHaveBeenCalled();
+        expect(service.findInstanceAll).toHaveBeenCalled();
         expect(comp.loggers[0]).toEqual(jasmine.objectContaining(log));
+      });
+      it('should handle a 503 on refreshing logs data', () => {
+        // GIVEN
+        const activeRoute = {
+          path: 'pathApp1',
+          prefix: 'prefixApp1',
+          appName: 'appName1',
+          status: 'UP',
+          serviceId: '1',
+          serviceInstances: []
+        };
+        comp.activeRoute = activeRoute;
+        comp.routes = [activeRoute];
+        spyOn(service, 'findInstanceAll').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: 'Mail down' })));
+
+        // WHEN
+        comp.refreshActiveRouteLogs();
+
+        // THEN
+        expect(service.findInstanceAll).toHaveBeenCalled();
+        expect(comp.updatingLogs).toEqual(false);
       });
     });
     describe('change log level', () => {
       it('should change log level correctly', () => {
         // GIVEN
         const log = new Log('main', 'ERROR');
-        spyOn(service, 'changeLevel').and.returnValue(of(new HttpResponse()));
-        spyOn(service, 'findAll').and.returnValue(
+        const activeRoute = {
+          path: 'pathApp1',
+          prefix: 'prefixApp1',
+          appName: 'appName1',
+          status: 'UP',
+          serviceId: '1',
+          serviceInstances: []
+        };
+        comp.activeRoute = activeRoute;
+        comp.routes = [activeRoute];
+        spyOn(service, 'changeInstanceLevel').and.returnValue(of(new HttpResponse()));
+        spyOn(service, 'findInstanceAll').and.returnValue(
           of(
             new HttpResponse({
               body: {
@@ -85,8 +128,8 @@ describe('Component Tests', () => {
         comp.changeLevel('main', 'ERROR');
 
         // THEN
-        expect(service.changeLevel).toHaveBeenCalled();
-        expect(service.findAll).toHaveBeenCalled();
+        expect(service.changeInstanceLevel).toHaveBeenCalled();
+        expect(service.findInstanceAll).toHaveBeenCalled();
         expect(comp.loggers[0]).toEqual(jasmine.objectContaining(log));
       });
     });

@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { JhiHealthService } from './health.service';
 import { JhiHealthModalComponent } from './health-modal.component';
 import { Route } from 'app/shared/routes/route.model';
 import { JhiRoutesService } from 'app/shared/routes/routes.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-health',
@@ -15,18 +16,19 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
   healthData: any;
   updatingHealth: boolean;
   activeRoute: Route;
-  subscription: Subscription;
+
+  unSubscribe$ = new Subject();
 
   constructor(private modalService: NgbModal, private healthService: JhiHealthService, private routesService: JhiRoutesService) {}
 
   ngOnInit() {
-    this.subscription = this.routesService.routeChanged$.subscribe(route => {
+    this.routesService.routeChanged$.pipe(takeUntil(this.unSubscribe$)).subscribe(route => {
       this.activeRoute = route;
-      this.displayActiveRouteHealth();
+      this.refreshActiveRouteHealth();
     });
   }
 
-  displayActiveRouteHealth() {
+  refreshActiveRouteHealth() {
     this.updatingHealth = true;
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
       this.healthService.checkInstanceHealth(this.activeRoute).subscribe(
@@ -36,7 +38,7 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
         },
         error => {
           if (error.status === 503 || error.status === 500 || error.status === 404) {
-            this.healthData = this.healthService.transformHealthData(error.json());
+            this.healthData = this.healthService.transformHealthData(error.error);
             this.updatingHealth = false;
             if (error.status === 500 || error.status === 404) {
               this.routesService.routeDown(this.activeRoute);
@@ -82,8 +84,7 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.unSubscribe$.next();
+    this.unSubscribe$.complete();
   }
 }

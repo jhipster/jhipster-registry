@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { JhiHealthService } from 'app/admin/health/health.service';
-import { Subscription } from 'rxjs';
 
 import { VERSION } from 'app/app.constants';
 import { EurekaStatusService } from './eureka.status.service';
@@ -13,6 +13,7 @@ import { LoginModalService } from 'app/core/login/login-modal.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { JhiApplicationsService } from 'app/registry/applications/applications.service';
+import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
 
 @Component({
   selector: 'jhi-home',
@@ -40,7 +41,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private eurekaStatusService: EurekaStatusService,
     private applicationsService: JhiApplicationsService,
     private healthService: JhiHealthService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private refreshService: JhiRefreshService
   ) {
     this.version = VERSION ? 'v' + VERSION : '';
     this.appInstances = [];
@@ -49,6 +51,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.accountService.identity().subscribe((account: Account) => {
       this.account = account;
+      if (!account || !this.isAuthenticated()) {
+        this.login();
+      } else {
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.populateDashboard());
+        this.populateDashboard();
+      }
     });
     this.registerAuthenticationSuccess();
   }
@@ -69,6 +77,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.authSubscription = this.eventManager.subscribe('authenticationSuccess', () => {
       this.accountService.identity().subscribe(account => {
         this.account = account;
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.populateDashboard());
+        this.populateDashboard();
       });
     });
   }

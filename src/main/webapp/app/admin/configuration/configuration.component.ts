@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { JhiConfigurationService } from './configuration.service';
 import { Route } from 'app/shared/routes/route.model';
 import { JhiRoutesService } from 'app/shared/routes/routes.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-configuration',
@@ -18,8 +19,9 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
   reverse: boolean;
 
   activeRoute: Route;
-  subscription: Subscription;
   updatingConfig: boolean;
+
+  unSubscribe$ = new Subject();
 
   constructor(private configurationService: JhiConfigurationService, private routesService: JhiRoutesService) {
     this.configKeys = [];
@@ -33,13 +35,13 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = this.routesService.routeChanged$.subscribe(route => {
+    this.routesService.routeChanged$.pipe(takeUntil(this.unSubscribe$)).subscribe(route => {
       this.activeRoute = route;
-      this.displayActiveRouteConfig();
+      this.refreshActiveRouteConfig();
     });
   }
 
-  displayActiveRouteConfig() {
+  refreshActiveRouteConfig() {
     this.updatingConfig = true;
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
       this.configurationService.getInstanceConfigs(this.activeRoute).subscribe(
@@ -68,6 +70,7 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
-    this.subscription.unsubscribe();
+    this.unSubscribe$.next();
+    this.unSubscribe$.complete();
   }
 }

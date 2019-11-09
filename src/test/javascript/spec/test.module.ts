@@ -11,6 +11,8 @@ import { MockAccountService } from './helpers/mock-account.service';
 import { MockActivatedRoute, MockRouter } from './helpers/mock-route.service';
 import { MockActiveModal } from './helpers/mock-active-modal.service';
 import { MockEventManager } from './helpers/mock-event-manager.service';
+import { SessionStorageService } from 'ngx-webstorage';
+import { MockSessionStorageService } from './helpers/mock-session-storage.service';
 
 @NgModule({
   providers: [
@@ -57,6 +59,10 @@ import { MockEventManager } from './helpers/mock-event-manager.service';
     {
       provide: NgbModal,
       useValue: null
+    },
+    {
+      provide: SessionStorageService,
+      useValue: MockSessionStorageService
     }
   ],
   imports: [HttpClientTestingModule]
