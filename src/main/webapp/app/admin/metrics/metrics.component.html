@@ -5,310 +5,50 @@
     </div>
 
     <h3>JVM Metrics</h3>
-    <div class="row" *ngIf="metrics">
-        <div class="col-md-4">
-            <h4>Memory</h4>
-            <div *ngIf="!updatingMetrics && metrics.jvm">
-                <div *ngFor="let entry of metrics.jvm | keys">
-                <span *ngIf="entry.value.max != -1; else other">
-                    <span>{{entry.key}}</span> ({{entry.value.used / 1048576 | number:'1.0-0'}}M / {{entry.value.max / 1048576 | number:'1.0-0'}}M)
-                </span>
-                    <div>Committed : {{entry.value.committed / 1048576 | number:'1.0-0'}}M</div>
-                    <ng-template #other><span><span>{{entry.key}}</span> {{entry.value.used / 1048576 | number:'1.0-0'}}M</span>
-                    </ng-template>
-                    <ngb-progressbar *ngIf="entry.value.max != -1" type="success" [value]="100 * entry.value.used/entry.value.max"
-                                     [striped]="true" [animated]="false">
-                        <span>{{entry.value.used * 100 / entry.value.max | number:'1.0-0'}}%</span>
-                    </ngb-progressbar>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4" *ngIf="threadStats">
-            <h4>Threads </h4>
-            <span><span>Runnable</span> {{threadStats.threadDumpRunnable}}</span>
-            <ngb-progressbar [value]="threadStats.threadDumpRunnable" [max]="threadStats.threadDumpAll" [striped]="true"
-                             [animated]="false" type="success">
-                <span>{{threadStats.threadDumpRunnable * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
-            </ngb-progressbar>
-            <span><span>Timed Waiting</span> ({{threadStats.threadDumpTimedWaiting}})</span>
-            <ngb-progressbar [value]="threadStats.threadDumpTimedWaiting" [max]="threadStats.threadDumpAll" [striped]="true"
-                             [animated]="false" type="warning">
-                <span>{{threadStats.threadDumpTimedWaiting * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
-            </ngb-progressbar>
-            <span><span>Waiting</span> ({{threadStats.threadDumpWaiting}})</span>
-            <ngb-progressbar [value]="threadStats.threadDumpWaiting" [max]="threadStats.threadDumpAll" [striped]="true"
-                             [animated]="false" type="warning">
-                <span>{{threadStats.threadDumpWaiting * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
-            </ngb-progressbar>
-            <span><span>Blocked</span> ({{threadStats.threadDumpBlocked}})</span>
-            <ngb-progressbar [value]="threadStats.threadDumpBlocked" [max]="threadStats.threadDumpAll" [striped]="true"
-                             [animated]="false" type="success">
-                <span>{{threadStats.threadDumpBlocked * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
-            </ngb-progressbar>
-            <div>Total: {{threadStats.threadDumpAll}}</div>
-            <button class="hand btn btn-primary btn-sm" (click)="open()" data-toggle="modal" data-target="#threadDump">
-                <span>Expand</span>
-            </button>
-        </div>
-
-        <div class="col-md-4" *ngIf="metrics.processMetrics">
-            <h4>System</h4>
-            <div class="row" *ngIf="!updatingMetrics">
-                <div class="col-md-4">Uptime</div>
-                <div class="col-md-8 text-right">{{convertMillisecondsToDuration(metrics.processMetrics["process.uptime"])}}</div>
-            </div>
-            <div class="row" *ngIf="!updatingMetrics">
-                <div class="col-md-4">Start time</div>
-                <div class="col-md-8 text-right">{{metrics.processMetrics["process.start.time"] | date:'full'}}</div>
-            </div>
-            <div class="row" *ngIf="!updatingMetrics">
-                <div class="col-md-9">Process CPU usage</div>
-                <div class="col-md-3 text-right">{{100 * metrics.processMetrics["process.cpu.usage"] | number:'1.0-2'}} %</div>
-            </div>
-            <ngb-progressbar [value]="100 * metrics.processMetrics['process.cpu.usage']" [striped]="true" [animated]="false" type="success"
-                             *ngIf="!updatingMetrics">
-                <span>{{100 * metrics.processMetrics["process.cpu.usage"] | number:'1.0-2'}} %</span>
-            </ngb-progressbar>
-            <div class="row" *ngIf="!updatingMetrics">
-                <div class="col-md-9">System CPU usage</div>
-                <div class="col-md-3 text-right">{{100 * metrics.processMetrics["system.cpu.usage"] | number:'1.0-2'}} %</div>
-            </div>
-            <ngb-progressbar [value]="100 * metrics.processMetrics['system.cpu.usage']" [striped]="true" [animated]="false" type="success"
-                             *ngIf="!updatingMetrics">
-                <span>{{100 * metrics.processMetrics["system.cpu.usage"] | number:'1.0-2'}} %</span>
-            </ngb-progressbar>
-            <div class="row" *ngIf="!updatingMetrics">
-                <div class="col-md-9">System CPU count</div>
-                <div class="col-md-3 text-right">{{metrics.processMetrics["system.cpu.count"]}}</div>
-            </div>
-            <div class="row" *ngIf="!updatingMetrics">
-                <div class="col-md-9">System 1m Load average</div>
-                <div class="col-md-3 text-right">{{metrics.processMetrics["system.load.average.1m"] | number:'1.0-2'}}</div>
-            </div>
-            <div class="row" *ngIf="!updatingMetrics">
-                <div class="col-md-9">Process files max</div>
-                <div class="col-md-3 text-right">{{metrics.processMetrics["process.files.max"] | number:'1.0-0'}}</div>
-            </div>
-            <div class="row" *ngIf="!updatingMetrics">
-                <div class="col-md-9">Process files open</div>
-                <div class="col-md-3 text-right">{{metrics.processMetrics["process.files.open"] | number:'1.0-0'}}</div>
-            </div>
-        </div>
+    <div class="row" *ngIf="!updatingMetrics">
+        <jhi-jvm-memory
+            class="col-md-4"
+            [updating]="updatingMetrics"
+            [jvmMemoryMetrics]="metrics.jvm">
+        </jhi-jvm-memory>
+        <jhi-jvm-threads class="col-md-4" [threadData]="threadData"></jhi-jvm-threads>
+        <jhi-metrics-system
+            class="col-md-4"
+            [updating]="updatingMetrics"
+            [systemMetrics]="metrics.processMetrics">
+        </jhi-metrics-system>
     </div>
 
     <div *ngIf="isObjectExisting(metrics, 'garbageCollector')">
         <h3>Garbage collector statistics</h3>
-        <div class="row" *ngIf="!updatingMetrics">
-            <div class="col-md-4" *ngIf="metrics.garbageCollector['jvm.gc.live.data.size'] && metrics.garbageCollector['jvm.gc.max.data.size']">
-                <span>
-                    GC Live Data Size/GC Max Data Size
-                    ({{metrics.garbageCollector['jvm.gc.live.data.size'] / 1048576 | number:'1.0-0'}}M
-                    / {{metrics.garbageCollector['jvm.gc.max.data.size'] / 1048576 | number:'1.0-0'}}M)
-                </span>
-                <ngb-progressbar [max]="metrics.garbageCollector['jvm.gc.max.data.size']"
-                                 [value]="metrics.garbageCollector['jvm.gc.live.data.size']" [striped]="true"
-                                 [animated]="false" type="success">
-                    <span>{{100 * metrics.garbageCollector['jvm.gc.live.data.size'] / metrics.garbageCollector['jvm.gc.max.data.size'] | number:'1.0-2'}}%</span>
-                </ngb-progressbar>
-            </div>
-            <div class="col-md-4" *ngIf="metrics.garbageCollector['jvm.gc.memory.promoted'] && metrics.garbageCollector['jvm.gc.memory.allocated']">
-                <span>
-                    GC Memory Promoted/GC Memory Allocated
-                    ({{metrics.garbageCollector['jvm.gc.memory.promoted'] / 1048576 | number:'1.0-0'}}M
-                    / {{metrics.garbageCollector['jvm.gc.memory.allocated'] / 1048576 | number:'1.0-0'}}M)
-                </span>
-                <ngb-progressbar [max]="metrics.garbageCollector['jvm.gc.memory.allocated']"
-                                 [value]="metrics.garbageCollector['jvm.gc.memory.promoted']" [striped]="true"
-                                 [animated]="false" type="success">
-                    <span>{{100 * metrics.garbageCollector['jvm.gc.memory.promoted'] / metrics.garbageCollector['jvm.gc.memory.allocated'] | number:'1.0-2'}}%</span>
-                </ngb-progressbar>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md-9">Classes loaded</div>
-                    <div class="col-md-3 text-right">{{metrics.garbageCollector.classesLoaded}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-9">Classes unloaded</div>
-                    <div class="col-md-3 text-right">{{metrics.garbageCollector.classesUnloaded}}</div>
-                </div>
-            </div>
-            <div class="table-responsive" *ngIf="metrics.garbageCollector['jvm.gc.pause']">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th class="text-right">Count</th>
-                        <th class="text-right">Mean</th>
-                        <th class="text-right">Min</th>
-                        <th class="text-right">p50</th>
-                        <th class="text-right">p75</th>
-                        <th class="text-right">p95</th>
-                        <th class="text-right">p99</th>
-                        <th class="text-right">Max</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>jvm.gc.pause</td>
-                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause'].count}}</td>
-                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause'].mean | number:'1.0-3'}}</td>
-                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.0'] | number:'1.0-3'}}</td>
-                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.5'] | number:'1.0-3'}}</td>
-                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.75'] | number:'1.0-3'}}</td>
-                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.95'] | number:'1.0-3'}}</td>
-                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause']['0.99'] | number:'1.0-3'}}</td>
-                        <td class="text-right">{{metrics.garbageCollector['jvm.gc.pause'].max | number:'1.0-3'}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <jhi-metrics-garbagecollector [updating]="updatingMetrics"
+                                      [garbageCollectorMetrics]="metrics.garbageCollector"></jhi-metrics-garbagecollector>
     </div>
 
-    <div class="well well-lg" *ngIf="updatingMetrics && !metrics">Updating...</div>
+    <div class="well well-lg" *ngIf="updatingMetrics">Updating...</div>
 
-    <div *ngIf="isObjectExisting(metrics, 'http.server.requests')">
-        <h3>HTTP requests (time in millisecond)</h3>
-        <table class="table table-striped" *ngIf="!updatingMetrics">
-            <thead>
-            <tr>
-                <th>Code</th>
-                <th>Count</th>
-                <th class="text-right">Mean</th>
-                <th class="text-right">Max</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let entry of metrics['http.server.requests']['percode'] | keys">
-                <td>{{entry.key}}</td>
-                <td>
-                    <ngb-progressbar [max]="metrics['http.server.requests']['all'].count" [value]="entry.value.count" [striped]="true"
-                                     [animated]="false" type="success">
-                        <span>{{entry.value.count}}</span>
-                    </ngb-progressbar>
-                </td>
-                <td class="text-right">
-                    {{filterNaN(entry.value.mean) | number:'1.0-2'}}
-                </td>
-                <td class="text-right">{{entry.value.max | number:'1.0-2'}}</td>
-            </tbody>
-        </table>
-    </div>
+    <jhi-metrics-request
+        *ngIf="isObjectExisting(metrics, 'http.server.requests')"
+        [updating]="updatingMetrics"
+        [requestMetrics]="metrics['http.server.requests']">
+    </jhi-metrics-request>
 
-    <div *ngIf="isObjectExisting(metrics, 'services')">
-        <h3>Endpoints requests (time in millisecond)</h3>
-        <div class="table-responsive" *ngIf="!updatingMetrics">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Method</th>
-                    <th>Endpoint url</th>
-                    <th class="text-right">Count</th>
-                    <th class="text-right">Mean</th>
-                </tr>
-                </thead>
-                <tbody>
-                <ng-container *ngFor="let entry of metrics.services | keys">
-                    <tr *ngFor="let method of entry.value | keys">
-                        <td>{{method.key}}</td>
-                        <td>{{entry.key}}</td>
-                        <td class="text-right">{{method.value.count}}</td>
-                        <td class="text-right">{{method.value.mean | number:'1.0-3'}}</td>
-                    </tr>
-                </ng-container>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <jhi-metrics-endpoints-requests
+        *ngIf="isObjectExisting(metrics, 'services')"
+        [updating]="updatingMetrics"
+        [endpointsRequestsMetrics]="metrics.services">
+    </jhi-metrics-endpoints-requests>
 
-    <div *ngIf="isObjectExistingAndNotEmpty(metrics, 'cache')">
-        <h3>Cache statistics</h3>
-        <div class="table-responsive" *ngIf="!updatingMetrics">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Cache name</th>
-                    <th class="text-right">Cache Hits</th>
-                    <th class="text-right">Cache Puts</th>
-                    <th class="text-right">Cache Size</th>
-                    <th class="text-right">Cache Entry Memory</th>
-                    <th class="text-right">Cache Entries</th>
-                    <th class="text-right">Cache Partition Gets</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let entry of metrics.cache | keys">
-                    <td>{{entry.key}}</td>
-                    <td class="text-right">{{entry.value['cache.gets.hit']}}</td>
-                    <td class="text-right">{{entry.value['cache.puts']}}</td>
-                    <td class="text-right">{{entry.value['cache.size']}}</td>
-                    <td class="text-right">{{entry.value['cache.entry.memory']}}</td>
-                    <td class="text-right">{{entry.value['cache.entries']}}</td>
-                    <td class="text-right">{{entry.value['cache.partition.gets']}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <jhi-metrics-cache
+        *ngIf="isObjectExisting(metrics, 'cache')"
+        [updating]="updatingMetrics"
+        [cacheMetrics]="metrics.cache">
+    </jhi-metrics-cache>
 
-    <div *ngIf="isObjectExistingAndNotEmpty(metrics, 'databases')">
-        <h3>DataSource statistics (time in millisecond)</h3>
-        <div class="table-responsive" *ngIf="!updatingMetrics">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th><span>Connection Pool Usage</span>
-                    </th>
-                    <th class="text-right">Count</th>
-                    <th class="text-right">Mean</th>
-                    <th class="text-right">Min</th>
-                    <th class="text-right">p50</th>
-                    <th class="text-right">p75</th>
-                    <th class="text-right">p95</th>
-                    <th class="text-right">p99</th>
-                    <th class="text-right">Max</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngIf="metrics.databases.acquire">
-                    <td>Acquire</td>
-                    <td class="text-right">{{metrics.databases.acquire.count}}</td>
-                    <td class="text-right">{{filterNaN(metrics.databases.acquire.mean) | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.databases.acquire['0.0'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.acquire['0.5'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.acquire['0.75'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.acquire['0.95'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.acquire['0.99'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{filterNaN(metrics.databases.acquire.max) | number:'1.0-2'}}</td>
-                </tr>
-                <tr *ngIf="metrics.databases.creation">
-                    <td>Creation</td>
-                    <td class="text-right">{{metrics.databases.creation.count}}</td>
-                    <td class="text-right">{{filterNaN(metrics.databases.creation.mean) | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.databases.creation['0.0'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.creation['0.5'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.creation['0.75'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.creation['0.95'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.creation['0.99'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{filterNaN(metrics.databases.creation.max) | number:'1.0-2'}}
-                    </td>
-                </tr>
-                <tr *ngIf="metrics.databases.usage">
-                    <td>Usage</td>
-                    <td class="text-right">{{metrics.databases.usage.count}}</td>
-                    <td class="text-right">{{filterNaN(metrics.databases.usage.mean) | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.databases.usage['0.0'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.usage['0.5'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.usage['0.75'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.usage['0.95'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{metrics.databases.usage['0.99'] | number:'1.0-3'}}</td>
-                    <td class="text-right">{{filterNaN(metrics.databases.usage.max) | number:'1.0-2'}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <jhi-metrics-datasource
+        *ngIf="isObjectExistingAndNotEmpty(metrics, 'databases')"
+        [updating]="updatingMetrics"
+        [datasourceMetrics]="metrics.databases">
+    </jhi-metrics-datasource>
 
 </div>

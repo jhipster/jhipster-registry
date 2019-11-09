@@ -3,14 +3,11 @@ package io.github.jhipster.registry.config;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
-import org.springframework.boot.web.server.MimeMappings;
-import org.springframework.boot.web.server.WebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.server.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -20,15 +17,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.util.EnumSet;
+import java.util.*;
 
 import static java.net.URLDecoder.decode;
 
@@ -36,7 +30,7 @@ import static java.net.URLDecoder.decode;
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer {
+public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory> {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
@@ -72,25 +66,25 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
     }
 
     private void setMimeMappings(WebServerFactory server) {
-        if (server instanceof UndertowServletWebServerFactory) {
+        if (server instanceof ConfigurableServletWebServerFactory) {
             MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
             // IE issue, see https://github.com/jhipster/generator-jhipster/pull/711
             mappings.add("html", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
             // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
             mappings.add("json", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
-            UndertowServletWebServerFactory undertow = (UndertowServletWebServerFactory) server;
-            undertow.setMimeMappings(mappings);
+            ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
+            servletWebServer.setMimeMappings(mappings);
         }
     }
 
     private void setLocationForStaticAssets(WebServerFactory server) {
-        if (server instanceof UndertowServletWebServerFactory) {
-            UndertowServletWebServerFactory undertow = (UndertowServletWebServerFactory) server;
+        if (server instanceof ConfigurableServletWebServerFactory) {
+            ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
             File root;
             String prefixPath = resolvePathPrefix();
-            root = new File(prefixPath + "target/www/");
+            root = new File(prefixPath + "target/classes/static/");
             if (root.exists() && root.isDirectory()) {
-                undertow.setDocumentRoot(root);
+                servletWebServer.setDocumentRoot(root);
             }
         }
     }
@@ -125,6 +119,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
             servletContext.addFilter("cachingHttpHeadersFilter",
                 new CachingHttpHeadersFilter(jHipsterProperties));
 
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/i18n/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/content/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/app/*");
         cachingHttpHeadersFilter.setAsyncSupported(true);
@@ -140,6 +135,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
             source.registerCorsConfiguration("/api/**", config);
             source.registerCorsConfiguration("/v2/api-docs", config);
             source.registerCorsConfiguration("/*/api/**", config);
+            source.registerCorsConfiguration("/*/management/**", config);
         }
 
         // default is to deny all CORS requests

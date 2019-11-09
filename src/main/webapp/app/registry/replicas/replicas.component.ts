@@ -1,35 +1,40 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { JhiReplicasService } from './replicas.service';
 import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-    selector: 'jhi-replicas',
-    templateUrl: './replicas.component.html',
-    styleUrls: ['replicas.component.scss']
+  selector: 'jhi-replicas',
+  templateUrl: './replicas.component.html',
+  styleUrls: ['replicas.component.scss']
 })
 export class JhiReplicasComponent implements OnInit, OnDestroy {
-    showMore: boolean;
-    replicas: any;
+  showMore: boolean;
+  replicas: any;
 
-    refreshReloadSubscription: Subscription;
+  unSubscribe$ = new Subject();
 
-    constructor(private replicasService: JhiReplicasService, private refreshService: JhiRefreshService) {
-        this.showMore = true;
-    }
+  constructor(private replicasService: JhiReplicasService, private refreshService: JhiRefreshService) {
+    this.showMore = true;
+  }
 
-    ngOnInit() {
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.refresh());
-        this.refresh();
-    }
+  ngOnInit() {
+    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(empty => this.refresh());
+    this.refresh();
+  }
 
-    ngOnDestroy() {
-        this.refreshReloadSubscription.unsubscribe();
-    }
+  ngOnDestroy() {
+    this.unSubscribe$.next();
+    this.unSubscribe$.complete();
+  }
 
-    refresh() {
-        this.replicasService.findAll().subscribe(replicas => {
-            this.replicas = replicas;
-        });
-    }
+  refresh() {
+    this.replicasService
+      .findAll()
+      .pipe(takeUntil(this.unSubscribe$))
+      .subscribe(replicas => {
+        this.replicas = replicas;
+      });
+  }
 }
