@@ -51,9 +51,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   registerAuthenticationSuccess() {
-    this.eventManager.subscribe('authenticationSuccess', message => {
-      this.getProfileInfo();
-    });
+    this.eventManager.subscribe('authenticationSuccess', () => this.getProfileInfo());
   }
 
   collapseNavbar() {

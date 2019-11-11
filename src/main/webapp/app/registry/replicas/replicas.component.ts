@@ -20,7 +20,7 @@ export class JhiReplicasComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(empty => this.refresh());
+    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.refresh());
     this.refresh();
   }
 

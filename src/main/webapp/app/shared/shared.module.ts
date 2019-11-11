@@ -4,7 +4,7 @@ import { JhiAlertComponent } from './alert/alert.component';
 import { JhiAlertErrorComponent } from './alert/alert-error.component';
 import { JhiLoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
-import { JhiRouteSelectorComponent } from './routes/route-selector.component';
+import { JhiRouteSelectorComponent } from 'app/shared/routes/route-selector.component';
 import { JhiRefreshSelectorComponent } from 'app/shared/refresh/refresh-selector.component';
 import { GroupByPipe } from 'app/shared/pipe/group-by.pipe';
 
@@ -25,9 +25,9 @@ import { GroupByPipe } from 'app/shared/pipe/group-by.pipe';
     JhiAlertComponent,
     JhiAlertErrorComponent,
     JhiLoginModalComponent,
+    HasAnyAuthorityDirective,
     JhiRouteSelectorComponent,
-    JhiRefreshSelectorComponent,
-    HasAnyAuthorityDirective
+    JhiRefreshSelectorComponent
   ]
 })
 export class JHipsterRegistrySharedModule {}

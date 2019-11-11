@@ -19,7 +19,6 @@ import { ErrorHandlerInterceptor } from 'app/blocks/interceptor/errorhandler.int
 import { NotificationInterceptor } from 'app/blocks/interceptor/notification.interceptor';
 
 import { fontAwesomeIcons } from './icons/font-awesome-icons';
-import { GroupByPipe } from 'app/shared/pipe/group-by.pipe';
 
 @NgModule({
   imports: [
@@ -59,8 +58,7 @@ import { GroupByPipe } from 'app/shared/pipe/group-by.pipe';
       provide: HTTP_INTERCEPTORS,
       useClass: NotificationInterceptor,
       multi: true
-    },
-    GroupByPipe
+    }
   ]
 })
 export class JHipsterRegistryCoreModule {

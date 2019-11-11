@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!account || !this.isAuthenticated()) {
         this.login();
       } else {
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.populateDashboard());
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(() => this.populateDashboard());
         this.populateDashboard();
       }
     });
@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.authSubscription = this.eventManager.subscribe('authenticationSuccess', () => {
       this.accountService.identity().subscribe(account => {
         this.account = account;
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(empty => this.populateDashboard());
+        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(() => this.populateDashboard());
         this.populateDashboard();
       });
     });

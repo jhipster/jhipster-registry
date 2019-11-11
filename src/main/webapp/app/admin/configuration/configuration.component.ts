@@ -54,7 +54,7 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
             }
           }
         },
-        error => {
+        () => {
           this.updatingConfig = false;
           this.routesService.routeDown(this.activeRoute);
         }

@@ -55,7 +55,7 @@ public class JHipsterRegistryApp implements InitializingBean {
                 "with both the 'dev' and 'prod' profiles at the same time.");
         }
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
-            log.error("You have misconfigured your application! It should not" +
+            log.error("You have misconfigured your application! It should not " +
                 "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
     }
@@ -63,12 +63,13 @@ public class JHipsterRegistryApp implements InitializingBean {
     /**
      * Main method, used to run the application.
      *
-     * @param args the command line arguments
+     * @param args the command line arguments.
      */
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(JHipsterRegistryApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
-        Environment env = app.run(args).getEnvironment();        logApplicationStartup(env);
+        Environment env = app.run(args).getEnvironment();
+        logApplicationStartup(env);
     }
 
     private static void logApplicationStartup(Environment env) {
@@ -89,8 +90,8 @@ public class JHipsterRegistryApp implements InitializingBean {
         }
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
-                "Local: \t\t{}://localhost:{}\n\t" +
-                "External: \t{}://{}:{}\n\t" +
+                "Local: \t\t{}://localhost:{}{}\n\t" +
+                "External: \t{}://{}:{}{}\n\t" +
                 "Profile(s): \t{}\n----------------------------------------------------------",
             env.getProperty("spring.application.name"),
             protocol,
@@ -107,6 +108,6 @@ public class JHipsterRegistryApp implements InitializingBean {
             configServerStatus = "Not found or not setup for this application";
         }
         log.info("\n----------------------------------------------------------\n\t" +
-        "Config Server: \t{}\n----------------------------------------------------------", configServerStatus);
+                "Config Server: \t{}\n----------------------------------------------------------", configServerStatus);
     }
 }

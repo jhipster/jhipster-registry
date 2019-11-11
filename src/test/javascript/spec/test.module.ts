@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgModule, ElementRef, Renderer } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
@@ -42,14 +42,6 @@ import { MockSessionStorageService } from './helpers/mock-session-storage.servic
     },
     {
       provide: LoginModalService,
-      useValue: null
-    },
-    {
-      provide: ElementRef,
-      useValue: null
-    },
-    {
-      provide: Renderer,
       useValue: null
     },
     {

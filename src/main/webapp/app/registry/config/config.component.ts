@@ -59,7 +59,7 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
         this.configurationSources = response.configurationSources;
       });
 
-    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(empty => this.refresh());
+    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.refresh());
   }
 
   refresh() {

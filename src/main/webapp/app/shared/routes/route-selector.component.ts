@@ -26,8 +26,8 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     this.activeRoute = this.routesService.getSelectedInstance();
 
     this.updateRoute();
-    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(reload => this.updateRoute());
-    this.routesService.routeReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(reload => this.updateRoute());
+    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.updateRoute());
+    this.routesService.routeReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.updateRoute());
     this.routesService.routeDown$.pipe(takeUntil(this.unSubscribe$)).subscribe(route => {
       this.downRoute(route);
       this.setActiveRoute(null);

@@ -22,7 +22,7 @@ export class JhiRefreshSelectorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activeRefreshTime = this.refreshService.getSelectedRefreshTime();
-    this.refreshService.refreshChanged$.pipe(takeUntil(this.unSubscribe$)).subscribe(empty => this.launchTimer(true));
+    this.refreshService.refreshChanged$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.launchTimer(true));
     this.launchTimer(false);
   }
 
