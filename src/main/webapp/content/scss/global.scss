@@ -89,6 +89,13 @@ Generic styles
   opacity: 1;
 }
 
+pre.code-block {
+  padding: 10px;
+  background: #403d3d;
+  color: rgb(241, 187, 90);
+  border-radius: 5px;
+}
+
 .footer {
   border-top: 1px solid rgba(0, 0, 0, 0.125);
 }

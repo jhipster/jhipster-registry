@@ -6,11 +6,12 @@
 
     <span>Filter (by prefix)</span> <input type="text" [(ngModel)]="filter" class="form-control">
     <h3 id="spring-configuration">Spring configuration</h3>
-    <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="spring-configuration">
+    <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="spring-configuration" *ngIf="configuration">
         <thead>
         <tr>
             <th scope="col" class="w-40" (click)="orderProp = 'prefix'; reverse=!reverse"><span>Prefix</span></th>
-            <th scope="col" class="w-60" (click)="orderProp = 'properties'; reverse=!reverse"><span>Properties</span></th>
+            <th scope="col" class="w-60" (click)="orderProp = 'properties'; reverse=!reverse"><span>Properties</span>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -27,23 +28,26 @@
         </tr>
         </tbody>
     </table>
-    <div *ngFor="let key of keys(allConfiguration); let i = index">
-        <h4 [id]="key + '_' + i"><span>{{key}}</span></h4>
-        <table class="table table-sm table-striped table-bordered table-responsive d-table" [attr.aria-describedby]="key + '_' + i">
-            <thead>
-            <tr>
-                <th scope="col" class="w-40">Property</th>
-                <th scope="col" class="w-60">Value</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let item of allConfiguration[key]">
-                <td class="break">{{item.key}}</td>
-                <td class="break">
-                    <span class="float-right badge-secondary break">{{item.val}}</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div *ngIf="allConfiguration">
+        <div *ngFor="let key of keys(allConfiguration); let i = index">
+            <h4 [id]="key + '_' + i"><span>{{key}}</span></h4>
+            <table class="table table-sm table-striped table-bordered table-responsive d-table"
+                   [attr.aria-describedby]="key + '_' + i">
+                <thead>
+                <tr>
+                    <th scope="col" class="w-40">Property</th>
+                    <th scope="col" class="w-60">Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of allConfiguration[key]">
+                    <td class="break">{{item.key}}</td>
+                    <td class="break">
+                        <span class="float-right badge-secondary break">{{item.val}}</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
