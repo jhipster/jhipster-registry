@@ -1,0 +1,10 @@
+jhipster:
+  security:
+    client-authorization:
+      token-service-id: uaa
+      client-id: internal
+      client-secret: internal
+
+eureka:
+  client:
+    fetch-registry: true

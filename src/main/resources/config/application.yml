@@ -16,11 +16,9 @@
 
 spring:
   application:
-    name: JHipsterRegistry
+    name: jhipster-registry
   jmx:
     enabled: false
-  messages:
-    basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
   mvc:
@@ -30,7 +28,7 @@ spring:
     user:
       name: admin
       password: admin
-      roles: ADMIN
+      roles: USER, ADMIN
   task:
     execution:
       thread-name-prefix: jhipster-registry-task-
@@ -47,6 +45,9 @@ spring:
   output:
     ansi:
       console-available: true
+
+logging:
+  file: target/jhipster-registry.log
 
 ribbon:
   eureka:
@@ -68,7 +69,7 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump']
+        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'threaddump']
   endpoint:
     health:
       show-details: when-authorized
@@ -100,6 +101,7 @@ management:
         auto-time-requests: true
 
 server:
+  port: 8761
   servlet:
     session:
       cookie:
@@ -166,7 +168,7 @@ eureka:
 # ===================================================================
 jhipster:
   clientApp:
-    name: 'jHipsterRegistryApp'
+    name: 'JHipsterRegistry'
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #     allowed-origins: "*"
@@ -175,8 +177,6 @@ jhipster:
   #     exposed-headers: "Authorization,Link,X-Total-Count"
   #     allow-credentials: true
   #     max-age: 1800
-  mail:
-    from: JHipsterRegistry@localhost
   swagger:
     default-include-pattern: /api/.*
     title: JHipster Registry API
