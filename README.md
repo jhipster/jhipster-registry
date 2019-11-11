@@ -21,7 +21,7 @@ There are a few limitations when deploying to Heroku.
 
 To run the cloned repository;
 
-- For development run `./mvnw -Pdev,webpack` to just start in development or run `./mvnw` and run `npm && npm start` for hot reload of client side code.
+- For development run `./mvnw -Pdev,webpack` to just start in development or run `./mvnw` and run `npm install && npm start` for hot reload of client side code.
 - For production profile run `./mvnw -Pprod`
 
 [azure-devops-image]: https://dev.azure.com/jhipster/jhipster-registry/_apis/build/status/jhipster.jhipster-registry?branchName=master
