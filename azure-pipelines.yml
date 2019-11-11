@@ -25,7 +25,7 @@ steps:
     inputs:
       versionSpec: '12.13.0'
     displayName: 'TOOLS: Install Node.js'
-  - task: |
+  - script: |
       wget -q -O - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add - && \
       sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ && \
       sudo apt-get update && \
