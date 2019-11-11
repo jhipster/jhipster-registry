@@ -21,7 +21,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule)
         },
         {
-          path: '',
+          path: 'registry',
           data: {
             authorities: ['ROLE_ADMIN']
           },
