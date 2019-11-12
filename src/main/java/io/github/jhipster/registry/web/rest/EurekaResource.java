@@ -10,7 +10,6 @@ import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl;
 import com.netflix.eureka.resources.StatusResource;
 import com.netflix.eureka.util.StatusInfo;
 import io.github.jhipster.registry.web.rest.vm.EurekaVM;
-import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
