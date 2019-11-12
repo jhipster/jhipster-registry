@@ -22,8 +22,7 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
   configAsJson: any;
   configAsKeyValuePairs: any;
   applicationList: Array<string>;
-
-  private unSubscribe$ = new Subject();
+  private unsubscribe$ = new Subject();
 
   constructor(
     private configService: JhiConfigService,
@@ -44,37 +43,35 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
     this.refresh();
   }
 
-  ngOnDestroy() {
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
-  }
-
   load() {
     this.profileService
       .getProfileInfo()
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(response => {
         this.activeRegistryProfiles = response.activeProfiles;
         this.isNative = this.activeRegistryProfiles.includes('native');
         this.configurationSources = response.configurationSources;
       });
 
-    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.refresh());
+    this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
   }
 
   refresh() {
-    this.configService.getConfigAsYaml(this.application, this.profile, this.label).subscribe(
-      response => {
-        this.configAsYaml = response;
-      },
-      () => {
-        this.configAsYaml = '';
-      }
-    );
+    this.configService
+      .getConfigAsYaml(this.application, this.profile, this.label)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        response => {
+          this.configAsYaml = response;
+        },
+        () => {
+          this.configAsYaml = '';
+        }
+      );
 
     this.configService
       .getConfigAsProperties(this.application, this.profile, this.label)
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         response => {
           this.configAsProperties = response;
@@ -93,7 +90,7 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
 
     this.configService
       .getConfigAsJson(this.application, this.profile, this.label)
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         response => {
           this.configAsJson = response;
@@ -105,7 +102,7 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
 
     this.applicationsService
       .findAll()
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         if (data && data.applications) {
           this.applicationList = ['application'];
@@ -125,5 +122,11 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
 
   getKeys(obj: Object) {
     return Object.keys(obj);
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

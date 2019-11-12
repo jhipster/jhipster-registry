@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { JhiHealthService } from 'app/admin/health/health.service';
@@ -14,6 +14,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { JhiApplicationsService } from 'app/registry/applications/applications.service';
 import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-home',
@@ -28,10 +29,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   appInstances: any;
   status: any;
   version: string;
-
-  profileInfoSubscription: Subscription;
-  refreshReloadSubscription: Subscription;
-  authSubscription: Subscription;
+  unsubscribe$ = new Subject();
+  subscription: Subscription;
 
   constructor(
     private accountService: AccountService,
@@ -49,37 +48,31 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.accountService.identity().subscribe((account: Account) => {
-      this.account = account;
-      if (!account || !this.isAuthenticated()) {
-        this.login();
-      } else {
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(() => this.populateDashboard());
-        this.populateDashboard();
-      }
-    });
+    this.accountService
+      .identity()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account: Account) => {
+        this.account = account;
+        if (!account || !this.isAuthenticated()) {
+          this.login();
+        } else {
+          this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.populateDashboard());
+          this.populateDashboard();
+        }
+      });
     this.registerAuthenticationSuccess();
   }
 
-  ngOnDestroy() {
-    if (this.refreshReloadSubscription) {
-      this.refreshReloadSubscription.unsubscribe();
-    }
-    if (this.profileInfoSubscription) {
-      this.profileInfoSubscription.unsubscribe();
-    }
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
-  }
-
   registerAuthenticationSuccess() {
-    this.authSubscription = this.eventManager.subscribe('authenticationSuccess', () => {
-      this.accountService.identity().subscribe(account => {
-        this.account = account;
-        this.refreshReloadSubscription = this.refreshService.refreshReload$.subscribe(() => this.populateDashboard());
-        this.populateDashboard();
-      });
+    this.subscription = this.eventManager.subscribe('authenticationSuccess', () => {
+      this.accountService
+        .identity()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(account => {
+          this.account = account;
+          this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.populateDashboard());
+          this.populateDashboard();
+        });
     });
   }
 
@@ -88,40 +81,50 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    this.profileInfoSubscription = this.profileService.getProfileInfo().subscribe(profileInfo => {
-      if (profileInfo.activeProfiles.includes('oauth2')) {
-        this.loginOAuth2Service.login();
-      } else {
-        this.modalRef = this.loginModalService.open();
-      }
-    });
+    this.profileService
+      .getProfileInfo()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(profileInfo => {
+        if (profileInfo.activeProfiles.includes('oauth2')) {
+          this.loginOAuth2Service.login();
+        } else {
+          this.modalRef = this.loginModalService.open();
+        }
+      });
   }
 
   populateDashboard() {
-    this.eurekaStatusService.findAll().subscribe(data => {
-      this.status = data.status;
-    });
+    this.eurekaStatusService
+      .findAll()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => (this.status = data.status));
 
-    this.applicationsService.findAll().subscribe(data => {
-      this.appInstances = [];
-      for (const app of data.applications) {
-        for (const inst of app.instances) {
-          inst.name = app.name;
-          this.appInstances.push(inst);
+    this.applicationsService
+      .findAll()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        this.appInstances = [];
+        for (const app of data.applications) {
+          for (const inst of app.instances) {
+            inst.name = app.name;
+            this.appInstances.push(inst);
+          }
         }
-      }
-    });
+      });
 
-    this.healthService.checkHealth().subscribe(
-      response => {
-        this.healthData = this.healthService.transformHealthData(response);
-        this.updatingHealth = false;
-      },
-      response => {
-        this.healthData = this.healthService.transformHealthData(response.data);
-        this.updatingHealth = false;
-      }
-    );
+    this.healthService
+      .checkHealth()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        response => {
+          this.healthData = this.healthService.transformHealthData(response);
+          this.updatingHealth = false;
+        },
+        response => {
+          this.healthData = this.healthService.transformHealthData(response.data);
+          this.updatingHealth = false;
+        }
+      );
   }
 
   baseName(name: string) {
@@ -137,6 +140,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       return 'badge-success';
     } else {
       return 'badge-danger';
+    }
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }

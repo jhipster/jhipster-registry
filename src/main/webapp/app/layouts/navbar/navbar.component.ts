@@ -7,7 +7,7 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 
 import { VERSION } from 'app/app.constants';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { LoginService } from 'app/core/login/login.service';
 import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
 import { LoginModalService } from 'app/core/login/login-modal.service';
@@ -24,8 +24,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   swaggerEnabled: boolean;
   modalRef: NgbModalRef;
   version: string;
-
-  unSubscribe$ = new Subject();
+  unsubscribe$ = new Subject();
+  subscription = new Subscription();
 
   constructor(
     private accountService: AccountService,
@@ -45,13 +45,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.registerAuthenticationSuccess();
   }
 
-  ngOnDestroy(): void {
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
-  }
-
   registerAuthenticationSuccess() {
-    this.eventManager.subscribe('authenticationSuccess', () => this.getProfileInfo());
+    this.subscription = this.eventManager.subscribe('authenticationSuccess', () => this.getProfileInfo());
   }
 
   collapseNavbar() {
@@ -70,7 +65,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.collapseNavbar();
     this.profileService
       .getProfileInfo()
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(profileInfo => {
         if (profileInfo.activeProfiles.includes('oauth2')) {
           this.loginOAuth2Service.logout().subscribe(response => {
@@ -99,10 +94,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
   getProfileInfo() {
     this.profileService
       .getProfileInfo()
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(profileInfo => {
         this.inProduction = profileInfo.inProduction;
         this.swaggerEnabled = profileInfo.swaggerEnabled;
       });
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

@@ -16,13 +16,12 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
   healthData: any;
   updatingHealth: boolean;
   activeRoute: Route;
-
-  unSubscribe$ = new Subject();
+  unsubscribe$ = new Subject();
 
   constructor(private modalService: NgbModal, private healthService: JhiHealthService, private routesService: JhiRoutesService) {}
 
   ngOnInit() {
-    this.routesService.routeChanged$.pipe(takeUntil(this.unSubscribe$)).subscribe(route => {
+    this.routesService.routeChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe(route => {
       this.activeRoute = route;
       this.refreshActiveRouteHealth();
     });
@@ -31,21 +30,24 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
   refreshActiveRouteHealth() {
     this.updatingHealth = true;
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-      this.healthService.checkInstanceHealth(this.activeRoute).subscribe(
-        health => {
-          this.healthData = this.healthService.transformHealthData(health);
-          this.updatingHealth = false;
-        },
-        error => {
-          if (error.status === 503 || error.status === 500 || error.status === 404) {
-            this.healthData = this.healthService.transformHealthData(error.error);
+      this.healthService
+        .checkInstanceHealth(this.activeRoute)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          health => {
+            this.healthData = this.healthService.transformHealthData(health);
             this.updatingHealth = false;
-            if (error.status === 500 || error.status === 404) {
-              this.routesService.routeDown(this.activeRoute);
+          },
+          error => {
+            if (error.status === 503 || error.status === 500 || error.status === 404) {
+              this.healthData = this.healthService.transformHealthData(error.error);
+              this.updatingHealth = false;
+              if (error.status === 500 || error.status === 404) {
+                this.routesService.routeDown(this.activeRoute);
+              }
             }
           }
-        }
-      );
+        );
     } else {
       this.routesService.routeDown(this.activeRoute);
     }
@@ -84,7 +86,7 @@ export class JhiHealthCheckComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

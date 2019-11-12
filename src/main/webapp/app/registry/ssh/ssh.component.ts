@@ -10,8 +10,7 @@ import { JhiSSHService } from './ssh.service';
 export class JhiSSHComponent implements OnInit, OnDestroy {
   data: any;
   showMore: boolean;
-
-  unSubscribe$ = new Subject();
+  unsubscribe$ = new Subject();
 
   constructor(private sshService: JhiSSHService) {
     this.showMore = true;
@@ -20,14 +19,13 @@ export class JhiSSHComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sshService
       .getSshPublicKey()
-      .pipe(takeUntil(this.unSubscribe$))
-      .subscribe(response => {
-        this.data = response;
-      });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => (this.data = response));
   }
 
-  ngOnDestroy(): void {
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

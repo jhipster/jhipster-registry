@@ -13,25 +13,19 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
   items: any;
   data: any;
   activeKey: any;
-
-  unSubscribe$ = new Subject();
+  unsubscribe$ = new Subject();
 
   constructor(private historyService: JhiHistoryService, private refreshService: JhiRefreshService) {}
 
   ngOnInit() {
-    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.refresh());
+    this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
     this.refresh();
-  }
-
-  ngOnDestroy() {
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
   }
 
   refresh() {
     this.historyService
       .findAll()
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         this.data = data;
         if (this.activeKey) {
@@ -69,5 +63,11 @@ export class JhiHistoryComponent implements OnInit, OnDestroy {
       }
     });
     return items;
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

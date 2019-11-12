@@ -19,7 +19,7 @@ export class LogsComponent implements OnInit, OnDestroy {
 
   activeRoute: Route;
   routes: Route[];
-  subscribeUn$ = new Subject();
+  unsubscribe$ = new Subject();
 
   constructor(private logsService: LogsService, private routesService: JhiRoutesService) {
     this.filter = '';
@@ -29,19 +29,22 @@ export class LogsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loggers = [];
-    this.routesService.routeChanged$.pipe(takeUntil(this.subscribeUn$)).subscribe(route => {
+    this.routesService.routeChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe(route => {
       this.activeRoute = route;
       this.refreshActiveRouteLogs();
     });
 
-    this.routesService.routesChanged$.pipe(takeUntil(this.subscribeUn$)).subscribe(routes => (this.routes = routes));
+    this.routesService.routesChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe(routes => (this.routes = routes));
   }
 
   changeLevel(name: string, level: string) {
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-      this.logsService.changeInstanceLevel(this.searchByAppName(), name, level).subscribe(() => {
-        this.logsService.findInstanceAll(this.activeRoute).subscribe(response => this.extractLoggers(response));
-      });
+      this.logsService
+        .changeInstanceLevel(this.searchByAppName(), name, level)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(() => {
+          this.logsService.findInstanceAll(this.activeRoute).subscribe(response => this.extractLoggers(response));
+        });
     }
   }
 
@@ -58,20 +61,23 @@ export class LogsComponent implements OnInit, OnDestroy {
   refreshActiveRouteLogs() {
     this.updatingLogs = true;
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-      this.logsService.findInstanceAll(this.activeRoute).subscribe(
-        response => {
-          this.extractLoggers(response);
-          this.updatingLogs = false;
-        },
-        error => {
-          if (error.status === 503 || error.status === 500 || error.status === 404) {
+      this.logsService
+        .findInstanceAll(this.activeRoute)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          response => {
+            this.extractLoggers(response);
             this.updatingLogs = false;
-            if (error.status === 500 || error.status === 404) {
-              this.routesService.routeDown(this.activeRoute);
+          },
+          error => {
+            if (error.status === 503 || error.status === 500 || error.status === 404) {
+              this.updatingLogs = false;
+              if (error.status === 500 || error.status === 404) {
+                this.routesService.routeDown(this.activeRoute);
+              }
             }
           }
-        }
-      );
+        );
     } else {
       this.routesService.routeDown(this.activeRoute);
     }
@@ -79,7 +85,7 @@ export class LogsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
-    this.subscribeUn$.next();
-    this.subscribeUn$.complete();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

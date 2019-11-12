@@ -12,8 +12,7 @@ export class JhiEncryptionComponent implements OnInit, OnDestroy {
   textToEncrypt: string;
   encryptedText: string;
   result: string;
-
-  private unSubscribe$ = new Subject();
+  private unsubscribe$ = new Subject();
 
   constructor(private encryptionService: JhiEncryptionService) {
     this.showMore = true;
@@ -24,15 +23,10 @@ export class JhiEncryptionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {}
 
-  ngOnDestroy() {
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
-  }
-
   encrypt() {
     this.encryptionService
       .encrypt(this.textToEncrypt)
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         response => {
           this.result = response;
@@ -47,7 +41,7 @@ export class JhiEncryptionComponent implements OnInit, OnDestroy {
   decrypt() {
     this.encryptionService
       .decrypt(this.encryptedText.replace(/^{cipher}/, ''))
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         response => {
           this.result = response;
@@ -57,5 +51,11 @@ export class JhiEncryptionComponent implements OnInit, OnDestroy {
           this.result = '';
         }
       );
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

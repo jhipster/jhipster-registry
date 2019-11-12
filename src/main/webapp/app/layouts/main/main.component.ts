@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized, NavigationError } from '@angular/router';
 
 import { Title } from '@angular/platform-browser';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-main',
   templateUrl: './main.component.html'
 })
-export class JhiMainComponent implements OnInit {
+export class JhiMainComponent implements OnInit, OnDestroy {
+  unsubscribe$ = new Subject();
+
   constructor(private titleService: Title, private router: Router, private $storageService: StateStorageService) {}
 
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
@@ -20,7 +24,7 @@ export class JhiMainComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.router.events.subscribe(event => {
+    this.router.events.pipe(takeUntil(this.unsubscribe$)).subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
       }
@@ -42,5 +46,11 @@ export class JhiMainComponent implements OnInit {
         this.router.navigate(['/404']);
       }
     });
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

@@ -12,29 +12,27 @@ import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
 export class JhiReplicasComponent implements OnInit, OnDestroy {
   showMore: boolean;
   replicas: any;
-
-  unSubscribe$ = new Subject();
+  unsubscribe$ = new Subject();
 
   constructor(private replicasService: JhiReplicasService, private refreshService: JhiRefreshService) {
     this.showMore = true;
   }
 
   ngOnInit() {
-    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.refresh());
+    this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
     this.refresh();
-  }
-
-  ngOnDestroy() {
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
   }
 
   refresh() {
     this.replicasService
       .findAll()
-      .pipe(takeUntil(this.unSubscribe$))
-      .subscribe(replicas => {
-        this.replicas = replicas;
-      });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(replicas => (this.replicas = replicas));
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

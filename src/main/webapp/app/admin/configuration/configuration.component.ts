@@ -20,8 +20,7 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
 
   activeRoute: Route;
   updatingConfig: boolean;
-
-  unSubscribe$ = new Subject();
+  unsubscribe$ = new Subject();
 
   constructor(private configurationService: JhiConfigurationService, private routesService: JhiRoutesService) {
     this.configKeys = [];
@@ -35,7 +34,7 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.routesService.routeChanged$.pipe(takeUntil(this.unSubscribe$)).subscribe(route => {
+    this.routesService.routeChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe(route => {
       this.activeRoute = route;
       this.refreshActiveRouteConfig();
     });
@@ -44,25 +43,29 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
   refreshActiveRouteConfig() {
     this.updatingConfig = true;
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-      this.configurationService.getInstanceConfigs(this.activeRoute).subscribe(
-        configuration => {
-          this.configuration = configuration;
-          this.updatingConfig = false;
-          for (const config of configuration) {
-            if (config.properties !== undefined) {
-              this.configKeys.push(Object.keys(config.properties));
+      this.configurationService
+        .getInstanceConfigs(this.activeRoute)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          configuration => {
+            this.configuration = configuration;
+            this.updatingConfig = false;
+            for (const config of configuration) {
+              if (config.properties !== undefined) {
+                this.configKeys.push(Object.keys(config.properties));
+              }
             }
+          },
+          () => {
+            this.updatingConfig = false;
+            this.routesService.routeDown(this.activeRoute);
           }
-        },
-        () => {
-          this.updatingConfig = false;
-          this.routesService.routeDown(this.activeRoute);
-        }
-      );
+        );
 
-      this.configurationService.getInstanceEnv(this.activeRoute).subscribe(configuration => {
-        this.allConfiguration = configuration;
-      });
+      this.configurationService
+        .getInstanceEnv(this.activeRoute)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(configuration => (this.allConfiguration = configuration));
     } else {
       this.routesService.routeDown(this.activeRoute);
     }
@@ -70,7 +73,7 @@ export class JhiConfigurationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // prevent memory leak when component destroyed
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

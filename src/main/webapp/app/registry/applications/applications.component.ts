@@ -17,27 +17,21 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
   instances: any;
   activeInstance: any;
   orderProp: string;
-
-  private unSubscribe$ = new Subject();
+  private unsubscribe$ = new Subject();
 
   constructor(private applicationsService: JhiApplicationsService, private refreshService: JhiRefreshService) {
     this.orderProp = 'name';
   }
 
   ngOnInit() {
-    this.refreshService.refreshReload$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.refresh());
+    this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
     this.refresh();
-  }
-
-  ngOnDestroy() {
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
   }
 
   refresh() {
     this.applicationsService
       .findAll()
-      .pipe(takeUntil(this.unSubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         this.data = data;
         if (this.application) {
@@ -88,5 +82,11 @@ export class JhiApplicationsComponent implements OnInit, OnDestroy {
     } else {
       return 'badge-danger';
     }
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
