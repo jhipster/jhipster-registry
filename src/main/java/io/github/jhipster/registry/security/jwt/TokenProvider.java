@@ -1,30 +1,31 @@
 package io.github.jhipster.registry.security.jwt;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import io.github.jhipster.registry.config.Constants;
+import io.github.jhipster.config.JHipsterProperties;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import io.github.jhipster.config.JHipsterProperties;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
 
-@Component
-@Profile("!" + Constants.PROFILE_OAUTH2)
 public class TokenProvider implements InitializingBean {
 
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
@@ -44,7 +45,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
         String base64secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
         byte[] keyBytes;

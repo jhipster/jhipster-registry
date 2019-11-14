@@ -188,3 +188,8 @@ jhipster:
     contact-email:
     license:
     license-url:
+  security:
+    oauth2:
+      audience:
+        - account
+        - api://default

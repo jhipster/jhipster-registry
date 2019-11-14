@@ -1,23 +1,18 @@
-package io.github.jhipster.registry.filters;
-
-import java.util.Set;
-
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
+package io.github.jhipster.registry.gateway;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 
-import io.github.jhipster.registry.config.Constants;
-import io.github.jhipster.registry.security.oauth2.AuthorizationHeaderUtil;
+import java.util.Set;
 
-@Component
-@Profile("!" + Constants.PROFILE_OAUTH2)
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
+
 public class JWTTokenRelayFilter extends ZuulFilter {
 
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
+        @SuppressWarnings("unchecked")
         Set<String> headers = (Set<String>) ctx.get("ignoredHeaders");
         // JWT tokens should be relayed to the resource servers
         headers.remove("authorization");
@@ -31,7 +26,7 @@ public class JWTTokenRelayFilter extends ZuulFilter {
 
     @Override
     public String filterType() {
-        return "pre";
+        return PRE_TYPE;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package io.github.jhipster.registry.filters.responserewriting;
+package io.github.jhipster.registry.gateway.responserewriting;
 
 import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.io.IOUtils;
@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 
-import static io.github.jhipster.registry.filters.responserewriting.SwaggerBasePathRewritingFilter.gzipData;
+import static io.github.jhipster.registry.gateway.responserewriting.SwaggerBasePathRewritingFilter.gzipData;
 import static org.assertj.core.api.Assertions.assertThat;
 import static springfox.documentation.swagger2.web.Swagger2Controller.DEFAULT_URL;
 

@@ -1,14 +1,14 @@
-package io.github.jhipster.registry.filters;
+package io.github.jhipster.registry.config;
 
 import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.registry.filters.accesscontrol.AccessControlFilter;
-import io.github.jhipster.registry.filters.responserewriting.SwaggerBasePathRewritingFilter;
+import io.github.jhipster.registry.gateway.accesscontrol.AccessControlFilter;
+import io.github.jhipster.registry.gateway.responserewriting.SwaggerBasePathRewritingFilter;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RegistryConfiguration {
+public class GatewayConfiguration {
 
     @Configuration
     public static class SwaggerBasePathRewritingConfiguration {

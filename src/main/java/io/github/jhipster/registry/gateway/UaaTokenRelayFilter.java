@@ -1,4 +1,4 @@
-package io.github.jhipster.registry.filters;
+package io.github.jhipster.registry.gateway;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import static io.github.jhipster.registry.config.Constants.PROFILE_UAA;
-import static io.github.jhipster.registry.filters.OAuth2TokenRelayFilter.AUTHORIZATION_HEADER;
+import static io.github.jhipster.registry.security.jwt.JWTFilter.AUTHORIZATION_HEADER;
 
 @Component
 @Profile(PROFILE_UAA)

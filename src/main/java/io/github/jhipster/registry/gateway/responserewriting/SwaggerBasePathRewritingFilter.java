@@ -1,14 +1,19 @@
-package io.github.jhipster.registry.filters.responserewriting;
+package io.github.jhipster.registry.gateway.responserewriting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.cloud.netflix.zuul.filters.post.SendResponseFilter;
 import springfox.documentation.swagger2.web.Swagger2Controller;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.zip.GZIPInputStream;
@@ -22,6 +27,10 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
     private final Logger log = LoggerFactory.getLogger(SwaggerBasePathRewritingFilter.class);
 
     private ObjectMapper mapper = new ObjectMapper();
+
+    public SwaggerBasePathRewritingFilter() {
+        super(new ZuulProperties());
+    }
 
     @Override
     public String filterType() {
@@ -60,6 +69,7 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     private String rewriteBasePath(RequestContext context) {
         InputStream responseDataStream = context.getResponseDataStream();
         String requestUri = RequestContext.getCurrentContext().getRequest().getRequestURI();
@@ -82,13 +92,12 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
         return null;
     }
 
-    public static byte[] gzipData(String content) throws IOException {
+    static byte[] gzipData(String content) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PrintWriter gzip = new PrintWriter(new GZIPOutputStream(bos));
         gzip.print(content);
         gzip.flush();
         gzip.close();
-
         return bos.toByteArray();
     }
 }
