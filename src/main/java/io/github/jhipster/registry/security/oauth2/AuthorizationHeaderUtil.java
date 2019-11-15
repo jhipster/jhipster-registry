@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
@@ -33,6 +34,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -72,7 +74,7 @@ public class AuthorizationHeaderUtil {
                 accessTokenValue = refreshToken(client, oauthToken);
                 if (null == accessTokenValue) {
                     SecurityContextHolder.getContext().setAuthentication(null);
-                    throw new OAuth2AuthorizationException(new OAuth2Error("access_denied", "The token is expired", null));
+                    throw new OAuth2AuthorizationException(new OAuth2Error(OAuth2ErrorCodes.ACCESS_DENIED, "The token is expired", null));
                 }
             }
             String authorizationHeaderValue = String.format("%s %s", tokenType, accessTokenValue);
@@ -147,7 +149,7 @@ public class AuthorizationHeaderUtil {
 
     private boolean isExpired(OAuth2AccessToken accessToken) {
         Instant now = Instant.now();
-        Instant expiresAt = accessToken.getExpiresAt();
+        Instant expiresAt = Objects.requireNonNull(accessToken.getExpiresAt());
         return now.isAfter(expiresAt.minus(Duration.ofMinutes(1L)));
     }
 }
