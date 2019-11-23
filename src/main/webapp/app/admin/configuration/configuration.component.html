@@ -10,8 +10,7 @@
         <thead>
         <tr>
             <th scope="col" class="w-40" (click)="orderProp = 'prefix'; reverse=!reverse"><span>Prefix</span></th>
-            <th scope="col" class="w-60" (click)="orderProp = 'properties'; reverse=!reverse"><span>Properties</span>
-            </th>
+            <th scope="col" class="w-60" (click)="orderProp = 'properties'; reverse=!reverse"><span>Properties</span></th>
         </tr>
         </thead>
         <tbody>
@@ -31,8 +30,7 @@
     <div *ngIf="allConfiguration">
         <div *ngFor="let key of keys(allConfiguration); let i = index">
             <h4 [id]="key + '_' + i"><span>{{key}}</span></h4>
-            <table class="table table-sm table-striped table-bordered table-responsive d-table"
-                   [attr.aria-describedby]="key + '_' + i">
+            <table class="table table-sm table-striped table-bordered table-responsive d-table" [attr.aria-describedby]="key + '_' + i">
                 <thead>
                 <tr>
                     <th scope="col" class="w-40">Property</th>

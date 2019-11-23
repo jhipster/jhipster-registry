@@ -9,11 +9,7 @@ import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.cloud.netflix.zuul.filters.post.SendResponseFilter;
 import springfox.documentation.swagger2.web.Swagger2Controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.zip.GZIPInputStream;
@@ -92,7 +88,7 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
         return null;
     }
 
-    static byte[] gzipData(String content) throws IOException {
+    public static byte[] gzipData(String content) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PrintWriter gzip = new PrintWriter(new GZIPOutputStream(bos));
         gzip.print(content);
