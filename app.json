@@ -21,7 +21,7 @@
     },
     "PORT": {
       "description": "Port to listen on",
-      "value": 8761
+      "value": "8761"
     }
   }
 }
