@@ -18,10 +18,6 @@
     "JHIPSTER_REGISTRY_VERSION": {
       "description": "Version of the registry to deploy.",
       "value": "5.0.2"
-    },
-    "PORT": {
-      "description": "Port to listen on",
-      "value": "8761"
     }
   }
 }

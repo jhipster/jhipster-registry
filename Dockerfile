@@ -16,7 +16,7 @@ FROM openjdk:8-jre-alpine
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     JAVA_OPTS="" \
     SPRING_PROFILES_ACTIVE=prod
-EXPOSE 8761
+EXPOSE ${PORT}
 RUN apk add --no-cache curl && \
     mkdir /target && \
     chmod g+rwx /target
