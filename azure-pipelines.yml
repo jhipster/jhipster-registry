@@ -23,7 +23,7 @@ pool:
 steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '12.13.0'
+      versionSpec: '12.13.1'
     displayName: 'TOOLS: Install Node.js'
   - script: |
       wget -q -O - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add - && \

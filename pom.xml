@@ -14,8 +14,8 @@
         <!-- Build properties -->
         <maven.version>3.3.9</maven.version>
         <java.version>1.8</java.version>
-        <node.version>v12.13.0</node.version>
-        <npm.version>6.13.0</npm.version>
+        <node.version>v12.13.1</node.version>
+        <npm.version>6.13.1</npm.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
