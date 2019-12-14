@@ -20,7 +20,6 @@
     <script src='./dist/lib/backbone-min.js' type='text/javascript'></script>
     <script src='./dist/swagger-ui.min.js' type='text/javascript'></script>
     <script src='./dist/lib/highlight.9.1.0.pack.js' type='text/javascript'></script>
-    <script src='./dist/lib/highlight.9.1.0.pack.js' type='text/javascript'></script>
     <script src='./dist/lib/jsoneditor.min.js' type='text/javascript'></script>
     <script src='./dist/lib/marked.js' type='text/javascript'></script>
     <script src='./dist/lib/swagger-oauth.js' type='text/javascript'></script>
@@ -44,11 +43,6 @@
                 },
                 "uiConfig": function(cb) {
                     $.getJSON(this.baseUrl() + "/swagger-resources/configuration/ui", function(data) {
-                        cb(data);
-                    });
-                },
-                "getProfileInfo": function(cb) {
-                    $.getJSON(this.baseUrl() + "/api/profile-info", function(data) {
                         cb(data);
                     });
                 }
@@ -81,47 +75,18 @@
                 initializeBaseUrl();
 
                 $('#select_baseUrl').change(function() {
-                    var selectedUrl = this.value;
-                    if (selectedUrl == null) {
-                        return;
-                    }
                     window.swaggerUi.headerView.trigger('update-swagger-ui', {
-                        url: selectedUrl
+                        url: $('#select_baseUrl').val()
                     });
                     addApiKeyAuthorization();
                 });
 
                 function addApiKeyAuthorization() {
-                    window.springfox.getProfileInfo(function(data) {
-                        var oauth2 = false;
-                        for (var i = 0; i < data.activeProfiles.length; i++) {
-                            if (data.activeProfiles[i] === 'oauth2') {
-                                oauth2 = true;
-                            }
-                        }
-                        if (oauth2) {
-                            // OAuth2
-                            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
-                            window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
-                        } else {
-                            // working only with JWT authentication
-                            var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken") || sessionStorage.getItem("jhi-authenticationtoken"));
-                            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
-                            window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
-                        }
-                    });
+                    var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken") || sessionStorage.getItem("jhi-authenticationtoken"));
+                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
+                    window.swaggerUi.api.clientAuthorizations.add("jwt", apiKeyAuth);
                 }
 
-                function getCSRF() {
-                    var name = "XSRF-TOKEN=";
-                    var ca = document.cookie.split(';');
-                    for(var i=0; i<ca.length; i++) {
-                        var c = ca[i];
-                        while (c.charAt(0)==' ') c = c.substring(1);
-                        if (c.indexOf(name) !== -1) return c.substring(name.length,c.length);
-                    }
-                    return "";
-                }
 
                 function log() {
                     if ('console' in window) {
@@ -164,10 +129,14 @@
 
                     var $urlDropdown = $('#select_baseUrl');
                     $urlDropdown.empty();
+                    data.sort(function (a, b) {
+                        var x = a.name.toLowerCase(), y = b.name.toLowerCase();
+                        return x < y ? -1 : x > y ? 1 : 0;
+                    });
                     $.each(data, function(i, resource) {
                         var option = $('<option></option>')
                         .attr("value", maybePrefix(resource.location, relativeLocation))
-                        .text(resource.name);
+                        .text(resource.name + " (" + resource.location + ")");
                         $urlDropdown.append(option);
                     });
                     $urlDropdown.change();

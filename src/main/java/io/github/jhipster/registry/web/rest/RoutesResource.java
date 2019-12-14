@@ -3,7 +3,6 @@ package io.github.jhipster.registry.web.rest;
 import com.netflix.appinfo.InstanceInfo;
 import io.github.jhipster.registry.service.dto.ZuulRouteDTO;
 import io.github.jhipster.registry.web.rest.vm.RouteVM;
-import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.zuul.filters.Route;

@@ -14,43 +14,54 @@
 # ===================================================================
 
 spring:
-    application:
-        name: JHipsterRegistry
-    cloud:
-        config:
-            enabled: false
-    main:
-        allow-bean-definition-overriding: true
-    mail:
-        host: localhost
-    mvc:
-        favicon:
-            enabled: false
-    security:
-        user:
-            name: admin
-            password: admin
-            roles: USER,ADMIN
-    thymeleaf:
-        mode: HTML
+  application:
+    name: JHipsterRegistry
+  cloud:
+    config:
+      enabled: false
+  mail:
+    host: localhost
+  main:
+    allow-bean-definition-overriding: true
+  messages:
+    basename: i18n/messages
+  mvc:
+    favicon:
+      enabled: false
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: USER,ADMIN
+  task:
+    execution:
+      thread-name-prefix: j-hipster-registry-task-
+      pool:
+        core-size: 1
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: j-hipster-registry-scheduling-
+      pool:
+        size: 1
+  thymeleaf:
+    mode: HTML
 
 server:
-    port: 10344
-    address: localhost
+  port: 10344
+  address: localhost
 
 eureka:
-    client:
-        enabled: true
-        fetch-registry: false
-        register-with-eureka: false
-    server:
-        enable-self-preservation: false
-    instance:
-        instanceId: jhipsterRegistry
+  client:
+    enabled: true
+    fetch-registry: false
+    register-with-eureka: false
+  instance:
+    instanceId: jhipsterRegistry
 management:
-    endpoints:
-        web:
-            base-path: /management
+  endpoints:
+    web:
+      base-path: /management
 # ===================================================================
 # JHipster specific properties
 #
@@ -58,21 +69,27 @@ management:
 # ===================================================================
 
 jhipster:
-    async:
-        core-pool-size: 1
-        max-pool-size: 50
-        queue-capacity: 10000
-    security:
-        authentication:
-            jwt:
-                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-                base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
-                # It is recommended to encrypt the secret key in Base64, using the property above.
-                # For compabitibily issues with applications generated with older JHipster releases,
-                # you can use both `base64-secret` and `secret` fields.
-                secret: my-secret-key-which-should-be-changed-in-production-and-be-base64-encoded
-                # Token is valid 24 hours
-                token-validity-in-seconds: 86400
+  clientApp:
+    name: 'jHipsterRegistryApp'
+  logging:
+    # To test json console appender
+    use-json-format: true # By default, logs are in Json format
+    logstash:
+      enabled: false
+      host: localhost
+      port: 5000
+      queue-size: 512
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+        base64-secret: OTc1OGNjNmNiMTQ5NWIyNjdjYjAwNmUyYWFjNzQ1Njk2NDBkZGMyMzRmMzZiM2I3ZTllOGM4ZmE5NDA2MzA5ODdlODM5OGYxNzU4OGExNmM2N2Y5YzU0OWVjNWQ4NTA1OWQyMA==
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+  metrics:
+    logs: # Reports metrics in the logs
+      enabled: true
+      report-frequency: 60 # in seconds
 
 # ===================================================================
 # Application specific properties

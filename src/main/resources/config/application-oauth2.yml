@@ -1,19 +1,19 @@
 spring:
-    security:
-        oauth2:
-            client:
-                provider:
-                    oidc:
-                        issuer-uri: http://localhost:9080/auth/realms/jhipster
-                registration:
-                    oidc:
-                        client-id: jhipster-registry
-                        client-secret: jhipster-registry
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: http://localhost:9080/auth/realms/jhipster
+        registration:
+          oidc:
+            client-id: jhipster-registry
+            client-secret: jhipster-registry
 
 server:
-    servlet:
-        session:
-            cookie:
-                http-only: true
-                # custom session cookie name to prevent conflict with another application on the same domain
-                name: JSESSIONID_REGISTRY
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        # custom session cookie name to prevent conflict with another application on the same domain
+        name: JSESSIONID_REGISTRY

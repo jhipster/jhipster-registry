@@ -20,7 +20,13 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         contentBase: './target/classes/static/',
         proxy: [{
             context: [
-                '/'
+                '/api',
+                '/services',
+                '/management',
+                '/swagger-resources',
+                '/v2/api-docs',
+                '/h2-console',
+                '/auth'
             ],
             target: `http${options.tls ? 's' : ''}://localhost:8761`,
             secure: false,
@@ -30,7 +36,8 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         watchOptions: {
             ignored: /node_modules/
         },
-        https: options.tls
+        https: options.tls,
+        historyApiFallback: true
     },
     entry: {
         polyfills: './src/main/webapp/app/polyfills',
@@ -44,10 +51,10 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     },
     module: {
         rules: [{
-            test: /\.ts$/,
+            test: /\.(j|t)s$/,
             enforce: 'pre',
-            loader: 'tslint-loader',
-            exclude: [/(node_modules)/, new RegExp('reflect-metadata\\' + path.sep + 'Reflect\\.ts')]
+            loader: 'eslint-loader',
+            exclude: /node_modules/
         },
         {
             test: /\.ts$/,
@@ -74,8 +81,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                         transpileOnly: true,
                         happyPackMode: true
                     }
-                },
-                'angular-router-loader'
+                }
             ],
             exclude: /(node_modules)/
         },

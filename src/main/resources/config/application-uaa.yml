@@ -1,0 +1,16 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          uaa:
+            token-uri: http://uaa/oauth/token
+        registration:
+          uaa:
+            client-id: internal
+            client-secret: internal
+            authorization-grant-type: client_credentials
+
+eureka:
+  client:
+    fetch-registry: true
