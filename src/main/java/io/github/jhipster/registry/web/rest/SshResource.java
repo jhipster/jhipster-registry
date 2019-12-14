@@ -26,7 +26,7 @@ public class SshResource {
      * GET  / : get the SSH public key
      */
     @GetMapping(value = "/ssh/public_key", produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> eureka() {
+    public ResponseEntity<String> getSshPublicKey() {
         try {
             String publicKey = getPublicKey();
             if(publicKey != null) return new ResponseEntity<>(publicKey, HttpStatus.OK);

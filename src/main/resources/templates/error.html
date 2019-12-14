@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.thymeleaf.org ">
+      xsi:schemaLocation="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="${baseUrl}/favicon.ico" />
     <title>Your request cannot be processed</title>
     <style>
         ::-moz-selection {
@@ -142,13 +143,13 @@
 </head>
 <body>
 <div class="container">
-    <h1>Your request cannot be processed <span>:(</span></h1>
+    <h1 th:text="#{error.title}">Your request cannot be processed <span>:(</span></h1>
 
-    <p>Sorry, an error has occurred.</p>
+    <p th:text="#{error.subtitle}">Sorry, an error has occurred.</p>
 
-    <span>Status:</span>&nbsp;<span></span>&nbsp;(<span th:text="${error}"></span>)<br/>
+    <span th:text="#{error.status}">Status:</span>&nbsp;<span th:text="${error}"></span>&nbsp;(<span th:text="${error}"></span>)<br/>
     <span th:if="${!#strings.isEmpty(message)}">
-        <span>Message:</span>&nbsp;<span th:text="${message}"></span><br/>
+        <span th:text="#{error.message}">Message:</span>&nbsp;<span th:text="${message}"></span><br/>
     </span>
 
     <script th:inline="text">

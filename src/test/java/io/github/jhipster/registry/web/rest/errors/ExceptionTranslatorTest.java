@@ -51,21 +51,6 @@ public class ExceptionTranslatorTest {
         assertThat(res.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
     }
 
-
-    @Test
-    public void processParameterizedValidationErrorTest() throws Exception {
-        // These lines will throw the wanted exception
-        SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenThrow(new CustomParameterizedException(null));
-        SecurityContextHolder.setContext(securityContext);
-
-        MvcResult res = mock.perform(get("/api/account"))
-            .andExpect(status().isBadRequest())
-            .andReturn();
-
-        assertThat(res.getResolvedException()).isInstanceOf(CustomParameterizedException.class);
-    }
-
     @Test
     public void processAccessDeniedExceptionTest() throws Exception {
         // These lines will throw the wanted exception

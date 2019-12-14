@@ -13,49 +13,70 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+logging:
+  level:
+    ROOT: DEBUG
+    io.github.jhipster: DEBUG
+    io.github.jhipster.registry: DEBUG
+
 spring:
-    devtools:
-        restart:
-            enabled: true
-        livereload:
-            enabled: false # we use gulp + BrowserSync for livereload
-    jackson:
-        serialization.indent_output: true
-    mail:
-        host: localhost
-        port: 25
-        username:
-        password:
-    messages:
-        cache-duration: 1
-    profiles:
-        active: dev
-        include: swagger
-    security:
-        user:
-            name: admin
-            password: admin
-            roles: USER,ADMIN
+  profiles:
+    active: dev
+    include:
+      - swagger
+      # Uncomment to activate TLS for the dev profile
+      #- tls
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: false # we use Webpack dev server + BrowserSync for livereload
+  jackson:
+    serialization:
+      indent-output: true
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: USER, ADMIN
+  messages:
+    cache-duration: PT1S # 1 second, see the ISO 8601 standard
+  thymeleaf:
+    cache: false
+  sleuth:
+    sampler:
+      probability: 1 # report 100% of traces
+  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+    base-url: http://localhost:9411
+    enabled: false
+    locator:
+      discovery:
+        enabled: true
+
+server:
+  port: 8761
 
 # ===================================================================
-# To enable SSL, generate a certificate using:
-# keytool -genkey -alias JHipsterRegistry -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# Eureka server configuration (eureka.server.*)
 #
-# You can also use Let's Encrypt:
-# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
+# Full list of properties with default values at:
+# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
 #
-# Then, modify the server.ssl properties so your "server" configuration looks like:
-#
-# server:
-#    port: 8443
-#    ssl:
-#        key-store: keystore.p12
-#        key-store-password: <your-password>
-#        keyStoreType: PKCS12
-#        keyAlias: JHipsterRegistry
+# Documentation at:
+# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
 # ===================================================================
-server:
-    port: 8761
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://admin:${spring.security.user.password}@localhost:8761/eureka/
 
 # ===================================================================
 # JHipster specific properties
@@ -64,36 +85,40 @@ server:
 # ===================================================================
 
 jhipster:
-    # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
-    cors:
-        allowed-origins: "*"
-        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
-        allowed-headers: "*"
-        exposed-headers:
-        allow-credentials: true
-        max-age: 1800
-    security:
-        client-authorization:
-          client-id: internal
-          client-secret: internal
-        authentication:
-            jwt:
-                # The secret key should come from a Spring Cloud Config server, and not from this file
-                # If using the "native" profile, it should be located in the "central-config" directory
-                # If using the "git" profile, it should come from an external Git repository
-                # Token is valid 24 hours
-                token-validity-in-seconds: 86400
-                token-validity-in-seconds-for-remember-me: 2592000
-    mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: JHipsterRegistry@localhost
-        base-url: http://127.0.0.1:8761
-    logging:
-        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
-            enabled: false
-            host: localhost
-            port: 5000
-            queue-size: 512
-
+  # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
+  cors:
+    allowed-origins: '*'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: 'Authorization,Link,X-Total-Count'
+    allow-credentials: true
+    max-age: 1800
+  security:
+    client-authorization:
+      client-id: internal
+      client-secret: internal
+    authentication:
+      jwt:
+        # The secret key should come from a Spring Cloud Config server, and not from this file
+        # If using the "native" profile, it should be located in the "central-config" directory
+        # If using the "git" profile, it should come from an external Git repository
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 2592000
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    from: JHipsterRegistry@localhost
+    base-url: http://127.0.0.1:8761
+  metrics:
+    logs: # Reports metrics in the logs
+      enabled: false
+      report-frequency: 60 # in seconds
+  logging:
+    use-json-format: false # By default, logs are not in Json format
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: false
+      host: localhost
+      port: 5000
+      queue-size: 512
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
