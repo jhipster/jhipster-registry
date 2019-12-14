@@ -1,0 +1,23 @@
+{
+  "plugins": ["@typescript-eslint/tslint"],
+  "extends": ["jhipster"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "@typescript-eslint/tslint/config": [
+      "error",
+      {
+        "lintFile": "./tslint.json"
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": false
+      }
+    ]
+  }
+}

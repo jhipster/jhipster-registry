@@ -9,7 +9,7 @@ public abstract class TestUtils {
 
     public static boolean isValid(String json) {
         try {
-            new JsonParser().parse(json);
+            JsonParser.parseString(json);
             return true;
         } catch (JsonSyntaxException jse) {
             return false;

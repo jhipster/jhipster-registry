@@ -1,29 +1,29 @@
 <div>
     <div class="head">
-        <h2 class="d-inline-block">Health Checks</h2>
+        <h2 id="health-page-heading" class="d-inline-block">Health Checks</h2>
         <jhi-route-selector class="float-right refresh-left-side"></jhi-route-selector>
     </div>
 
     <div class="table-responsive">
-        <table id="healthCheck" class="table table-striped">
+        <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
             <thead>
                 <tr>
-                    <th>Service Name</th>
-                    <th class="text-center">Status</th>
-                    <th class="text-center">Details</th>
+                    <th scope="col">Service Name</th>
+                    <th scope="col" class="text-center">Status</th>
+                    <th scope="col" class="text-center">Details</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let health of healthData">
                     <td><span class="text-capitalize">{{ baseName(health.name) }}</span> {{subSystemName(health.name)}}</td>
                     <td class="text-center">
-                        <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(health.status)">
+                        <span class="badge" [ngClass]="getBadgeClass(health.status)">
                             {{health.status}}
                         </span>
                     </td>
                     <td class="text-center">
                         <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
-                            <i class="fa fa-eye"></i>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                         </a>
                     </td>
                 </tr>

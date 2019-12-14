@@ -1,7 +1,7 @@
 # ===================================================================
 # Spring Boot configuration.
 #
-# This configuration will be overriden by the Spring profile you use,
+# This configuration will be overridden by the Spring profile you use,
 # for example application-dev.yml if you use the "dev" profile.
 #
 # More information on profiles: https://www.jhipster.tech/profiles/
@@ -15,60 +15,102 @@
 # ===================================================================
 
 spring:
-    application:
-        name: jhipster-registry
-    mvc:
-        favicon:
-            enabled: false
-    security:
-        user:
-            name: admin
-            password: admin
-            roles: USER,ADMIN
-    thymeleaf:
-        mode: HTML
-
-server:
-    port: 8761
+  application:
+    name: jhipster-registry
+  jmx:
+    enabled: false
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    favicon:
+      enabled: false
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: USER, ADMIN
+  task:
+    execution:
+      thread-name-prefix: jhipster-registry-task-
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: jhipster-registry-scheduling-
+      pool:
+        size: 2
+  thymeleaf:
+    mode: HTML
+  output:
+    ansi:
+      console-available: true
 
 logging:
-    file: target/jhipster-registry.log
+  file: target/jhipster-registry.log
 
 ribbon:
-    eureka:
-        enabled: true
+  eureka:
+    enabled: true
 
-zuul:
-    prefix: /services/ #slash before and after
-    strip-prefix: true
+# See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
+zuul: # those values must be configured depending on the application specific needs
+  sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
+  host:
+    max-total-connections: 1000
+    max-per-route-connections: 100
+  prefix: /services/ #slash before and after
+  strip-prefix: true
+  semaphore:
+    max-semaphores: 500
 
 management:
-    endpoints:
-        web:
-            base-path: /management
-            exposure:
-                include: ["configprops", "env", "health", "info", "jhimetrics", "logfile", "loggers", "threaddump"]
-    endpoint:
-        health:
-            show-details: when_authorized
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'threaddump']
+  endpoint:
     health:
-        mail:
-            enabled: false # When using the MailService, configure an SMTP server and set this to true
-    metrics:
-        enable:
-            http: true
-            jvm: true
-            logback: true
-            process: true
-            system: true
-        distribution:
-            percentiles-histogram:
-                all: true
-            percentiles:
-                all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
-        web:
-            server:
-                auto-time-requests: true
+      show-details: when-authorized
+      roles: 'ROLE_ADMIN'
+    jhimetrics:
+      enabled: true
+  info:
+    git:
+      mode: full
+  health:
+    mail:
+      enabled: false # When using the MailService, configure an SMTP server and set this to true
+  metrics:
+    enable:
+      http: true
+      jvm: true
+      logback: true
+      process: true
+      system: true
+    distribution:
+      percentiles-histogram:
+        all: true
+      percentiles:
+        all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+    tags:
+      application: ${spring.application.name}
+    web:
+      server:
+        auto-time-requests: true
+
+server:
+  port: 8761
+  servlet:
+    session:
+      cookie:
+        http-only: true
+
+# Properties to be exposed on the /info management endpoint
+info:
+  # Comma separated list of profiles that will trigger the ribbon to show
+  display-ribbon-on-profiles: 'dev'
 
 # ===================================================================
 # Eureka server configuration (eureka.server.*)
@@ -81,39 +123,73 @@ management:
 # ===================================================================
 
 eureka:
-    instance:
-        appname: jhipster-registry
-        instanceId: jhipsterRegistry:${spring.application.instance-id:${random.value}}
-        prefer-ip-address: true
-        lease-renewal-interval-in-seconds: 5
-        lease-expiration-duration-in-seconds: 10
-        status-page-url-path: ${management.endpoints.web.base-path}/info
-        health-check-url-path: ${management.endpoints.web.base-path}/health
-        metadata-map:
-            zone: primary # This is needed for the load balancer
-            profile: ${spring.profiles.active}
-            version: ${info.project.version}
-    client:
-        enabled: true
-        fetch-registry: false
-        register-with-eureka: false
-        instance-info-replication-interval-seconds: 10
-        registry-fetch-interval-seconds: 10
-        service-url:
-            defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
-    server:
-        # see discussion about enable-self-preservation:
-        # https://github.com/jhipster/generator-jhipster/issues/3654
-        enable-self-preservation: false
-        peer-node-read-timeout-ms: 1000
-    dashboard:
-        path: /registry
-    datacenter: JHipster-DataCenter
-    environment: JHipster-Environment
+  instance:
+    appname: jhipster-registry
+    instanceId: jhipsterRegistry:${spring.application.instance-id:${random.value}}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    status-page-url-path: ${management.endpoints.web.base-path}/info
+    health-check-url-path: ${management.endpoints.web.base-path}/health
+    metadata-map:
+      zone: primary # This is needed for the load balancer
+      profile: ${spring.profiles.active}
+      version: #project.version#
+      git-version: ${git.commit.id.describe:}
+      git-commit: ${git.commit.id.abbrev:}
+      git-branch: ${git.branch:}
+  client:
+    enabled: true
+    healthcheck:
+      enabled: true
+    fetch-registry: false
+    register-with-eureka: false
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    service-url:
+      defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
+  server:
+    # see discussion about enable-self-preservation:
+    # https://github.com/jhipster/generator-jhipster/issues/3654
+    enable-self-preservation: false
+    peer-node-read-timeout-ms: 1000
+  dashboard:
+    path: /registry
+  datacenter: JHipster-DataCenter
+  environment: JHipster-Environment
 
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://www.jhipster.tech/common-application-properties/
+# ===================================================================
 jhipster:
-    swagger:
-        default-include-pattern: /(api|config)/.*
-        title: JHipster Registry API
-        description: JHipster Registry API documentation
-        version: ${info.project.version}
+  clientApp:
+    name: 'JHipsterRegistry'
+  # By default CORS is disabled. Uncomment to enable.
+  # cors:
+  #     allowed-origins: "*"
+  #     allowed-methods: "*"
+  #     allowed-headers: "*"
+  #     exposed-headers: "Authorization,Link,X-Total-Count"
+  #     allow-credentials: true
+  #     max-age: 1800
+  swagger:
+    default-include-pattern: /api/.*
+    title: JHipster Registry API
+    description: JHipster Registry API documentation
+    version: ${info.project.version}
+    terms-of-service-url:
+    contact-name:
+    contact-url:
+    contact-email:
+    license:
+    license-url:
+  security:
+    oauth2:
+      audience:
+        - account
+        - api://default

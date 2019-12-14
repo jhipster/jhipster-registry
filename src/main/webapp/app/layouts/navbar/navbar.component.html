@@ -27,19 +27,19 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="applications" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/applications" (click)="collapseNavbar()">
                             <fa-icon icon="cloud" [fixedWidth]="true"></fa-icon>
                             <span class="hidden-sm">Instances</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="history" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/history" (click)="collapseNavbar()">
                             <fa-icon icon="hourglass" [fixedWidth]="true"></fa-icon>
                             <span class="hidden-sm">History</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="replicas" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/replicas" (click)="collapseNavbar()">
                             <fa-icon icon="cloud-download-alt" [fixedWidth]="true"></fa-icon>
                             <span class="hidden-sm">Replicas</span>
                         </a>
@@ -56,19 +56,19 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="config" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/config" (click)="collapseNavbar()">
                             <fa-icon icon="tachometer-alt" [fixedWidth]="true"></fa-icon>
                             <span class="hidden-sm">Cloud config</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="encryption" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/encryption" (click)="collapseNavbar()">
                             <fa-icon icon="key" [fixedWidth]="true"></fa-icon>
                             <span class="hidden-sm">Encryption</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="ssh" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/ssh" (click)="collapseNavbar()">
                             <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
                             <span class="hidden-sm">SSH</span>
                         </a>
@@ -85,37 +85,37 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li>
-                        <a class="dropdown-item" routerLink="jhi-metrics" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="admin/metrics" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="tachometer-alt" [fixedWidth]="true"></fa-icon>
                             <span>Metrics</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLink="jhi-health" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="admin/health" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="heart" [fixedWidth]="true"></fa-icon>
                             <span>Health</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLink="jhi-configuration" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="admin/configuration" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="list" [fixedWidth]="true"></fa-icon>
                             <span>Configuration</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLink="logs" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="admin/logs" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="file-alt" [fixedWidth]="true"></fa-icon>
                             <span>Logs</span>
                         </a>
                     </li>
                     <li *ngIf="swaggerEnabled">
-                        <a class="dropdown-item" routerLink="docs" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
                             <span>API</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLink="loggers" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="admin/logfile" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="tasks" [fixedWidth]="true"></fa-icon>
                             <span>Loggers</span>
                         </a>

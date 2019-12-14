@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * View Model object for representing a user's credentials
+ * View Model object for storing a user's credentials.
  */
 public class LoginVM {
 
@@ -13,6 +13,7 @@ public class LoginVM {
     private String username;
 
     @NotNull
+    @Size(min = 4, max = 100)
     private String password;
 
     private Boolean rememberMe;

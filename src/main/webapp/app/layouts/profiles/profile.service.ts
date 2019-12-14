@@ -1,32 +1,40 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { map, shareReplay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { ProfileInfo } from './profile-info.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ProfileService {
-    private profileInfoUrl = SERVER_API_URL + 'api/profile-info';
-    private profileInfo: Promise<ProfileInfo>;
+  private infoUrl = SERVER_API_URL + 'management/info';
+  private profileInfo$: Observable<ProfileInfo>;
 
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-    getProfileInfo(): Promise<ProfileInfo> {
-        if (!this.profileInfo) {
-            this.profileInfo = this.http
-                .get<ProfileInfo>(this.profileInfoUrl, { observe: 'response' })
-                .map((res: HttpResponse<any>) => {
-                    const data = res.body;
-                    const pi = new ProfileInfo();
-                    pi.activeProfiles = data.activeProfiles;
-                    pi.ribbonEnv = data.ribbonEnv;
-                    pi.configurationSources = data.configurationSources;
-                    pi.inProduction = data.activeProfiles.includes('prod');
-                    pi.swaggerEnabled = data.activeProfiles.includes('swagger');
-                    return pi;
-                })
-                .toPromise();
-        }
-        return this.profileInfo;
+  getProfileInfo(): Observable<ProfileInfo> {
+    if (this.profileInfo$) {
+      return this.profileInfo$;
     }
+
+    this.profileInfo$ = this.http.get<ProfileInfo>(this.infoUrl).pipe(
+      map((profileInfo: ProfileInfo) => {
+        const pi = new ProfileInfo();
+        pi.activeProfiles = profileInfo.activeProfiles;
+        const displayRibbonOnProfiles = profileInfo['display-ribbon-on-profiles'].split(',');
+        if (pi.activeProfiles) {
+          const ribbonProfiles = displayRibbonOnProfiles.filter(profile => pi.activeProfiles.includes(profile));
+          if (ribbonProfiles.length !== 0) {
+            pi.ribbonEnv = ribbonProfiles[0];
+          }
+          pi.inProduction = pi.activeProfiles.includes('prod');
+          pi.swaggerEnabled = pi.activeProfiles.includes('swagger');
+        }
+        return pi;
+      }),
+      shareReplay()
+    );
+    return this.profileInfo$;
+  }
 }

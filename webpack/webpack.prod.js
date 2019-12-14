@@ -17,7 +17,7 @@ const sass = require('sass');
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
     // Enable source maps. Please note that this will slow down the build.
-    // You have to enable it in UglifyJSPlugin config below and in tsconfig-aot.json as well
+    // You have to enable it in Terser config below and in tsconfig-aot.json as well
     // devtool: 'source-map',
     entry: {
         polyfills: './src/main/webapp/app/polyfills',
@@ -80,25 +80,16 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     },
     optimization: {
         runtimeChunk: false,
-        splitChunks: {
-            cacheGroups: {
-                commons: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'vendors',
-                    chunks: 'all'
-                }
-            }
-        },
         minimizer: [
             new TerserPlugin({
                 parallel: true,
                 cache: true,
+                // sourceMap: true, // Enable source maps. Please note that this will slow down the build
                 terserOptions: {
                     ecma: 6,
                     ie8: false,
                     toplevel: true,
                     module: true,
-                    // sourceMap: true, // Enable source maps. Please note that this will slow down the build
                     compress: {
                         dead_code: true,
                         warnings: false,
@@ -113,8 +104,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                         inline: true,
                         join_vars: true,
                         ecma: 6,
-                        module: true,
-                        toplevel: true
+                        module: true
                     },
                     output: {
                         comments: false,
@@ -140,9 +130,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }),
         new MomentLocalesPlugin({
             localesToKeep: [
-                    'en'
-                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array
-                ]
+                // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array
+            ]
         }),
         new Visualizer({
             // Webpack statistics in target folder
@@ -159,7 +148,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }),
         new WorkboxPlugin.GenerateSW({
           clientsClaim: true,
-          skipWaiting: true
+          skipWaiting: true,
         })
     ],
     mode: 'production'

@@ -18,32 +18,39 @@
 #
 
 pool:
-    vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-18.04'
 
 steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: "10.15.3"
-      displayName: "Install Node.js"
-    - script: npm install -g npm
-      displayName: 'TOOLS: update NPM'
-    - script: npm install
-      displayName: 'Install dependencies'
-    - script: |
-        ./mvnw -ntp test
-      displayName: 'TEST: Back'
-    - script: |
-        npm test
-      displayName: 'TEST: Front'
-    - script: docker build -t jhipster/jhipster-registry:travis .
-      displayName: 'Build Docker image'
-    - script: |
-        docker images
-        docker run --name jhipster-registry -p 8761:8761 -d -t jhipster/jhipster-registry:travis
-      displayName: 'Run application'
-    - script: |
-          sleep 90
-          docker ps
-          docker logs jhipster-registry
-          curl -v http://localhost:8761
-      displayName: 'Check if app is running'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.13.1'
+    displayName: 'TOOLS: Install Node.js'
+  - script: |
+      wget -q -O - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add - && \
+      sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ && \
+      sudo apt-get update && \
+      sudo apt-get install -y adoptopenjdk-11-hotspot && \
+      sudo update-java-alternatives -s adoptopenjdk-11-hotspot-amd64
+    displayName: 'TOOLS: Install AdoptOpenJDK'
+  - script: npm install -g npm
+    displayName: 'TOOLS: Update NPM'
+  - script: npm install
+    displayName: 'BUILD: Install dependencies'
+  - script: |
+      ./mvnw -ntp verify
+    displayName: 'TEST: Back'
+  - script: |
+      npm test
+    displayName: 'TEST: Front'
+  - script: docker build -t jhipster/jhipster-registry:azure .
+    displayName: 'BUILD: Docker image'
+  - script: |
+      docker images
+      docker run --name jhipster-registry -p 8761:8761 -d -t jhipster/jhipster-registry:azure
+    displayName: 'TEST: Run application'
+  - script: |
+      sleep 90
+      docker ps
+      docker logs jhipster-registry
+      curl -v http://localhost:8761
+    displayName: 'TEST: Check if app is running'

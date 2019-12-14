@@ -14,14 +14,14 @@ h4 {
   font-weight: 300;
 }
 
-a {
+/* Increase contrast of links to get 100% on Lighthouse Accessability Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
+a,
+a:hover {
   color: #533f03;
   font-weight: bold;
 }
 
 a:hover {
-  color: #533f03;
-  font-weight: bold;
   /* make sure browsers use the pointer cursor for anchors, even with no href */
   cursor: pointer;
 }
@@ -90,10 +90,10 @@ Generic styles
 }
 
 pre.code-block {
-    padding: 10px;
-    background: #403d3d;
-    color: rgb(241, 187, 90);
-    border-radius: 5px;
+  padding: 10px;
+  background: #403d3d;
+  color: rgb(241, 187, 90);
+  border-radius: 5px;
 }
 
 .footer {
@@ -123,7 +123,7 @@ Custom alerts for notification
       font-size: 10px;
     }
   }
-  .toast {
+  .jhi-toast {
     position: fixed;
     width: 100%;
     &.left {
@@ -142,21 +142,9 @@ Custom alerts for notification
 }
 
 @media screen and (min-width: 480px) {
-  .alerts .toast {
+  .alerts .jhi-toast {
     width: 50%;
   }
-}
-
-/* ==========================================================================
-entity tables helpers
-========================================================================== */
-
-/* Makes toolbar not wrap on smaller screens
-http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
-.flex-btn-group-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
 }
 
 /* ==========================================================================

@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "6.0.0-beta",
+    "jhipsterVersion": "6.5.1",
     "baseName": "JHipsterRegistry",
     "packageName": "io.github.jhipster.registry",
     "packageFolder": "io/github/jhipster/registry",
@@ -25,9 +25,15 @@
     "jhiPrefix": "jhi",
     "skipClient": false,
     "skipUserManagement": false,
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "clientFramework": "angularX",
     "cacheProvider": "no",
-    "enableHibernateCache": false
+    "enableHibernateCache": false,
+    "embeddableLaunchScript": false,
+    "clientTheme": "none",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "blueprints": []
   }
 }

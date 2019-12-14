@@ -3,30 +3,38 @@ Refresh selector styles
 ========================================================================== */
 
 .dropdown {
-    .times {
-        font-weight: normal;
-        .times-text {
-            font-family: sans-serif;
-        }
+  .times {
+    font-weight: normal;
+
+    .times-text {
+      font-family: sans-serif;
     }
-    .dropdown-menu {
-        border-color: darkgrey;
-        .dropdown-item { /* refresh times */
-            word-break: break-all;
-            &:hover {
-                color: #fff;
-                background-color: #80bed8;
-            }
-            &:active {
-                color: #fff;
-                background-color: #0275d8;
-            }
-            &.manual-refresh {
-                display: initial;
-            }
-        }
-        .dropdown-divider {
-            background-color: #dcdcdc;
-        }
+  }
+
+  .dropdown-menu {
+    border-color: darkgrey;
+
+    .dropdown-item {
+      /* refresh times */
+      word-break: break-all;
+
+      &:hover {
+        color: #fff;
+        background-color: #80bed8;
+      }
+
+      &:active {
+        color: #fff;
+        background-color: #0275d8;
+      }
+
+      &.manual-refresh {
+        display: initial;
+      }
     }
+
+    .dropdown-divider {
+      background-color: #dcdcdc;
+    }
+  }
 }

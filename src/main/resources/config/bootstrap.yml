@@ -1,33 +1,29 @@
 # ===================================================================
 # Spring Cloud Config bootstrap configuration for the "dev" profile
-# In prod profile, properties will be overwriten by the ones defined in bootstrap-prod.yml
+# In prod profile, properties will be overwritten by the ones defined in bootstrap-prod.yml
 # ===================================================================
 
 spring:
-    application:
-        name: jhipster-registry
-    profiles:
-        active: dev
-        include: composite
-    cloud:
-        config:
-            server:
-                bootstrap: true
-                composite:
-                    - type: native
-                      search-locations: file:./central-config
-                prefix: /config
-            fail-fast: true
-            # name of the config server's property source (file.yml) that we want to use
-            name: jhipster-registry
-            profile: dev # profile(s) of the property source
-            label: master # toggle to switch to a different version of the configuration as stored in git
-            # it can be set to any label, branch or commit of the config source git repository
+  application:
+    name: jhipster-registry
+  profiles:
+    active: dev
+    include: composite
+  cloud:
+    config:
+      server:
+        bootstrap: true
+        composite:
+          - type: native
+            search-locations: file:./central-config
+        prefix: /config
+      fail-fast: true
+      # name of the config server's property source (file.yml) that we want to use
+      name: jhipster-registry
+      profile: dev # profile(s) of the property source
+      label: master # toggle to switch to a different version of the configuration as stored in git
+      # it can be set to any label, branch or commit of the configuration source Git repository
 
 info:
-    project:
-        version: #project.version#
-
-# uncomment to enable encryption features
-#encrypt:
-#    key: my-secret-encryption-key-to-change-in-production
+  project:
+    version: #project.version#
