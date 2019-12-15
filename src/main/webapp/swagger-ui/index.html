@@ -45,6 +45,11 @@
                     $.getJSON(this.baseUrl() + "/swagger-resources/configuration/ui", function(data) {
                         cb(data);
                     });
+                },
+                "getProfileInfo": function(cb) {
+                    $.getJSON(this.baseUrl() + "/management/info", function (data) {
+                        cb(data);
+                    });
                 }
             };
             window.springfox = springfox;
@@ -82,11 +87,36 @@
                 });
 
                 function addApiKeyAuthorization() {
-                    var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken") || sessionStorage.getItem("jhi-authenticationtoken"));
-                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
-                    window.swaggerUi.api.clientAuthorizations.add("jwt", apiKeyAuth);
+                    window.springfox.getProfileInfo(function (data) {
+                        var oauth2 = false;
+                        for (var i = 0; i < data.activeProfiles.length; i++) {
+                            if (data.activeProfiles[i] === 'oauth2' || data.activeProfiles[i] === 'uaa') {
+                                oauth2 = true;
+                            }
+                        }
+                        if (oauth2) {
+                            // OAuth2
+                            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
+                            window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
+                        } else {
+                            // working only with JWT authentication
+                            var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken") || sessionStorage.getItem("jhi-authenticationtoken"));
+                            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
+                            window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
+                        }
+                    });
                 }
 
+                function getCSRF() {
+                    var name = "XSRF-TOKEN=";
+                    var ca = document.cookie.split(';');
+                    for(var i=0; i<ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) === ' ') c = c.substring(1);
+                        if (c.indexOf(name) !== -1) return c.substring(name.length,c.length);
+                    }
+                    return "";
+                }
 
                 function log() {
                     if ('console' in window) {
@@ -129,10 +159,6 @@
 
                     var $urlDropdown = $('#select_baseUrl');
                     $urlDropdown.empty();
-                    data.sort(function (a, b) {
-                        var x = a.name.toLowerCase(), y = b.name.toLowerCase();
-                        return x < y ? -1 : x > y ? 1 : 0;
-                    });
                     $.each(data, function(i, resource) {
                         var option = $('<option></option>')
                         .attr("value", maybePrefix(resource.location, relativeLocation))
