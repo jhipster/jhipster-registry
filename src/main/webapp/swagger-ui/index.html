@@ -90,7 +90,7 @@
                     window.springfox.getProfileInfo(function (data) {
                         var oauth2 = false;
                         for (var i = 0; i < data.activeProfiles.length; i++) {
-                            if (data.activeProfiles[i] === 'oauth2' || data.activeProfiles[i] === 'uaa') {
+                            if (data.activeProfiles[i] === 'oauth2') {
                                 oauth2 = true;
                             }
                         }
