@@ -36,7 +36,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         },
         {
             test: /\.scss$/,
-            use: ['to-string-loader', 'css-loader', {
+            use: ['to-string-loader', 'css-loader', 'postcss-loader', {
                 loader: 'sass-loader',
                 options: { implementation: sass }
             }],
@@ -149,6 +149,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new WorkboxPlugin.GenerateSW({
           clientsClaim: true,
           skipWaiting: true,
+          exclude: [/swagger-ui/]
         })
     ],
     mode: 'production'

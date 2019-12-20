@@ -30,7 +30,7 @@ export class MockRouter extends SpyObject {
     this.navigateByUrlSpy = this.spy('navigateByUrl');
   }
 
-  setRouterEvent(event: any) {
-    this.events = of(event);
+  setRouterEvent(event: Observable<any>) {
+    this.events = event;
   }
 }
