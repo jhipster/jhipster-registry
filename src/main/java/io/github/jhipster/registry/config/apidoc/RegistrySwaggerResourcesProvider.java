@@ -22,8 +22,6 @@ import java.util.List;
 @Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
 public class RegistrySwaggerResourcesProvider implements SwaggerResourcesProvider {
 
-    private final Logger log = LoggerFactory.getLogger(RegistrySwaggerResourcesProvider.class);
-
     private final RouteLocator routeLocator;
 
     public RegistrySwaggerResourcesProvider(RouteLocator routeLocator) {
