@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 export class LoginOAuth2Service {
   constructor(private http: HttpClient) {}
 
-  login() {
+  login(): void {
     let port = location.port ? ':' + location.port : '';
     if (port === ':9000') {
       port = ':8761';

@@ -4,11 +4,21 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 
+export interface Credentials {
+  username: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+export interface JWTToken {
+  idToken: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthSessionServerProvider {
   constructor(private http: HttpClient) {}
 
-  login(credentials): Observable<any> {
+  login(credentials: Credentials): Observable<JWTToken> {
     const data =
       `username=${encodeURIComponent(credentials.username)}` +
       `&password=${encodeURIComponent(credentials.password)}` +
@@ -16,7 +26,7 @@ export class AuthSessionServerProvider {
       '&submit=Login';
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(SERVER_API_URL + 'api/authentication', data, { headers });
+    return this.http.post<JWTToken>(SERVER_API_URL + 'api/authentication', data, { headers });
   }
 
   logout(): Observable<any> {
@@ -24,7 +34,10 @@ export class AuthSessionServerProvider {
     return this.http.post(SERVER_API_URL + 'api/logout', {}, { observe: 'response' }).pipe(
       map((response: HttpResponse<any>) => {
         // to get a new csrf token call the api
-        this.http.get(SERVER_API_URL + 'api/account').subscribe(() => {}, () => {});
+        this.http.get(SERVER_API_URL + 'api/account').subscribe(
+          () => {},
+          () => {}
+        );
         return response;
       })
     );

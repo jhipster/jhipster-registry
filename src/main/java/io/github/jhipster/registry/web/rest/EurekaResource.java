@@ -3,6 +3,7 @@ package io.github.jhipster.registry.web.rest;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.config.ConfigurationManager;
 import com.netflix.discovery.shared.Application;
+import com.netflix.discovery.shared.Pair;
 import com.netflix.eureka.EurekaServerContext;
 import com.netflix.eureka.EurekaServerContextHolder;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
@@ -26,6 +27,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.stream.Collectors.toMap;
 
 /**
  * Controller for viewing Eureka data.
@@ -76,19 +79,11 @@ public class EurekaResource {
     public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
         Map<String, Map<Long, String>> lastn = new HashMap<>();
         PeerAwareInstanceRegistryImpl registry = (PeerAwareInstanceRegistryImpl) getRegistry();
-        Map<Long, String> canceledMap = new HashMap<>();
-        registry.getLastNCanceledInstances().forEach(
-            canceledInstance -> {
-                canceledMap.put(canceledInstance.first(), canceledInstance.second());
-            }
-        );
+        Map<Long, String> canceledMap = registry.getLastNCanceledInstances()
+            .stream().collect(toMap(Pair::first, Pair::second));
         lastn.put("canceled", canceledMap);
-        Map<Long, String> registeredMap = new HashMap<>();
-        registry.getLastNRegisteredInstances().forEach(
-            registeredInstance -> {
-                registeredMap.put(registeredInstance.first(), registeredInstance.second());
-            }
-        );
+        Map<Long, String> registeredMap = registry.getLastNRegisteredInstances()
+            .stream().collect(toMap(Pair::first, Pair::second));
         lastn.put("registered", registeredMap);
         return new ResponseEntity<>(lastn, HttpStatus.OK);
     }

@@ -1,10 +1,9 @@
-export class Route {
-  constructor(
-    public path: string,
-    public prefix: string,
-    public appName: string,
-    public status: string,
-    public serviceId: string,
-    public serviceInstances: any[]
-  ) {}
+export interface Route {
+  path: string;
+  prefix: string;
+  appName: string;
+  status: InstanceStatus;
+  serviceId: string;
 }
+
+export type InstanceStatus = 'UP' | 'DOWN' | 'STARTING' | 'OUT_OF_SERVICE' | 'UNKNOWN';

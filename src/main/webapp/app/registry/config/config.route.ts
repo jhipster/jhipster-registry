@@ -1,9 +1,9 @@
 import { Route } from '@angular/router';
-import { JhiConfigComponent } from './config.component';
+import { ConfigComponent } from './config.component';
 
 export const configRoute: Route = {
   path: '',
-  component: JhiConfigComponent,
+  component: ConfigComponent,
   data: {
     pageTitle: 'Configuration'
   }

@@ -4,18 +4,18 @@ import { Observable } from 'rxjs';
 import { Route } from 'app/shared/routes/route.model';
 
 @Injectable({ providedIn: 'root' })
-export class JhiLogfileService {
+export class LogfileService {
   constructor(private http: HttpClient) {}
 
   // get the Registry's logfile
-  getLogfile(): Observable<any> {
-    return this.http.get('management/logfile', { responseType: 'text' });
+  getLogfile(): Observable<string> {
+    return this.http.get<string>('management/logfile');
   }
 
   // get the instance's logfile
-  getInstanceLogfile(instance: Route): Observable<any> {
+  getInstanceLogfile(instance: Route | undefined): Observable<string> {
     if (instance && instance.prefix && instance.prefix.length > 0) {
-      return this.http.get(instance.prefix + '/management/logfile', { responseType: 'text' });
+      return this.http.get<string>(instance.prefix + '/management/logfile');
     }
     return this.getLogfile();
   }

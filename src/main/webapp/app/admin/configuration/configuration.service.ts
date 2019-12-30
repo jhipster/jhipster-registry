@@ -1,82 +1,87 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Route } from 'app/shared/routes/route.model';
 
+export interface ConfigProps {
+  contexts: Contexts;
+}
+
+export interface Contexts {
+  [key: string]: Context;
+}
+
+export interface Context {
+  beans: Beans;
+  parentId?: any;
+}
+
+export interface Beans {
+  [key: string]: Bean;
+}
+
+export interface Bean {
+  prefix: string;
+  properties: any;
+}
+
+export interface Env {
+  activeProfiles?: string[];
+  propertySources: PropertySource[];
+}
+
+export interface PropertySource {
+  name: string;
+  properties: Properties;
+}
+
+export interface Properties {
+  [key: string]: Property;
+}
+
+export interface Property {
+  value: string;
+  origin?: string;
+}
+
 @Injectable({ providedIn: 'root' })
-export class JhiConfigurationService {
+export class ConfigurationService {
   constructor(private http: HttpClient) {}
 
-  getConfigs(prefix: String = ''): Observable<any> {
-    return this.http.get(SERVER_API_URL + prefix + 'management/configprops', { observe: 'response' }).pipe(
-      map((res: HttpResponse<any>) => {
-        const properties: any[] = [];
-        const propertiesObject = this.getConfigPropertiesObjects(res.body);
-        for (const key in propertiesObject) {
-          if (Object.prototype.hasOwnProperty.call(propertiesObject, key)) {
-            properties.push(propertiesObject[key]);
-          }
-        }
+  getBeans(prefix: String = ''): Observable<Bean[]> {
+    return this.http.get<ConfigProps>((SERVER_API_URL as string) + prefix + 'management/configprops').pipe(
+      map(configProps =>
+        Object.values(
+          Object.values(configProps.contexts)
+            .map(context => context.beans)
+            .reduce((allBeans: Beans, contextBeans: Beans) => ({ ...allBeans, ...contextBeans }))
+        )
+      )
+    );
+  }
 
-        return properties.sort((propertyA, propertyB) => {
-          return propertyA.prefix === propertyB.prefix ? 0 : propertyA.prefix < propertyB.prefix ? -1 : 1;
-        });
+  getInstanceBeans(instance: Route | undefined): Observable<Bean[]> {
+    if (instance && instance.prefix && instance.prefix.length > 0) {
+      return this.getBeans(instance.prefix + '/');
+    }
+    return this.getBeans();
+  }
+
+  getPropertySources(prefix: String = ''): Observable<PropertySource[]> {
+    return this.http.get<Env>((SERVER_API_URL as string) + prefix + 'management/env').pipe(
+      map(env => {
+        return env.propertySources;
       })
     );
   }
 
-  getConfigPropertiesObjects(res: Record<string, any>) {
-    // This code is for Spring Boot 2
-    if (res['contexts'] !== undefined) {
-      for (const key in res['contexts']) {
-        // If the key is not bootstrap, it will be the ApplicationContext Id
-        // For default app, it is baseName
-        // For microservice, it is baseName-1
-        if (!key.startsWith('bootstrap')) {
-          return res['contexts'][key]['beans'];
-        }
-      }
-    }
-    // by default, use the default ApplicationContext Id
-    return res['contexts']['JHipsterRegistry']['beans'];
-  }
-
-  getInstanceConfigs(instance: Route): Observable<any> {
+  getInstancePropertySources(instance: Route | undefined): Observable<PropertySource[]> {
     if (instance && instance.prefix && instance.prefix.length > 0) {
-      return this.getConfigs(instance.prefix + '/');
+      return this.getPropertySources(instance.prefix + '/');
     }
-    return this.getConfigs();
-  }
-
-  getEnv(prefix: String = ''): Observable<any> {
-    return this.http.get(SERVER_API_URL + prefix + 'management/env', { observe: 'response' }).pipe(
-      map((res: HttpResponse<any>) => {
-        const properties: any = {};
-        const propertySources = res.body['propertySources'];
-
-        for (const propertyObject of propertySources) {
-          const name = propertyObject['name'];
-          const detailProperties = propertyObject['properties'];
-          const vals: any[] = [];
-          for (const keyDetail in detailProperties) {
-            if (Object.prototype.hasOwnProperty.call(detailProperties, keyDetail)) {
-              vals.push({ key: keyDetail, val: detailProperties[keyDetail]['value'] });
-            }
-          }
-          properties[name] = vals;
-        }
-        return properties;
-      })
-    );
-  }
-
-  getInstanceEnv(instance: Route): Observable<any> {
-    if (instance && instance.prefix && instance.prefix.length > 0) {
-      return this.getEnv(instance.prefix + '/');
-    }
-    return this.getEnv();
+    return this.getPropertySources();
   }
 }

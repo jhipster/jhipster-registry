@@ -1,19 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { JhiHealthService } from 'app/admin/health/health.service';
+import { Health, HealthService, HealthStatus } from 'app/admin/health/health.service';
 
 import { VERSION } from 'app/app.constants';
-import { EurekaStatusService } from './eureka.status.service';
+import { EurekaStatusKey, EurekaStatusService } from './eureka.status.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
-import { JhiApplicationsService } from 'app/registry/applications/applications.service';
-import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
+import { ApplicationsService, Instance } from 'app/registry/applications/applications.service';
+import { RefreshService } from 'app/shared/refresh/refresh.service';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -22,15 +21,16 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['home.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  account: Account;
-  modalRef: NgbModalRef;
-  updatingHealth: boolean;
-  healthData: any;
-  appInstances: any;
-  status: any;
-  version: string;
+  account?: Account | null;
+  updatingHealth?: boolean;
+  health?: Health;
+  appInstances: Array<Instance> = [];
+  status?: {
+    [key in EurekaStatusKey]?: any;
+  };
+  version: string = VERSION ? 'v' + VERSION : '';
   unsubscribe$ = new Subject();
-  subscription: Subscription;
+  subscription?: Subscription;
 
   constructor(
     private accountService: AccountService,
@@ -38,20 +38,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     private loginOAuth2Service: LoginOAuth2Service,
     private eventManager: JhiEventManager,
     private eurekaStatusService: EurekaStatusService,
-    private applicationsService: JhiApplicationsService,
-    private healthService: JhiHealthService,
+    private applicationsService: ApplicationsService,
+    private healthService: HealthService,
     private profileService: ProfileService,
-    private refreshService: JhiRefreshService
-  ) {
-    this.version = VERSION ? 'v' + VERSION : '';
-    this.appInstances = [];
-  }
+    private refreshService: RefreshService
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.accountService
       .identity()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((account: Account) => {
+      .subscribe(account => {
         this.account = account;
         if (!account || !this.isAuthenticated()) {
           this.login();
@@ -63,12 +60,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.registerAuthenticationSuccess();
   }
 
-  registerAuthenticationSuccess() {
+  registerAuthenticationSuccess(): void {
     this.subscription = this.eventManager.subscribe('authenticationSuccess', () => {
       this.accountService
         .identity()
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(account => {
+        .subscribe((account: Account | null) => {
           this.account = account;
           this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.populateDashboard());
           this.populateDashboard();
@@ -76,24 +73,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  isAuthenticated() {
+  isAuthenticated(): boolean {
     return this.accountService.isAuthenticated();
   }
 
-  login() {
+  login(): void {
     this.profileService
       .getProfileInfo()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(profileInfo => {
-        if (profileInfo.activeProfiles.includes('oauth2')) {
+        if (profileInfo.activeProfiles!.includes('oauth2')) {
           this.loginOAuth2Service.login();
         } else {
-          this.modalRef = this.loginModalService.open();
+          this.loginModalService.open();
         }
       });
   }
 
-  populateDashboard() {
+  populateDashboard(): void {
     this.eurekaStatusService
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))
@@ -102,40 +99,32 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.applicationsService
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
+      .subscribe(applications => {
         this.appInstances = [];
-        for (const app of data.applications) {
-          for (const inst of app.instances) {
-            inst.name = app.name;
-            this.appInstances.push(inst);
-          }
-        }
+        applications.forEach(application =>
+          application.instances.forEach(instance => {
+            instance.name = application.name;
+            this.appInstances.push(instance);
+          })
+        );
       });
 
     this.healthService
       .checkHealth()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
-        response => {
-          this.healthData = this.healthService.transformHealthData(response);
+        health => {
+          this.health = health;
           this.updatingHealth = false;
         },
-        response => {
-          this.healthData = this.healthService.transformHealthData(response.data);
+        health => {
+          this.health = health;
           this.updatingHealth = false;
         }
       );
   }
 
-  baseName(name: string) {
-    return this.healthService.getBaseName(name);
-  }
-
-  subSystemName(name: string) {
-    this.healthService.getSubSystemName(name);
-  }
-
-  getBadgeClass(statusState) {
+  getBadgeClass(statusState: HealthStatus): string {
     if (statusState === 'UP') {
       return 'badge-success';
     } else {
@@ -143,12 +132,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // prevent memory leak when component destroyed
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription!.unsubscribe();
   }
 }
