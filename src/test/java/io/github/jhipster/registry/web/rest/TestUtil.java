@@ -24,7 +24,7 @@ public final class TestUtil {
     private static final ObjectMapper mapper = createObjectMapper();
 
     /** MediaType for JSON UTF8 */
-    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON_UTF8;
+    public static final MediaType APPLICATION_JSON = MediaType.APPLICATION_JSON;
 
     private static ObjectMapper createObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
