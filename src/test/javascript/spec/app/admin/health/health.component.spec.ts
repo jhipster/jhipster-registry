@@ -54,8 +54,8 @@ describe('Component Tests', () => {
 
       it('should flatten health data with no subsystems', () => {
         const data = {
-          details: {
-            status: 'UP',
+          status: 'UP',
+          components: {
             db: {
               status: 'UP',
               database: 'H2',
@@ -87,8 +87,8 @@ describe('Component Tests', () => {
 
       it('should flatten health data with subsystems at level 1, main system has no additional information', () => {
         const data = {
-          details: {
-            status: 'UP',
+          status: 'UP',
+          components: {
             db: {
               status: 'UP',
               database: 'H2',
@@ -147,8 +147,8 @@ describe('Component Tests', () => {
 
       it('should flatten health data with subsystems at level 1, main system has additional information', () => {
         const data = {
-          details: {
-            status: 'UP',
+          status: 'UP',
+          components: {
             db: {
               status: 'UP',
               database: 'H2',
@@ -215,8 +215,8 @@ describe('Component Tests', () => {
 
       it('should flatten health data with subsystems at level 1, main system has additional error', () => {
         const data = {
-          details: {
-            status: 'UP',
+          status: 'UP',
+          components: {
             db: {
               status: 'UP',
               database: 'H2',
