@@ -35,6 +35,17 @@
     "dtoSuffix": "DTO",
     "otherModules": [],
     "blueprints": [],
-    "creationTimestamp": 1576848019661
+    "creationTimestamp": 1576848019661,
+    "gcpProjectId": "jhipsterproject",
+    "gcpCloudSqlInstanceName": "jhipsterproject:us-central1:jhipster",
+    "gcpCloudSqlUserName": "root",
+    "gcpCloudSqlDatabaseName": "jhipsterregistry",
+    "gaeServiceName": "default",
+    "gaeLocation": "us-central",
+    "gaeInstanceClass": "F2",
+    "gaeScalingType": "automatic",
+    "gaeMinInstances": "1",
+    "gaeMaxInstances": "2",
+    "gaeCloudSQLInstanceNeeded": "Y"
   }
 }
