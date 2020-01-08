@@ -40,7 +40,7 @@
     "gcpCloudSqlInstanceName": "jhipsterproject:us-central1:jhipster",
     "gcpCloudSqlUserName": "root",
     "gcpCloudSqlDatabaseName": "jhipsterregistry",
-    "gaeServiceName": "default",
+    "gaeServiceName": "jhipster-registry",
     "gaeLocation": "us-central",
     "gaeInstanceClass": "F2",
     "gaeScalingType": "automatic",
