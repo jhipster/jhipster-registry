@@ -1,54 +1,33 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { CookieService } from 'ngx-cookie';
-
-import {
-    JHipsterRegistrySharedLibsModule,
-    JHipsterRegistrySharedCommonModule,
-    CSRFService,
-    AuthServerProvider,
-    AuthSessionServerProvider,
-    AccountService,
-    UserService,
-    StateStorageService,
-    LoginService,
-    LoginModalService,
-    LoginOAuth2Service,
-    Principal,
-    HasAnyAuthorityDirective,
-    JhiLoginModalComponent,
-    JhiRoutesService,
-    JhiRefreshService
-} from './';
+import { NgModule } from '@angular/core';
+import { JHipsterRegistrySharedLibsModule } from './shared-libs.module';
+import { JhiAlertComponent } from './alert/alert.component';
+import { JhiAlertErrorComponent } from './alert/alert-error.component';
+import { JhiLoginModalComponent } from './login/login.component';
+import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
+import { JhiRouteSelectorComponent } from 'app/shared/routes/route-selector.component';
+import { JhiRefreshSelectorComponent } from 'app/shared/refresh/refresh-selector.component';
+import { GroupByPipe } from 'app/shared/pipe/group-by.pipe';
 
 @NgModule({
-    imports: [JHipsterRegistrySharedLibsModule, JHipsterRegistrySharedCommonModule],
-    declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
-    providers: [
-        JhiRoutesService,
-        JhiRefreshService,
-        AuthServerProvider,
-        AuthSessionServerProvider,
-        CookieService,
-        LoginService,
-        LoginModalService,
-        LoginOAuth2Service,
-        AccountService,
-        StateStorageService,
-        Principal,
-        CSRFService,
-        AuthServerProvider,
-        UserService,
-        DatePipe
-    ],
-    entryComponents: [JhiLoginModalComponent],
-    exports: [JHipsterRegistrySharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective, DatePipe],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [JHipsterRegistrySharedLibsModule],
+  declarations: [
+    JhiAlertComponent,
+    JhiAlertErrorComponent,
+    JhiLoginModalComponent,
+    HasAnyAuthorityDirective,
+    JhiRouteSelectorComponent,
+    JhiRefreshSelectorComponent,
+    GroupByPipe
+  ],
+  entryComponents: [JhiLoginModalComponent],
+  exports: [
+    JHipsterRegistrySharedLibsModule,
+    JhiAlertComponent,
+    JhiAlertErrorComponent,
+    JhiLoginModalComponent,
+    HasAnyAuthorityDirective,
+    JhiRouteSelectorComponent,
+    JhiRefreshSelectorComponent
+  ]
 })
-export class JHipsterRegistrySharedModule {
-    static forRoot() {
-        return {
-            ngModule: JHipsterRegistrySharedModule
-        };
-    }
-}
+export class JHipsterRegistrySharedModule {}

@@ -1,70 +1,106 @@
 package io.github.jhipster.registry.web.rest.errors;
 
-import java.util.List;
+import io.github.jhipster.web.util.HeaderUtil;
 
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.zalando.problem.DefaultProblem;
+import org.zalando.problem.Problem;
+import org.zalando.problem.ProblemBuilder;
+import org.zalando.problem.Status;
+import org.zalando.problem.spring.web.advice.ProblemHandling;
+import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
+import org.zalando.problem.violations.ConstraintViolationProblem;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
+ * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807).
  */
 @ControllerAdvice
-public class ExceptionTranslator {
+public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ErrorVM processValidationError(MethodArgumentNotValidException ex) {
-        BindingResult result = ex.getBindingResult();
-        List<FieldError> fieldErrors = result.getFieldErrors();
-        ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
-        for (FieldError fieldError : fieldErrors) {
-            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
+    private static final String FIELD_ERRORS_KEY = "fieldErrors";
+    private static final String MESSAGE_KEY = "message";
+    private static final String PATH_KEY = "path";
+    private static final String VIOLATIONS_KEY = "violations";
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
+
+    /**
+     * Post-process the Problem payload to add the message key for the front-end if needed.
+     */
+    @Override
+    public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity, NativeWebRequest request) {
+        if (entity == null) {
+            return entity;
         }
-        return dto;
-    }
+        Problem problem = entity.getBody();
+        if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
+            return entity;
+        }
+        ProblemBuilder builder = Problem.builder()
+            .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
+            .withStatus(problem.getStatus())
+            .withTitle(problem.getTitle())
+            .with(PATH_KEY, request.getNativeRequest(HttpServletRequest.class).getRequestURI());
 
-    @ExceptionHandler(CustomParameterizedException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ParameterizedErrorVM processParameterizedValidationError(CustomParameterizedException ex) {
-        return ex.getErrorVM();
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ResponseBody
-    public ErrorVM processAccessDeniedException(AccessDeniedException e) {
-        return new ErrorVM(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
-    }
-
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorVM processMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        return new ErrorVM(ErrorConstants.ERR_METHOD_NOT_SUPPORTED, exception.getMessage());
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorVM> processRuntimeException(Exception ex) {
-        BodyBuilder builder;
-        ErrorVM errorVM;
-        ResponseStatus responseStatus = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
-        if (responseStatus != null) {
-            builder = ResponseEntity.status(responseStatus.value());
-            errorVM = new ErrorVM("error." + responseStatus.value().value(), responseStatus.reason());
+        if (problem instanceof ConstraintViolationProblem) {
+            builder
+                .with(VIOLATIONS_KEY, ((ConstraintViolationProblem) problem).getViolations())
+                .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION);
         } else {
-            builder = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
-            errorVM = new ErrorVM(ErrorConstants.ERR_INTERNAL_SERVER_ERROR, "Internal server error");
+            builder
+                .withCause(((DefaultProblem) problem).getCause())
+                .withDetail(problem.getDetail())
+                .withInstance(problem.getInstance());
+            problem.getParameters().forEach(builder::with);
+            if (!problem.getParameters().containsKey(MESSAGE_KEY) && problem.getStatus() != null) {
+                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode());
+            }
         }
-        return builder.body(errorVM);
+        return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
+    }
+
+    @Override
+    public ResponseEntity<Problem> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @Nonnull NativeWebRequest request) {
+        BindingResult result = ex.getBindingResult();
+        List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
+            .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("DTO$", ""), f.getField(), f.getCode()))
+            .collect(Collectors.toList());
+
+        Problem problem = Problem.builder()
+            .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
+            .withTitle("Method argument not valid")
+            .withStatus(defaultConstraintViolationStatus())
+            .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION)
+            .with(FIELD_ERRORS_KEY, fieldErrors)
+            .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleNoSuchElementException(NoSuchElementException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withStatus(Status.NOT_FOUND)
+            .with(MESSAGE_KEY, ErrorConstants.ENTITY_NOT_FOUND_TYPE)
+            .build();
+        return create(ex, problem, request);
+    }
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
+        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, false, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
 }

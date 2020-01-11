@@ -1,7 +1,10 @@
 package io.github.jhipster.registry.config;
 
+import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.registry.security.AuthoritiesConstants;
 import io.github.jhipster.registry.security.oauth2.AudienceValidator;
+import io.github.jhipster.registry.security.oauth2.AuthorizationHeaderFilter;
+import io.github.jhipster.registry.security.oauth2.AuthorizationHeaderUtil;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -37,8 +40,15 @@ import static java.util.stream.Collectors.toList;
 @Profile(Constants.PROFILE_OAUTH2)
 public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
-    private String issuerUri;
+    private final String issuerUri;
+
+    private final JHipsterProperties jHipsterProperties;
+
+    public OAuth2SecurityConfiguration(@Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}") String issuerUri,
+                                       JHipsterProperties jHipsterProperties) {
+        this.issuerUri = issuerUri;
+        this.jHipsterProperties = jHipsterProperties;
+    }
 
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager(
@@ -60,7 +70,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring()
             .antMatchers("/app/**/*.{js,html}")
             .antMatchers("/swagger-ui/**")
@@ -86,9 +96,8 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/services/**").authenticated()
             .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
-            .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .and()
@@ -129,12 +138,17 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
         NimbusJwtDecoderJwkSupport jwtDecoder = (NimbusJwtDecoderJwkSupport)
             JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
-        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator();
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 
         jwtDecoder.setJwtValidator(withAudience);
 
         return jwtDecoder;
+    }
+
+    @Bean
+    public AuthorizationHeaderFilter authHeaderFilter(AuthorizationHeaderUtil headerUtil) {
+        return new AuthorizationHeaderFilter(headerUtil);
     }
 }
