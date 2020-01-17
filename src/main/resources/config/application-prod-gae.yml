@@ -43,6 +43,10 @@ jhipster:
     exposed-headers: 'Authorization,Link,X-Total-Count'
     allow-credentials: true
     max-age: 1800
+eureka:
+  client:
+    service-url:
+      defaultZone: https://admin:${spring.security.user.password:admin}@jhipsterproject.appspot.com/eureka/
 # Property to disable logging in GAE since we cannot write to GAE file system
 logging:
   file:
