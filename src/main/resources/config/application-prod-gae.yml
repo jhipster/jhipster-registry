@@ -1,0 +1,52 @@
+# ===================================================================
+# Spring Boot configuration for the "gae" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+server:
+  port: ${PORT}
+management:
+  health:
+    diskspace:
+      enabled: false
+# ===================================================================
+# JHipster Sample Spring Cloud Config.
+# ===================================================================
+
+# Property used on app startup to check the config server status
+configserver:
+  name: JHipster Registry config server
+  status: Connected to the JHipster Registry config server!
+
+# Default JWT secret token (to be changed in production!)
+jhipster:
+  security:
+    authentication:
+      jwt:
+        # It is recommended to encrypt the secret key in Base64, using the `base64-secret` property.
+        # For compabitibily issues with applications generated with older JHipster releases,
+        # we use the non Base64-encoded `secret` property here.
+        # secret: my-secret-key-which-should-be-changed-in-production-and-be-base64-encoded
+        # The `base64-secret` property is recommended if you use JHipster v5.3.0+
+        # (you can type `echo 'secret-key'|base64` on your command line)
+        base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
+  cors:
+    allowed-origins: 'https://jhipsterproject.appspot.com'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: 'Authorization,Link,X-Total-Count'
+    allow-credentials: true
+    max-age: 1800
+eureka:
+  client:
+    service-url:
+      defaultZone: https://admin:${spring.security.user.password:admin}@jhipsterproject.appspot.com/eureka/
+# Property to disable logging in GAE since we cannot write to GAE file system
+logging:
+  file:
