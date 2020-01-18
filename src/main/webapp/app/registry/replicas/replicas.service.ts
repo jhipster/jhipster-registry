@@ -8,6 +8,6 @@ export class JhiReplicasService {
   constructor(private http: HttpClient) {}
 
   findAll(): Observable<any> {
-    return this.http.get('api/eureka/replicas').pipe(map((res: HttpResponse<any>) => res.body));
+    return this.http.get('api/eureka/replicas', { observe: 'response' }).pipe(map((res: HttpResponse<any>) => res.body));
   }
 }
