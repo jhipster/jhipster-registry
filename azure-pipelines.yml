@@ -41,6 +41,7 @@ steps:
   - script: npm install
     displayName: 'BUILD: Install dependencies'
   - script: |
+      ./mvnw -version
       ./mvnw -ntp verify
     displayName: 'TEST: Back'
   - script: |
