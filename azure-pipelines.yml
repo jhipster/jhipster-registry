@@ -26,12 +26,11 @@ steps:
       versionSpec: '12.14.0'
     displayName: 'TOOLS: Install Node.js'
   - script: |
-      echo '*** Using AdoptOpenJDK 11'
-      wget -q -O - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
-      sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
+      echo '*** Using OpenJDK 11'
+      sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get update
-      sudo apt-get install -y adoptopenjdk-11-hotspot
-      sudo update-java-alternatives -s adoptopenjdk-11-hotspot-amd64
+      sudo apt-get install -y openjdk-11-jdk
+      sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
       JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
       java -version
       javac -version
