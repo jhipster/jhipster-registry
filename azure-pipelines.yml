@@ -32,7 +32,10 @@ steps:
       sudo apt-get update
       sudo apt-get install -y adoptopenjdk-11-hotspot
       sudo update-java-alternatives -s adoptopenjdk-11-hotspot-amd64
+      JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
       java -version
+      javac -version
+      echo "JAVA_HOME=$JAVA_HOME"
     displayName: 'TOOLS: Install AdoptOpenJDK'
   - script: npm install -g npm
     displayName: 'TOOLS: Update NPM'
