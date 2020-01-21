@@ -32,7 +32,16 @@ import {
   faTrashAlt,
   faAsterisk,
   faTasks,
-  faHome
+  faHome,
+  faPodcast,
+  faHourglass,
+  faCloudDownloadAlt,
+  faCogs,
+  faKey,
+  faFileAlt,
+  faInfoCircle,
+  faArrowCircleDown,
+  faArrowCircleUp
 } from '@fortawesome/free-solid-svg-icons';
 
 export const fontAwesomeIcons = [
@@ -69,5 +78,14 @@ export const fontAwesomeIcons = [
   faCalendarAlt,
   faSearch,
   faTrashAlt,
-  faAsterisk
+  faAsterisk,
+  faPodcast,
+  faHourglass,
+  faCloudDownloadAlt,
+  faCogs,
+  faKey,
+  faFileAlt,
+  faInfoCircle,
+  faArrowCircleDown,
+  faArrowCircleUp
 ];

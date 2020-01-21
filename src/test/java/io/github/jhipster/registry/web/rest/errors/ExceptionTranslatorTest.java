@@ -41,7 +41,7 @@ public class ExceptionTranslatorTest {
             .setControllerAdvice(new ExceptionTranslator())
             .build();
         MvcResult res = jwtMock.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL)
             .content("{\"username\":\"fakeUsernameTooLongfakeUsernameTooLongfakeUsernameTooLongfakeUsernameTooLong" +
                 "\",\"password\":\"fakePassword\",\"rememberMe\":false}"))
