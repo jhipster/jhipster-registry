@@ -5,13 +5,19 @@
     </div>
 
     <h3>JVM Metrics</h3>
+
     <div class="row" *ngIf="metrics && !updatingMetrics">
         <jhi-jvm-memory
             class="col-md-4"
             [updating]="updatingMetrics"
             [jvmMemoryMetrics]="metrics.jvm">
         </jhi-jvm-memory>
-        <jhi-jvm-threads class="col-md-4" [threadData]="threads"></jhi-jvm-threads>
+
+        <jhi-jvm-threads
+            class="col-md-4"
+            [threadData]="threads">
+        </jhi-jvm-threads>
+
         <jhi-metrics-system
             class="col-md-4"
             [updating]="updatingMetrics"
@@ -21,7 +27,11 @@
 
     <div *ngIf="metrics && metricsKeyExists('garbageCollector')">
         <h3>Garbage collector statistics</h3>
-        <jhi-metrics-garbagecollector [updating]="updatingMetrics" [garbageCollectorMetrics]="metrics.garbageCollector"></jhi-metrics-garbagecollector>
+
+        <jhi-metrics-garbagecollector
+            [updating]="updatingMetrics"
+            [garbageCollectorMetrics]="metrics.garbageCollector">
+        </jhi-metrics-garbagecollector>
     </div>
 
     <div class="well well-lg" *ngIf="updatingMetrics">Updating...</div>
