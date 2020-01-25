@@ -6,13 +6,13 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './error.component.html'
 })
 export class ErrorComponent implements OnInit {
-  errorMessage: string;
-  error403: boolean;
-  error404: boolean;
+  errorMessage?: string;
+  error403?: boolean;
+  error404?: boolean;
 
   constructor(private route: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.data.subscribe(routeData => {
       if (routeData.error403) {
         this.error403 = routeData.error403;

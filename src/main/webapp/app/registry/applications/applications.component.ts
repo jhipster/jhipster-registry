@@ -1,8 +1,6 @@
-/* tslint:disable:no-access-missing-member */
-// TODO lint disabled as the filter pipe used in template seems to trigger this
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { JhiApplicationsService } from './applications.service';
-import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
+import { Application, ApplicationsService, Instance, InstanceStatus } from './applications.service';
+import { RefreshService } from 'app/shared/refresh/refresh.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -11,80 +9,68 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './applications.component.html',
   styleUrls: ['applications.component.scss']
 })
-export class JhiApplicationsComponent implements OnInit, OnDestroy {
-  application: any;
-  data: any;
-  instances: any;
-  activeInstance: any;
+export class ApplicationsComponent implements OnInit, OnDestroy {
+  activeApplication?: Application | null;
+  applications?: Array<Application>;
+  instances?: Array<Instance>;
   orderProp: string;
   private unsubscribe$ = new Subject();
 
-  constructor(private applicationsService: JhiApplicationsService, private refreshService: JhiRefreshService) {
+  constructor(private applicationsService: ApplicationsService, private refreshService: RefreshService) {
     this.orderProp = 'name';
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
     this.refresh();
   }
 
-  refresh() {
+  refresh(): void {
     this.applicationsService
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        this.data = data;
-        if (this.application) {
-          this.show(this.application);
-        } else if (data.applications.length > 0) {
-          this.show(data.applications[0].name);
+      .subscribe(applications => {
+        this.applications = applications;
+        if (this.activeApplication) {
+          this.selectActiveApplication(this.activeApplication.name);
+        } else if (applications.length > 0) {
+          this.selectActiveApplication(applications[0].name);
         }
       });
   }
 
-  show(app) {
-    this.application = app;
-    let found = false;
-    for (const dataApp of this.data.applications) {
-      dataApp.active = '';
-      if (dataApp.name === this.application) {
-        this.instances = dataApp.instances;
-        dataApp.active = 'active';
-        found = true;
+  selectActiveApplication(applicationName: string): void {
+    this.applications!.forEach(application => {
+      application.active = '';
+      if (application.name === applicationName) {
+        this.activeApplication = application;
+        this.instances = application.instances;
+        application.active = 'active';
       }
-    }
-    if (!found) {
-      this.application = false;
-    }
+    });
   }
 
-  countInstances(app) {
-    let count = 0;
-    for (const instance of app) {
-      if (instance.status === 'UP') {
-        count++;
-      }
-    }
-    return count;
+  checkInstanceLength(instances: Array<Instance>): boolean {
+    return this.countActiveInstances(instances) < instances.length;
   }
 
-  checkInstanceLength(app) {
-    return this.countInstances(app) < app.length;
+  displayCountInstances(instances: Array<Instance>): string {
+    return this.countActiveInstances(instances) + '/' + instances.length;
   }
 
-  displayCountInstances(app) {
-    return this.countInstances(app) + '/' + app.length;
+  countActiveInstances(instances: Array<Instance>): number {
+    return instances.filter(instance => instance.status === 'UP').length;
   }
 
-  getBadgeClass(statusState) {
-    if (statusState && statusState === 'UP') {
+  getBadgeClass(status: InstanceStatus): string {
+    if (status && status === 'UP') {
       return 'badge-success';
     } else {
       return 'badge-danger';
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // prevent memory leak when component destroyed
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

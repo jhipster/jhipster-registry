@@ -2,68 +2,66 @@ import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angu
 import { of } from 'rxjs';
 
 import { JHipsterRegistryTestModule } from '../../../test.module';
-import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
-import { JhiApplicationsComponent } from 'app/registry/applications/applications.component';
-import { JhiApplicationsService } from 'app/registry/applications/applications.service';
+import { RefreshService } from 'app/shared/refresh/refresh.service';
+import { ApplicationsComponent } from 'app/registry/applications/applications.component';
+import { Application, ApplicationsService } from 'app/registry/applications/applications.service';
 
 describe('Component Tests', () => {
   describe('ApplicationsComponent', () => {
-    let comp: JhiApplicationsComponent;
-    let fixture: ComponentFixture<JhiApplicationsComponent>;
+    let comp: ApplicationsComponent;
+    let fixture: ComponentFixture<ApplicationsComponent>;
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [JHipsterRegistryTestModule],
-        declarations: [JhiApplicationsComponent],
-        providers: [JhiApplicationsService, JhiRefreshService]
+        declarations: [ApplicationsComponent],
+        providers: [ApplicationsService, RefreshService]
       })
-        .overrideTemplate(JhiApplicationsComponent, '')
+        .overrideTemplate(ApplicationsComponent, '')
         .compileComponents();
     }));
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(JhiApplicationsComponent);
+      fixture = TestBed.createComponent(ApplicationsComponent);
       comp = fixture.componentInstance;
     });
 
     it('refresh data', fakeAsync(
-      inject([JhiApplicationsService], (service: JhiApplicationsService) => {
-        const response = {
-          applications: [
-            {
-              name: 'app1',
-              instances: [
-                {
-                  instanceId: 1,
-                  status: 'UP',
-                  homePageUrl: 'home'
-                }
-              ]
-            },
-            {
-              name: 'app2',
-              instances: [
-                {
-                  instanceId: 2,
-                  status: 'UP',
-                  homePageUrl: 'home'
-                },
-                {
-                  instanceId: 3,
-                  status: 'UP',
-                  homePageUrl: 'home'
-                }
-              ]
-            }
-          ]
-        };
-        spyOn(service, 'findAll').and.returnValue(of(response));
+      inject([ApplicationsService], (service: ApplicationsService) => {
+        const applications: Array<Application> = [
+          {
+            name: 'app1',
+            instances: [
+              {
+                instanceId: 1,
+                status: 'UP',
+                homePageUrl: 'home'
+              }
+            ]
+          },
+          {
+            name: 'app2',
+            instances: [
+              {
+                instanceId: 2,
+                status: 'UP',
+                homePageUrl: 'home'
+              },
+              {
+                instanceId: 3,
+                status: 'UP',
+                homePageUrl: 'home'
+              }
+            ]
+          }
+        ];
+        spyOn(service, 'findAll').and.returnValue(of(applications));
 
         comp.ngOnInit();
         tick();
 
         expect(service.findAll).toHaveBeenCalled();
-        expect(comp.data).toEqual(response);
+        expect(comp.instances).toEqual(applications[0].instances);
       })
     ));
   });

@@ -147,9 +147,9 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             debug: false
         }),
         new WorkboxPlugin.GenerateSW({
-          clientsClaim: true,
-          skipWaiting: true,
-          exclude: [/swagger-ui/]
+            clientsClaim: true,
+            skipWaiting: true,
+            exclude: [/swagger-ui/]
         })
     ],
     mode: 'production'

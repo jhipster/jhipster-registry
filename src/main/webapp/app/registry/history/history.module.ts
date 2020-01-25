@@ -3,10 +3,10 @@ import { RouterModule } from '@angular/router';
 import { JHipsterRegistrySharedModule } from 'app/shared/shared.module';
 
 import { historyRoute } from './history.route';
-import { JhiHistoryComponent } from './history.component';
+import { HistoryComponent } from './history.component';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([historyRoute])],
-  declarations: [JhiHistoryComponent]
+  declarations: [HistoryComponent]
 })
 export class HistoryModule {}

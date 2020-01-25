@@ -8,8 +8,8 @@ export class MockAccountService extends SpyObject {
   getSpy: Spy;
   saveSpy: Spy;
   fakeResponse: any;
-  identitySpy: Spy;
-  getAuthenticationStateSpy: Spy;
+  identitySpy?: Spy;
+  getAuthenticationStateSpy?: Spy;
 
   constructor() {
     super(AccountService);
@@ -20,7 +20,7 @@ export class MockAccountService extends SpyObject {
     this.setIdentitySpy({});
   }
 
-  subscribe(callback: any) {
+  subscribe(callback: any): void {
     callback(this.fakeResponse);
   }
 

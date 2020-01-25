@@ -1,9 +1,9 @@
 import { Route } from '@angular/router';
-import { JhiReplicasComponent } from './replicas.component';
+import { ReplicasComponent } from './replicas.component';
 
 export const replicasRoute: Route = {
   path: '',
-  component: JhiReplicasComponent,
+  component: ReplicasComponent,
   data: {
     pageTitle: 'Replicas'
   }

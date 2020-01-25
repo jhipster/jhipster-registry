@@ -1,62 +1,55 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { JhiConfigService } from './config.service';
+import { ConfigService } from './config.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
-import { JhiApplicationsService } from 'app/registry/applications/applications.service';
+import { RefreshService } from 'app/shared/refresh/refresh.service';
+import { ApplicationsService } from 'app/registry/applications/applications.service';
 
 @Component({
   selector: 'jhi-config',
   templateUrl: './config.component.html'
 })
-export class JhiConfigComponent implements OnInit, OnDestroy {
-  application: string;
-  profile: string;
-  label: string;
-  activeRegistryProfiles: any;
-  isNative: boolean;
-  configurationSources: Array<any>;
-  configAsYaml: any;
-  configAsProperties: any;
-  configAsJson: any;
-  configAsKeyValuePairs: any;
-  applicationList: Array<string>;
+export class ConfigComponent implements OnInit, OnDestroy {
+  application = 'application';
+  profile = 'prod';
+  label = 'master';
+  activeRegistryProfiles?: string[] = [];
+  isNative = true;
+  configurationSources?: Array<any>;
+  configAsYaml?: string;
+  configAsProperties?: string;
+  configAsJson?: string;
+  configAsKeyValuePairs?: Map<string, string>;
+  applications = ['application'];
   private unsubscribe$ = new Subject();
 
   constructor(
-    private configService: JhiConfigService,
+    private configService: ConfigService,
     private profileService: ProfileService,
-    private applicationsService: JhiApplicationsService,
-    private refreshService: JhiRefreshService
-  ) {
-    this.application = 'application';
-    this.profile = 'prod';
-    this.label = 'master';
-    this.activeRegistryProfiles = [];
-    this.isNative = true;
-    this.applicationList = ['application'];
-  }
+    private applicationsService: ApplicationsService,
+    private refreshService: RefreshService
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.load();
     this.refresh();
   }
 
-  load() {
+  load(): void {
     this.profileService
       .getProfileInfo()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(response => {
         this.activeRegistryProfiles = response.activeProfiles;
-        this.isNative = this.activeRegistryProfiles.includes('native');
+        this.isNative = this.activeRegistryProfiles!.includes('native');
         this.configurationSources = response.configurationSources;
       });
 
     this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
   }
 
-  refresh() {
+  refresh(): void {
     this.configService
       .getConfigAsYaml(this.application, this.profile, this.label)
       .pipe(takeUntil(this.unsubscribe$))
@@ -76,10 +69,10 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
         response => {
           this.configAsProperties = response;
 
-          const keyValueArray = [];
+          const keyValueArray: Map<string, string> = new Map();
           this.configAsProperties.split('\n').forEach(property => {
-            const keyValueSplit = property.split(': ');
-            keyValueArray.push({ key: keyValueSplit[0], value: keyValueSplit[1] });
+            const keyValueSplit: string[] = property.split(': ');
+            keyValueArray.set(keyValueSplit[0], keyValueSplit[1]);
           });
           this.configAsKeyValuePairs = keyValueArray;
         },
@@ -96,17 +89,17 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
           this.configAsJson = response;
         },
         () => {
-          this.configAsJson = {};
+          this.configAsJson = '';
         }
       );
 
     this.applicationsService
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        if (data && data.applications) {
-          this.applicationList = ['application'];
-          data.applications.forEach(application => {
+      .subscribe(applications => {
+        if (applications) {
+          this.applications = ['application'];
+          applications.forEach(application => {
             const instanceId = application.instances[0].instanceId;
             let applicationName;
             if (instanceId.indexOf(':') === -1) {
@@ -114,17 +107,17 @@ export class JhiConfigComponent implements OnInit, OnDestroy {
             } else {
               applicationName = instanceId.substr(0, instanceId.indexOf(':'));
             }
-            this.applicationList.push(applicationName);
+            this.applications.push(applicationName);
           });
         }
       });
   }
 
-  getKeys(obj: Object) {
+  getKeys(obj: Object): string[] {
     return Object.keys(obj);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // prevent memory leak when component destroyed
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

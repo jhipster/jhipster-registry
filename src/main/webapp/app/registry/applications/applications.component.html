@@ -4,15 +4,17 @@
         <jhi-refresh-selector class="float-right refresh-left-side"></jhi-refresh-selector>
     </div>
 
-    <div class="apps col-md-5" *ngIf="data">
+    <div class="apps col-md-5" *ngIf="applications">
         <ul class="list-group">
-            <li class="list-group-item {{app.active}}" *ngFor="let app of data.applications | orderBy:orderProp" (click)="show(app.name)">
-                <fa-icon icon="alert" *ngIf="checkInstanceLength(app.instances)"></fa-icon> {{app.name}}
-                <span class="badge badge-pill font-weight-normal badge-info">{{displayCountInstances(app.instances)}}</span>
+            <li class="list-group-item {{application.active}}"
+                *ngFor="let application of applications | orderBy:orderProp"
+                (click)="selectActiveApplication(application.name)">
+                <fa-icon icon="alert" *ngIf="checkInstanceLength(application.instances)"></fa-icon>{{application.name}}
+                <span class="badge badge-pill font-weight-normal badge-info">{{displayCountInstances(application.instances)}}</span>
             </li>
         </ul>
     </div>
-    <div class="row" *ngIf="data">
+    <div class="row" *ngIf="instances">
         <div id="instances" class="col-md-12">
             <h3>Instances</h3>
             <div class="table-responsive">

@@ -5,7 +5,7 @@ import { SessionStorageService } from 'ngx-webstorage';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class JhiRoutesService {
+export class RoutesService {
   // Observable sources
   private routeChangedSource = new Subject<Route>();
   private routesChangedSource = new Subject<Route[]>();
@@ -27,27 +27,27 @@ export class JhiRoutesService {
     return this.http.get<Route[]>('/api/routes');
   }
 
-  routeChange(route: Route) {
+  routeChange(route: Route | undefined): void {
     this.routeChangedSource.next(route);
   }
 
-  routesChange(routes: Route[]) {
+  routesChange(routes: Route[]): void {
     this.routesChangedSource.next(routes);
   }
 
-  reloadRoutes() {
+  reloadRoutes(): void {
     this.routeReloadSource.next(true);
   }
 
-  routeDown(route: Route) {
+  routeDown(route: Route | undefined): void {
     this.routeDownSource.next(route);
   }
 
-  getSelectedInstance() {
+  getSelectedInstance(): Route {
     return this.sessionStorage.retrieve('instanceId');
   }
 
-  storeSelectedInstance(instance) {
+  storeSelectedInstance(instance: Route | undefined): void {
     this.sessionStorage.store('instanceId', instance);
   }
 }

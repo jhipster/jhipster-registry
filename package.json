@@ -58,7 +58,7 @@
     "file-loader": "5.0.2",
     "fork-ts-checker-webpack-plugin": "3.1.1",
     "friendly-errors-webpack-plugin": "1.7.0",
-    "generator-jhipster": "6.5.1",
+    "generator-jhipster": "6.6.0",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
     "husky": "3.1.0",
