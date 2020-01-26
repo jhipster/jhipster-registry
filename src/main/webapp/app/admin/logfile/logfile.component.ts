@@ -45,8 +45,8 @@ export class LogfileComponent implements OnInit, OnDestroy {
                 'Please check:\n ' +
                 '- if the microservice is up\n ' +
                 '- if these properties are set: \n ' +
-                '    - logging.path\n ' +
-                '    - logging.file (to avoid using the same spring.log)\n\n' +
+                '    - logging.file.path\n ' +
+                '    - logging.file.name (to avoid using the same spring.log)\n\n' +
                 'See:\n ' +
                 '- https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html\n ' +
                 '- https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html';
