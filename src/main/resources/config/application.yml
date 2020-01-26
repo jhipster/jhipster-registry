@@ -47,7 +47,8 @@ spring:
       console-available: true
 
 logging:
-  file: target/jhipster-registry.log
+  file:
+    name: target/jhipster-registry.log
 
 ribbon:
   eureka:
@@ -98,7 +99,9 @@ management:
       application: ${spring.application.name}
     web:
       server:
-        auto-time-requests: true
+        request:
+          autotime:
+            enabled: true
 
 server:
   port: 8761
