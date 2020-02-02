@@ -19,7 +19,7 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./health/health.module').then(m => m.HealthModule)
       },
       {
-        path: 'logs',
+        path: 'loggers',
         loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)
       },
       {
