@@ -3,7 +3,8 @@ export interface InfoResponse {
   git?: any;
   build?: any;
   activeProfiles?: string[];
-  configurationSources?: Array<any>;
+  'cloud-config-server-configuration-sources'?: Array<any>;
+  'cloud-config-label'?: string;
 }
 
 export class ProfileInfo {
@@ -12,6 +13,7 @@ export class ProfileInfo {
     public ribbonEnv?: string,
     public inProduction?: boolean,
     public swaggerEnabled?: boolean,
-    public configurationSources?: Array<any>
+    public cloudConfigServerConfigurationSources?: Array<any>,
+    public cloudConfigLabel?: string
   ) {}
 }

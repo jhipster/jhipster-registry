@@ -13,7 +13,8 @@ import { ApplicationsService } from 'app/registry/applications/applications.serv
 export class ConfigComponent implements OnInit, OnDestroy {
   application = 'application';
   profile = 'prod';
-  label = 'master';
+  defaultLabel = 'master';
+  label = this.defaultLabel;
   activeRegistryProfiles?: string[] = [];
   isNative = true;
   configurationSources?: Array<any>;
@@ -43,7 +44,8 @@ export class ConfigComponent implements OnInit, OnDestroy {
       .subscribe(response => {
         this.activeRegistryProfiles = response.activeProfiles;
         this.isNative = this.activeRegistryProfiles!.includes('native');
-        this.configurationSources = response.configurationSources;
+        this.configurationSources = response.cloudConfigServerConfigurationSources;
+        this.label = response.cloudConfigLabel || this.defaultLabel;
       });
 
     this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
