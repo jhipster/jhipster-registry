@@ -99,7 +99,7 @@ eureka:
     instance:
         hostname: eureka-peer-1
     server:
-        enable-self-preservation: true
+        enable-self-preservation: false
         registry-sync-retry-wait-ms: 500
         a-sgcache-expiry-timeout-ms: 60000
         eviction-interval-timer-in-ms: 30000
@@ -120,7 +120,7 @@ eureka:
     instance:
         hostname: eureka-peer-2
     server:
-        enable-self-preservation: true
+        enable-self-preservation: false
         registry-sync-retry-wait-ms: 500
         a-sgcache-expiry-timeout-ms: 60000
         eviction-interval-timer-in-ms: 30000
