@@ -1,17 +1,13 @@
 package io.github.jhipster.registry.security.jwt;
 
-import io.github.jhipster.config.JHipsterProperties;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.*;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,14 +15,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.StringUtils;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
+import io.github.jhipster.config.JHipsterProperties;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
-public class TokenProvider implements InitializingBean {
+public class TokenProvider {
 
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
@@ -44,26 +38,17 @@ public class TokenProvider implements InitializingBean {
         this.jHipsterProperties = jHipsterProperties;
     }
 
-    @Override
-    public void afterPropertiesSet() {
-        String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
-        String base64secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
+    @PostConstruct
+    public void init() {
         byte[] keyBytes;
-        if (StringUtils.isEmpty(base64secret)) {
-            log.info("The JWT key used is not Base64-encoded. " +
+        String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
+        if (!StringUtils.isEmpty(secret)) {
+            log.warn("Warning: the JWT key used is not Base64-encoded. " +
                 "We recommend using the `jhipster.security.authentication.jwt.base64-secret` key for optimum security.");
-
-            if (StringUtils.isEmpty(secret)) {
-                log.error("\n----------------------------------------------------------\n" +
-                    "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
-                    "Please read the documentation at https://www.jhipster.tech/jhipster-registry/\n" +
-                    "----------------------------------------------------------");
-                throw new RuntimeException("No JWT secret key is configured, the application cannot start.");
-            }
             keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         } else {
             log.debug("Using a Base64-encoded JWT secret key");
-            keyBytes = Decoders.BASE64.decode(base64secret);
+            keyBytes = Decoders.BASE64.decode(jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret());
         }
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.tokenValidityInMilliseconds =
