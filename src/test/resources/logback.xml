@@ -35,7 +35,8 @@
     <logger name="sun.net.www" level="INFO"/>
     <logger name="sun.rmi.transport" level="WARN"/>
 
-    <root level="WARN">
+    <root>
+        <level>WARN</level>
         <appender-ref ref="CONSOLE"/>
     </root>
 
