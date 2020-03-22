@@ -3,18 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class JhiConfigService {
+export class ConfigService {
   constructor(private http: HttpClient) {}
 
-  getConfigAsYaml(application: string, profile: string, label: string): Observable<any> {
+  getConfigAsYaml(application: string, profile: string, label: string): Observable<string> {
     return this.http.get('config/' + label + '/' + application + '-' + profile + '.yml', { responseType: 'text' });
   }
 
-  getConfigAsProperties(application: string, profile: string, label: string): Observable<any> {
+  getConfigAsProperties(application: string, profile: string, label: string): Observable<string> {
     return this.http.get('config/' + label + '/' + application + '-' + profile + '.properties', { responseType: 'text' });
   }
 
-  getConfigAsJson(application: string, profile: string, label: string): Observable<any> {
+  getConfigAsJson(application: string, profile: string, label: string): Observable<string> {
     return this.http.get('config/' + label + '/' + application + '-' + profile + '.json', { responseType: 'text' });
   }
 }

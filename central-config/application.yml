@@ -12,7 +12,7 @@ jhipster:
     security:
         authentication:
             jwt:
-                # It is recommended to encrypt the secret key in Base64, using the `base64-secret` property.
+                # It is recommended to encode the secret key in Base64, using the `base64-secret` property.
                 # For compabitibily issues with applications generated with older JHipster releases,
                 # we use the non Base64-encoded `secret` property here.
                 secret: my-secret-key-which-should-be-changed-in-production-and-be-base64-encoded

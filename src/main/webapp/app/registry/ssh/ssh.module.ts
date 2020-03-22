@@ -3,10 +3,10 @@ import { RouterModule } from '@angular/router';
 import { JHipsterRegistrySharedModule } from 'app/shared/shared.module';
 
 import { sshRoute } from './ssh.route';
-import { JhiSSHComponent } from './ssh.component';
+import { SSHComponent } from './ssh.component';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([sshRoute])],
-  declarations: [JhiSSHComponent]
+  declarations: [SSHComponent]
 })
 export class SSHModule {}

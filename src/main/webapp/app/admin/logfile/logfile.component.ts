@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs';
-import { JhiLogfileService } from './logfile.service';
-import { JhiRoutesService } from 'app/shared/routes/routes.service';
+import { LogfileService } from './logfile.service';
+import { RoutesService } from 'app/shared/routes/routes.service';
 import { Route } from 'app/shared/routes/route.model';
 import { takeUntil } from 'rxjs/operators';
 
@@ -10,24 +10,24 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './logfile.component.html',
   styleUrls: ['logfile.scss']
 })
-export class JhiLogfileComponent implements OnInit, OnDestroy {
-  activeRoute: Route;
-  updatingLogfile: boolean;
-  logtxt: string;
+export class LogfileComponent implements OnInit, OnDestroy {
+  activeRoute?: Route;
+  updatingLogfile = true;
+  logtxt?: string;
   unsubscribe$ = new Subject();
 
-  @ViewChild('logfile', { static: false }) private logFileViewer: ElementRef;
+  @ViewChild('logfile', { static: false }) private logFileViewer?: ElementRef;
 
-  constructor(private jhiLogfileService: JhiLogfileService, private routesService: JhiRoutesService) {}
+  constructor(private jhiLogfileService: LogfileService, private routesService: RoutesService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.routesService.routeChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe(route => {
       this.activeRoute = route;
       this.displayActiveRouteLog();
     });
   }
 
-  displayActiveRouteLog() {
+  displayActiveRouteLog(): void {
     this.updatingLogfile = true;
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
       this.jhiLogfileService
@@ -45,8 +45,8 @@ export class JhiLogfileComponent implements OnInit, OnDestroy {
                 'Please check:\n ' +
                 '- if the microservice is up\n ' +
                 '- if these properties are set: \n ' +
-                '    - logging.path\n ' +
-                '    - logging.file (to avoid using the same spring.log)\n\n' +
+                '    - logging.file.path\n ' +
+                '    - logging.file.name (to avoid using the same spring.log)\n\n' +
                 'See:\n ' +
                 '- https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html\n ' +
                 '- https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html';
@@ -57,15 +57,15 @@ export class JhiLogfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  scrollToBottom() {
-    this.logFileViewer.nativeElement.scrollTop = this.logFileViewer.nativeElement.scrollHeight;
+  scrollToBottom(): void {
+    this.logFileViewer!.nativeElement.scrollTop = this.logFileViewer!.nativeElement.scrollHeight;
   }
 
-  scrollToTop() {
-    this.logFileViewer.nativeElement.scrollTop = this.logFileViewer.nativeElement.scrolledUp;
+  scrollToTop(): void {
+    this.logFileViewer!.nativeElement.scrollTop = this.logFileViewer!.nativeElement.scrolledUp;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // prevent memory leak when component destroyed
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

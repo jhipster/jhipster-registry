@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { ProfileService } from 'app/layouts/profiles/profile.service';
@@ -19,13 +18,12 @@ import { AccountService } from 'app/core/auth/account.service';
   styleUrls: ['navbar.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  inProduction: boolean;
-  isNavbarCollapsed: boolean;
-  swaggerEnabled: boolean;
-  modalRef: NgbModalRef;
-  version: string;
+  inProduction?: boolean;
+  isNavbarCollapsed = true;
+  swaggerEnabled?: boolean;
+  version: string = VERSION ? 'v' + VERSION : '';
   unsubscribe$ = new Subject();
-  subscription = new Subscription();
+  subscription?: Subscription;
 
   constructor(
     private accountService: AccountService,
@@ -35,39 +33,36 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private eventManager: JhiEventManager,
     private router: Router
-  ) {
-    this.version = VERSION ? 'v' + VERSION : '';
-    this.isNavbarCollapsed = true;
-  }
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getProfileInfo();
     this.registerAuthenticationSuccess();
   }
 
-  registerAuthenticationSuccess() {
+  registerAuthenticationSuccess(): void {
     this.subscription = this.eventManager.subscribe('authenticationSuccess', () => this.getProfileInfo());
   }
 
-  collapseNavbar() {
+  collapseNavbar(): void {
     this.isNavbarCollapsed = true;
   }
 
-  isAuthenticated() {
+  isAuthenticated(): boolean {
     return this.accountService.isAuthenticated();
   }
 
-  login() {
-    this.modalRef = this.loginModalService.open();
+  login(): void {
+    this.loginModalService.open();
   }
 
-  logout() {
+  logout(): void {
     this.collapseNavbar();
     this.profileService
       .getProfileInfo()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(profileInfo => {
-        if (profileInfo.activeProfiles.includes('oauth2')) {
+        if (profileInfo.activeProfiles!.includes('oauth2')) {
           this.loginOAuth2Service.logout().subscribe(response => {
             const data = response.body;
             let logoutUrl = data.logoutUrl;
@@ -87,11 +82,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
       });
   }
 
-  toggleNavbar() {
+  toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
 
-  getProfileInfo() {
+  getProfileInfo(): void {
     this.profileService
       .getProfileInfo()
       .pipe(takeUntil(this.unsubscribe$))
@@ -101,12 +96,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // prevent memory leak when component destroyed
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription!.unsubscribe();
   }
 }

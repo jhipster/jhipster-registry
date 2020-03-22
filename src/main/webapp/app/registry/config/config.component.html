@@ -41,7 +41,7 @@
                     <pre class="code-block">{{configAsJson}}</pre>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Table" id="table">
+            <ngb-tab title="Table" id="table" *ngIf="configAsKeyValuePairs">
                 <ng-template ngbTabContent>
                     <table class="table table-striped table-bordered table-responsive d-table">
                         <thead>
@@ -51,7 +51,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let property of configAsKeyValuePairs">
+                        <tr *ngFor="let property of configAsKeyValuePairs | keyvalue">
                             <td>{{ property.key }}</td>
                             <td>{{ property.value }}</td>
                         </tr>

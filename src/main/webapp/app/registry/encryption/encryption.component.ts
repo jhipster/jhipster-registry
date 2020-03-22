@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { JhiEncryptionService } from './encryption.service';
+import { Component, OnDestroy } from '@angular/core';
+import { EncryptionService } from './encryption.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -7,23 +7,16 @@ import { takeUntil } from 'rxjs/operators';
   selector: 'jhi-encryption',
   templateUrl: './encryption.component.html'
 })
-export class JhiEncryptionComponent implements OnInit, OnDestroy {
-  showMore: boolean;
-  textToEncrypt: string;
-  encryptedText: string;
-  result: string;
+export class EncryptionComponent implements OnDestroy {
+  showMore = true;
+  textToEncrypt = '';
+  encryptedText = '';
+  result = '';
   private unsubscribe$ = new Subject();
 
-  constructor(private encryptionService: JhiEncryptionService) {
-    this.showMore = true;
-    this.textToEncrypt = '';
-    this.encryptedText = '';
-    this.result = '';
-  }
+  constructor(private encryptionService: EncryptionService) {}
 
-  ngOnInit() {}
-
-  encrypt() {
+  encrypt(): void {
     this.encryptionService
       .encrypt(this.textToEncrypt)
       .pipe(takeUntil(this.unsubscribe$))
@@ -38,7 +31,7 @@ export class JhiEncryptionComponent implements OnInit, OnDestroy {
       );
   }
 
-  decrypt() {
+  decrypt(): void {
     this.encryptionService
       .decrypt(this.encryptedText.replace(/^{cipher}/, ''))
       .pipe(takeUntil(this.unsubscribe$))
@@ -53,7 +46,7 @@ export class JhiEncryptionComponent implements OnInit, OnDestroy {
       );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // prevent memory leak when component destroyed
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

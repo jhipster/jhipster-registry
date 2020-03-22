@@ -3,16 +3,16 @@ import Spy = jasmine.Spy;
 import { SessionStorageService } from 'ngx-webstorage';
 
 export class MockSessionStorageService extends SpyObject {
-  getRetrieveSpy: Spy;
+  getRetrieveSpy?: Spy;
   storeUrlSpy: Spy;
 
   constructor() {
     super(SessionStorageService);
-    this.setSessionSpy({});
+    this.setSessionSpy('{}');
     this.storeUrlSpy = this.spy('store').andReturn(this);
   }
 
-  setSessionSpy(json) {
+  setSessionSpy(json: string): void {
     this.getRetrieveSpy = this.spy('retrieve').andReturn(json);
   }
 }

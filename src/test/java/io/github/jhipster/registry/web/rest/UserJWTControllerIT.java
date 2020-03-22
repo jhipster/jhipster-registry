@@ -61,7 +61,7 @@ public class UserJWTControllerIT {
             .createToken(Mockito.any(Authentication.class), Mockito.anyBoolean());
 
         mockMvc.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL)
             .content(new ObjectMapper().writeValueAsString(vm)))
             .andExpect(content().string("{\"id_token\":\"fakeToken\"}"))
@@ -75,7 +75,7 @@ public class UserJWTControllerIT {
             .createToken(Mockito.any(Authentication.class), Mockito.anyBoolean());
 
         mockMvc.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value(startsWith("Bad Request: Required request body is missing")));
@@ -89,7 +89,7 @@ public class UserJWTControllerIT {
         vm.setRememberMe(true);
 
         mockMvc.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL)
             .content(new ObjectMapper().writeValueAsString(vm)))
             .andExpect(status().isUnauthorized())

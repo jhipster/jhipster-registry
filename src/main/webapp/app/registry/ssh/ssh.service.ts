@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export class JhiSSHService {
   constructor(private http: HttpClient) {}
 
-  getSshPublicKey(): Observable<any> {
-    return this.http.get('api/ssh/public_key', { responseType: 'text' });
+  getSshPublicKey(): Observable<string> {
+    return this.http.get<string>('api/ssh/public_key');
   }
 }

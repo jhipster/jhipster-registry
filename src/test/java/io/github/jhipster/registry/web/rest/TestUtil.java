@@ -2,13 +2,13 @@ package io.github.jhipster.registry.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
-import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -23,11 +23,9 @@ public final class TestUtil {
 
     private static final ObjectMapper mapper = createObjectMapper();
 
-    /** MediaType for JSON UTF8 */
-    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON_UTF8;
-
     private static ObjectMapper createObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         mapper.registerModule(new JavaTimeModule());
         return mapper;
@@ -94,6 +92,7 @@ public final class TestUtil {
 
     /**
      * Creates a matcher that matches when the examined string represents the same instant as the reference datetime.
+     *
      * @param date the reference datetime against which the examined string is checked.
      */
     public static ZonedDateTimeMatcher sameInstant(ZonedDateTime date) {
@@ -128,7 +127,6 @@ public final class TestUtil {
         registrar.registerFormatters(dfcs);
         return dfcs;
     }
-
 
     private TestUtil() {}
 }

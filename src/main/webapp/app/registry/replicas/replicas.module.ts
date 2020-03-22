@@ -3,10 +3,10 @@ import { RouterModule } from '@angular/router';
 import { JHipsterRegistrySharedModule } from 'app/shared/shared.module';
 
 import { replicasRoute } from './replicas.route';
-import { JhiReplicasComponent } from './replicas.component';
+import { ReplicasComponent } from './replicas.component';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([replicasRoute])],
-  declarations: [JhiReplicasComponent]
+  declarations: [ReplicasComponent]
 })
 export class ReplicasModule {}

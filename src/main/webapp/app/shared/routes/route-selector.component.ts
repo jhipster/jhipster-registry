@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { JhiRoutesService } from './routes.service';
-import { Route } from './route.model';
+import { RoutesService } from './routes.service';
+import { InstanceStatus, Route } from './route.model';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
-import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
+import { RefreshService } from 'app/shared/refresh/refresh.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -11,18 +11,18 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './route-selector.component.html',
   styleUrls: ['route-selector.component.scss']
 })
-export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
-  activeRoute: Route;
-  routes: Route[];
-  savedRoutes: Route[];
-  updatingRoutes: boolean;
+export class RouteSelectorComponent implements OnInit, OnDestroy {
+  activeRoute?: Route;
+  routes?: Route[];
+  savedRoutes?: Route[];
+  updatingRoutes?: boolean;
   searchedInstance = '';
 
   unSubscribe$ = new Subject();
 
-  constructor(private routesService: JhiRoutesService, private refreshService: JhiRefreshService) {}
+  constructor(private routesService: RoutesService, private refreshService: RefreshService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activeRoute = this.routesService.getSelectedInstance();
 
     this.updateRoute();
@@ -34,14 +34,14 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     /** prevent memory leak when component destroyed **/
     this.unSubscribe$.next();
     this.unSubscribe$.complete();
   }
 
   /** Change active route only if exists, else choose Registry **/
-  setActiveRoute(instance: Route) {
+  setActiveRoute(instance: Route | null): void {
     if (instance && this.routes && this.routes.findIndex(r => r.appName === instance.appName) !== -1) {
       this.activeRoute = instance;
     } else if (this.routes && this.routes.length > 0) {
@@ -51,7 +51,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     this.routesService.routeChange(this.activeRoute);
   }
 
-  private updateRoute() {
+  private updateRoute(): void {
     this.updatingRoutes = true;
     this.routesService
       .findAll()
@@ -83,7 +83,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
       );
   }
 
-  private downRoute(instance: Route) {
+  private downRoute(instance: Route | undefined): void {
     if (instance) {
       instance.status = 'DOWN';
     }
@@ -93,18 +93,18 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
                                       UI PART
    ========================================================================== */
 
-  getActiveRoute() {
-    return this.activeRoute.serviceId ? this.activeRoute.serviceId.toUpperCase() : this.activeRoute.appName.toUpperCase();
+  getActiveRoute(): string | undefined {
+    return this.activeRoute!.serviceId ? this.activeRoute!.serviceId.toUpperCase() : this.activeRoute!.appName.toUpperCase();
   }
 
-  getBadgeClassRoute(route: Route) {
+  getBadgeClassRoute(route: Route): string {
     if (route && !route.status) {
       route.status = 'UP';
     }
     return this.getBadgeClass(route.status);
   }
 
-  private getBadgeClass(statusState) {
+  private getBadgeClass(statusState: InstanceStatus): string {
     if (statusState && (statusState === 'UP' || statusState.toLowerCase() === 'starting')) {
       return 'badge-success';
     } else {
@@ -112,19 +112,19 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
     }
   }
 
-  state(route: Route) {
+  state(route: Route): string | void {
     if (route && route.status && route.status === 'DOWN') {
       return 'disabled';
-    } else if (route && route.serviceId === this.activeRoute.serviceId) {
+    } else if (route && route.serviceId === this.activeRoute!.serviceId) {
       return 'active';
     }
   }
 
-  searchByAppName() {
+  searchByAppName(): void {
     if (this.searchedInstance === '') {
       this.routes = this.savedRoutes;
     } else {
-      this.routes = this.savedRoutes.filter(route => {
+      this.routes = this.savedRoutes!.filter(route => {
         return route.appName.includes(this.searchedInstance);
       });
     }
@@ -136,7 +136,7 @@ export class JhiRouteSelectorComponent implements OnInit, OnDestroy {
    * ("The method "drop" that you're trying to access does not exist in the class declaration.").
    * @param dropdown
    */
-  closeDropDown(dropdown: NgbDropdown) {
+  closeDropDown(dropdown: NgbDropdown): void {
     if (dropdown) {
       dropdown.close();
     }

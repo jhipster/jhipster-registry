@@ -10,12 +10,12 @@ import { takeUntil } from 'rxjs/operators';
   selector: 'jhi-main',
   templateUrl: './main.component.html'
 })
-export class JhiMainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
 
   constructor(private titleService: Title, private router: Router, private $storageService: StateStorageService) {}
 
-  private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
+  private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
     let title: string = routeSnapshot.data && routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : 'jHipsterRegistryApp';
     if (routeSnapshot.firstChild) {
       title = this.getPageTitle(routeSnapshot.firstChild) || title;
@@ -23,7 +23,7 @@ export class JhiMainComponent implements OnInit, OnDestroy {
     return title;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.router.events.pipe(takeUntil(this.unsubscribe$)).subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
@@ -32,7 +32,7 @@ export class JhiMainComponent implements OnInit, OnDestroy {
         let params = {};
         let destinationData = {};
         let destinationName = '';
-        const destinationEvent = event.state.root.firstChild.children[0];
+        const destinationEvent = event.state.root.firstChild!.children[0];
         if (destinationEvent !== undefined) {
           params = destinationEvent.params;
           destinationData = destinationEvent.data;
@@ -48,7 +48,7 @@ export class JhiMainComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // prevent memory leak when component destroyed
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

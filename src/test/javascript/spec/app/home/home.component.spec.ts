@@ -6,12 +6,12 @@ import { HomeComponent } from 'app/home/home.component';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { EurekaStatusService } from 'app/home/eureka.status.service';
-import { JhiHealthService } from 'app/admin/health/health.service';
+import { HealthService } from 'app/admin/health/health.service';
 import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { JhiRefreshService } from 'app/shared/refresh/refresh.service';
+import { RefreshService } from 'app/shared/refresh/refresh.service';
 import { Account } from 'app/core/user/account.model';
-import { JhiApplicationsService } from 'app/registry/applications/applications.service';
+import { ApplicationsService } from 'app/registry/applications/applications.service';
 
 describe('Component Tests', () => {
   describe('HomeComponent', () => {
@@ -30,15 +30,15 @@ describe('Component Tests', () => {
           {
             provide: LoginModalService,
             useValue: {
-              open() {}
+              open(): void {}
             }
           },
           EurekaStatusService,
-          JhiApplicationsService,
-          JhiHealthService,
+          ApplicationsService,
+          HealthService,
           LoginOAuth2Service,
           ProfileService,
-          JhiRefreshService
+          RefreshService
         ]
       })
         .overrideTemplate(HomeComponent, '')
@@ -74,35 +74,32 @@ describe('Component Tests', () => {
     ));
 
     it('populate Dashboard with Applications data', fakeAsync(
-      inject([JhiApplicationsService], (service: JhiApplicationsService) => {
+      inject([ApplicationsService], (service: ApplicationsService) => {
         spyOn(service, 'findAll').and.returnValue(
-          of({
-            status: null,
-            applications: [
-              {
-                name: 'app1',
-                instances: [
-                  {
-                    instanceId: 1,
-                    status: 'UP'
-                  },
-                  {
-                    instanceId: 2,
-                    status: 'DOWN'
-                  }
-                ]
-              },
-              {
-                name: 'app2',
-                instances: [
-                  {
-                    instanceId: 3,
-                    status: 'UP'
-                  }
-                ]
-              }
-            ]
-          })
+          of([
+            {
+              name: 'app1',
+              instances: [
+                {
+                  instanceId: 1,
+                  status: 'UP'
+                },
+                {
+                  instanceId: 2,
+                  status: 'DOWN'
+                }
+              ]
+            },
+            {
+              name: 'app2',
+              instances: [
+                {
+                  instanceId: 3,
+                  status: 'UP'
+                }
+              ]
+            }
+          ])
         );
 
         comp.ngOnInit();

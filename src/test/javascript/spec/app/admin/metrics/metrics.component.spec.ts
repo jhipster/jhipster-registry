@@ -2,32 +2,32 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { JHipsterRegistryTestModule } from '../../../test.module';
-import { JhiMetricsMonitoringComponent } from 'app/admin/metrics/metrics.component';
-import { JhiMetricsService } from 'app/admin/metrics/metrics.service';
+import { MetricsMonitoringComponent } from 'app/admin/metrics/metrics.component';
+import { MetricsService } from 'app/admin/metrics/metrics.service';
 
 describe('Component Tests', () => {
-  describe('JhiMetricsMonitoringComponent', () => {
-    let comp: JhiMetricsMonitoringComponent;
-    let fixture: ComponentFixture<JhiMetricsMonitoringComponent>;
-    let service: JhiMetricsService;
+  describe('MetricsMonitoringComponent', () => {
+    let comp: MetricsMonitoringComponent;
+    let fixture: ComponentFixture<MetricsMonitoringComponent>;
+    let service: MetricsService;
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [JHipsterRegistryTestModule],
-        declarations: [JhiMetricsMonitoringComponent]
+        declarations: [MetricsMonitoringComponent]
       })
-        .overrideTemplate(JhiMetricsMonitoringComponent, '')
+        .overrideTemplate(MetricsMonitoringComponent, '')
         .compileComponents();
     }));
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(JhiMetricsMonitoringComponent);
+      fixture = TestBed.createComponent(MetricsMonitoringComponent);
       comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(JhiMetricsService);
+      service = fixture.debugElement.injector.get(MetricsService);
     });
 
     describe('refresh', () => {
-      it('should refresh metrics data', () => {
+      it('Should handle response on refreshing metrics data', () => {
         // GIVEN
         const response = {
           timers: {
@@ -46,8 +46,7 @@ describe('Component Tests', () => {
           prefix: 'prefixApp1',
           appName: 'appName1',
           status: 'UP',
-          serviceId: '1',
-          serviceInstances: []
+          serviceId: '1'
         };
         spyOn(service, 'getInstanceMetrics').and.returnValue(of(response));
 

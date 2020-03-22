@@ -18,9 +18,9 @@ class ArchTest {
 
         noClasses()
             .that()
-                .resideInAnyPackage("..service..")
+                .resideInAnyPackage("io.github.jhipster.registry.service..")
             .or()
-                .resideInAnyPackage("..repository..")
+                .resideInAnyPackage("io.github.jhipster.registry.repository..")
             .should().dependOnClassesThat()
                 .resideInAnyPackage("..io.github.jhipster.registry.web..")
         .because("Services and repositories should not depend on web layer")

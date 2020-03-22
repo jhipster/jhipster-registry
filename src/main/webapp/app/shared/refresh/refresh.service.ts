@@ -3,7 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { SessionStorageService } from 'ngx-webstorage';
 
 @Injectable({ providedIn: 'root' })
-export class JhiRefreshService {
+export class RefreshService {
   // Observable sources
   private refreshChangedSource = new Subject<any>();
   private refreshReloadSource = new Subject<any>();
@@ -15,11 +15,11 @@ export class JhiRefreshService {
     this.refreshReload$ = this.refreshReloadSource.asObservable();
   }
 
-  refreshChanged() {
+  refreshChanged(): void {
     this.refreshChangedSource.next();
   }
 
-  refreshReload() {
+  refreshReload(): void {
     this.refreshReloadSource.next();
   }
 
@@ -27,7 +27,7 @@ export class JhiRefreshService {
     return this.sessionStorage.retrieve('refreshTime');
   }
 
-  storeSelectedRefreshTime(time: number) {
+  storeSelectedRefreshTime(time: number): void {
     this.sessionStorage.store('refreshTime', time);
   }
 }
