@@ -5,7 +5,7 @@
   "env": {
     "JHIPSTER_PASSWORD": {
       "description": "Admin password for the registry (used to login after clicking 'View App'). Must be at least 5 characters.",
-      "required": "true"
+      "required": true
     },
     "JAVA_OPTS": {
       "description": "Java runtime options.",
@@ -20,8 +20,5 @@
       "value": "5.0.2"
     }
   },
-  "buildpacks": [
-    {"url": "heroku/jvm"},
-    {"url": "https://github.com/jhipster/jhipster-registry-buildpack"}
-  ]
+  "buildpacks": [{ "url": "heroku/jvm" }, { "url": "https://github.com/jhipster/jhipster-registry-buildpack" }]
 }
