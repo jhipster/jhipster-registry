@@ -8,10 +8,10 @@ export class EncryptionService {
   constructor(private http: HttpClient) {}
 
   encrypt(textToEncrypt: string): Observable<string> {
-    return this.http.post<string>('config/encrypt', textToEncrypt).pipe(map((response: string) => '{cipher}' + response));
+    return this.http.post('config/encrypt', textToEncrypt, { responseType: 'text' }).pipe(map((response: string) => '{cipher}' + response));
   }
 
   decrypt(textToDecrypt: string): Observable<string> {
-    return this.http.post<string>('config/decrypt', textToDecrypt);
+    return this.http.post('config/decrypt', textToDecrypt, { responseType: 'text' });
   }
 }
