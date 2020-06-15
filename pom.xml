@@ -1110,7 +1110,7 @@
                     <plugin>
                         <groupId>org.springframework.boot.experimental</groupId>
                         <artifactId>spring-boot-thin-maven-plugin</artifactId>
-                        <version>1.0.23.RELEASE</version>
+                        <version>1.0.25.RELEASE</version>
                         <configuration>
                             <outputDirectory>${project.build.directory}/appengine-staging</outputDirectory>
                         </configuration>
