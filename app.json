@@ -9,7 +9,7 @@
     },
     "JAVA_OPTS": {
       "description": "Java runtime options.",
-      "value": "-Xmx300m -Xss512k -XX:CICompilerCount=2 -XX:ReservedCodeCacheSize=50m -XX:MaxMetaspaceSize=80m -XX:ParallelGCThreads=3 -Dfile.encoding=UTF-8"
+      "value": "-Dfile.encoding=UTF-8"
     },
     "SPRING_OPTS": {
       "description": "Spring Boot options.",
@@ -17,11 +17,8 @@
     },
     "JHIPSTER_REGISTRY_VERSION": {
       "description": "Version of the registry to deploy.",
-      "value": "5.0.2"
+      "value": "6.2.0"
     }
   },
-  "buildpacks": [
-    {"url": "heroku/jvm"},
-    {"url": "https://github.com/jhipster/jhipster-registry-buildpack"}
-  ]
+  "buildpacks": [{ "url": "heroku/jvm" }, { "url": "https://github.com/jhipster/jhipster-registry-buildpack" }]
 }
