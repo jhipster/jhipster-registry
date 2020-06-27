@@ -5,7 +5,7 @@
 
     <groupId>io.github.jhipster.registry</groupId>
     <artifactId>jhipster-registry</artifactId>
-    <version>6.2.0</version>
+    <version>6.3.0</version>
     <packaging>jar</packaging>
     <name>JHipster Registry</name>
     <description>JHipster service registry, made with Netflix Eureka and Spring Cloud Config</description>
