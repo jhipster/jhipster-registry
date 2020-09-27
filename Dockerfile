@@ -3,7 +3,9 @@ ADD . /code/
 RUN \
     apt-get update && \
     apt-get install build-essential -y && \
+    apt-get install dos2unix -y && \
     cd /code/ && \
+    dos2unix mvnw && \
     rm -Rf target node_modules && \
     chmod +x /code/mvnw && \
     sleep 1 && \
