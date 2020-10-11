@@ -24,7 +24,7 @@ To run the cloned repository;
 - For development run `./mvnw -Pdev,webpack` to just start in development or run `./mvnw` and run `npm install && npm start` for hot reload of client side code.
 - For production profile run `./mvnw -Pprod`
 
-[azure-devops-image]: https://dev.azure.com/jhipster/jhipster-registry/_apis/build/status/jhipster.jhipster-registry?branchName=master
+[azure-devops-image]: https://dev.azure.com/jhipster/jhipster-registry/_apis/build/status/jhipster.jhipster-registry?branchName=main
 [azure-devops-url-main]: https://dev.azure.com/jhipster/jhipster-registry/_build
-[travis-image]: https://travis-ci.org/jhipster/jhipster-registry.svg?branch=master
+[travis-image]: https://travis-ci.org/jhipster/jhipster-registry.svg?branch=main
 [travis-url]: https://travis-ci.org/jhipster/jhipster-registry
