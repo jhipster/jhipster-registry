@@ -13,7 +13,7 @@ import { ApplicationsService } from 'app/registry/applications/applications.serv
 export class ConfigComponent implements OnInit, OnDestroy {
   application = 'application';
   profile = 'prod';
-  defaultLabel = 'master';
+  defaultLabel = 'main';
   label = this.defaultLabel;
   activeRegistryProfiles?: string[] = [];
   isNative = true;

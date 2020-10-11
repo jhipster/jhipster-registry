@@ -13,10 +13,10 @@ spring:
         composite:
           - type: git
             uri: https://github.com/jhipster/jhipster-registry-sample-config
-            # By default, the JGit library used by Spring Cloud Config Server uses SSH configuration files 
-            # such as ~/.ssh/known_hosts and /etc/ssh/ssh_config when connecting to Git repositories by using an SSH URI. 
+            # By default, the JGit library used by Spring Cloud Config Server uses SSH configuration files
+            # such as ~/.ssh/known_hosts and /etc/ssh/ssh_config when connecting to Git repositories by using an SSH URI.
             # In cloud environments such as Cloud Foundry/Docker the local filesystem may be ephemeral or not easily accessible.
-            # For those cases, SSH configuration can be set by using Java properties. In order to activate property-based SSH configuration, 
+            # For those cases, SSH configuration can be set by using Java properties. In order to activate property-based SSH configuration,
             # the ignoreLocalSshSettings property must be set to true, and privateKey (usually, in github, it's a deploy key) should pasted here.
             # ignore-local-ssh-settings: true
             # private-key: # https://cloud.spring.io/spring-cloud-config/multi/multi__spring_cloud_config_server.html#_git_ssh_configuration_using_properties
@@ -25,5 +25,5 @@ spring:
       # name of the config server's property source (file.yml) that we want to use
       name: jhipster-registry
       profile: prod # profile(s) of the property source
-      label: master # toggle to switch to a different version of the configuration as stored in git
+      label: main # toggle to switch to a different version of the configuration as stored in git
       # it can be set to any label, branch or commit of the configuration source Git repository
