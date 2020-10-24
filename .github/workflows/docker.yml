@@ -33,7 +33,7 @@ jobs:
               run: docker build -t jhipster/jhipster-registry:ci .
             - name: 'DOCKER: list image'
               run: docker images
-            - name: 'DOCKER: list image'
+            - name: 'DOCKER: start container'
               run: docker run --name jhipster-registry -p 8761:8761 -d -t jhipster/jhipster-registry:ci
             - name: 'DOCKER: wait 30sec'
               run: sleep 30
