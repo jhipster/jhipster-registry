@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: Application CI
+name: Build
 on: [push, pull_request]
 jobs:
     pipeline:
