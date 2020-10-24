@@ -25,11 +25,6 @@ jobs:
         runs-on: ubuntu-latest
         if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
         timeout-minutes: 40
-        env:
-            NODE_VERSION: 12.19.0
-            SPRING_OUTPUT_ANSI_ENABLED: DETECT
-            JHI_DISABLE_WEBPACK_LOGS: true
-            NG_CLI_ANALYTICS: false
         steps:
             - uses: actions/checkout@v2
             - name: 'TOOLS: docker version'
