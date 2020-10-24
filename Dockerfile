@@ -17,13 +17,16 @@ RUN \
 FROM adoptopenjdk:11-jre-hotspot
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     JAVA_OPTS="" \
+    JHIPSTER_SLEEP=0 \
     SPRING_PROFILES_ACTIVE=prod
 EXPOSE 8761
 RUN apt-get install -y curl && \
     apt-get clean && \
     mkdir /target && \
     chmod g+rwx /target
-CMD java \
+CMD echo "The JHipster Registry will start in ${JHIPSTER_SLEEP}s..." && \
+    sleep ${JHIPSTER_SLEEP} && \
+    java \
         ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \
         -jar /jhipster-registry.jar
 
