@@ -6,7 +6,7 @@ import { RefreshService } from './refresh.service';
 @Component({
   selector: 'jhi-refresh-selector',
   templateUrl: './refresh-selector.component.html',
-  styleUrls: ['refresh-selector.component.scss']
+  styleUrls: ['refresh-selector.component.scss'],
 })
 export class RefreshSelectorComponent implements OnInit, OnDestroy {
   activeRefreshTime: number;
@@ -64,17 +64,18 @@ export class RefreshSelectorComponent implements OnInit, OnDestroy {
                                       UI PART
    ========================================================================== */
 
-  classTime(): string {
+  classTime(): string | string[] | Set<string> | { [klass: string]: any } {
     if (this.activeRefreshTime <= 0) {
       return 'fa fa-pause';
     }
     return 'fa fa-repeat';
   }
 
-  stateTime(time: number): string | void {
+  stateTime(time: number): string | string[] | Set<string> | { [klass: string]: any } {
     if (time === this.activeRefreshTime) {
       return 'active';
     }
+    return '';
   }
 
   getActiveRefreshTime(): string {

@@ -3,7 +3,7 @@ import { DatePipe, registerLocaleData } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { CookieModule } from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie-service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { NgJhipsterModule } from 'ng-jhipster';
 import locale from '@angular/common/locales/en';
@@ -22,43 +22,43 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
 @NgModule({
   imports: [
     HttpClientModule,
-    CookieModule.forRoot(),
     NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-' }),
     NgJhipsterModule.forRoot({
       // set below to true to make alerts look like toast
       alertAsToast: false,
-      alertTimeout: 5000
-    })
+      alertTimeout: 5000,
+    }),
   ],
   providers: [
     Title,
+    CookieService,
     {
       provide: LOCALE_ID,
-      useValue: 'en'
+      useValue: 'en',
     },
     { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter },
     DatePipe,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthExpiredInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorHandlerInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NotificationInterceptor,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class JHipsterRegistryCoreModule {
   constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig) {

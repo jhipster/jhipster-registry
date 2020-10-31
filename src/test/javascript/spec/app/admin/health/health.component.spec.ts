@@ -3,26 +3,26 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 
 import { JHipsterRegistryTestModule } from '../../../test.module';
-import { HealthCheckComponent } from 'app/admin/health/health.component';
+import { HealthComponent } from 'app/admin/health/health.component';
 import { Health, HealthService } from 'app/admin/health/health.service';
 
 describe('Component Tests', () => {
   describe('HealthCheckComponent', () => {
-    let comp: HealthCheckComponent;
-    let fixture: ComponentFixture<HealthCheckComponent>;
+    let comp: HealthComponent;
+    let fixture: ComponentFixture<HealthComponent>;
     let service: HealthService;
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [JHipsterRegistryTestModule],
-        declarations: [HealthCheckComponent]
+        declarations: [HealthComponent],
       })
-        .overrideTemplate(HealthCheckComponent, '')
+        .overrideTemplate(HealthComponent, '')
         .compileComponents();
     }));
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(HealthCheckComponent);
+      fixture = TestBed.createComponent(HealthComponent);
       comp = fixture.componentInstance;
       service = fixture.debugElement.injector.get(HealthService);
     });
@@ -44,7 +44,7 @@ describe('Component Tests', () => {
           prefix: 'prefixApp1',
           appName: 'appName1',
           status: 'UP',
-          serviceId: '1'
+          serviceId: '1',
         };
         const health: Health = { status: 'UP', components: { mail: { status: 'UP', details: 'mailDetails' } } };
         spyOn(service, 'checkInstanceHealth').and.returnValue(of(health));
@@ -64,7 +64,7 @@ describe('Component Tests', () => {
           prefix: 'prefixApp1',
           appName: 'appName1',
           status: 'UP',
-          serviceId: '1'
+          serviceId: '1',
         };
         const health: Health = { status: 'DOWN', components: { mail: { status: 'DOWN', details: 'mailDetails' } } };
         spyOn(service, 'checkInstanceHealth').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: health })));

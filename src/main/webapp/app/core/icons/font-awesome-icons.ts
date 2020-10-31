@@ -32,6 +32,7 @@ import {
   faTrashAlt,
   faAsterisk,
   faTasks,
+  // jhipster-needle-add-icon-import
   faHome,
   faPodcast,
   faHourglass,
@@ -41,7 +42,7 @@ import {
   faFileAlt,
   faInfoCircle,
   faArrowCircleDown,
-  faArrowCircleUp
+  faArrowCircleUp,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const fontAwesomeIcons = [
@@ -78,6 +79,7 @@ export const fontAwesomeIcons = [
   faCalendarAlt,
   faSearch,
   faTrashAlt,
+  // jhipster-needle-add-icon-import
   faAsterisk,
   faPodcast,
   faHourglass,
@@ -87,5 +89,5 @@ export const fontAwesomeIcons = [
   faFileAlt,
   faInfoCircle,
   faArrowCircleDown,
-  faArrowCircleUp
+  faArrowCircleUp,
 ];

@@ -6,6 +6,6 @@ import { applicationsRoute } from './applications.route';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([applicationsRoute])],
-  declarations: [ApplicationsComponent]
+  declarations: [ApplicationsComponent],
 })
 export class ApplicationsModule {}

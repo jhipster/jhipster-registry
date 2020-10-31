@@ -8,8 +8,8 @@ export const errorRoute: Routes = [
     component: ErrorComponent,
     data: {
       authorities: [],
-      pageTitle: 'Error page!'
-    }
+      pageTitle: 'Error page!',
+    },
   },
   {
     path: 'accessdenied',
@@ -17,8 +17,8 @@ export const errorRoute: Routes = [
     data: {
       authorities: [],
       pageTitle: 'Error page!',
-      errorMessage: 'You are not authorized to access this page.'
-    }
+      errorMessage: 'You are not authorized to access this page.',
+    },
   },
   {
     path: '404',
@@ -26,11 +26,11 @@ export const errorRoute: Routes = [
     data: {
       authorities: [],
       pageTitle: 'Error page!',
-      errorMessage: 'The page does not exist.'
-    }
+      errorMessage: 'The page does not exist.',
+    },
   },
   {
     path: '**',
-    redirectTo: '/404'
-  }
+    redirectTo: '/404',
+  },
 ];

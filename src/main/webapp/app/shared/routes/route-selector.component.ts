@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'jhi-route-selector',
   templateUrl: './route-selector.component.html',
-  styleUrls: ['route-selector.component.scss']
+  styleUrls: ['route-selector.component.scss'],
 })
 export class RouteSelectorComponent implements OnInit, OnDestroy {
   activeRoute?: Route;
@@ -97,14 +97,14 @@ export class RouteSelectorComponent implements OnInit, OnDestroy {
     return this.activeRoute!.serviceId ? this.activeRoute!.serviceId.toUpperCase() : this.activeRoute!.appName.toUpperCase();
   }
 
-  getBadgeClassRoute(route: Route): string {
+  getBadgeClassRoute(route: Route): string | string[] | Set<string> | { [klass: string]: any } {
     if (route && !route.status) {
       route.status = 'UP';
     }
     return this.getBadgeClass(route.status);
   }
 
-  private getBadgeClass(statusState: InstanceStatus): string {
+  private getBadgeClass(statusState: InstanceStatus): string | string[] | Set<string> | { [klass: string]: any } {
     if (statusState && (statusState === 'UP' || statusState.toLowerCase() === 'starting')) {
       return 'badge-success';
     } else {
@@ -112,12 +112,13 @@ export class RouteSelectorComponent implements OnInit, OnDestroy {
     }
   }
 
-  state(route: Route): string | void {
+  state(route: Route): string | string[] | Set<string> | { [klass: string]: any } {
     if (route && route.status && route.status === 'DOWN') {
       return 'disabled';
     } else if (route && route.serviceId === this.activeRoute!.serviceId) {
       return 'active';
     }
+    return '';
   }
 
   searchByAppName(): void {

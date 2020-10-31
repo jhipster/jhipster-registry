@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { JHipsterRegistrySharedModule } from 'app/shared/shared.module';
 
-import { MetricsMonitoringComponent } from './metrics.component';
+import { MetricsComponent } from './metrics.component';
 
 import { metricsRoute } from './metrics.route';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([metricsRoute])],
-  declarations: [MetricsMonitoringComponent]
+  declarations: [MetricsComponent],
 })
 export class MetricsModule {}

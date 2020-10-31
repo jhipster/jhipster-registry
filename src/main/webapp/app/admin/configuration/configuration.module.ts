@@ -8,6 +8,6 @@ import { configurationRoute } from './configuration.route';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([configurationRoute])],
-  declarations: [ConfigurationComponent]
+  declarations: [ConfigurationComponent],
 })
 export class ConfigurationModule {}

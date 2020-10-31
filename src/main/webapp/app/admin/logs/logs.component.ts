@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-logs',
-  templateUrl: './logs.component.html'
+  templateUrl: './logs.component.html',
 })
 export class LogsComponent implements OnInit, OnDestroy {
   loggers?: Log[];

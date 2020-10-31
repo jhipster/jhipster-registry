@@ -9,7 +9,7 @@
             <li class="list-group-item {{application.active}}"
                 *ngFor="let application of applications | orderBy:orderProp"
                 (click)="selectActiveApplication(application.name)">
-                <fa-icon icon="alert" *ngIf="checkInstanceLength(application.instances)"></fa-icon>{{application.name}}
+                <fa-icon icon="sensor-alert" *ngIf="checkInstanceLength(application.instances)"></fa-icon>{{application.name}}
                 <span class="badge badge-pill font-weight-normal badge-info">{{displayCountInstances(application.instances)}}</span>
             </li>
         </ul>

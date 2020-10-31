@@ -15,24 +15,24 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
         {
           path: 'admin',
           data: {
-            authorities: ['ROLE_ADMIN']
+            authorities: ['ROLE_ADMIN'],
           },
           canActivate: [UserRouteAccessService],
-          loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule)
+          loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
         },
         {
           path: 'registry',
           data: {
-            authorities: ['ROLE_ADMIN']
+            authorities: ['ROLE_ADMIN'],
           },
           canActivate: [UserRouteAccessService],
-          loadChildren: () => import('./registry/registry-routing.module').then(m => m.RegistryRoutingModule)
+          loadChildren: () => import('./registry/registry-routing.module').then(m => m.RegistryRoutingModule),
         },
-        ...LAYOUT_ROUTES
+        ...LAYOUT_ROUTES,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }
-    )
+    ),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class JHipsterRegistryAppRoutingModule {}
