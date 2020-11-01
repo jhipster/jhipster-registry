@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'jhi-applications',
   templateUrl: './applications.component.html',
-  styleUrls: ['applications.component.scss']
+  styleUrls: ['applications.component.scss'],
 })
 export class ApplicationsComponent implements OnInit, OnDestroy {
   activeApplication?: Application | null;

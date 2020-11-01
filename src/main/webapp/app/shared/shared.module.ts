@@ -17,7 +17,7 @@ import { GroupByPipe } from 'app/shared/pipe/group-by.pipe';
     HasAnyAuthorityDirective,
     RouteSelectorComponent,
     RefreshSelectorComponent,
-    GroupByPipe
+    GroupByPipe,
   ],
   entryComponents: [LoginModalComponent],
   exports: [
@@ -27,7 +27,7 @@ import { GroupByPipe } from 'app/shared/pipe/group-by.pipe';
     LoginModalComponent,
     HasAnyAuthorityDirective,
     RouteSelectorComponent,
-    RefreshSelectorComponent
-  ]
+    RefreshSelectorComponent,
+  ],
 })
 export class JHipsterRegistrySharedModule {}

@@ -7,6 +7,6 @@ import { logfileRoute } from 'app/admin/logfile/logfile.route';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([logfileRoute])],
-  declarations: [LogfileComponent]
+  declarations: [LogfileComponent],
 })
 export class LogfileModule {}

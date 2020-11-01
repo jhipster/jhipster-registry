@@ -8,6 +8,6 @@ import { docsRoute } from './docs.route';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([docsRoute])],
-  declarations: [DocsComponent]
+  declarations: [DocsComponent],
 })
 export class DocsModule {}

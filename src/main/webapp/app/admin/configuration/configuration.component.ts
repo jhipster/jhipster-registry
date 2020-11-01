@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-configuration',
-  templateUrl: './configuration.component.html'
+  templateUrl: './configuration.component.html',
 })
 export class ConfigurationComponent implements OnInit, OnDestroy {
   allBeans!: Bean[];

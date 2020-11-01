@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'jhi-logfile',
   templateUrl: './logfile.component.html',
-  styleUrls: ['logfile.scss']
+  styleUrls: ['logfile.scss'],
 })
 export class LogfileComponent implements OnInit, OnDestroy {
   activeRoute?: Route;
