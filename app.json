@@ -17,7 +17,7 @@
     },
     "JHIPSTER_REGISTRY_VERSION": {
       "description": "Version of the registry to deploy.",
-      "value": "6.4.0"
+      "value": "6.5.0"
     }
   },
   "buildpacks": [{ "url": "heroku/jvm" }, { "url": "https://github.com/jhipster/jhipster-registry-buildpack" }]
