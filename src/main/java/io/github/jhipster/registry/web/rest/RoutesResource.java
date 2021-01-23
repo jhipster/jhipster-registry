@@ -56,7 +56,7 @@ public class RoutesResource {
 
                 return routeVM;
             })
-            // we don't need the service sets. They come in as of eureka.fetch-registry=true, which is needed for requests against UAA
+            // we don't need the service sets. They come in as of eureka.fetch-registry=true
             .filter(routeVM -> routeVM.getServiceInstances() == null || routeVM.getServiceInstances().isEmpty())
             .forEach(route -> routeVMs.put(route.getServiceId(), route));
 
