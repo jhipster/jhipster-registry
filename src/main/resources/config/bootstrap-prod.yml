@@ -21,6 +21,14 @@ spring:
             # ignore-local-ssh-settings: true
             # private-key: # https://cloud.spring.io/spring-cloud-config/multi/multi__spring_cloud_config_server.html#_git_ssh_configuration_using_properties
         prefix: /config
+      # Ideally, you should configure approle authentication mechanism and provide
+      # role id and secret id as environment variables. Refer vault documentation
+      # to enable and configure https://www.vaultproject.io/docs/auth/approle
+      #        vault:
+      #          authentication: approle
+      #          app-role:
+      #            role-id:
+      #            secret-id:
       fail-fast: true
       # name of the config server's property source (file.yml) that we want to use
       name: jhipster-registry

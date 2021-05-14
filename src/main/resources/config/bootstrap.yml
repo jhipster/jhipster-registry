@@ -13,9 +13,23 @@ spring:
     config:
       server:
         bootstrap: true
+        fail-on-composite-error: false
         composite:
           - type: native
             search-locations: file:./central-config
+          - type: vault
+            kv-version: 2
+            backend: secret
+            default-key: application
+            profile-separator: '/'
+        vault:
+          authentication: token
+          host: localhost
+          port: 8200
+          scheme: http
+          skip-ssl-validation: true
+          timeout: 5
+          token: jhipster-registry # In server mode, provide a token having read access on secrets
         prefix: /config
       fail-fast: true
       # name of the config server's property source (file.yml) that we want to use

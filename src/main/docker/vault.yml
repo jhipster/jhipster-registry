@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  vault:
+    image: vault:1.7.1
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=jhipster-registry
+    ports:
+      - 8200:8200
+    cap_add:
+      - IPC_LOCK
+    # Uncomment the below configurations to start vault in server mode and use file system backend
+    # Do ensure to keep root token and unseal keys in a safe place. Those shall be required to
+    # unseal vault after the restart and configure other authentication methods.
+#    command: server
+#    volumes:
+#      - ./vault-config/config:/vault/config
+#      - ./vault-config/logs:/vault/logs
+#      - ./vault-config/data:/vault/file
