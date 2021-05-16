@@ -1,33 +1,49 @@
 import { NgModule } from '@angular/core';
-import { JHipsterRegistrySharedLibsModule } from './shared-libs.module';
+
+import { SharedLibsModule } from './shared-libs.module';
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
-import { LoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
-import { RouteSelectorComponent } from 'app/shared/routes/route-selector.component';
-import { RefreshSelectorComponent } from 'app/shared/refresh/refresh-selector.component';
-import { GroupByPipe } from 'app/shared/pipe/group-by.pipe';
+import { DurationPipe } from './date/duration.pipe';
+import { FormatMediumDatetimePipe } from './date/format-medium-datetime.pipe';
+import { FormatMediumDatePipe } from './date/format-medium-date.pipe';
+import { KeysPipe } from './array/keys.pipe';
+import { OrderByPipe } from './array/order-by.pipe';
+import { SortByDirective } from './sort/sort-by.directive';
+import { SortDirective } from './sort/sort.directive';
+import { ItemCountComponent } from './pagination/item-count.component';
+import { RefreshSelectorComponent } from './refresh/refresh-selector.component';
 
 @NgModule({
-  imports: [JHipsterRegistrySharedLibsModule],
+  imports: [SharedLibsModule],
   declarations: [
     AlertComponent,
     AlertErrorComponent,
-    LoginModalComponent,
     HasAnyAuthorityDirective,
-    RouteSelectorComponent,
+    DurationPipe,
+    FormatMediumDatetimePipe,
+    FormatMediumDatePipe,
+    KeysPipe,
+    OrderByPipe,
+    SortByDirective,
+    SortDirective,
+    ItemCountComponent,
     RefreshSelectorComponent,
-    GroupByPipe,
   ],
-  entryComponents: [LoginModalComponent],
   exports: [
-    JHipsterRegistrySharedLibsModule,
+    SharedLibsModule,
     AlertComponent,
     AlertErrorComponent,
-    LoginModalComponent,
     HasAnyAuthorityDirective,
-    RouteSelectorComponent,
+    DurationPipe,
+    FormatMediumDatetimePipe,
+    FormatMediumDatePipe,
+    KeysPipe,
+    OrderByPipe,
+    SortByDirective,
+    SortDirective,
+    ItemCountComponent,
     RefreshSelectorComponent,
   ],
 })
-export class JHipsterRegistrySharedModule {}
+export class SharedModule {}

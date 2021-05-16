@@ -27,10 +27,6 @@ export class LoginOAuth2Service {
 
   logout(): Observable<any> {
     // logout from the server
-    return this.http.post(SERVER_API_URL + 'api/logout', {}, { observe: 'response' }).pipe(
-      map((response: HttpResponse<any>) => {
-        return response;
-      })
-    );
+    return this.http.post(SERVER_API_URL + 'api/logout', {}, { observe: 'response' }).pipe(map((response: HttpResponse<any>) => response));
   }
 }

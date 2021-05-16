@@ -8,20 +8,12 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-main',
-  templateUrl: './main.component.html'
+  templateUrl: './main.component.html',
 })
 export class MainComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
 
   constructor(private titleService: Title, private router: Router, private $storageService: StateStorageService) {}
-
-  private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
-    let title: string = routeSnapshot.data && routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : 'jHipsterRegistryApp';
-    if (routeSnapshot.firstChild) {
-      title = this.getPageTitle(routeSnapshot.firstChild) || title;
-    }
-    return title;
-  }
 
   ngOnInit(): void {
     this.router.events.pipe(takeUntil(this.unsubscribe$)).subscribe(event => {
@@ -29,15 +21,10 @@ export class MainComponent implements OnInit, OnDestroy {
         this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
       }
       if (event instanceof RoutesRecognized) {
-        let params = {};
-        let destinationData = {};
-        let destinationName = '';
         const destinationEvent = event.state.root.firstChild!.children[0];
-        if (destinationEvent !== undefined) {
-          params = destinationEvent.params;
-          destinationData = destinationEvent.data;
-          destinationName = destinationEvent.url[0].path;
-        }
+        const params = destinationEvent.params;
+        const destinationData = destinationEvent.data;
+        const destinationName = destinationEvent.url[0].path;
         const from = { name: this.router.url.slice(1) };
         const destination = { name: destinationName, data: destinationData };
         this.$storageService.storeDestinationState(destination, params, from);
@@ -52,5 +39,13 @@ export class MainComponent implements OnInit, OnDestroy {
     // prevent memory leak when component destroyed
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
+    let title: string = routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : 'jHipsterRegistryApp';
+    if (routeSnapshot.firstChild) {
+      title = this.getPageTitle(routeSnapshot.firstChild) || title;
+    }
+    return title;
   }
 }

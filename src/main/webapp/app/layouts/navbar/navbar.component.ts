@@ -1,26 +1,24 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { JhiEventManager } from 'ng-jhipster';
-
-import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { VERSION } from 'app/app.constants';
-import { takeUntil } from 'rxjs/operators';
-import { Subject, Subscription } from 'rxjs';
-import { LoginService } from 'app/core/login/login.service';
-import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
-import { LoginModalService } from 'app/core/login/login-modal.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { EventManager } from 'app/core/util/event-manager.service';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { LoginService } from 'app/login/login.service';
+import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
 
 @Component({
   selector: 'jhi-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['navbar.scss']
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   inProduction?: boolean;
   isNavbarCollapsed = true;
-  swaggerEnabled?: boolean;
+  openAPIEnabled?: boolean;
   version: string = VERSION ? 'v' + VERSION : '';
   unsubscribe$ = new Subject();
   subscription?: Subscription;
@@ -29,15 +27,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private loginService: LoginService,
     private loginOAuth2Service: LoginOAuth2Service,
-    private loginModalService: LoginModalService,
     private profileService: ProfileService,
-    private eventManager: JhiEventManager,
+    private eventManager: EventManager,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.getProfileInfo();
     this.registerAuthenticationSuccess();
+  }
+
+  ngOnDestroy(): void {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+    this.subscription?.unsubscribe();
   }
 
   registerAuthenticationSuccess(): void {
@@ -53,7 +57,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   login(): void {
-    this.loginModalService.open();
+    this.router.navigate(['/login']);
   }
 
   logout(): void {
@@ -68,10 +72,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
             let logoutUrl = data.logoutUrl;
             // if Keycloak, uri has protocol/openid-connect/token
             if (logoutUrl.indexOf('/protocol') > -1) {
-              logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
+              logoutUrl = `${String(logoutUrl)}?redirect_uri=${String(window.location.origin)}`;
             } else {
               // Okta
-              logoutUrl = logoutUrl + '?id_token_hint=' + data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
+              logoutUrl = `${String(logoutUrl)}?id_token_hint=${String(data.idToken)}&post_logout_redirect_uri=${String(
+                window.location.origin
+              )}`;
             }
             window.location.href = logoutUrl;
           });
@@ -92,14 +98,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(profileInfo => {
         this.inProduction = profileInfo.inProduction;
-        this.swaggerEnabled = profileInfo.swaggerEnabled;
+        this.openAPIEnabled = profileInfo.openAPIEnabled;
       });
-  }
-
-  ngOnDestroy(): void {
-    // prevent memory leak when component destroyed
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-    this.subscription!.unsubscribe();
   }
 }

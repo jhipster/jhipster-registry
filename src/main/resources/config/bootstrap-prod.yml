@@ -4,8 +4,9 @@
 # ===================================================================
 
 spring:
-  profiles:
-    active: prod
+  config:
+    activate:
+      on-profile: prod
   cloud:
     config:
       server:

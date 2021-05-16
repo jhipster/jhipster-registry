@@ -1,33 +1,28 @@
 import { Component, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { JhiEventManager, JhiAlert, JhiAlertService, JhiEventWithContent } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
 
 import { AlertError } from './alert-error.model';
+import { Alert, AlertService } from 'app/core/util/alert.service';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 
 @Component({
   selector: 'jhi-alert-error',
-  template: ` <div class="alerts" role="alert">
-    <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
-      <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="close(alert)">
-        <pre [innerHTML]="alert.msg"></pre>
-      </ngb-alert>
-    </div>
-  </div>`,
+  templateUrl: './alert-error.component.html',
 })
 export class AlertErrorComponent implements OnDestroy {
-  alerts: JhiAlert[] = [];
+  alerts: Alert[] = [];
   errorListener: Subscription;
   httpErrorListener: Subscription;
 
-  constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager) {
-    this.errorListener = eventManager.subscribe('jHipsterRegistryApp.error', (response: JhiEventWithContent<AlertError>) => {
-      const errorResponse = response.content;
+  constructor(private alertService: AlertService, private eventManager: EventManager) {
+    this.errorListener = eventManager.subscribe('jHipsterRegistryApp.error', (response: EventWithContent<unknown> | string) => {
+      const errorResponse = (response as EventWithContent<AlertError>).content;
       this.addErrorAlert(errorResponse.message);
     });
 
-    this.httpErrorListener = eventManager.subscribe('jHipsterRegistryApp.httpError', (response: JhiEventWithContent<HttpErrorResponse>) => {
-      const httpErrorResponse = response.content;
+    this.httpErrorListener = eventManager.subscribe('jHipsterRegistryApp.httpError', (response: EventWithContent<unknown> | string) => {
+      const httpErrorResponse = (response as EventWithContent<HttpErrorResponse>).content;
       switch (httpErrorResponse.status) {
         // connection refused, server not reachable
         case 0:
@@ -36,12 +31,12 @@ export class AlertErrorComponent implements OnDestroy {
 
         case 400: {
           const arr = httpErrorResponse.headers.keys();
-          let errorHeader = null;
-          arr.forEach(entry => {
+          let errorHeader: string | null = null;
+          for (const entry of arr) {
             if (entry.toLowerCase().endsWith('app-error')) {
               errorHeader = httpErrorResponse.headers.get(entry);
             }
-          });
+          }
           if (errorHeader) {
             this.addErrorAlert(errorHeader);
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
@@ -51,12 +46,12 @@ export class AlertErrorComponent implements OnDestroy {
                 fieldError.message = 'Size';
               }
               // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
-              const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-              const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
-              this.addErrorAlert('Error on field "' + fieldName + '"');
+              const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
+              const fieldName: string = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+              this.addErrorAlert(`Error on field "${fieldName}"`);
             }
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message);
+            this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message);
           } else {
             this.addErrorAlert(httpErrorResponse.error);
           }
@@ -69,7 +64,7 @@ export class AlertErrorComponent implements OnDestroy {
 
         default:
           if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message);
+            this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message);
           } else {
             this.addErrorAlert(httpErrorResponse.error);
           }
@@ -77,7 +72,7 @@ export class AlertErrorComponent implements OnDestroy {
     });
   }
 
-  setClasses(alert: JhiAlert): { [key: string]: boolean } {
+  setClasses(alert: Alert): { [key: string]: boolean } {
     const classes = { 'jhi-toast': Boolean(alert.toast) };
     if (alert.position) {
       return { ...classes, [alert.position]: true };
@@ -86,28 +81,15 @@ export class AlertErrorComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.errorListener) {
-      this.eventManager.destroy(this.errorListener);
-    }
-    if (this.httpErrorListener) {
-      this.eventManager.destroy(this.httpErrorListener);
-    }
+    this.eventManager.destroy(this.errorListener);
+    this.eventManager.destroy(this.httpErrorListener);
   }
 
-  addErrorAlert(message: string): void {
-    const newAlert: JhiAlert = {
-      type: 'danger',
-      msg: message,
-      timeout: 5000,
-      toast: this.alertService.isToast(),
-      scoped: true,
-    };
-
-    this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+  close(alert: Alert): void {
+    alert.close?.(this.alerts);
   }
 
-  close(alert: JhiAlert): void {
-    // NOSONAR can be removed after https://github.com/SonarSource/SonarJS/issues/1930 is resolved
-    alert.close?.(this.alerts); // NOSONAR
+  private addErrorAlert(message?: string): void {
+    this.alertService.addAlert({ type: 'danger', message }, this.alerts);
   }
 }

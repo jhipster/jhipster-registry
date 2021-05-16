@@ -5,10 +5,10 @@ import { SessionStorageService } from 'ngx-webstorage';
 @Injectable({ providedIn: 'root' })
 export class RefreshService {
   // Observable sources
-  private refreshChangedSource = new Subject<any>();
-  private refreshReloadSource = new Subject<any>();
   refreshChanged$: Observable<any>;
   refreshReload$: Observable<any>;
+  private refreshChangedSource = new Subject<any>();
+  private refreshReloadSource = new Subject<any>();
 
   constructor(private sessionStorage: SessionStorageService) {
     this.refreshChanged$ = this.refreshChangedSource.asObservable();
@@ -24,7 +24,7 @@ export class RefreshService {
   }
 
   getSelectedRefreshTime(): number {
-    return this.sessionStorage.retrieve('refreshTime');
+    return this.sessionStorage.retrieve('refreshTime') as number;
   }
 
   storeSelectedRefreshTime(time: number): void {

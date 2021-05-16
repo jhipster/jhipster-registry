@@ -1,24 +1,24 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { JhiEventManager } from 'ng-jhipster';
-
-import { Health, HealthService, HealthStatus } from 'app/admin/health/health.service';
+import { takeUntil } from 'rxjs/operators';
 
 import { VERSION } from 'app/app.constants';
 import { EurekaStatusKey, EurekaStatusService } from './eureka.status.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
-import { LoginModalService } from 'app/core/login/login-modal.service';
 import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/user/account.model';
+import { Account } from 'app/core/auth/account.model';
+import { EventManager } from 'app/core/util/event-manager.service';
 import { ApplicationsService, Instance } from 'app/registry/applications/applications.service';
+import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
+import { Health, HealthStatus } from 'app/shared/health/health.model';
+import { HealthService } from 'app/shared/health/health.service';
 import { RefreshService } from 'app/shared/refresh/refresh.service';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
-  styleUrls: ['home.scss']
+  styleUrls: ['./home.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   account?: Account | null;
@@ -34,14 +34,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private accountService: AccountService,
-    private loginModalService: LoginModalService,
     private loginOAuth2Service: LoginOAuth2Service,
-    private eventManager: JhiEventManager,
+    private eventManager: EventManager,
     private eurekaStatusService: EurekaStatusService,
     private applicationsService: ApplicationsService,
     private healthService: HealthService,
     private profileService: ProfileService,
-    private refreshService: RefreshService
+    private refreshService: RefreshService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +85,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (profileInfo.activeProfiles!.includes('oauth2')) {
           this.loginOAuth2Service.login();
         } else {
-          this.loginModalService.open();
+          this.router.navigate(['/login']);
         }
       });
   }
@@ -136,6 +136,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     // prevent memory leak when component destroyed
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-    this.subscription!.unsubscribe();
+    this.subscription?.unsubscribe();
   }
 }

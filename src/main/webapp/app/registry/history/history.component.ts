@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { EurekaHistory, EurekaHistoryType, History, HistoryService } from './history.service';
@@ -7,19 +7,26 @@ import { RefreshService } from 'app/shared/refresh/refresh.service';
 
 @Component({
   selector: 'jhi-history',
-  templateUrl: './history.component.html'
+  templateUrl: './history.component.html',
 })
 export class HistoryComponent implements OnInit, OnDestroy {
   histories?: History;
   eurekaHistory?: EurekaHistory;
   activeKey?: EurekaHistoryType;
   unsubscribe$ = new Subject();
+  active = 'registered';
 
   constructor(private historyService: HistoryService, private refreshService: RefreshService) {}
 
   ngOnInit(): void {
     this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
     this.refresh();
+  }
+
+  ngOnDestroy(): void {
+    // prevent memory leak when component destroyed
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   refresh(): void {
@@ -41,13 +48,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     this.histories = this.activeKey === 'registered' ? this.eurekaHistory!.registered : this.eurekaHistory!.canceled;
   }
 
-  beforeChange($event: NgbTabChangeEvent): void {
+  beforeChange($event: NgbNavChangeEvent): void {
     this.activate($event.nextId as EurekaHistoryType);
-  }
-
-  ngOnDestroy(): void {
-    // prevent memory leak when component destroyed
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 }

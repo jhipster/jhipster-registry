@@ -9,6 +9,7 @@ spring:
           oidc:
             client-id: jhipster-registry
             client-secret: jhipster-registry
+            scope: openid,profile,email
 
 server:
   servlet:

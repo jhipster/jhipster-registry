@@ -6,7 +6,7 @@ import { RefreshService } from './refresh.service';
 @Component({
   selector: 'jhi-refresh-selector',
   templateUrl: './refresh-selector.component.html',
-  styleUrls: ['refresh-selector.component.scss'],
+  styleUrls: ['./refresh-selector.component.scss'],
 })
 export class RefreshSelectorComponent implements OnInit, OnDestroy {
   activeRefreshTime: number;
@@ -24,6 +24,12 @@ export class RefreshSelectorComponent implements OnInit, OnDestroy {
     this.activeRefreshTime = this.refreshService.getSelectedRefreshTime();
     this.refreshService.refreshChanged$.pipe(takeUntil(this.unSubscribe$)).subscribe(() => this.launchTimer(true));
     this.launchTimer(false);
+  }
+
+  ngOnDestroy(): void {
+    /** prevent memory leak when component destroyed **/
+    this.unSubscribe$.next();
+    this.unSubscribe$.complete();
   }
 
   manualRefresh(): void {
@@ -82,12 +88,6 @@ export class RefreshSelectorComponent implements OnInit, OnDestroy {
     if (this.activeRefreshTime <= 0) {
       return 'disabled';
     }
-    return this.activeRefreshTime + ' sec.';
-  }
-
-  ngOnDestroy(): void {
-    /** prevent memory leak when component destroyed **/
-    this.unSubscribe$.next();
-    this.unSubscribe$.complete();
+    return `${String(this.activeRefreshTime)} sec.`;
   }
 }
