@@ -28,7 +28,7 @@ To run the cloned repository;
 [github-actions-docker]: https://github.com/jhipster/jhipster-registry/workflows/Docker%20Image/badge.svg
 [github-actions-url]: https://github.com/jhipster/jhipster-registry/actions
 
-## Vault Integration
+## HashiCorp Vault Integration
 
 ### Development Mode
 
