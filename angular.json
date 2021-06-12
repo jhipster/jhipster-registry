@@ -32,6 +32,12 @@
   "defaultProject": "jhipster-registry",
   "cli": {
     "packageManager": "npm",
+    "packageManager": "npm",
+    "packageManager": "npm",
+    "packageManager": "npm",
+    "packageManager": "npm",
+    "packageManager": "npm",
+    "packageManager": "npm",
     "packageManager": "npm"
 
   }
