@@ -8,7 +8,7 @@ import { ApplicationsService } from 'app/registry/applications/applications.serv
 
 @Component({
   selector: 'jhi-config',
-  templateUrl: './config.component.html'
+  templateUrl: './config.component.html',
 })
 export class ConfigComponent implements OnInit, OnDestroy {
   application = 'application';
@@ -45,7 +45,7 @@ export class ConfigComponent implements OnInit, OnDestroy {
         this.activeRegistryProfiles = response.activeProfiles;
         this.isNative = this.activeRegistryProfiles!.includes('native');
         this.configurationSources = response.cloudConfigServerConfigurationSources;
-        this.label = response.cloudConfigLabel || this.defaultLabel;
+        this.label = response.cloudConfigLabel ?? this.defaultLabel;
       });
 
     this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
@@ -70,7 +70,6 @@ export class ConfigComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.configAsProperties = response;
-
           const keyValueArray: Map<string, string> = new Map();
           this.configAsProperties.split('\n').forEach(property => {
             const keyValueSplit: string[] = property.split(': ');
@@ -89,6 +88,8 @@ export class ConfigComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.configAsJson = response;
+          // eslint-disable-next-line no-console
+          console.log(this.configAsJson);
         },
         () => {
           this.configAsJson = '';
@@ -99,23 +100,21 @@ export class ConfigComponent implements OnInit, OnDestroy {
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(applications => {
-        if (applications) {
-          this.applications = ['application'];
-          applications.forEach(application => {
-            const instanceId = application.instances[0].instanceId;
-            let applicationName;
-            if (instanceId.indexOf(':') === -1) {
-              applicationName = application.name.toLowerCase();
-            } else {
-              applicationName = instanceId.substr(0, instanceId.indexOf(':'));
-            }
-            this.applications.push(applicationName);
-          });
-        }
+        this.applications = ['application'];
+        applications.forEach(application => {
+          const instanceId = application.instances[0].instanceId;
+          let applicationName;
+          if (instanceId.indexOf(':') === -1) {
+            applicationName = application.name.toLowerCase();
+          } else {
+            applicationName = instanceId.substr(0, instanceId.indexOf(':'));
+          }
+          this.applications.push(applicationName);
+        });
       });
   }
 
-  getKeys(obj: Object): string[] {
+  getKeys(obj: Record<string, unknown>): string[] {
     return Object.keys(obj);
   }
 

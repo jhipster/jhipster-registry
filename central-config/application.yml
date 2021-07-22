@@ -4,23 +4,23 @@
 
 # Property used on app startup to check the config server status
 configserver:
-    name: JHipster Registry config server
-    status: Connected to the JHipster Registry config server!
+  name: JHipster Registry config server
+  status: Connected to the JHipster Registry config server!
 
 # Default JWT secret token (to be changed in production!)
 jhipster:
-    security:
-        authentication:
-            jwt:
-                # It is recommended to encode the secret key in Base64, using the `base64-secret` property.
-                # For compabitibily issues with applications generated with older JHipster releases,
-                # we use the non Base64-encoded `secret` property here.
-                secret: my-secret-key-which-should-be-changed-in-production-and-be-base64-encoded
-                # The `base64-secret` property is recommended if you use JHipster v5.3.0+
-                # (you can type `echo 'secret-key'|base64` on your command line)
-                # base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
+  security:
+    authentication:
+      jwt:
+        # It is recommended to encode the secret key in Base64, using the `base64-secret` property.
+        # For compabitibily issues with applications generated with older JHipster releases,
+        # we use the non Base64-encoded `secret` property here.
+        secret: my-secret-key-which-should-be-changed-in-production-and-be-base64-encoded
+        # The `base64-secret` property is recommended if you use JHipster v5.3.0+
+        # (you can type `echo 'secret-key'|base64` on your command line)
+        # base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
 
 # Enable /management/logfile endpoint for all apps
 logging:
-    path: /tmp
-    file: ${spring.application.name}.log
+  path: /tmp
+  file: ${spring.application.name}.log

@@ -7,7 +7,7 @@ import { RefreshService } from 'app/shared/refresh/refresh.service';
 @Component({
   selector: 'jhi-replicas',
   templateUrl: './replicas.component.html',
-  styleUrls: ['replicas.component.scss']
+  styleUrls: ['./replicas.component.scss'],
 })
 export class ReplicasComponent implements OnInit, OnDestroy {
   showMore = true;

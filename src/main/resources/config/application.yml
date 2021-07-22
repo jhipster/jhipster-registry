@@ -14,76 +14,37 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-spring:
-  application:
-    name: jhipster-registry
-  jmx:
-    enabled: false
-  main:
-    allow-bean-definition-overriding: true
-  mvc:
-    favicon:
-      enabled: false
-  security:
-    user:
-      name: admin
-      password: admin
-      roles: USER, ADMIN
-  task:
-    execution:
-      thread-name-prefix: jhipster-registry-task-
-      pool:
-        core-size: 2
-        max-size: 50
-        queue-capacity: 10000
-    scheduling:
-      thread-name-prefix: jhipster-registry-scheduling-
-      pool:
-        size: 2
-  thymeleaf:
-    mode: HTML
-  output:
-    ansi:
-      console-available: true
-
-logging:
-  file:
-    name: target/jhipster-registry.log
-
-ribbon:
-  eureka:
-    enabled: true
-
-# See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
-zuul: # those values must be configured depending on the application specific needs
-  sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
-  host:
-    max-total-connections: 1000
-    max-per-route-connections: 100
-  prefix: /services/ #slash before and after
-  strip-prefix: true
-  semaphore:
-    max-semaphores: 500
-
 management:
   endpoints:
     web:
       base-path: /management
       exposure:
-        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'threaddump']
+        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump']
   endpoint:
     health:
-      show-details: when-authorized
+      show-details: when_authorized
       roles: 'ROLE_ADMIN'
+      probes:
+        enabled: true
     jhimetrics:
       enabled: true
   info:
     git:
       mode: full
   health:
+    group:
+      liveness:
+        include: livenessState
+      readiness:
+        include: readinessState
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
   metrics:
+    export:
+      # Prometheus is the default metrics backend
+      prometheus:
+        enabled: true
+        step: 60
     enable:
       http: true
       jvm: true
@@ -102,6 +63,51 @@ management:
         request:
           autotime:
             enabled: true
+
+spring:
+  application:
+    name: jhipster-registry
+  profiles:
+    # The commented value for `active` can be replaced with valid Spring profiles to load.
+    # Otherwise, it will be filled in by maven when building the JAR file
+    # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
+    active: #spring.profiles.active#
+    group:
+      dev:
+        - dev
+        - api-docs
+        # Uncomment to activate TLS for the dev profile
+        #- tls
+  jmx:
+    enabled: false
+  messages:
+    basename: i18n/messages
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    user:
+      name: admin
+      password: admin
+      roles:
+        - ADMIN
+        - USER
+  task:
+    execution:
+      thread-name-prefix: jhipster-registry-task-
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: jhipster-registry-scheduling-
+      pool:
+        size: 2
+  thymeleaf:
+    mode: HTML
+
+logging:
+  file:
+    name: target/jhipster-registry.log
 
 server:
   port: 8761
@@ -124,8 +130,17 @@ info:
 # Documentation at:
 # https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
 # ===================================================================
-
 eureka:
+  client:
+    enabled: true
+    healthcheck:
+      enabled: true
+    fetch-registry: false
+    register-with-eureka: false
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    service-url:
+      defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
   instance:
     appname: jhipster-registry
     instanceId: jhipsterRegistry:${spring.application.instance-id:${random.value}}
@@ -141,16 +156,6 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
-  client:
-    enabled: true
-    healthcheck:
-      enabled: true
-    fetch-registry: false
-    register-with-eureka: false
-    instance-info-replication-interval-seconds: 10
-    registry-fetch-interval-seconds: 10
-    service-url:
-      defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
   server:
     # see discussion about enable-self-preservation:
     # https://github.com/jhipster/generator-jhipster/issues/3654
@@ -158,9 +163,44 @@ eureka:
     peer-node-read-timeout-ms: 1000
   dashboard:
     path: /registry
-  datacenter: JHipster-DataCenter
-  environment: JHipster-Environment
 
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+jhipster:
+  clientApp:
+    name: 'JHipsterRegistry'
+  # By default CORS is disabled. Uncomment to enable.
+  # cors:
+  #   allowed-origins: "http://localhost:8100,http://localhost:9000"
+  #   allowed-methods: "*"
+  #   allowed-headers: "*"
+  #   exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+  #   allow-credentials: true
+  #   max-age: 1800
+  mail:
+    from: JHipsterRegistry@localhost
+  api-docs:
+    default-include-pattern: ${server.servlet.context-path:}/api/.*
+    management-include-pattern: ${server.servlet.context-path:}/management/.*
+    title: JHipster Registry API
+    description: JHipster Registry API documentation
+    version: ${info.project.version}
+    terms-of-service-url:
+    contact-name:
+    contact-url:
+    contact-email:
+    license: unlicensed
+    license-url:
+  security:
+    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
+    oauth2:
+      audience:
+        - account
+        - api://default
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -169,30 +209,5 @@ eureka:
 # More documentation is available at:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-jhipster:
-  clientApp:
-    name: 'JHipsterRegistry'
-  # By default CORS is disabled. Uncomment to enable.
-  # cors:
-  #     allowed-origins: "*"
-  #     allowed-methods: "*"
-  #     allowed-headers: "*"
-  #     exposed-headers: "Authorization,Link,X-Total-Count"
-  #     allow-credentials: true
-  #     max-age: 1800
-  swagger:
-    default-include-pattern: /api/.*
-    title: JHipster Registry API
-    description: JHipster Registry API documentation
-    version: ${info.project.version}
-    terms-of-service-url:
-    contact-name:
-    contact-url:
-    contact-email:
-    license:
-    license-url:
-  security:
-    oauth2:
-      audience:
-        - account
-        - api://default
+
+# application:

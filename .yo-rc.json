@@ -1,9 +1,9 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "6.10.5",
+    "jhipsterVersion": "7.1.0",
     "baseName": "JHipsterRegistry",
-    "packageName": "io.github.jhipster.registry",
-    "packageFolder": "io/github/jhipster/registry",
+    "packageName": "tech.jhipster.registry",
+    "packageFolder": "tech/jhipster/registry",
     "serverPort": "8761",
     "authenticationType": "jwt",
     "hibernateCache": "no",
@@ -20,11 +20,11 @@
     "jwtSecretKey": "c9d37cefc48581919939d587c750ea215020765b",
     "useSass": true,
     "enableTranslation": false,
-    "applicationType": "gateway",
+    "applicationType": "monolith",
     "testFrameworks": [],
     "jhiPrefix": "jhi",
     "skipClient": false,
-    "skipUserManagement": false,
+    "skipUserManagement": true,
     "clientPackageManager": "npm",
     "clientFramework": "angularX",
     "cacheProvider": "no",
@@ -46,6 +46,16 @@
     "gaeScalingType": "automatic",
     "gaeMinInstances": "1",
     "gaeMaxInstances": "2",
-    "gaeCloudSQLInstanceNeeded": "Y"
+    "gaeCloudSQLInstanceNeeded": "Y",
+    "skipServer": false,
+    "skipCheckLengthOfIdentifier": false,
+    "skipFakeData": false,
+    "pages": [],
+    "clientThemeVariant": "",
+    "withAdminUi": false,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
+    "reactive": false,
+    "devServerPort": 4200
   }
 }

@@ -1,39 +1,41 @@
 <div>
-    <div class="head">
-        <h2 class="d-inline-block">Instances history</h2>
-        <jhi-refresh-selector class="float-right refresh-left-side"></jhi-refresh-selector>
-    </div>
+  <div class="head">
+    <h2 class="d-inline-block">Instances history</h2>
+    <jhi-refresh-selector class="float-right refresh-left-side"></jhi-refresh-selector>
+  </div>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <ngb-tabset activeId="registered" (tabChange)="beforeChange($event)" type="pills">
-                <ngb-tab id="registered" title="Last registered leases">
-                    <ng-template ngbTabContent></ng-template>
-                </ngb-tab>
-                <ngb-tab id="canceled" title="Last canceled leases">
-                    <ng-template ngbTabContent></ng-template>
-                </ngb-tab>
-            </ngb-tabset>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Instance</th>
-                    </tr>
-                    </thead>
-                    <tbody *ngIf="histories">
-                    <tr *ngFor="let history of (histories | keys | orderBy:'key':false)">
-                        <td>
-                            {{history.key | date:'medium'}}
-                        </td>
-                        <td>
-                            {{history.value}}
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <ul ngbNav #nav="ngbNav" [(activeId)]="active" (navChange)="beforeChange($event)" class="nav-pills">
+        <li ngbNavItem="registered">
+          <a ngbNavLink>Last registered leases</a>
+          <ng-template ngbNavContent></ng-template>
+        </li>
+        <li ngbNavItem="canceled">
+          <a ngbNavLink>Last canceled leases</a>
+          <ng-template ngbNavContent></ng-template>
+        </li>
+      </ul>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Instance</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="histories">
+            <tr *ngFor="let history of histories | keys | orderBy: 'key':false">
+              <td>
+                {{ history.key | date: 'medium' }}
+              </td>
+              <td>
+                {{ history.value }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>

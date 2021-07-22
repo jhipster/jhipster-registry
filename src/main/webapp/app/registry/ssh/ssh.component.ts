@@ -1,18 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { JhiSSHService } from './ssh.service';
+import { SSHService } from './ssh.service';
 
 @Component({
   selector: 'jhi-applications',
-  templateUrl: './ssh.component.html'
+  templateUrl: './ssh.component.html',
 })
 export class SSHComponent implements OnInit, OnDestroy {
   data?: string;
   showMore: boolean;
   unsubscribe$ = new Subject();
 
-  constructor(private sshService: JhiSSHService) {
+  constructor(private sshService: SSHService) {
     this.showMore = true;
   }
 

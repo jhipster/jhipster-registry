@@ -1,84 +1,89 @@
 <div>
-    <div class="head">
-        <h2 class="d-inline-block">Spring Cloud Configuration</h2>
-        <jhi-refresh-selector class="float-right refresh-left-side"></jhi-refresh-selector>
+  <div class="head">
+    <h2 class="d-inline-block">Spring Cloud Configuration</h2>
+    <jhi-refresh-selector class="float-right refresh-left-side"></jhi-refresh-selector>
+  </div>
+
+  <form #form="ngForm" (ngSubmit)="refresh()">
+    <div class="form-group">
+      <label for="profile"><strong>Application</strong></label>
+      <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application" required />
     </div>
 
-    <form #form="ngForm" (ngSubmit)="refresh()">
-        <div class="form-group">
-            <label for="profile"><strong>Application</strong></label>
-            <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application"
-                   required>
-        </div>
-
-        <div class="form-group">
-            <label for="profile"><strong>Profile</strong></label>
-            <input type="text" class="form-control" id="profile" [(ngModel)]="profile" name="profile" required>
-        </div>
-
-        <div class="form-group" *ngIf="!isNative">
-            <label for="label"><strong>Git Label: </strong></label>
-            <input type="text" class="form-control" id="label" name="label" [(ngModel)]="label" required>
-        </div>
-        <input type="submit" style="display: none;"> <!-- tips to submit without button -->
-    </form>
-
-    <div *ngIf="configAsYaml">
-        <h3>Configuration</h3>
-        <ngb-tabset type="pills">
-            <ngb-tab title="YAML" id="yaml">
-                <ng-template ngbTabContent>
-                    <pre class="code-block">{{configAsYaml}}</pre>
-                </ng-template>
-            </ngb-tab>
-            <ngb-tab title="Properties" id="properties">
-                <ng-template ngbTabContent>
-                    <pre class="code-block">{{configAsProperties}}</pre>
-                </ng-template>
-            </ngb-tab>
-            <ngb-tab title="JSON" id="json">
-                <ng-template ngbTabContent>
-                    <pre class="code-block">{{configAsJson}}</pre>
-                </ng-template>
-            </ngb-tab>
-            <ngb-tab title="Table" id="table" *ngIf="configAsKeyValuePairs">
-                <ng-template ngbTabContent>
-                    <table class="table table-striped table-bordered table-responsive d-table">
-                        <thead>
-                        <tr>
-                            <th>Properties</th>
-                            <th>Value</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let property of configAsKeyValuePairs | keyvalue">
-                            <td>{{ property.key }}</td>
-                            <td>{{ property.value }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </ng-template>
-            </ngb-tab>
-        </ngb-tabset>
+    <div class="form-group">
+      <label for="profile"><strong>Profile</strong></label>
+      <input type="text" class="form-control" id="profile" [(ngModel)]="profile" name="profile" required />
     </div>
 
-    <h3 class="head bottom">Configuration Sources</h3>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Index</th>
-            <th>Configuration</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let source of configurationSources; let index=index">
-            <td>{{ index }}</td>
-            <td>
-                <ul>
-                    <li *ngFor="let prop of getKeys(source)">{{ prop }}: {{ source[prop] | json}}</li>
-                </ul>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="form-group" *ngIf="!isNative">
+      <label for="label"><strong>Git Label: </strong></label>
+      <input type="text" class="form-control" id="label" name="label" [(ngModel)]="label" required />
+    </div>
+    <input type="submit" style="display: none" />
+    <!-- tips to submit without button -->
+  </form>
+
+  <div *ngIf="configAsYaml">
+    <h3>Configuration</h3>
+    <ul ngbNav #nav="ngbNav" class="nav-pills">
+      <li ngbNavItem="yaml">
+        <a ngbNavLink>YAML</a>
+        <ng-template ngbNavContent>
+          <pre class="code-block">{{ configAsYaml }}</pre>
+        </ng-template>
+      </li>
+      <li ngbNavItem="properties">
+        <a ngbNavLink>Properties</a>
+        <ng-template ngbNavContent>
+          <pre class="code-block">{{ configAsProperties }}</pre>
+        </ng-template>
+      </li>
+      <li ngbNavItem="json">
+        <a ngbNavLink>JSON</a>
+        <ng-template ngbNavContent>
+          <pre class="code-block">{{ configAsJson }}</pre>
+        </ng-template>
+      </li>
+      <li ngbNavItem="table" *ngIf="configAsKeyValuePairs">
+        <a ngbNavLink>Table</a>
+        <ng-template ngbNavContent>
+          <table class="table table-striped table-bordered table-responsive d-table">
+            <thead>
+              <tr>
+                <th>Properties</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let property of configAsKeyValuePairs | keyvalue">
+                <td>{{ property.key }}</td>
+                <td>{{ property.value }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </li>
+    </ul>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+  </div>
+
+  <h3 class="head bottom">Configuration Sources</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Index</th>
+        <th>Configuration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let source of configurationSources; let index = index">
+        <td>{{ index }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let prop of getKeys(source)">{{ prop }}: {{ source[prop] | json }}</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

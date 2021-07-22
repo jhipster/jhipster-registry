@@ -69,7 +69,12 @@ out/
 ######################
 # Visual Studio Code
 ######################
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
 
 ######################
 # Maven
@@ -147,6 +152,15 @@ Desktop.ini
 ######################
 .eslintcache
 
+######################
+# Code coverage
+######################
+/coverage/
+/.nyc_output/
+
+######################
+# Vault
+######################
 # Ignore Vault data and logs
 src/main/docker/vault-config/data
 src/main/docker/vault-config/logs

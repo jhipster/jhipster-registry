@@ -1,133 +1,112 @@
 <nav class="navbar navbar-dark navbar-expand-md bg-dark">
-    <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
-        <span class="logo-img"></span>
-        <span class="navbar-title">Registry</span> <span class="navbar-version">{{version}}</span>
-    </a>
-    <a class="navbar-toggler d-lg-none" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
-        <fa-icon icon="bars"></fa-icon>
-    </a>
-    <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
-                    <span>
-                        <fa-icon icon="home"></fa-icon>
-                        <span>Home</span>
-                    </span>
-                </a>
-            </li>
-            <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="eureka-menu">
-                    <span>
-                    	<fa-icon icon="podcast"></fa-icon>
-                        <span>Eureka</span>
-                        <b class="caret"></b>
-                    </span>
-                </a>
-                <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/applications" (click)="collapseNavbar()">
-                            <fa-icon icon="cloud" [fixedWidth]="true"></fa-icon>
-                            <span class="hidden-sm">Instances</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/history" (click)="collapseNavbar()">
-                            <fa-icon icon="hourglass" [fixedWidth]="true"></fa-icon>
-                            <span class="hidden-sm">History</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/replicas" (click)="collapseNavbar()">
-                            <fa-icon icon="cloud-download-alt" [fixedWidth]="true"></fa-icon>
-                            <span class="hidden-sm">Replicas</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="configuration-menu">
-                    <span>
-                        <fa-icon icon="cogs"></fa-icon>
-                        <span>Configuration</span>
-                        <b class="caret"></b>
-                    </span>
-                </a>
-                <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/config" (click)="collapseNavbar()">
-                            <fa-icon icon="tachometer-alt" [fixedWidth]="true"></fa-icon>
-                            <span class="hidden-sm">Cloud config</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/encryption" (click)="collapseNavbar()">
-                            <fa-icon icon="key" [fixedWidth]="true"></fa-icon>
-                            <span class="hidden-sm">Encryption</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLinkActive="active" routerLink="registry/ssh" (click)="collapseNavbar()">
-                            <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
-                            <span class="hidden-sm">SSH</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
-                    <span>
-                        <i class="fa fa-user-plus" aria-hidden="true"></i>
-                        <span>Administration</span>
-                        <b class="caret"></b>
-                    </span>
-                </a>
-                <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li>
-                        <a class="dropdown-item" routerLink="admin/metrics" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon icon="tachometer-alt" [fixedWidth]="true"></fa-icon>
-                            <span>Metrics</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="admin/health" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon icon="heart" [fixedWidth]="true"></fa-icon>
-                            <span>Health</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="admin/configuration" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon icon="list" [fixedWidth]="true"></fa-icon>
-                            <span>Configuration</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="admin/loggers" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon icon="tasks" [fixedWidth]="true"></fa-icon>
-                            <span>Loggers</span>
-                        </a>
-                    </li>
-                    <li *ngIf="swaggerEnabled">
-                        <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
-                            <span>API</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="admin/logfile" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon icon="file-alt" [fixedWidth]="true"></fa-icon>
-                            <span>Logs</span>
-                        </a>
-                    </li>
-                    <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
-                </ul>
-            </li>
-            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link" (click)="logout()" id="logout">
-                    <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
-                </a>
-            </li>
+  <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
+    <span class="logo-img"></span>
+    <span class="navbar-title">Registry</span> <span class="navbar-version">{{ version }}</span>
+  </a>
+  <a
+    class="navbar-toggler d-lg-none"
+    href="javascript:void(0);"
+    data-toggle="collapse"
+    data-target="#navbarResponsive"
+    aria-controls="navbarResponsive"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+    (click)="toggleNavbar()"
+  >
+    <fa-icon icon="bars"></fa-icon>
+  </a>
+  <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
+          <span>
+            <fa-icon icon="home"></fa-icon>
+            <span>Home</span>
+          </span>
+        </a>
+      </li>
+      <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+      <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="eureka-menu">
+          <span>
+            <fa-icon icon="podcast"></fa-icon>
+            <span>Eureka</span>
+            <b class="caret"></b>
+          </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu>
+          <li>
+            <a class="dropdown-item" routerLinkActive="active" routerLink="registry/applications" (click)="collapseNavbar()">
+              <fa-icon icon="cloud" [fixedWidth]="true"></fa-icon>
+              <span class="hidden-sm">Instances</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLinkActive="active" routerLink="registry/history" (click)="collapseNavbar()">
+              <fa-icon icon="hourglass" [fixedWidth]="true"></fa-icon>
+              <span class="hidden-sm">History</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLinkActive="active" routerLink="registry/replicas" (click)="collapseNavbar()">
+              <fa-icon icon="cloud-download-alt" [fixedWidth]="true"></fa-icon>
+              <span class="hidden-sm">Replicas</span>
+            </a>
+          </li>
         </ul>
-    </div>
+      </li>
+      <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="configuration-menu">
+          <span>
+            <fa-icon icon="cogs"></fa-icon>
+            <span>Configuration</span>
+            <b class="caret"></b>
+          </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu>
+          <li>
+            <a class="dropdown-item" routerLinkActive="active" routerLink="registry/config" (click)="collapseNavbar()">
+              <fa-icon icon="tachometer-alt" [fixedWidth]="true"></fa-icon>
+              <span class="hidden-sm">Cloud config</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLinkActive="active" routerLink="registry/encryption" (click)="collapseNavbar()">
+              <fa-icon icon="key" [fixedWidth]="true"></fa-icon>
+              <span class="hidden-sm">Encryption</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLinkActive="active" routerLink="registry/ssh" (click)="collapseNavbar()">
+              <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
+              <span class="hidden-sm">SSH</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
+          <span>
+            <i class="fa fa-user-plus" aria-hidden="true"></i>
+            <span>Administration</span>
+            <b class="caret"></b>
+          </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu>
+          <li *ngIf="openAPIEnabled">
+            <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
+              <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
+              <span>API</span>
+            </a>
+          </li>
+          <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
+        </ul>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" (click)="logout()" id="logout">
+          <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
+        </a>
+      </li>
+    </ul>
+  </div>
 </nav>
