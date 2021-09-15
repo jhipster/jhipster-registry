@@ -7,7 +7,7 @@
 
     <groupId>tech.jhipster.registry</groupId>
     <artifactId>jhipster-registry</artifactId>
-    <version>7.0.0</version>
+    <version>7.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JHipster Registry</name>
     <description>JHipster service registry, made with Netflix Eureka and Spring Cloud Config</description>
@@ -44,10 +44,10 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>7.1.0</jhipster-dependencies.version>
+        <jhipster-dependencies.version>7.2.0</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.4.7</spring-boot.version>
+        <spring-boot.version>2.5.4</spring-boot.version>
         <archunit-junit5.version>0.19.0</archunit-junit5.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <!-- Plugin versions -->
@@ -545,11 +545,23 @@
                             <user>1000</user>
                         </container>
                         <extraDirectories>
-                            <paths>src/main/docker/jib</paths>
+                            <paths>
+                                <path>
+                                    <from>src/main/docker/jib</from>
+                                    <into>/</into>
+                                    <excludes>
+                                        <exclude>**/.gitkeep</exclude>
+                                    </excludes>
+                                </path>
+                            </paths>
                             <permissions>
                                 <permission>
                                     <file>/entrypoint.sh</file>
                                     <mode>755</mode>
+                                </permission>
+                                <permission>
+                                    <file>/target</file>
+                                    <mode>775</mode>
                                 </permission>
                             </permissions>
                         </extraDirectories>
