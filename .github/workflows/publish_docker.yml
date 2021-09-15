@@ -18,7 +18,9 @@
 #
 
 name: Publish Containers
-on: [push]
+on:
+  push:
+    branches: [main]
 jobs:
     pipeline:
         name: JHipster Registry Docker
@@ -38,7 +40,7 @@ jobs:
               # This is where you will update the PAT to GITHUB_TOKEN
               run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             - name: Publish to GitHub Container Registry
-              run: ./mvnw -ntp verify -DskipTests -Pprod jib:build -Dimage=ghcr.io/${{ github.actor }}/jhipster-registry:ci
+              run: ./mvnw -ntp verify -DskipTests -Pprod jib:build -Dimage=ghcr.io/${{ github.actor }}/jhipster-registry:main
             - name: 'DOCKER: list image'
               run: docker images
             - name: 'DOCKER: start container'
