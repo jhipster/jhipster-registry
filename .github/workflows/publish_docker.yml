@@ -32,7 +32,7 @@ jobs:
             - name: 'Setup java'
               uses: actions/setup-java@v2
               with:
-                  distribution: 'adopt'
+                  distribution: 'temurin'
                   java-version: '11'
             - name: 'TOOLS: docker version'
               run: docker version

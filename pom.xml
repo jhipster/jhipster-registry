@@ -543,11 +543,7 @@
                             </pluginExtension>
                         </pluginExtensions>
                         <from>
-                            <!-- Enable once eclipse-temurin:11-jre-focal is build for arm64
-                                 https://hub.docker.com/_/eclipse-temurin?tab=description
                             <image>eclipse-temurin:11-jre</image>
-                            -->
-                            <image>adoptopenjdk:11-jre-hotspot</image>
                             <platforms>
                                 <platform>
                                     <architecture>amd64</architecture>
