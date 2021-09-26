@@ -521,9 +521,39 @@
                     <groupId>com.google.cloud.tools</groupId>
                     <artifactId>jib-maven-plugin</artifactId>
                     <version>${jib-maven-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                          <groupId>com.google.cloud.tools</groupId>
+                          <artifactId>jib-ownership-extension-maven</artifactId>
+                          <version>0.1.0</version>
+                        </dependency>
+                      </dependencies>
                     <configuration>
+                        <pluginExtensions>
+                            <pluginExtension>
+                                <implementation>com.google.cloud.tools.jib.maven.extension.ownership.JibOwnershipExtension</implementation>
+                                <configuration implementation="com.google.cloud.tools.jib.maven.extension.ownership.Configuration">
+                                    <rules>
+                                        <rule>
+                                            <glob>/target</glob>
+                                            <ownership>1000</ownership>
+                                        </rule>
+                                    </rules>
+                                </configuration>
+                            </pluginExtension>
+                        </pluginExtensions>
                         <from>
-                            <image>adoptopenjdk:11-jre-hotspot</image>
+                            <image>eclipse-temurin:11-jre</image>
+                            <platforms>
+                                <platform>
+                                    <architecture>amd64</architecture>
+                                    <os>linux</os>
+                                </platform>
+                                <platform>
+                                    <architecture>arm64</architecture>
+                                    <os>linux</os>
+                                </platform>
+                            </platforms>
                         </from>
                         <to>
                             <image>jhipster-registry:latest</image>
