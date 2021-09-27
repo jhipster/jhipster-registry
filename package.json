@@ -108,7 +108,7 @@
     "eslint": "7.28.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-webpack-plugin": "2.5.4",
-    "generator-jhipster": "7.1.0",
+    "generator-jhipster": "7.2.0",
     "husky": "4.3.8",
     "jest": "27.0.4",
     "jest-date-mock": "1.0.8",
