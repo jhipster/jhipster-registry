@@ -47,7 +47,7 @@ jobs:
             - name: 'DOCKER: list image'
               run: docker images
             - name: 'DOCKER: start container'
-              run: docker run --name jhipster-registry -p 8761:8761 -d -t -e JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET='bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=' ghcr.io/${{ github.repository }}:main
+              run: docker run --name jhipster-registry -p 8761:8761 -d -t ghcr.io/${{ github.repository }}:main
             - name: 'DOCKER: wait 30sec'
               run: sleep 30
             - name: 'DOCKER list containers'
