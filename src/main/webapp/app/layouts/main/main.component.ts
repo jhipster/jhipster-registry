@@ -1,25 +1,23 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized, NavigationError } from '@angular/router';
-
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized } from '@angular/router';
+
+import { AccountService } from 'app/core/auth/account.service';
+
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-main',
   templateUrl: './main.component.html',
 })
-export class MainComponent implements OnInit, OnDestroy {
-  unsubscribe$ = new Subject();
-
-  constructor(private titleService: Title, private router: Router, private $storageService: StateStorageService) {}
+export class MainComponent implements OnInit {
+  constructor(private accountService: AccountService, private titleService: Title, private router: Router, private $storageService: StateStorageService) {}
 
   ngOnInit(): void {
-    this.router.events.pipe(takeUntil(this.unsubscribe$)).subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
-      }
+    // try to log in automatically
+    this.accountService.identity().subscribe();
+
+    this.router.events.subscribe(event => {
       if (event instanceof RoutesRecognized) {
         const destinationEvent = event.state.root.firstChild!.children[0];
         const params = destinationEvent.params;
@@ -29,23 +27,25 @@ export class MainComponent implements OnInit, OnDestroy {
         const destination = { name: destinationName, data: destinationData };
         this.$storageService.storeDestinationState(destination, params, from);
       }
-      if (event instanceof NavigationError && event.error.status === 404) {
-        this.router.navigate(['/404']);
+      if (event instanceof NavigationEnd) {
+        this.updateTitle();
       }
     });
   }
 
-  ngOnDestroy(): void {
-    // prevent memory leak when component destroyed
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
-
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
-    let title: string = routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : 'jHipsterRegistryApp';
+    const title: string = routeSnapshot.data['pageTitle'] ?? '';
     if (routeSnapshot.firstChild) {
-      title = this.getPageTitle(routeSnapshot.firstChild) || title;
+      return this.getPageTitle(routeSnapshot.firstChild) || title;
     }
     return title;
+  }
+
+  private updateTitle(): void {
+    let pageTitle = this.getPageTitle(this.router.routerState.snapshot.root);
+    if (!pageTitle) {
+      pageTitle = 'JHipster Registry';
+    }
+    this.titleService.setTitle(pageTitle);
   }
 }

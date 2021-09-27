@@ -16,12 +16,12 @@
 spring:
   application:
     name: JHipsterRegistry
-  jackson:
-    serialization:
-      write-durations-as-timestamps: false
   cloud:
     config:
       enabled: false
+  jackson:
+    serialization:
+      write-durations-as-timestamps: false
   mail:
     host: localhost
   main:

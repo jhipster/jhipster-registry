@@ -19,6 +19,23 @@ logging:
     tech.jhipster: INFO
     tech.jhipster.registry: INFO
 
+# ===================================================================
+# Eureka server configuration (eureka.server.*)
+#
+# Full list of properties with default values at:
+# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
+#
+# Documentation at:
+# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
+# ===================================================================
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://admin:${spring.security.user.password}@localhost:8761/eureka/
+
 management:
   metrics:
     export:
@@ -65,23 +82,6 @@ server:
     enabled: true
     mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
     min-response-size: 1024
-
-# ===================================================================
-# Eureka server configuration (eureka.server.*)
-#
-# Full list of properties with default values at:
-# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
-#
-# Documentation at:
-# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
-# ===================================================================
-
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://admin:${spring.security.user.password}@localhost:8761/eureka/
 
 # ===================================================================
 # JHipster specific properties

@@ -14,6 +14,49 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+# ===================================================================
+# Eureka server configuration (eureka.server.*)
+#
+# Full list of properties with default values at:
+# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
+#
+# Documentation at:
+# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
+# ===================================================================
+eureka:
+  client:
+    enabled: true
+    healthcheck:
+      enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    service-url:
+      defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
+  instance:
+    appname: jhipster-registry
+    instanceId: jhipsterRegistry:${spring.application.instance-id:${random.value}}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    status-page-url-path: ${management.endpoints.web.base-path}/info
+    health-check-url-path: ${management.endpoints.web.base-path}/health
+    metadata-map:
+      zone: primary # This is needed for the load balancer
+      profile: ${spring.profiles.active}
+      version: #project.version#
+      git-version: ${git.commit.id.describe:}
+      git-commit: ${git.commit.id.abbrev:}
+      git-branch: ${git.branch:}
+  server:
+    # see discussion about enable-self-preservation:
+    # https://github.com/jhipster/generator-jhipster/issues/3654
+    enable-self-preservation: false
+    peer-node-read-timeout-ms: 1000
+  dashboard:
+    path: /registry
+
 management:
   endpoints:
     web:
@@ -104,10 +147,9 @@ spring:
         size: 2
   thymeleaf:
     mode: HTML
-
-logging:
-  file:
-    name: target/jhipster-registry.log
+  output:
+    ansi:
+      console-available: true
 
 server:
   port: 8761
@@ -120,49 +162,6 @@ server:
 info:
   # Comma separated list of profiles that will trigger the ribbon to show
   display-ribbon-on-profiles: 'dev'
-
-# ===================================================================
-# Eureka server configuration (eureka.server.*)
-#
-# Full list of properties with default values at:
-# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
-#
-# Documentation at:
-# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
-# ===================================================================
-eureka:
-  client:
-    enabled: true
-    healthcheck:
-      enabled: true
-    fetch-registry: true
-    register-with-eureka: true
-    instance-info-replication-interval-seconds: 10
-    registry-fetch-interval-seconds: 10
-    service-url:
-      defaultZone: http://admin:${spring.security.user.password:admin}@localhost:${server.port}/eureka/
-  instance:
-    appname: jhipster-registry
-    instanceId: jhipsterRegistry:${spring.application.instance-id:${random.value}}
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 10
-    status-page-url-path: ${management.endpoints.web.base-path}/info
-    health-check-url-path: ${management.endpoints.web.base-path}/health
-    metadata-map:
-      zone: primary # This is needed for the load balancer
-      profile: ${spring.profiles.active}
-      version: #project.version#
-      git-version: ${git.commit.id.describe:}
-      git-commit: ${git.commit.id.abbrev:}
-      git-branch: ${git.branch:}
-  server:
-    # see discussion about enable-self-preservation:
-    # https://github.com/jhipster/generator-jhipster/issues/3654
-    enable-self-preservation: false
-    peer-node-read-timeout-ms: 1000
-  dashboard:
-    path: /registry
 
 # ===================================================================
 # JHipster specific properties

@@ -8,10 +8,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 const environment = require('./environment');
+const proxyConfig = require('./proxy.conf');
 
-const tls = process.env.TLS;
-
-module.exports = (config, options, targetOptions) => {
+module.exports = async (config, options, targetOptions) => {
   config.cache = {
     // 1. Set cache type to filesystem
     type: 'filesystem',
@@ -39,6 +38,12 @@ module.exports = (config, options, targetOptions) => {
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
       })
     );
+  }
+
+  // configuring proxy for back end service
+  const tls = Boolean(config.devServer && config.devServer.https);
+  if (config.devServer) {
+    config.devServer.proxy = proxyConfig({ tls });
   }
   if (targetOptions.target === 'serve' || config.watch) {
     config.plugins.push(
@@ -95,7 +100,6 @@ module.exports = (config, options, targetOptions) => {
 
   config.plugins.push(
     new webpack.DefinePlugin({
-      __TIMESTAMP__: JSON.stringify(environment.__TIMESTAMP__),
       // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
       __VERSION__: JSON.stringify(environment.__VERSION__),
       __DEBUG_INFO_ENABLED__: environment.__DEBUG_INFO_ENABLED__ || config.mode === 'development',
@@ -103,7 +107,7 @@ module.exports = (config, options, targetOptions) => {
       // If this URL is left empty (""), then it will be relative to the current context.
       // If you use an API server, in `prod` mode, you will need to enable CORS
       // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
-      __SERVER_API_URL__: JSON.stringify(environment.__SERVER_API_URL__),
+      SERVER_API_URL: JSON.stringify(environment.SERVER_API_URL),
     })
   );
 

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SERVER_API_URL } from 'app/app.constants';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -9,7 +8,7 @@ export class LoginOAuth2Service {
   constructor(private http: HttpClient) {}
 
   login(): void {
-    let port = location.port ? ':' + location.port : '';
+    let port = location.port ? `:${location.port}` : '';
     if (port === ':9000') {
       port = ':8761';
     }
@@ -27,6 +26,6 @@ export class LoginOAuth2Service {
 
   logout(): Observable<any> {
     // logout from the server
-    return this.http.post(SERVER_API_URL + 'api/logout', {}, { observe: 'response' }).pipe(map((response: HttpResponse<any>) => response));
+    return this.http.post(`${SERVER_API_URL}api/logout`, {}, { observe: 'response' }).pipe(map((response: HttpResponse<any>) => response));
   }
 }
