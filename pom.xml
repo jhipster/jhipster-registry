@@ -518,27 +518,7 @@
                     <groupId>com.google.cloud.tools</groupId>
                     <artifactId>jib-maven-plugin</artifactId>
                     <version>${jib-maven-plugin.version}</version>
-                    <dependencies>
-                        <dependency>
-                          <groupId>com.google.cloud.tools</groupId>
-                          <artifactId>jib-ownership-extension-maven</artifactId>
-                          <version>0.1.0</version>
-                        </dependency>
-                      </dependencies>
                     <configuration>
-                        <pluginExtensions>
-                            <pluginExtension>
-                                <implementation>com.google.cloud.tools.jib.maven.extension.ownership.JibOwnershipExtension</implementation>
-                                <configuration implementation="com.google.cloud.tools.jib.maven.extension.ownership.Configuration">
-                                    <rules>
-                                        <rule>
-                                            <glob>/target</glob>
-                                            <ownership>1000</ownership>
-                                        </rule>
-                                    </rules>
-                                </configuration>
-                            </pluginExtension>
-                        </pluginExtensions>
                         <from>
                             <image>${jib-maven-plugin.image}</image>
                             <platforms>
@@ -585,10 +565,6 @@
                                 <permission>
                                     <file>/entrypoint.sh</file>
                                     <mode>755</mode>
-                                </permission>
-                                <permission>
-                                    <file>/target</file>
-                                    <mode>775</mode>
                                 </permission>
                             </permissions>
                         </extraDirectories>
