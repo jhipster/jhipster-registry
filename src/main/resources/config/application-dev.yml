@@ -19,6 +19,23 @@ logging:
     tech.jhipster: DEBUG
     tech.jhipster.registry: DEBUG
 
+# ===================================================================
+# Eureka server configuration (eureka.server.*)
+#
+# Full list of properties with default values at:
+# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
+#
+# Documentation at:
+# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
+# ===================================================================
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://admin:${spring.security.user.password}@localhost:8761/eureka/
+
 spring:
   devtools:
     restart:
@@ -52,23 +69,6 @@ server:
   port: 8761
 
 # ===================================================================
-# Eureka server configuration (eureka.server.*)
-#
-# Full list of properties with default values at:
-# https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-server/src/main/java/org/springframework/cloud/netflix/eureka/server/EurekaServerConfigBean.java
-#
-# Documentation at:
-# https://github.com/Netflix/eureka/blob/master/eureka-core/src/main/java/com/netflix/eureka/EurekaServerConfig.java
-# ===================================================================
-
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://admin:${spring.security.user.password}@localhost:8761/eureka/
-
-# ===================================================================
 # JHipster specific properties
 #
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
@@ -78,7 +78,7 @@ jhipster:
   # CORS is only enabled by default with the "dev" profile
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
-    allowed-origins: 'http://localhost:8100,http://localhost:9000,http://localhost:4200'
+    allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,http://localhost:4200,https://localhost:4200'
     allowed-methods: '*'
     allowed-headers: '*'
     exposed-headers: 'Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params'

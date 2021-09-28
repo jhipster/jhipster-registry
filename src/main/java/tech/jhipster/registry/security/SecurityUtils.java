@@ -75,12 +75,26 @@ public final class SecurityUtils {
     }
 
     /**
-     * Ge the authorities of current user
+     * Checks if the current user has any of the authorities.
      *
-     * @return the authorities of current user
+     * @param authorities the authorities to check.
+     * @return true if the current user has any of the authorities, false otherwise.
      */
-    public static Set<String> getAuthorities() {
-        return getAuthorities(SecurityContextHolder.getContext().getAuthentication()).collect(Collectors.toSet());
+    public static boolean hasCurrentUserAnyOfAuthorities(String... authorities) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (
+            authentication != null && getAuthorities(authentication).anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+        );
+    }
+
+    /**
+     * Checks if the current user has none of the authorities.
+     *
+     * @param authorities the authorities to check.
+     * @return true if the current user has none of the authorities, false otherwise.
+     */
+    public static boolean hasCurrentUserNoneOfAuthorities(String... authorities) {
+        return !hasCurrentUserAnyOfAuthorities(authorities);
     }
 
     /**
@@ -90,8 +104,16 @@ public final class SecurityUtils {
      * @return true if the current user has the authority, false otherwise.
      */
     public static boolean hasCurrentUserThisAuthority(String authority) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && getAuthorities(authentication).anyMatch(authority::equals);
+        return hasCurrentUserAnyOfAuthorities(authority);
+    }
+
+    /**
+     * Get the authorities of current user
+     *
+     * @return the authorities of current user
+     */
+    public static Set<String> getAuthorities() {
+        return getAuthorities(SecurityContextHolder.getContext().getAuthentication()).collect(Collectors.toSet());
     }
 
     private static Stream<String> getAuthorities(Authentication authentication) {

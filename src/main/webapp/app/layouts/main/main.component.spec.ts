@@ -1,7 +1,7 @@
 jest.mock('app/core/auth/account.service');
 
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { Router, RouterEvent, NavigationEnd, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subject, of } from 'rxjs';
 import { NgxWebstorageModule } from 'ngx-webstorage';
@@ -52,10 +52,11 @@ describe('Component Tests', () => {
     });
 
     describe('page title', () => {
-      const defaultPageTitle = 'jHipsterRegistryApp';
+      const defaultPageTitle = 'JHipster Registry';
       const parentRoutePageTitle = 'parentTitle';
       const childRoutePageTitle = 'childTitle';
       const navigationEnd = new NavigationEnd(1, '', '');
+      const navigationStart = new NavigationStart(1, '');
 
       beforeEach(() => {
         routerState.snapshot.root = { data: {} };
@@ -98,13 +99,23 @@ describe('Component Tests', () => {
         it('should set page title to parent route pageTitle if child routes exists but pageTitle is not set for child route data', () => {
           // GIVEN
           routerState.snapshot.root.data = { pageTitle: parentRoutePageTitle };
-          routerState.snapshot.root.firstChild = null;
+          routerState.snapshot.root.firstChild = { data: {} };
 
           // WHEN
           routerEventsSubject.next(navigationEnd);
 
           // THEN
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle);
+        });
+      });
+
+      describe('navigation start', () => {
+        it('should not set page title on navigation start', () => {
+          // WHEN
+          routerEventsSubject.next(navigationStart);
+
+          // THEN
+          expect(titleService.setTitle).not.toHaveBeenCalled();
         });
       });
     });
