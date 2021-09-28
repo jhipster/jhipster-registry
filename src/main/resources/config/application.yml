@@ -105,10 +105,6 @@ spring:
   thymeleaf:
     mode: HTML
 
-logging:
-  file:
-    name: target/jhipster-registry.log
-
 server:
   port: 8761
   servlet:
