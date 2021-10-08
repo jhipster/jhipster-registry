@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "7.2.0",
+    "jhipsterVersion": "7.3.0",
     "baseName": "JHipsterRegistry",
     "dasherizedBaseName": "jhipster-registry",
     "humanizedBaseName": "JHipster Registry",
