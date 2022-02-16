@@ -60,22 +60,18 @@ public class CloudConfigRefreshService {
     public void configMapWatcher() {
         if (getConfigPath() != null && !getConfigPath().isEmpty()) {
             taskExecutor =
-                Executors.newSingleThreadScheduledExecutor(
-                    job -> {
-                        Thread thread = new Thread(job, "CloudConfigMapRefresher");
-                        thread.setDaemon(true);
-                        return thread;
-                    }
-                );
-            taskExecutor.execute(
-                () -> {
-                    try {
-                        configMapRefreshContext();
-                    } catch (IOException | InterruptedException ex) {
-                        log.error("Unable to refresh K8s ConfigMap", ex);
-                    }
+                Executors.newSingleThreadScheduledExecutor(job -> {
+                    Thread thread = new Thread(job, "CloudConfigMapRefresher");
+                    thread.setDaemon(true);
+                    return thread;
+                });
+            taskExecutor.execute(() -> {
+                try {
+                    configMapRefreshContext();
+                } catch (IOException | InterruptedException ex) {
+                    log.error("Unable to refresh K8s ConfigMap", ex);
                 }
-            );
+            });
         } else {
             log.error("ConfigMap directory path not specified. Specify value for the environment variable k8s.config.path");
         }

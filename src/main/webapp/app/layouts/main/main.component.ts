@@ -11,7 +11,12 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
   templateUrl: './main.component.html',
 })
 export class MainComponent implements OnInit {
-  constructor(private accountService: AccountService, private titleService: Title, private router: Router, private $storageService: StateStorageService) {}
+  constructor(
+    private accountService: AccountService,
+    private titleService: Title,
+    private router: Router,
+    private $storageService: StateStorageService
+  ) {}
 
   ngOnInit(): void {
     // try to log in automatically

@@ -1,11 +1,11 @@
 jest.mock('app/core/auth/account.service');
-jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { of } from 'rxjs';
 
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
@@ -32,7 +32,7 @@ describe('Component Tests', () => {
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
+          imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot(), RouterTestingModule.withRoutes([])],
           declarations: [HomeComponent],
           providers: [
             AccountService,
@@ -43,7 +43,6 @@ describe('Component Tests', () => {
             LoginOAuth2Service,
             ProfileService,
             RefreshService,
-            Router,
           ],
         })
           .overrideTemplate(HomeComponent, '')
@@ -90,6 +89,7 @@ describe('Component Tests', () => {
           activeProfiles: ['composite', 'dev', 'api-docs'],
         })
       );
+      jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
 
       // WHEN
       comp.login();

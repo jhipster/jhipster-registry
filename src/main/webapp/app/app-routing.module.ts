@@ -8,8 +8,6 @@ import { Authority } from 'app/config/authority.constants';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
-const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
-
 @NgModule({
   imports: [
     RouterModule.forRoot(
@@ -34,7 +32,8 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           path: 'login',
           loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
         },
-        ...LAYOUT_ROUTES,
+        navbarRoute,
+        ...errorRoute,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }
     ),

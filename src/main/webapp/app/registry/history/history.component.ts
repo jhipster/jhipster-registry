@@ -25,7 +25,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // prevent memory leak when component destroyed
-    this.unsubscribe$.next();
+    this.unsubscribe$.next(null);
     this.unsubscribe$.complete();
   }
 

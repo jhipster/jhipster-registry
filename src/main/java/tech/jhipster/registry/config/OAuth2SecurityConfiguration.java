@@ -117,8 +117,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/management/info").permitAll()
                 .antMatchers("/management/health").permitAll()
                 .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/v2/api-docs/**").permitAll()
-                .antMatchers("/swagger-resources/configuration/**").permitAll()
+                .antMatchers("/v3/api-docs/**").permitAll()
                 .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
             .and()
                 .oauth2ResourceServer()
@@ -141,16 +140,14 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return authorities -> {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
-            authorities.forEach(
-                authority -> {
-                    // Check for OidcUserAuthority because Spring Security 5.2 returns
-                    // each scope as a GrantedAuthority, which we don't care about.
-                    if (authority instanceof OidcUserAuthority) {
-                        OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                        mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
-                    }
+            authorities.forEach(authority -> {
+                // Check for OidcUserAuthority because Spring Security 5.2 returns
+                // each scope as a GrantedAuthority, which we don't care about.
+                if (authority instanceof OidcUserAuthority) {
+                    OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                    mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
                 }
-            );
+            });
             return mappedAuthorities;
         };
     }

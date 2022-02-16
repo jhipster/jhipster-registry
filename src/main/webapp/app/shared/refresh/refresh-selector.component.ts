@@ -28,7 +28,7 @@ export class RefreshSelectorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     /** prevent memory leak when component destroyed **/
-    this.unSubscribe$.next();
+    this.unSubscribe$.next(null);
     this.unSubscribe$.complete();
   }
 

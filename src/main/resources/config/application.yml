@@ -14,6 +14,16 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+---
+# Conditionally disable springdoc on missing api-docs profile
+spring:
+  config:
+    activate:
+      on-profile: '!api-docs'
+springdoc:
+  api-docs:
+    enabled: false
+---
 # ===================================================================
 # Eureka server configuration (eureka.server.*)
 #
@@ -49,6 +59,7 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
+      context-path: ${server.servlet.context-path:}
   server:
     # see discussion about enable-self-preservation:
     # https://github.com/jhipster/generator-jhipster/issues/3654
@@ -62,24 +73,25 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump']
+        include:
+          ['configprops', 'env', 'health', 'info', 'jhimetrics', 'jhiopenapigroups', 'logfile', 'loggers', 'prometheus', 'threaddump']
   endpoint:
     health:
       show-details: when_authorized
       roles: 'ROLE_ADMIN'
       probes:
         enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState
     jhimetrics:
       enabled: true
   info:
     git:
       mode: full
   health:
-    group:
-      liveness:
-        include: livenessState
-      readiness:
-        include: readinessState
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
   metrics:
@@ -127,6 +139,10 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
+    allow-circular-references: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   security:
     user:
       name: admin
@@ -158,6 +174,9 @@ server:
       cookie:
         http-only: true
 
+springdoc:
+  show-actuator: true
+
 # Properties to be exposed on the /info management endpoint
 info:
   # Comma separated list of profiles that will trigger the ribbon to show
@@ -183,8 +202,8 @@ jhipster:
   mail:
     from: JHipsterRegistry@localhost
   api-docs:
-    default-include-pattern: ${server.servlet.context-path:}/api/.*
-    management-include-pattern: ${server.servlet.context-path:}/management/.*
+    default-include-pattern: ${server.servlet.context-path:}/api/**
+    management-include-pattern: ${server.servlet.context-path:}/management/**
     title: JHipster Registry API
     description: JHipster Registry API documentation
     version: ${info.project.version}

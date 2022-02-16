@@ -5,6 +5,6 @@ export const encryptionRoute: Route = {
   path: '',
   component: EncryptionComponent,
   data: {
-    pageTitle: 'Encryption'
-  }
+    pageTitle: 'Encryption',
+  },
 };
