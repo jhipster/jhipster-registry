@@ -1,7 +1,6 @@
 package tech.jhipster.registry.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -22,9 +21,8 @@ import tech.jhipster.registry.security.AuthoritiesConstants;
  * Integration tests for the {@link AuthInfoResource} REST controller.
  */
 @AutoConfigureMockMvc
-@SpringBootTest(classes = { JHipsterRegistryApp.class })
-@ActiveProfiles(profiles = { "native", "oauth2-test" })
-@Import(TestSecurityConfiguration.class)
+@SpringBootTest(classes = { JHipsterRegistryApp.class, TestSecurityConfiguration.class })
+@ActiveProfiles(profiles = { "native", "oauth2" })
 class AuthInfoResourceIT {
 
     static final String TEST_USER_LOGIN = "test";
@@ -32,7 +30,7 @@ class AuthInfoResourceIT {
     @Autowired
     private MockMvc restAuthInfoMockMvc;
 
-    private static final String issuer = "http://localhost:9080/auth/realms/jhipster";
+    private static final String issuer = "http://DO_NOT_CALL:9080/auth/realms/jhipster";
 
     private static final String clientId = "web_app";
 

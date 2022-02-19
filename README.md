@@ -102,3 +102,56 @@ vault:
 ```
 
 - After successful start, you shall require entering a new password as provided in vault.
+
+### Auth0
+
+If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, you can follow the below configuration steps:
+
+- Create a free developer account at <https://auth0.com/signup>. After successful sign-up, your account will be associated with a unique domain like `dev-xxx.us.auth0.com`
+- Create a new application of type `Regular Web Applications`. Switch to the `Settings` tab, and configure your application settings like:
+  - Allowed Callback URLs: `http://localhost:8761/login/oauth2/code/oidc`
+  - Allowed Logout URLs: `http://localhost:8761/`
+- Navigate to **User Management** > **Roles** and create new roles named `ROLE_ADMIN`, and `ROLE_USER`.
+- Navigate to **User Management** > **Users** and create a new user account. Click on the **Role** tab to assign roles to the newly created user account.
+- Navigate to **Auth Pipeline** > **Rules** and create a new Rule. Choose `Empty rule` template. Provide a meaningful name like `JHipster claims` and replace `Script` content with the following and Save.
+
+```javascript
+function (user, context, callback) {
+  user.preferred_username = user.email;
+  const roles = (context.authorization || {}).roles;
+  function prepareCustomClaimKey(claim) {
+    return `https://www.jhipster.tech/${claim}`;
+  }
+  const rolesClaim = prepareCustomClaimKey('roles');
+  if (context.idToken) {
+  	context.idToken[rolesClaim] = roles;
+  }
+  if (context.accessToken) {
+  	context.accessToken[rolesClaim] = roles;
+  }
+  callback(null, user, context);
+}
+```
+
+- In your `JHipster` application, modify `src/main/resources/config/application.yml` to use your Auth0 application settings:
+
+```yaml
+spring:
+  ...
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: https://{your-auth0-domain}/
+        registration:
+          oidc:
+            client-id: {clientId}
+            client-secret: {clientSecret}
+jhipster:
+  ...
+  security:
+    oauth2:
+      audience:
+        - https://{your-auth0-domain}/api/v2/
+```
