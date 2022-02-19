@@ -1,4 +1,3 @@
-jest.mock('@angular/router');
 jest.mock('app/core/auth/account.service');
 jest.mock('app/login/login.service');
 jest.mock('app/shared/oauth2/login-oauth2.service');
@@ -6,6 +5,7 @@ jest.mock('app/shared/oauth2/login-oauth2.service');
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -29,9 +29,9 @@ describe('Component Tests', () => {
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule],
+          imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
           declarations: [NavbarComponent],
-          providers: [AccountService, Router, LoginService, LoginOAuth2Service],
+          providers: [AccountService, LoginService, LoginOAuth2Service],
         })
           .overrideTemplate(NavbarComponent, '')
           .compileComponents();
@@ -74,6 +74,7 @@ describe('Component Tests', () => {
           activeProfiles: [],
         })
       );
+      jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
 
       // WHEN
       comp.logout();

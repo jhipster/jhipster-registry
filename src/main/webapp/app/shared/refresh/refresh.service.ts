@@ -16,11 +16,11 @@ export class RefreshService {
   }
 
   refreshChanged(): void {
-    this.refreshChangedSource.next();
+    this.refreshChangedSource.next(null);
   }
 
   refreshReload(): void {
-    this.refreshReloadSource.next();
+    this.refreshReloadSource.next(null);
   }
 
   getSelectedRefreshTime(): number {

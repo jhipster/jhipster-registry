@@ -100,17 +100,15 @@ public class EurekaResource {
         getServerContext()
             .getPeerEurekaNodes()
             .getPeerNodesView()
-            .forEach(
-                node -> {
-                    try {
-                        // The URL is parsed in order to remove login/password information
-                        URI uri = new URI(node.getServiceUrl());
-                        replicas.add(uri.getHost() + ":" + uri.getPort());
-                    } catch (URISyntaxException e) {
-                        log.warn("Could not parse peer Eureka node URL: {}", e.getMessage());
-                    }
+            .forEach(node -> {
+                try {
+                    // The URL is parsed in order to remove login/password information
+                    URI uri = new URI(node.getServiceUrl());
+                    replicas.add(uri.getHost() + ":" + uri.getPort());
+                } catch (URISyntaxException e) {
+                    log.warn("Could not parse peer Eureka node URL: {}", e.getMessage());
                 }
-            );
+            });
 
         return new ResponseEntity<>(replicas, HttpStatus.OK);
     }

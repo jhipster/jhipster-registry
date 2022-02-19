@@ -5,6 +5,6 @@ export const replicasRoute: Route = {
   path: '',
   component: ReplicasComponent,
   data: {
-    pageTitle: 'Replicas'
-  }
+    pageTitle: 'Replicas',
+  },
 };

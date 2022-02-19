@@ -5,6 +5,6 @@ export const configRoute: Route = {
   path: '',
   component: ConfigComponent,
   data: {
-    pageTitle: 'Configuration'
-  }
+    pageTitle: 'Configuration',
+  },
 };

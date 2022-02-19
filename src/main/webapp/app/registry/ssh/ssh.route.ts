@@ -5,6 +5,6 @@ export const sshRoute: Route = {
   path: '',
   component: SSHComponent,
   data: {
-    pageTitle: 'SSH public key'
-  }
+    pageTitle: 'SSH public key',
+  },
 };

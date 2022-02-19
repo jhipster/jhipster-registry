@@ -1,7 +1,7 @@
 # Syncing with generator-jhipster
 
 JHipster Registry is generated with generator-jhipster.
-The following is a base workflow to regenerate JHisper Registry using a new generator-jhipster release.
+The following is a base workflow to regenerate JHipster Registry using a new generator-jhipster release.
 
 Update JHipster:
 

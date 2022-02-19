@@ -1,7 +1,7 @@
-jest.mock('@angular/router');
 jest.mock('app/core/auth/state-storage.service');
 
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { NgxWebstorageModule } from 'ngx-webstorage';
@@ -33,14 +33,15 @@ describe('Account Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
-      providers: [StateStorageService, Router],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), NgxWebstorageModule.forRoot()],
+      providers: [StateStorageService],
     });
 
     service = TestBed.inject(AccountService);
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
+    jest.spyOn(mockRouter, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
   });
 
   afterEach(() => {

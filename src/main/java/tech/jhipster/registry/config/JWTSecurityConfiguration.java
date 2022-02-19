@@ -24,6 +24,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 import tech.jhipster.config.JHipsterProperties;
+import tech.jhipster.registry.management.SecurityMetersService;
 import tech.jhipster.registry.security.AuthoritiesConstants;
 import tech.jhipster.registry.security.jwt.JWTConfigurer;
 import tech.jhipster.registry.security.jwt.TokenProvider;
@@ -41,6 +42,8 @@ public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SecurityProblemSupport problemSupport;
 
+    private final SecurityMetersService securityMetersService;
+
     private final String username;
 
     private final String password;
@@ -53,7 +56,8 @@ public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Value("${spring.security.user.roles}") String[] roles,
         AuthenticationManagerBuilder authenticationManagerBuilder,
         JHipsterProperties jHipsterProperties,
-        SecurityProblemSupport securityProblemSupport
+        SecurityProblemSupport securityProblemSupport,
+        SecurityMetersService securityMetersService
     ) {
         this.username = username;
         this.password = password;
@@ -61,6 +65,7 @@ public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.jHipsterProperties = jHipsterProperties;
         this.problemSupport = securityProblemSupport;
+        this.securityMetersService = securityMetersService;
     }
 
     @PostConstruct
@@ -135,8 +140,7 @@ public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/management/info").permitAll()
                 .antMatchers("/management/health").permitAll()
                 .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/v2/api-docs/**").permitAll()
-                .antMatchers("/swagger-resources/configuration/**").permitAll()
+                .antMatchers("/v3/api-docs/**").permitAll()
                 .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
             .and()
                 .httpBasic()
@@ -152,6 +156,6 @@ public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public TokenProvider tokenProvider() {
-        return new TokenProvider(jHipsterProperties);
+        return new TokenProvider(jHipsterProperties, securityMetersService);
     }
 }

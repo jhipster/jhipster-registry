@@ -5,6 +5,6 @@ export const historyRoute: Route = {
   path: '',
   component: HistoryComponent,
   data: {
-    pageTitle: 'History'
-  }
+    pageTitle: 'History',
+  },
 };
