@@ -109,6 +109,15 @@ OAuth is a stateful security mechanism, like HTTP Session. Spring Security provi
 
 Please note that [JSON Web Token (JWT)](https://jwt.io/) is the default option when using the JHipster Registry. It has to be started with **oauth2** spring profile to enable the OAuth authentication.
 
+In order to run your JHipster Registry with OAuth 2.0 and OpenID Connect:
+
+- For development run `SPRING_PROFILES_ACTIVE=dev,oauth2,native ./mvnw`
+- For production you can use environment variables. For example:
+
+```
+export SPRING_PROFILES_ACTIVE=prod,oauth2,api-docs
+```
+
 ### Keycloak
 
 [Keycloak](https://www.keycloak.org/) is the default OpenID Connect server configured with JHipster.
