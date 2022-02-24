@@ -102,3 +102,34 @@ vault:
 ```
 
 - After successful start, you shall require entering a new password as provided in vault.
+
+## OAuth 2.0 and OpenID Connect
+
+OAuth is a stateful security mechanism, like HTTP Session. Spring Security provides excellent OAuth 2.0 and OIDC support, and this is leveraged by JHipster. If you’re not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
+
+Please note that [JSON Web Token (JWT)](https://jwt.io/) is the default option when using the JHipster Registry. It has to be started with **oauth2** spring profile to enable the OAuth authentication.
+
+In order to run your JHipster Registry with OAuth 2.0 and OpenID Connect:
+
+- For development run `SPRING_PROFILES_ACTIVE=dev,oauth2,native ./mvnw`
+- For production you can use environment variables. For example:
+
+```
+export SPRING_PROFILES_ACTIVE=prod,oauth2,api-docs
+```
+
+### Keycloak
+
+[Keycloak](https://www.keycloak.org/) is the default OpenID Connect server configured with JHipster.
+
+If you want to use Keycloak, you can follow the [documentation for Keycloak](https://www.jhipster.tech/security/#keycloak)
+
+### Okta
+
+If you'd like to use [Okta](https://www.okta.com/) instead of Keycloak, you can follow the [documentation for Okta](https://www.jhipster.tech/security/#okta)
+
+### Auth0
+
+If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, you can follow the [documentation for Auth0](https://www.jhipster.tech/security/#auth0)
+
+NOTE: Using the JHipster Registry, add URLs for port 8761 too ("Allowed Callback URLs" and "Allowed Logout URLs")

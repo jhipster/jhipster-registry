@@ -10,7 +10,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { EventManager } from 'app/core/util/event-manager.service';
 import { ApplicationsService, Instance } from 'app/registry/applications/applications.service';
-import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
+import { LoginOAuth2Service } from 'app/login/login-oauth2.service';
 import { Health, HealthStatus } from 'app/shared/health/health.model';
 import { HealthService } from 'app/shared/health/health.service';
 import { RefreshService } from 'app/shared/refresh/refresh.service';

@@ -8,7 +8,8 @@ import { AccountService } from 'app/core/auth/account.service';
 import { EventManager } from 'app/core/util/event-manager.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginService } from 'app/login/login.service';
-import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
+import { LoginOAuth2Service } from 'app/login/login-oauth2.service';
+import { Logout } from '../../login/logout.model';
 
 @Component({
   selector: 'jhi-navbar',
@@ -67,19 +68,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(profileInfo => {
         if (profileInfo.activeProfiles!.includes('oauth2')) {
-          this.loginOAuth2Service.logout().subscribe(response => {
-            const data = response.body;
-            let logoutUrl = data.logoutUrl;
-            // if Keycloak, uri has protocol/openid-connect/token
-            if (logoutUrl.indexOf('/protocol') > -1) {
-              logoutUrl = `${String(logoutUrl)}?redirect_uri=${String(window.location.origin)}`;
-            } else {
-              // Okta
-              logoutUrl = `${String(logoutUrl)}?id_token_hint=${String(data.idToken)}&post_logout_redirect_uri=${String(
-                window.location.origin
-              )}`;
-            }
-            window.location.href = logoutUrl;
+          this.loginOAuth2Service.logout().subscribe((logout: Logout) => {
+            window.location.href = logout.logoutUrl;
           });
         } else {
           this.loginService.logout();

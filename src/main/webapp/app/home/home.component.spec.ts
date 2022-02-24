@@ -12,7 +12,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { ApplicationsService } from 'app/registry/applications/applications.service';
 import { HealthService } from 'app/shared/health/health.service';
-import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
+import { LoginOAuth2Service } from 'app/login/login-oauth2.service';
 import { RefreshService } from 'app/shared/refresh/refresh.service';
 import { EventManager } from 'app/core/util/event-manager.service';
 import { EurekaStatusService } from './eureka.status.service';

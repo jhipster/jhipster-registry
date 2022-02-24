@@ -1,6 +1,6 @@
 jest.mock('app/core/auth/account.service');
 jest.mock('app/login/login.service');
-jest.mock('app/shared/oauth2/login-oauth2.service');
+jest.mock('app/login/login-oauth2.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -12,7 +12,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
 import { LoginService } from 'app/login/login.service';
-import { LoginOAuth2Service } from 'app/shared/oauth2/login-oauth2.service';
+import { LoginOAuth2Service } from 'app/login/login-oauth2.service';
 
 import { NavbarComponent } from './navbar.component';
 
