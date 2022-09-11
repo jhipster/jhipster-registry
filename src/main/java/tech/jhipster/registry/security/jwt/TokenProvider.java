@@ -20,7 +20,6 @@ import org.springframework.util.ObjectUtils;
 import tech.jhipster.config.JHipsterProperties;
 import tech.jhipster.registry.management.SecurityMetersService;
 
-@Component
 public class TokenProvider {
 
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
