@@ -2,6 +2,7 @@ package tech.jhipster.registry.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import tech.jhipster.registry.config.Constants;
 import tech.jhipster.registry.security.jwt.JWTFilter;
 import tech.jhipster.registry.security.jwt.TokenProvider;
 import tech.jhipster.registry.web.rest.vm.LoginVM;
@@ -19,6 +21,7 @@ import tech.jhipster.registry.web.rest.vm.LoginVM;
  */
 @RestController
 @RequestMapping("/api")
+@Profile("!" + Constants.PROFILE_OAUTH2)
 public class UserJWTController {
 
     private final TokenProvider tokenProvider;

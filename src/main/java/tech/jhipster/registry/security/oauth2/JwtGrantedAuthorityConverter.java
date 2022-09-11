@@ -7,7 +7,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import tech.jhipster.registry.security.SecurityUtils;
 
-@Component
 public class JwtGrantedAuthorityConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
     public JwtGrantedAuthorityConverter() {
