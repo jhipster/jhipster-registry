@@ -30,7 +30,7 @@ class AuthInfoResourceIT {
     @Autowired
     private MockMvc restAuthInfoMockMvc;
 
-    private static final String issuer = "http://DO_NOT_CALL:9080/auth/realms/jhipster";
+    private static final String issuer = "http://DO_NOT_CALL:9080/realms/jhipster";
 
     private static final String clientId = "web_app";
 
