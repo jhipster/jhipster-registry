@@ -2,3 +2,10 @@ spring:
   cloud:
     config:
       enabled: false
+      server:
+        composite:
+          - type: git
+            uri: https://github.com/jhipster/jhipster-registry-sample-config
+            ignore-local-ssh-settings: true
+            private-key: my-private-key
+      label: main

@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "spring.cloud.config.server")
-public class ConfigServerConfig {
+public class ConfigServerProperties {
 
     private final List<Map<String, Object>> composite = new ArrayList<>();
 

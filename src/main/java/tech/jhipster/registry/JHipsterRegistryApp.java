@@ -18,12 +18,12 @@ import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.registry.config.ApplicationProperties;
-import tech.jhipster.registry.config.ConfigServerConfig;
+import tech.jhipster.registry.config.ConfigServerProperties;
 
 @EnableEurekaServer
 @EnableConfigServer
 @SpringBootApplication
-@EnableConfigurationProperties({ ApplicationProperties.class, ConfigServerConfig.class })
+@EnableConfigurationProperties({ ApplicationProperties.class, ConfigServerProperties.class })
 public class JHipsterRegistryApp {
 
     private static final Logger log = LoggerFactory.getLogger(JHipsterRegistryApp.class);
