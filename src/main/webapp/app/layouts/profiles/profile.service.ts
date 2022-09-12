@@ -19,16 +19,12 @@ export class ProfileService {
     }
 
     this.profileInfo$ = this.http.get<InfoResponse>(this.infoUrl).pipe(
-      map(
-        (response: InfoResponse) => ({
-          activeProfiles: response.activeProfiles,
-          inProduction: response.activeProfiles?.includes('prod'),
-          openAPIEnabled: response.activeProfiles?.includes('api-docs'),
-          cloudConfigServerConfigurationSources: response['cloud-config-server-configuration-sources'],
-          cloudConfigLabel: response['cloud-config-label'],
-        }),
-        shareReplay()
-      )
+      map((response: InfoResponse) => ({
+        activeProfiles: response.activeProfiles,
+        inProduction: response.activeProfiles?.includes('prod'),
+        openAPIEnabled: response.activeProfiles?.includes('api-docs'),
+      })),
+      shareReplay()
     );
     return this.profileInfo$;
   }

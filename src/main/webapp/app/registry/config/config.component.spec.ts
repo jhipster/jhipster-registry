@@ -54,6 +54,18 @@ describe('Component Tests', () => {
           })
         );
 
+        jest.spyOn(service, 'getConfigSources').mockReturnValue(
+          of({
+            label: 'main',
+            serverConfigurationSources: [
+              {
+                type: 'native',
+                'search-locations': 'file:./central-config',
+              },
+            ],
+          })
+        );
+
         // WHEN
         comp.ngOnInit();
 

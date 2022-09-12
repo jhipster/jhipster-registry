@@ -24,7 +24,7 @@ public class SshResourceTest {
     }
 
     @Test
-    public void eurekaTest() throws Exception {
+    public void shouldGetSshPublicKey() throws Exception {
         // without key
         doReturn(null).when(ssh).getPublicKey();
         mock.perform(get("/api/ssh/public_key")).andExpect(status().isNotFound());

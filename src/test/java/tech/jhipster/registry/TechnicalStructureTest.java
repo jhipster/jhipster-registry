@@ -9,6 +9,7 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import tech.jhipster.registry.config.ApplicationProperties;
+import tech.jhipster.registry.config.ConfigServerProperties;
 
 @AnalyzeClasses(packagesOf = JHipsterRegistryApp.class, importOptions = DoNotIncludeTests.class)
 class TechnicalStructureTest {
@@ -25,5 +26,6 @@ class TechnicalStructureTest {
         .whereLayer("Security").mayOnlyBeAccessedByLayers("Web", "Config")
 
         .ignoreDependency(alwaysTrue(), belongToAnyOf(ApplicationProperties.class))
+        .ignoreDependency(alwaysTrue(), belongToAnyOf(ConfigServerProperties.class))
         .ignoreDependency(belongToAnyOf(JHipsterRegistryApp.class), alwaysTrue());
 }
