@@ -18,18 +18,4 @@ export class StateStorageService {
   clearUrl(): void {
     this.sessionStorageService.clear(this.previousUrlKey);
   }
-
-  storeDestinationState(destinationState: any, destinationStateParams: any, fromState: any): void {
-    const destinationInfo = {
-      destination: {
-        name: destinationState.name,
-        data: destinationState.data,
-      },
-      params: destinationStateParams,
-      from: {
-        name: fromState.name,
-      },
-    };
-    this.sessionStorageService.store('destinationState', destinationInfo);
-  }
 }

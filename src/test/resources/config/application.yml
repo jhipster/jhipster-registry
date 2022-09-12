@@ -47,7 +47,7 @@ spring:
     scheduling:
       thread-name-prefix: jhipster-registry-scheduling-
       pool:
-        size: 1
+        size: 20
   thymeleaf:
     mode: HTML
 
@@ -60,10 +60,12 @@ server:
 #
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
 jhipster:
   clientApp:
     name: 'jHipsterRegistryApp'
+  mail:
+    from: JHipsterRegistry@localhost.com
+    base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender
     use-json-format: true # By default, logs are in Json format
@@ -79,6 +81,7 @@ jhipster:
         base64-secret: NmQ3NTY1NjhlZGY2NmEzNzUxMjFkZDVmNTA3YjRiNWIxMzM2ZGRiNDNlYjFkMDc2YzdlYTgzYjVkNTNlZGU0NTdiNDg5OTUyNTZjYmNiYjlkMWNjNjE5MTE2NjVhZjM2MmZkYTdiYjRkNGZiMDU5MzhmMDIzYTE4ZjQ3ZTVmMTU=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -89,3 +92,7 @@ jhipster:
 # ===================================================================
 
 # application:
+management:
+  health:
+    mail:
+      enabled: false

@@ -55,13 +55,27 @@ spring:
       name: admin
       password: admin
       roles: USER, ADMIN
+  sleuth:
+    # https://github.com/spring-projects/spring-framework/issues/27844#issuescomment-1002866885
+    # https://github.com/spring-cloud/spring-cloud-sleuth/issues/2094
+    async:
+      enabled: false
+    enabled: false
+    sampler:
+      probability: 1 # report 100% of traces
+  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+    base-url: http://localhost:9411
+    enabled: false
+    locator:
+      discovery:
+        enabled: true
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
 # keytool -genkey -alias jhipsterregistry -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:
-# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
+# See details in topic "Create a Java Keystore (.JKS) from Let's Encrypt Certificates" on https://maximilian-boehm.com/en-gb/blog
 #
 # Then, modify the server.ssl properties so your "server" configuration looks like:
 #

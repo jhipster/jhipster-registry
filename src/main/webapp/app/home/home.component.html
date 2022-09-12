@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-md-12 text-center">
       <div *ngSwitchCase="true">
-        <jhi-refresh-selector class="float-right refresh-left-side"></jhi-refresh-selector>
+        <jhi-refresh-selector class="float-end refresh-left-side"></jhi-refresh-selector>
       </div>
       <div class="alert alert-warning" *ngSwitchCase="false">
         <span>You are not authenticated.</span>
@@ -67,7 +67,7 @@
                 <td>{{ instance.name }}</td>
                 <td class="break">{{ instance.instanceId }}</td>
                 <td class="text-center">
-                  <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(instance.status)">
+                  <span class="badge rounded-pill fw-normal" [ngClass]="getBadgeClass(instance.status)">
                     {{ instance.status }}
                   </span>
                 </td>
@@ -106,7 +106,7 @@
               <tr>
                 <td>Instance Status</td>
                 <td>
-                  <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(status.instanceInfo.status)">
+                  <span class="badge rounded-pill fw-normal" [ngClass]="getBadgeClass(status.instanceInfo.status)">
                     {{ status.instanceInfo.status }}
                   </span>
                 </td>
@@ -130,7 +130,7 @@
                 </td>
                 <td class="text-center"></td>
                 <td class="text-center">
-                  <span class="badge" [ngClass]="getBadgeClass(componentHealth.value!.status)">
+                  <span class="badge rounded-pill" [ngClass]="getBadgeClass(componentHealth.value!.status)">
                     {{ componentHealth.value!.status }}
                   </span>
                 </td>

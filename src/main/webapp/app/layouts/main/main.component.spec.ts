@@ -4,7 +4,6 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterEvent, NavigationEnd, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subject, of } from 'rxjs';
-import { NgxWebstorageModule } from 'ngx-webstorage';
 
 import { AccountService } from 'app/core/auth/account.service';
 
@@ -22,24 +21,21 @@ describe('MainComponent', () => {
     routerState = routerState;
   }
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [NgxWebstorageModule.forRoot()],
-        declarations: [MainComponent],
-        providers: [
-          Title,
-          AccountService,
-          {
-            provide: Router,
-            useClass: MockRouter,
-          },
-        ],
-      })
-        .overrideTemplate(MainComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [MainComponent],
+      providers: [
+        Title,
+        AccountService,
+        {
+          provide: Router,
+          useClass: MockRouter,
+        },
+      ],
     })
-  );
+      .overrideTemplate(MainComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MainComponent);
