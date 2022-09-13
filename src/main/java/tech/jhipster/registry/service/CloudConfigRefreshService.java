@@ -124,7 +124,7 @@ public class CloudConfigRefreshService {
                 if (log.isDebugEnabled()) {
                     events.forEach(event -> log.debug("Event detected: " + event.kind().name() + ", Updated File: " + event.context()));
                 }
-                Collection<Integer> activeList = fileList.stream().map(entry -> getHashValue(entry)).collect(Collectors.toList());
+                Collection<Integer> activeList = fileList.stream().map(this::getHashValue).collect(Collectors.toList());
                 if (!hashList.containsAll(activeList)) {
                     log.debug("File system updated. Hashed content matching failed");
                     hashList.clear();
