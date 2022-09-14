@@ -18,6 +18,7 @@ import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.registry.config.ApplicationProperties;
+import tech.jhipster.registry.config.CRLFLogConverter;
 import tech.jhipster.registry.config.ConfigServerProperties;
 
 @EnableEurekaServer
@@ -88,6 +89,7 @@ public class JHipsterRegistryApp {
             log.warn("The host name could not be determined, using `localhost` as fallback");
         }
         log.info(
+            CRLFLogConverter.CRLF_SAFE_MARKER,
             "\n----------------------------------------------------------\n\t" +
             "Application '{}' is running! Access URLs:\n\t" +
             "Local: \t\t{}://localhost:{}{}\n\t" +

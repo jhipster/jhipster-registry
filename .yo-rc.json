@@ -38,7 +38,7 @@
     "hibernateCache": "no",
     "humanizedBaseName": "JHipster Registry",
     "jhiPrefix": "jhi",
-    "jhipsterVersion": "7.6.0",
+    "jhipsterVersion": "7.9.3",
     "jwtSecretKey": "NmQ3NTY1NjhlZGY2NmEzNzUxMjFkZDVmNTA3YjRiNWIxMzM2ZGRiNDNlYjFkMDc2YzdlYTgzYjVkNTNlZGU0NTdiNDg5OTUyNTZjYmNiYjlkMWNjNjE5MTE2NjVhZjM2MmZkYTdiYjRkNGZiMDU5MzhmMDIzYTE4ZjQ3ZTVmMTU=",
     "languages": ["en", "fr"],
     "messageBroker": false,

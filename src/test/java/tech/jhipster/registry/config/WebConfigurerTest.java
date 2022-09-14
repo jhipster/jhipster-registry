@@ -50,20 +50,6 @@ class WebConfigurerTest {
     }
 
     @Test
-    void shouldStartUpProdServletContext() throws ServletException {
-        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
-
-        assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-    }
-
-    @Test
-    void shouldStartUpDevServletContext() throws ServletException {
-        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
-
-        assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-    }
-
-    @Test
     void shouldCustomizeServletContainer() {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
         UndertowServletWebServerFactory container = new UndertowServletWebServerFactory();

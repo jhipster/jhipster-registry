@@ -15,10 +15,13 @@ h4 {
 }
 
 /* Increase contrast of links to get 100% on Lighthouse Accessability Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
-a,
-a:hover {
+a {
   color: #533f03;
   font-weight: bold;
+}
+
+a:hover {
+  color: #533f03;
 }
 
 /* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
@@ -81,6 +84,14 @@ Generic styles
   padding: 10px;
 }
 
+.head {
+  margin-bottom: 1%;
+}
+
+.bottom {
+  margin-top: 2%;
+}
+
 .w-40 {
   width: 40% !important;
 }
@@ -94,6 +105,10 @@ Generic styles
   word-break: break-all;
 }
 
+.form-control {
+  background-color: #fff;
+}
+
 .readonly {
   background-color: #eee;
   opacity: 1;
@@ -104,6 +119,13 @@ pre.code-block {
   background: #403d3d;
   color: rgb(241, 187, 90);
   border-radius: 5px;
+}
+
+.refresh-left-side {
+  .dropdown-menu {
+    left: initial;
+    right: 0;
+  }
 }
 
 .footer {
@@ -158,28 +180,6 @@ Custom alerts for notification
 }
 
 /* ==========================================================================
-entity detail page css
-========================================================================== */
-.row.jh-entity-details > {
-  dd {
-    margin-bottom: 15px;
-  }
-}
-
-@media screen and (min-width: 768px) {
-  .row.jh-entity-details > {
-    dt {
-      margin-bottom: 15px;
-    }
-    dd {
-      border-bottom: 1px solid #eee;
-      padding-left: 180px;
-      margin-left: 0;
-    }
-  }
-}
-
-/* ==========================================================================
 ui bootstrap tweaks
 ========================================================================== */
 .nav,
@@ -196,4 +196,19 @@ ui bootstrap tweaks
   white-space: nowrap;
 }
 
+.dropdown-menu {
+  padding-left: 0px;
+}
+
+/* ==========================================================================
+angular-cli removes postcss-rtl processed inline css, processed rules must be added here instead
+========================================================================== */
+/* navbar.component.scss */
+.navbar {
+  ul.navbar-nav {
+    .nav-item {
+      margin-left: 0.5em;
+    }
+  }
+}
 /* jhipster-needle-scss-add-main JHipster will add new css style */

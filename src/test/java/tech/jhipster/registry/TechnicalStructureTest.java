@@ -8,8 +8,6 @@ import com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import tech.jhipster.registry.config.ApplicationProperties;
-import tech.jhipster.registry.config.ConfigServerProperties;
 
 @AnalyzeClasses(packagesOf = JHipsterRegistryApp.class, importOptions = DoNotIncludeTests.class)
 class TechnicalStructureTest {
@@ -19,13 +17,18 @@ class TechnicalStructureTest {
     static final ArchRule respectsTechnicalArchitectureLayers = layeredArchitecture()
         .layer("Config").definedBy("..config..")
         .layer("Web").definedBy("..web..")
+        .optionalLayer("Service").definedBy("..service..")
         .layer("Security").definedBy("..security..")
 
         .whereLayer("Config").mayNotBeAccessedByAnyLayer()
         .whereLayer("Web").mayOnlyBeAccessedByLayers("Config")
-        .whereLayer("Security").mayOnlyBeAccessedByLayers("Web", "Config")
+        .whereLayer("Service").mayOnlyBeAccessedByLayers("Web", "Config")
+        .whereLayer("Security").mayOnlyBeAccessedByLayers("Config", "Service", "Web")
 
-        .ignoreDependency(alwaysTrue(), belongToAnyOf(ApplicationProperties.class))
-        .ignoreDependency(alwaysTrue(), belongToAnyOf(ConfigServerProperties.class))
-        .ignoreDependency(belongToAnyOf(JHipsterRegistryApp.class), alwaysTrue());
+        .ignoreDependency(belongToAnyOf(JHipsterRegistryApp.class), alwaysTrue())
+        .ignoreDependency(alwaysTrue(), belongToAnyOf(
+            tech.jhipster.registry.config.ConfigServerProperties.class))
+        .ignoreDependency(alwaysTrue(), belongToAnyOf(
+            tech.jhipster.registry.config.ApplicationProperties.class
+        ));
 }

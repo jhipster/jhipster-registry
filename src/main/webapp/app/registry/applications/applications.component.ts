@@ -64,9 +64,9 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
 
   getBadgeClass(status: InstanceStatus): string {
     if (status === 'UP') {
-      return 'badge-success';
+      return 'bg-success';
     } else {
-      return 'badge-danger';
+      return 'bg-danger';
     }
   }
 

@@ -13,9 +13,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.userdetails.User;
@@ -26,6 +25,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.util.StringUtils;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
@@ -39,7 +39,7 @@ import tech.jhipster.registry.security.oauth2.JwtGrantedAuthorityConverter;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
 @Profile(Constants.PROFILE_OAUTH2)
-public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class OAuth2SecurityConfiguration {
 
     private final String issuerUri;
 
@@ -80,13 +80,19 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return "{noop}" + user.getPassword();
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/app/**/*.{js,html}").antMatchers("/swagger-ui/**").antMatchers("/content/**");
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web ->
+            web
+                .ignoring()
+                .antMatchers("/app/**/*.{js,html}")
+                .antMatchers("/i18n/**")
+                .antMatchers("/swagger-ui/**")
+                .antMatchers("/content/**");
     }
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http
             .cors()
@@ -102,9 +108,9 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                     .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
                 .and()
-                    .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'self'; payment 'none'")
+                    .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
                 .and()
-                    .frameOptions().deny()
+                    .frameOptions().sameOrigin()
             .and()
                 .httpBasic().realmName("JHipster Registry")
             .and()
@@ -126,6 +132,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .and()
                     .oauth2Login();
+        return http.build();
         // @formatter:on
     }
 
@@ -154,7 +161,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(issuerUri);
+        NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);

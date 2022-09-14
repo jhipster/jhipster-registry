@@ -112,23 +112,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.healthService
       .checkHealth()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        health => {
+      .subscribe({
+        next: health => {
           this.health = health;
           this.updatingHealth = false;
         },
-        health => {
+        error: health => {
           this.health = health;
           this.updatingHealth = false;
-        }
-      );
+        },
+      });
   }
 
   getBadgeClass(statusState: HealthStatus): string {
     if (statusState === 'UP') {
-      return 'badge-success';
+      return 'bg-success';
     } else {
-      return 'badge-danger';
+      return 'bg-danger';
     }
   }
 

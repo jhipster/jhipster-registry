@@ -26,17 +26,15 @@ describe('Component Tests', () => {
     let mockLoginOAuth2Service: LoginOAuth2Service;
     let mockRouter: Router;
 
-    beforeEach(
-      waitForAsync(() => {
-        TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-          declarations: [NavbarComponent],
-          providers: [AccountService, LoginService, LoginOAuth2Service],
-        })
-          .overrideTemplate(NavbarComponent, '')
-          .compileComponents();
+    beforeEach(waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+        declarations: [NavbarComponent],
+        providers: [AccountService, LoginService, LoginOAuth2Service],
       })
-    );
+        .overrideTemplate(NavbarComponent, '')
+        .compileComponents();
+    }));
 
     beforeEach(() => {
       fixture = TestBed.createComponent(NavbarComponent);

@@ -6,13 +6,11 @@ describe('ItemCountComponent test', () => {
   let comp: ItemCountComponent;
   let fixture: ComponentFixture<ItemCountComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [ItemCountComponent],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ItemCountComponent],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ItemCountComponent);

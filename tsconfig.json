@@ -4,6 +4,7 @@
     "outDir": "./target/classes/static/",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "strictNullChecks": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
@@ -14,7 +15,7 @@
     "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "es2020",
     "module": "es2020",
     "lib": ["es2018", "dom"]
   },

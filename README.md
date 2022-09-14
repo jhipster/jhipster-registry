@@ -132,4 +132,4 @@ If you'd like to use [Okta](https://www.okta.com/) instead of Keycloak, you can 
 
 If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, you can follow the [documentation for Auth0](https://www.jhipster.tech/security/#auth0)
 
-NOTE: Using the JHipster Registry, add URLs for port 8761 too ("Allowed Callback URLs" and "Allowed Logout URLs")
+\*NOTE: Using the JHipster Registry, add URLs for port 8761 too ("Allowed Callback URLs" and "Allowed Logout URLs")

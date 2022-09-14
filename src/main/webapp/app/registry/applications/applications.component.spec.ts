@@ -13,17 +13,15 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<ApplicationsComponent>;
     let service: ApplicationsService;
 
-    beforeEach(
-      waitForAsync(() => {
-        TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
-          declarations: [ApplicationsComponent],
-          providers: [ApplicationsService, RefreshService],
-        })
-          .overrideTemplate(ApplicationsComponent, '')
-          .compileComponents();
+    beforeEach(waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
+        declarations: [ApplicationsComponent],
+        providers: [ApplicationsService, RefreshService],
       })
-    );
+        .overrideTemplate(ApplicationsComponent, '')
+        .compileComponents();
+    }));
 
     beforeEach(() => {
       fixture = TestBed.createComponent(ApplicationsComponent);
@@ -127,8 +125,8 @@ describe('Component Tests', () => {
       it('should get badge class', () => {
         const upBadgeClass = comp.getBadgeClass('UP');
         const downBadgeClass = comp.getBadgeClass('DOWN');
-        expect(upBadgeClass).toEqual('badge-success');
-        expect(downBadgeClass).toEqual('badge-danger');
+        expect(upBadgeClass).toEqual('bg-success');
+        expect(downBadgeClass).toEqual('bg-danger');
       });
     });
   });

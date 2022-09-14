@@ -98,7 +98,7 @@ export class DataUtils {
     const fileReader: FileReader = new FileReader();
     fileReader.onload = (e: ProgressEvent<FileReader>) => {
       if (typeof e.target?.result === 'string') {
-        const base64Data: string = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
+        const base64Data: string = e.target.result.substring(e.target.result.indexOf('base64,') + 'base64,'.length);
         callback(base64Data);
       }
     };
@@ -124,6 +124,6 @@ export class DataUtils {
   }
 
   private formatAsBytes(size: number): string {
-    return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
+    return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes'; // NOSONAR
   }
 }
