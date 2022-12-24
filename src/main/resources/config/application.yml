@@ -38,8 +38,8 @@ eureka:
     enabled: true
     healthcheck:
       enabled: true
-    fetch-registry: true
-    register-with-eureka: true
+    fetch-registry: false
+    register-with-eureka: false
     instance-info-replication-interval-seconds: 10
     registry-fetch-interval-seconds: 10
     service-url:
