@@ -109,7 +109,7 @@
     "@types/node": "16.11.56",
     "@typescript-eslint/eslint-plugin": "5.36.1",
     "@typescript-eslint/parser": "5.36.1",
-    "browser-sync": "2.27.11",
+    "browser-sync": "2.29.0",
     "browser-sync-webpack-plugin": "2.3.0",
     "concurrently": "7.3.0",
     "copy-webpack-plugin": "11.0.0",
