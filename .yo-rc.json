@@ -61,6 +61,6 @@
     "testFrameworks": [],
     "useSass": true,
     "websocket": false,
-    "withAdminUi": false
+    "withAdminUi": true
   }
 }
