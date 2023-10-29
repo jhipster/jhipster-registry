@@ -8,7 +8,7 @@ Full documentation is available on the [JHipster documentation for microservices
 
 ## Deploy to Heroku
 
-Click this button to deploy your own instance of the registry:
+Click this button to deploy your  instance of the registry:
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
@@ -32,7 +32,7 @@ To run the cloned repository;
 
 ### Development Mode
 
-`JHipster Registry` default integration uses a `vault` server with an in-memory backend. The data shall not be persisted and shall require you to configure secrets after every restart. The in-memory configuration provides an easy way to test out the integration and later switch to the recommended server mode.
+`JHipster Registry` default integration uses a `vault` server with an in-memory backend. The data shall not be persist and shall require you to configure secrets after every restart. The in-memory configuration provides an easy way to test out the integration and later switch to the recommended server mode.
 
 - Start vault server docker container:
 
