@@ -25,7 +25,7 @@
     <properties>
         <!-- Build properties -->
         <maven.version>3.2.5</maven.version>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <node.version>v16.17.0</node.version>
         <npm.version>8.19.1</npm.version>
 
@@ -47,8 +47,8 @@
         <jhipster-dependencies.version>7.9.3</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.7.3</spring-boot.version>
-        <archunit-junit5.version>0.22.0</archunit-junit5.version>
+        <spring-boot.version>3.5.6</spring-boot.version>
+        <archunit-junit5.version>1.4.1</archunit-junit5.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
         <jgit.version>5.13.1.202206130422-r</jgit.version>
         <!-- Plugin versions -->
@@ -72,7 +72,7 @@
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <git-commit-id-plugin.version>5.0.0</git-commit-id-plugin.version>
         <modernizer-maven-plugin.version>2.4.0</modernizer-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
         <jib-maven-plugin.version>3.2.1</jib-maven-plugin.version>
         <jib-maven-plugin.image>eclipse-temurin:11-jre-focal</jib-maven-plugin.image>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
@@ -658,8 +658,8 @@
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <message>You are running an incompatible version of Java. JHipster supports JDK 11 to 18.</message>
-                                <version>[11,12),[12,13),[13,14),[14,15),[15,16),[16,17),[17,18),[18,19)</version>
+                                <message>You are running an incompatible version of Java. JHipster supports JDK 17.</message>
+                                <version>[17,18)</version>
                             </requireJavaVersion>
                         </rules>
                     </configuration>
