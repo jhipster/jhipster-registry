@@ -6,17 +6,6 @@ This is the [JHipster](https://www.jhipster.tech/) registry service, based on [S
 
 Full documentation is available on the [JHipster documentation for microservices](https://www.jhipster.tech/microservices-architecture).
 
-## Deploy to Heroku
-
-Click this button to deploy your  instance of the registry:
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-There are a few limitations when deploying to Heroku.
-
-- The registry will only work with [native configuration](https://www.jhipster.tech/jhipster-registry/#spring-cloud-config) (and not Git config).
-- The registry service cannot be scaled up to multiple dynos to provide redundancy. You must deploy multiple applications (i.e. click the button more than once). This is because Eureka requires distinct URLs to synchronize in-memory state between instances.
-
 ## Running locally
 
 To run the cloned repository;
