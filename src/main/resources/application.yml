@@ -1,0 +1,139 @@
+# ===================================================================
+# JHipster Registry Configuration
+# Supports multiple discovery systems: Eureka, Consul, Kubernetes
+# ===================================================================
+
+spring:
+  application:
+    name: jhipster-registry
+  profiles:
+    active: '@spring.profiles.active@'
+    group:
+      dev:
+        - dev
+      prod:
+        - prod
+  cloud:
+    config:
+      enabled: true
+      fail-fast: false
+    discovery:
+      enabled: true
+
+# Eureka Configuration (default)
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://admin:admin@localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+
+# Consul Configuration
+consul:
+  enabled: false
+  host: localhost
+  port: 8500
+  config:
+    enabled: false
+    prefix: config
+    data-key: data
+  discovery:
+    enabled: false
+    health-check-path: /management/health
+    health-check-interval: 10s
+    instance-id: ${spring.application.name}:${server.port}
+    service-name: ${spring.application.name}
+    prefer-ip-address: true
+
+# Kubernetes Configuration
+kubernetes:
+  enabled: false
+  config:
+    enabled: false
+    paths: /var/run/secrets/kubernetes.io/serviceaccount
+  discovery:
+    enabled: false
+    all-namespaces: true
+
+# JHipster Registry specific settings
+jhipster:
+  registry:
+    discovery-type: eureka  # eureka, consul, or kubernetes
+    config-server:
+      enabled: true
+      git:
+        uri: https://github.com/jhipster/jhipster-registry-config
+        search-paths: central-config
+
+server:
+  port: 8761
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json
+    min-response-size: 1024
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ['*']
+  endpoint:
+    health:
+      show-details: when_authorized
+
+logging:
+  level:
+    root: WARN
+    tech.jhipster: INFO
+    org.springframework.cloud: INFO
+
+---
+# Consul Profile
+spring:
+  config:
+    activate:
+      on-profile: consul
+  cloud:
+    consul:
+      enabled: true
+      config:
+        enabled: true
+      discovery:
+        enabled: true
+    discovery:
+      enabled: true
+jhipster:
+  registry:
+    discovery-type: consul
+eureka:
+  client:
+    enabled: false
+
+---
+# Kubernetes Profile
+spring:
+  config:
+    activate:
+      on-profile: kubernetes
+  cloud:
+    kubernetes:
+      enabled: true
+      config:
+        enabled: true
+      discovery:
+        enabled: true
+        all-namespaces: true
+    discovery:
+      enabled: true
+jhipster:
+  registry:
+    discovery-type: kubernetes
+eureka:
+  client:
+    enabled: false
+consul:
+  enabled: false
