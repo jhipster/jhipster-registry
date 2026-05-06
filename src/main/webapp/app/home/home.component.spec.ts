@@ -15,7 +15,7 @@ import { HealthService } from 'app/shared/health/health.service';
 import { LoginOAuth2Service } from 'app/login/login-oauth2.service';
 import { RefreshService } from 'app/shared/refresh/refresh.service';
 import { EventManager } from 'app/core/util/event-manager.service';
-import { EurekaStatusService } from './eureka.status.service';
+import { DiscoveryStatusService } from './discovery.status.service';
 import { HomeComponent } from './home.component';
 
 describe('Component Tests', () => {
@@ -25,7 +25,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<HomeComponent>;
     let mockAccountService: AccountService;
     let mockApplicationService: ApplicationsService;
-    let mockEurekaStatusService: EurekaStatusService;
+    let mockDiscoveryStatusService: DiscoveryStatusService;
     let mockProfileService: ProfileService;
     let mockRouter: Router;
 
@@ -37,7 +37,7 @@ describe('Component Tests', () => {
           providers: [
             AccountService,
             EventManager,
-            EurekaStatusService,
+            DiscoveryStatusService,
             ApplicationsService,
             HealthService,
             LoginOAuth2Service,
@@ -58,7 +58,7 @@ describe('Component Tests', () => {
       mockAccountService.getAuthenticationState = jest.fn(() => of(null));
       mockRouter = TestBed.inject(Router);
       mockApplicationService = TestBed.inject(ApplicationsService);
-      mockEurekaStatusService = TestBed.inject(EurekaStatusService);
+      mockDiscoveryStatusService = TestBed.inject(DiscoveryStatusService);
       mockProfileService = TestBed.inject(ProfileService);
 
       account = new Account(true, ['ROLE_ADMIN'], 'admin@admin.com', 'firstname', 'en', 'lastname', 'admin', '');
@@ -99,9 +99,10 @@ describe('Component Tests', () => {
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
     });
 
-    it('populate Dashboard with Eureka status data', () => {
-      jest.spyOn(mockEurekaStatusService, 'findAll').mockReturnValue(
+    it('populate Dashboard with Discovery status data', () => {
+      jest.spyOn(mockDiscoveryStatusService, 'findAll').mockReturnValue(
         of({
+          backend: 'eureka',
           status: {
             environment: 'test',
           },
@@ -110,8 +111,9 @@ describe('Component Tests', () => {
 
       comp.ngOnInit();
 
-      expect(mockEurekaStatusService.findAll).toHaveBeenCalled();
+      expect(mockDiscoveryStatusService.findAll).toHaveBeenCalled();
       expect(comp.status).toEqual({ environment: 'test' });
+      expect(comp.discoveryBackend).toEqual('eureka');
     });
 
     it('populate Dashboard with Applications data', () => {
