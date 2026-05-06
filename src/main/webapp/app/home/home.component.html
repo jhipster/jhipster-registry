@@ -1,6 +1,7 @@
 <div [ngSwitch]="isAuthenticated()">
   <h1 class="text-center">
     JHipster Registry <small>{{ version }}</small>
+    <span class="badge bg-info ms-2">{{ discoveryBackend }}</span>
   </h1>
   <div class="row">
     <div class="col-md-12 text-center">
@@ -23,22 +24,30 @@
           <table class="table">
             <tbody>
               <tr>
+                <td>Discovery Backend</td>
+                <td>{{ discoveryBackend }}</td>
+              </tr>
+              <tr *ngIf="status.environment">
                 <td>Environment</td>
                 <td>{{ status.environment }}</td>
               </tr>
-              <tr>
+              <tr *ngIf="status.datacenter">
                 <td>Data Center</td>
                 <td>{{ status.datacenter }}</td>
               </tr>
-              <tr>
+              <tr *ngIf="status.namespace">
+                <td>Namespace</td>
+                <td>{{ status.namespace }}</td>
+              </tr>
+              <tr *ngIf="status.currentTime">
                 <td>Current Time</td>
                 <td>{{ status.currentTime }}</td>
               </tr>
-              <tr>
+              <tr *ngIf="status.upTime">
                 <td>System Uptime</td>
                 <td>{{ status.upTime }}</td>
               </tr>
-              <tr>
+              <tr *ngIf="status.isBelowRenewThreshold">
                 <td>Below Renew Threshold</td>
                 <td>{{ status.isBelowRenewThreshold }}</td>
               </tr>
@@ -53,7 +62,6 @@
           <h3 class="card-title">Instances Registered</h3>
         </div>
         <div class="card-block">
-          <!--{vm.apps.applications}}-->
           <table class="table">
             <thead>
               <tr>
@@ -79,7 +87,7 @@
     </div>
   </div>
   <div class="row" *ngSwitchCase="true">
-    <div class="col-sm-12 col-md-6" *ngIf="status">
+    <div class="col-sm-12 col-md-6" *ngIf="status && status.generalStats">
       <div class="card">
         <div class="card-header text-white bg-primary">
           <h3 class="card-title">General Info</h3>
@@ -99,11 +107,11 @@
                 <td>Number of CPU</td>
                 <td>{{ status.generalStats['num-of-cpus'] }}</td>
               </tr>
-              <tr>
+              <tr *ngIf="status.instanceInfo">
                 <td>Instance Ip Address</td>
                 <td>{{ status.instanceInfo.ipAddr }}</td>
               </tr>
-              <tr>
+              <tr *ngIf="status.instanceInfo">
                 <td>Instance Status</td>
                 <td>
                   <span class="badge rounded-pill fw-normal" [ngClass]="getBadgeClass(status.instanceInfo.status)">

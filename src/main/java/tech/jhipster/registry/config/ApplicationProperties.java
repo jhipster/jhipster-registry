@@ -15,12 +15,18 @@ public class ApplicationProperties {
 
     private final Eureka eureka = new Eureka();
 
+    private final Discovery discovery = new Discovery();
+
     public Oauth2 getOauth2() {
         return oauth2;
     }
 
     public Eureka getEureka() {
         return eureka;
+    }
+
+    public Discovery getDiscovery() {
+        return discovery;
     }
 
     public static class Oauth2 {
@@ -66,6 +72,23 @@ public class ApplicationProperties {
 
         public void setEnvironment(String environment) {
             this.environment = environment;
+        }
+    }
+
+    public static class Discovery {
+
+        /**
+         * Preferred discovery backend name (eureka, consul, kubernetes).
+         * If not set, the first active backend will be used.
+         */
+        private String backend;
+
+        public String getBackend() {
+            return backend;
+        }
+
+        public void setBackend(String backend) {
+            this.backend = backend;
         }
     }
 }

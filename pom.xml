@@ -297,7 +297,20 @@
             <groupId>org.springframework.vault</groupId>
             <artifactId>spring-vault-core</artifactId>
         </dependency>
-        <!-- jhipster-needle-maven-add-dependency -->
+        <!-- Consul discovery support (optional) -->
+ <dependency>
+ <groupId>org.springframework.cloud</groupId>
+ <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+ <optional>true</optional>
+ </dependency>
+ <!-- Kubernetes discovery support (optional) -->
+ <dependency>
+ <groupId>org.springframework.cloud</groupId>
+ <artifactId>spring-cloud-starter-kubernetes-fabric8-all</artifactId>
+ <version>2.1.8</version>
+ <optional>true</optional>
+ </dependency>
+ <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
     <build>
