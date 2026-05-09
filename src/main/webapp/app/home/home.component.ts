@@ -4,7 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { VERSION } from 'app/app.constants';
-import { EurekaStatusKey, EurekaStatusService } from './eureka.status.service';
+import { DiscoveryStatusService } from './discovery.status.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
@@ -26,8 +26,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   health?: Health;
   appInstances: Array<Instance> = [];
   status?: {
-    [key in EurekaStatusKey]?: any;
+    [key: string]: any;
   };
+  discoveryBackend = 'eureka';
   version: string = VERSION ? 'v' + VERSION : '';
   unsubscribe$ = new Subject();
   subscription?: Subscription;
@@ -36,7 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private loginOAuth2Service: LoginOAuth2Service,
     private eventManager: EventManager,
-    private eurekaStatusService: EurekaStatusService,
+    private discoveryStatusService: DiscoveryStatusService,
     private applicationsService: ApplicationsService,
     private healthService: HealthService,
     private profileService: ProfileService,
@@ -91,10 +92,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   populateDashboard(): void {
-    this.eurekaStatusService
+    this.discoveryStatusService
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => (this.status = data.status));
+      .subscribe(data => {
+        this.discoveryBackend = data.backend;
+        this.status = data.status;
+      });
 
     this.applicationsService
       .findAll()

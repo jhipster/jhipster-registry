@@ -1,0 +1,34 @@
+# ===================================================================
+# Spring Boot configuration for Kubernetes discovery profile.
+#
+# Activate this profile to use Kubernetes instead of Eureka.
+# Usage: --spring.profiles.active=kubernetes
+#
+# Prerequisites:
+# - Running in a Kubernetes cluster with service account permissions
+# - spring-cloud-starter-kubernetes-fabric8-all on the classpath
+# ===================================================================
+spring:
+  cloud:
+    kubernetes:
+      discovery:
+        enabled: true
+        all-namespaces: false
+      namespace: default
+      config:
+        enabled: true
+        sources:
+          - namespace: default
+            name: ${spring.application.name}
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration
+      - org.springframework.cloud.netflix.eureka.EurekaServerAutoConfiguration
+
+eureka:
+  client:
+    enabled: false
+
+application:
+  discovery:
+    backend: kubernetes
