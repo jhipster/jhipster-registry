@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { Application, ApplicationsService, Eureka } from './applications.service';
+import { Application, ApplicationsService, DiscoveryResponse } from './applications.service';
 
 describe('Service Tests', () => {
   describe('Applications Service', () => {
@@ -24,25 +24,36 @@ describe('Service Tests', () => {
     });
 
     describe('Service methods', () => {
-      it('should find all applications', () => {
+      it('should find all applications via unified discovery API', () => {
         const applications: Application = {
           name: 'app1',
           instances: [
             {
-              instanceId: 1,
+              instanceId: '1',
               status: 'UP',
               homePageUrl: 'home',
             },
           ],
         };
-        const eureka: Eureka = {
+        const discoveryResponse: DiscoveryResponse = {
+          backend: 'eureka',
           applications: [applications],
         };
         service.findAll().subscribe(received => (expectedResult = received));
 
-        const req = httpMock.expectOne({ method: 'GET' });
-        req.flush(eureka);
+        const req = httpMock.expectOne('api/discovery/applications');
+        expect(req.request.method).toBe('GET');
+        req.flush(discoveryResponse);
         expect(expectedResult).toEqual([applications]);
+      });
+
+      it('should get the active backend name', () => {
+        service.getBackend().subscribe(received => (expectedResult = received as unknown as Application[]));
+
+        const req = httpMock.expectOne('api/discovery/backend');
+        expect(req.request.method).toBe('GET');
+        req.flush({ name: 'consul', active: true });
+        expect(expectedResult).toEqual('consul' as unknown as Application[]);
       });
     });
   });

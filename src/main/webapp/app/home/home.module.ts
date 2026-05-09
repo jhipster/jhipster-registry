@@ -4,11 +4,11 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'app/shared/shared.module';
 import { HOME_ROUTE } from './home.route';
 import { HomeComponent } from './home.component';
-import { EurekaStatusService } from './eureka.status.service';
+import { DiscoveryStatusService } from './discovery.status.service';
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild([HOME_ROUTE])],
   declarations: [HomeComponent],
-  providers: [EurekaStatusService],
+  providers: [DiscoveryStatusService],
 })
 export class HomeModule {}

@@ -1,0 +1,34 @@
+# ===================================================================
+# Spring Boot configuration for Consul discovery profile.
+#
+# Activate this profile to use Consul instead of Eureka.
+# Usage: --spring.profiles.active=consul
+#
+# Prerequisites:
+# - Consul agent running on localhost:8500 (or configured host)
+# - spring-cloud-starter-consul-discovery on the classpath
+# ===================================================================
+spring:
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        enabled: true
+        instance-id: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+        service-name: ${spring.application.name}
+      config:
+        enabled: true
+        format: YAML
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration
+      - org.springframework.cloud.netflix.eureka.EurekaServerAutoConfiguration
+
+eureka:
+  client:
+    enabled: false
+
+application:
+  discovery:
+    backend: consul
