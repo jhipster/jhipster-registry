@@ -1,0 +1,27 @@
+spring:
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        enabled: true
+        healthCheckPath: ${management.endpoints.web.base-path}/health
+        healthCheckInterval: 15s
+        instanceId: ${spring.application.name}:${random.value}
+        prefer-ip-address: true
+  config:
+    activate:
+      on-profile: consul
+
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          ['configprops', 'env', 'health', 'info', 'jhimetrics', 'jhiopenapigroups', 'logfile', 'loggers', 'prometheus', 'threaddump']
+
+application:
+  eureka:
+    environment: 'Consul-Datacenter'
+    datacenter: 'Consul-Environment'

@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    kubernetes:
+      discovery:
+        enabled: true
+        all-namespaces: true
+        discovery-server-url:
+      client:
+        namespace: ${KUBERNETES_NAMESPACE:default}
+  config:
+    activate:
+      on-profile: kubernetes
+
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          ['configprops', 'env', 'health', 'info', 'jhimetrics', 'jhiopenapigroups', 'logfile', 'loggers', 'prometheus', 'threaddump']
+
+application:
+  eureka:
+    environment: 'Kubernetes-Datacenter'
+    datacenter: 'Kubernetes-Environment'
