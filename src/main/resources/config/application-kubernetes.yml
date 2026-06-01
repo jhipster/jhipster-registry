@@ -1,0 +1,13 @@
+# Kubernetes Discovery Configuration
+application:
+  discovery:
+    backend: kubernetes
+  kubernetes:
+    namespace: ${KUBERNETES_NAMESPACE:default}
+
+spring:
+  cloud:
+    kubernetes:
+      discovery:
+        enabled: true
+        register: false

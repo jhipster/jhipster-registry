@@ -2,12 +2,6 @@ package tech.jhipster.registry.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * Properties specific to JHipster.
- *
- * Properties are configured in the {@code application.yml} file.
- * See {@link tech.jhipster.config.JHipsterProperties} for a good example.
- */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
@@ -15,12 +9,30 @@ public class ApplicationProperties {
 
     private final Eureka eureka = new Eureka();
 
+    private final Consul consul = new Consul();
+
+    private final Kubernetes kubernetes = new Kubernetes();
+
+    private final Discovery discovery = new Discovery();
+
     public Oauth2 getOauth2() {
         return oauth2;
     }
 
     public Eureka getEureka() {
         return eureka;
+    }
+
+    public Consul getConsul() {
+        return consul;
+    }
+
+    public Kubernetes getKubernetes() {
+        return kubernetes;
+    }
+
+    public Discovery getDiscovery() {
+        return discovery;
     }
 
     public static class Oauth2 {
@@ -66,6 +78,55 @@ public class ApplicationProperties {
 
         public void setEnvironment(String environment) {
             this.environment = environment;
+        }
+    }
+
+    public static class Consul {
+
+        private String host = "localhost";
+
+        private int port = 8500;
+
+        public String getHost() {
+            return host;
+        }
+
+        public void setHost(String host) {
+            this.host = host;
+        }
+
+        public int getPort() {
+            return port;
+        }
+
+        public void setPort(int port) {
+            this.port = port;
+        }
+    }
+
+    public static class Kubernetes {
+
+        private String namespace = "default";
+
+        public String getNamespace() {
+            return namespace;
+        }
+
+        public void setNamespace(String namespace) {
+            this.namespace = namespace;
+        }
+    }
+
+    public static class Discovery {
+
+        private String backend = "eureka";
+
+        public String getBackend() {
+            return backend;
+        }
+
+        public void setBackend(String backend) {
+            this.backend = backend;
         }
     }
 }

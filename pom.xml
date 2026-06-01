@@ -81,6 +81,8 @@
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <!-- jhipster-needle-maven-property -->
         <spring-cloud.version>2021.0.8</spring-cloud.version>
+            <consul-api.version>1.4.5</consul-api.version>
+        <kubernetes-client.version>20.0.0</kubernetes-client.version>
     </properties>
 
     <dependencyManagement>
@@ -762,13 +764,17 @@
             <id>api-docs</id>
             <properties>
                 <profile.api-docs>,api-docs</profile.api-docs>
-            </properties>
+                    <consul-api.version>1.4.5</consul-api.version>
+        <kubernetes-client.version>20.0.0</kubernetes-client.version>
+    </properties>
         </profile>
         <profile>
             <id>tls</id>
             <properties>
                 <profile.tls>,tls</profile.tls>
-            </properties>
+                    <consul-api.version>1.4.5</consul-api.version>
+        <kubernetes-client.version>20.0.0</kubernetes-client.version>
+    </properties>
         </profile>
         <profile>
             <id>webapp</id>
@@ -896,7 +902,9 @@
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev</spring.profiles.active>
-            </properties>
+                    <consul-api.version>1.4.5</consul-api.version>
+        <kubernetes-client.version>20.0.0</kubernetes-client.version>
+    </properties>
         </profile>
         <profile>
             <id>dev</id>
@@ -950,7 +958,9 @@
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}</spring.profiles.active>
-            </properties>
+                    <consul-api.version>1.4.5</consul-api.version>
+        <kubernetes-client.version>20.0.0</kubernetes-client.version>
+    </properties>
         </profile>
         <profile>
             <id>prod</id>
@@ -1068,7 +1078,9 @@
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}</spring.profiles.active>
-            </properties>
+                    <consul-api.version>1.4.5</consul-api.version>
+        <kubernetes-client.version>20.0.0</kubernetes-client.version>
+    </properties>
         </profile>
         <profile>
             <id>war</id>
@@ -1226,7 +1238,9 @@
             <id>prod-gae</id>
             <properties>
                 <spring.profiles.active>prod${profile.api-docs},prod-gae</spring.profiles.active>
-            </properties>
+                    <consul-api.version>1.4.5</consul-api.version>
+        <kubernetes-client.version>20.0.0</kubernetes-client.version>
+    </properties>
         </profile>
         <profile>
             <id>gae</id>
