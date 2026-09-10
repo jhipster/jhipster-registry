@@ -13,6 +13,39 @@ To run the cloned repository;
 - For development run `./mvnw -Pdev,webapp` to just start in development or run `./mvnw` and run `npm install && npm start` for hot reload of client side code.
 - For production profile run `./mvnw -Pprod`
 
+## Viewing services without Eureka
+
+The Registry can use Spring Cloud's Consul or Kubernetes discovery client to populate its existing UI. Eureka remains the default. An external discovery profile disables the embedded Eureka server and its client; it does not change authentication or Spring Cloud Config's configuration sources.
+
+Build with the matching Maven profile to include the optional client, and select the matching Spring profile when starting the application:
+
+```shell
+# Consul: connect to a local agent; use spring.cloud.consul.host/port for another address.
+SPRING_PROFILES_ACTIVE=dev,consul ./mvnw -Pdev,webapp,consul
+
+# Kubernetes: use the namespace and API credentials configured for the Fabric8 client.
+SPRING_PROFILES_ACTIVE=dev,kubernetes ./mvnw -Pdev,webapp,kubernetes
+```
+
+Keep the existing configuration-server setup (native files, Git, or Vault) appropriate for your environment. These profiles do not turn Consul KV, Kubernetes ConfigMaps, or Secrets into configuration repositories. Consul registration is disabled: this Registry reads the catalog. Kubernetes discovery reads Services and Endpoints in the client's configured namespace; provide a service account or kubeconfig with permission to get/list those resources. No cluster or cloud account is created by the application. Only one discovery profile may be active. Selecting one without its Maven dependency fails at startup rather than displaying an empty Eureka catalog.
+
+The Applications and Home pages preserve the existing instance fields. External instance IDs are opaque, so Config uses the discovered service name. Links use the instance URI, optional `context-path` and `management.context-path` metadata (default `/management`), or explicit `homePageUrl`, `healthCheckUrl`, and `statusPageUrl` metadata. Explicit URLs support separate management hosts/ports. `UNKNOWN` is shown neutrally because the portable discovery API does not provide a per-instance health status. System Status and General Info describe the Registry JVM. Eureka lease histories and peer replicas remain empty for external providers; those providers manage their own history and topology.
+
+### Testing discovery profiles
+
+The normal Java and frontend suites cover payload mapping, empty catalogs, opaque IDs, health presentation, and profile selection. The optional-client test starts the real application and each real Spring discovery client against an in-process HTTP fixture; it does not require a running Consul agent or Kubernetes cluster:
+
+```shell
+./mvnw -Pdev,consul -Dskip.installnodenpm -Dskip.npm -Dtest=ProviderApplicationIT -Ddiscovery.test.provider=consul test
+./mvnw -Pdev,kubernetes -Dskip.installnodenpm -Dskip.npm -Dtest=ProviderApplicationIT -Ddiscovery.test.provider=kubernetes test
+# Both optional dependencies present, neither selected: preserve embedded Eureka.
+./mvnw -Pdev,consul,kubernetes -Dskip.installnodenpm -Dskip.npm -Dtest=ProviderApplicationIT -Ddiscovery.test.provider=eureka test
+```
+
+These explicit checks also run as separate CI commands. `ProviderApplicationIT` is intentionally opt-in because closing an embedded Eureka context shuts down Servo's process-wide scheduler; it must not run before the existing integration tests in their shared JVM. The existing suite runs normally.
+
+The tests load the built production bootstrap files and select profiles through command-line arguments. Only discovery API addresses, local credentials discovery, catalog polling, and config-server bootstrap traffic are isolated for the fixture. They assert the actual client type, the absence/presence of Eureka, all four `/api/eureka/*` UI endpoints, and read-only discovery requests. They do not verify live-cluster RBAC/networking or browser behavior.
+
 [github-actions-build]: https://github.com/jhipster/jhipster-registry/workflows/Build/badge.svg
 [github-actions-docker]: https://github.com/jhipster/jhipster-registry/workflows/Docker%20Image/badge.svg
 

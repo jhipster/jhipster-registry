@@ -33,7 +33,7 @@
                 <a href="{{ instance.homePageUrl }}" target="_blank">{{ instance.instanceId }}</a>
               </td>
               <td class="text-start">
-                <span class="badge rounded-pill fw-normal bg-success" [ngClass]="getBadgeClass(instance.status)">
+                <span class="badge rounded-pill fw-normal" [ngClass]="getBadgeClass(instance.status)">
                   {{ instance.status }}
                 </span>
                 <span class="float-end" *ngFor="let entry of instance.metadata | keys">

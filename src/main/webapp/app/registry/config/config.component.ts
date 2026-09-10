@@ -98,9 +98,11 @@ export class ConfigComponent implements OnInit, OnDestroy {
       .subscribe(applications => {
         this.applications = ['application'];
         applications.forEach(application => {
-          const instanceId = application.instances[0].instanceId;
+          const instanceId: string = application.instances[0]?.instanceId ?? '';
           let applicationName;
-          if (instanceId.indexOf(':') === -1) {
+          if (application.configName) {
+            applicationName = application.configName;
+          } else if (instanceId.indexOf(':') === -1) {
             applicationName = application.name.toLowerCase();
           } else {
             applicationName = instanceId.substr(0, instanceId.indexOf(':'));

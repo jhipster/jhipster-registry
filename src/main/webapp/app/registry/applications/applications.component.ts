@@ -51,7 +51,7 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
   }
 
   checkInstanceLength(instances: Array<Instance>): boolean {
-    return this.countActiveInstances(instances) < instances.length;
+    return instances.some(instance => instance.status !== 'UP' && instance.status !== 'UNKNOWN');
   }
 
   displayCountInstances(instances: Array<Instance>): string {
@@ -65,6 +65,8 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
   getBadgeClass(status: InstanceStatus): string {
     if (status === 'UP') {
       return 'bg-success';
+    } else if (status === 'UNKNOWN') {
+      return 'bg-secondary';
     } else {
       return 'bg-danger';
     }

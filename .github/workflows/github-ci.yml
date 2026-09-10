@@ -48,5 +48,10 @@ jobs:
                   ./mvnw -ntp clean verify -P-webpack
             - name: Run frontend test
               run: npm run test
+            - name: Verify discovery profiles in separate test JVMs
+              run: |
+                  ./mvnw -ntp -Pdev,consul -Dskip.installnodenpm -Dskip.npm -Dtest=ProviderApplicationIT -Ddiscovery.test.provider=consul test
+                  ./mvnw -ntp -Pdev,kubernetes -Dskip.installnodenpm -Dskip.npm -Dtest=ProviderApplicationIT -Ddiscovery.test.provider=kubernetes test
+                  ./mvnw -ntp -Pdev,consul,kubernetes -Dskip.installnodenpm -Dskip.npm -Dtest=ProviderApplicationIT -Ddiscovery.test.provider=eureka test
             - name: Package application
               run: ./mvnw -ntp package -Pprod -DskipTests

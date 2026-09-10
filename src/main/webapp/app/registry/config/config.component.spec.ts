@@ -17,17 +17,15 @@ describe('Component Tests', () => {
     let mockProfileService: ProfileService;
     let mockApplicationService: ApplicationsService;
 
-    beforeEach(
-      waitForAsync(() => {
-        TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
-          declarations: [ConfigComponent],
-          providers: [ConfigService, RefreshService],
-        })
-          .overrideTemplate(ConfigComponent, '')
-          .compileComponents();
+    beforeEach(waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
+        declarations: [ConfigComponent],
+        providers: [ConfigService, RefreshService],
       })
-    );
+        .overrideTemplate(ConfigComponent, '')
+        .compileComponents();
+    }));
 
     beforeEach(() => {
       fixture = TestBed.createComponent(ConfigComponent);
@@ -84,6 +82,21 @@ describe('Component Tests', () => {
     });
 
     describe('refresh', () => {
+      it('uses the service config name for opaque external IDs and empty services', () => {
+        jest.spyOn(mockApplicationService, 'findAll').mockReturnValue(
+          of([
+            { name: 'orders', configName: 'orders', instances: [{ instanceId: 'node:10.0.0.8:8080' }] },
+            { name: 'inventory', configName: 'inventory', instances: [] },
+            { name: 'LEGACY', instances: [{ instanceId: 'legacy:8080' }] },
+            { name: 'EMPTY', instances: [] },
+          ])
+        );
+
+        comp.refresh();
+
+        expect(comp.applications).toEqual(['application', 'orders', 'inventory', 'legacy', 'empty']);
+      });
+
       it('should call refresh on init with configAsJson', () => {
         const configAsJson: string =
           '{\n' +

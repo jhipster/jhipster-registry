@@ -21,12 +21,17 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tech.jhipster.registry.config.ApplicationProperties;
+import tech.jhipster.registry.service.DiscoveryView;
 import tech.jhipster.registry.web.rest.vm.EurekaVM;
 
 /**
@@ -40,8 +45,25 @@ public class EurekaResource {
 
     private final ApplicationProperties applicationProperties;
 
-    public EurekaResource(ApplicationProperties applicationProperties) {
+    private final DiscoveryView discoveryView;
+
+    public EurekaResource(ApplicationProperties applicationProperties, Environment environment, BeanFactory beanFactory) {
         this.applicationProperties = applicationProperties;
+        boolean consul = environment.acceptsProfiles(Profiles.of("consul"));
+        boolean kubernetes = environment.acceptsProfiles(Profiles.of("kubernetes"));
+        if (consul && kubernetes) {
+            throw new IllegalArgumentException("Select only one discovery profile: consul or kubernetes");
+        }
+        String provider = consul ? "consul" : kubernetes ? "kubernetes" : null;
+        // Select the requested provider explicitly: a primary composite client may also contain Eureka or SimpleDiscoveryClient.
+        this.discoveryView =
+            provider == null
+                ? null
+                : new DiscoveryView(
+                    beanFactory.getBean(provider + "DiscoveryClient", DiscoveryClient.class),
+                    provider,
+                    applicationProperties
+                );
     }
 
     /**
@@ -50,7 +72,7 @@ public class EurekaResource {
     @GetMapping("/eureka/applications")
     public ResponseEntity<EurekaVM> eureka() {
         EurekaVM eurekaVM = new EurekaVM();
-        eurekaVM.setApplications(getApplications());
+        eurekaVM.setApplications(discoveryView == null ? getApplications() : discoveryView.applications());
         return new ResponseEntity<>(eurekaVM, HttpStatus.OK);
     }
 
@@ -83,6 +105,11 @@ public class EurekaResource {
     @GetMapping("/eureka/lastn")
     public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
         Map<String, Map<Long, String>> lastn = new HashMap<>();
+        if (discoveryView != null) {
+            lastn.put("canceled", Map.of());
+            lastn.put("registered", Map.of());
+            return ResponseEntity.ok(lastn);
+        }
         PeerAwareInstanceRegistryImpl registry = (PeerAwareInstanceRegistryImpl) getRegistry();
         Map<Long, String> canceledMap = registry.getLastNCanceledInstances().stream().collect(toMap(Pair::first, Pair::second));
         lastn.put("canceled", canceledMap);
@@ -97,6 +124,9 @@ public class EurekaResource {
     @GetMapping("/eureka/replicas")
     public ResponseEntity<List<String>> replicas() {
         List<String> replicas = new ArrayList<>();
+        if (discoveryView != null) {
+            return ResponseEntity.ok(replicas);
+        }
         getServerContext()
             .getPeerEurekaNodes()
             .getPeerNodesView()
@@ -119,7 +149,7 @@ public class EurekaResource {
     @GetMapping("/eureka/status")
     public ResponseEntity<EurekaVM> eurekaStatus() {
         EurekaVM eurekaVM = new EurekaVM();
-        eurekaVM.setStatus(getEurekaStatus());
+        eurekaVM.setStatus(discoveryView == null ? getEurekaStatus() : discoveryView.status());
         return new ResponseEntity<>(eurekaVM, HttpStatus.OK);
     }
 

@@ -29,26 +29,24 @@ describe('Component Tests', () => {
     let mockProfileService: ProfileService;
     let mockRouter: Router;
 
-    beforeEach(
-      waitForAsync(() => {
-        TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot(), RouterTestingModule.withRoutes([])],
-          declarations: [HomeComponent],
-          providers: [
-            AccountService,
-            EventManager,
-            EurekaStatusService,
-            ApplicationsService,
-            HealthService,
-            LoginOAuth2Service,
-            ProfileService,
-            RefreshService,
-          ],
-        })
-          .overrideTemplate(HomeComponent, '')
-          .compileComponents();
+    beforeEach(waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot(), RouterTestingModule.withRoutes([])],
+        declarations: [HomeComponent],
+        providers: [
+          AccountService,
+          EventManager,
+          EurekaStatusService,
+          ApplicationsService,
+          HealthService,
+          LoginOAuth2Service,
+          ProfileService,
+          RefreshService,
+        ],
       })
-    );
+        .overrideTemplate(HomeComponent, '')
+        .compileComponents();
+    }));
 
     beforeEach(() => {
       fixture = TestBed.createComponent(HomeComponent);
@@ -97,6 +95,10 @@ describe('Component Tests', () => {
       // THEN
       expect(mockProfileService.getProfileInfo).toHaveBeenCalled();
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+    });
+
+    it('uses a neutral badge for an unknown discovery health state', () => {
+      expect(comp.getBadgeClass('UNKNOWN')).toEqual('bg-secondary');
     });
 
     it('populate Dashboard with Eureka status data', () => {
