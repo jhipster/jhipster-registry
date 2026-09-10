@@ -4,7 +4,11 @@
     <jhi-refresh-selector class="float-end refresh-left-side"></jhi-refresh-selector>
   </div>
 
-  <div id="replicas" class="panel panel-default">
+  <p *ngIf="backend !== 'eureka'" class="alert alert-info">
+    {{ backend | titlecase }} discovery does not expose Eureka peer replicas. Manage provider replication in your discovery infrastructure.
+  </p>
+
+  <div *ngIf="backend === 'eureka'" id="replicas" class="panel panel-default">
     <div class="panel-body">
       <div class="table-responsive">
         <table class="table table-striped">
@@ -20,13 +24,13 @@
     </div>
   </div>
 
-  <div class="text-center pad">
+  <div *ngIf="backend === 'eureka'" class="text-center pad">
     <a (click)="showMore = !showMore" class="btn btn-default">
       <span *ngIf="showMore"> <fa-icon icon="arrow-circle-down"></fa-icon>&nbsp;show more </span>
       <span *ngIf="!showMore"> <fa-icon icon="arrow-circle-up"></fa-icon>&nbsp;show less </span>
     </a>
   </div>
-  <div [ngbCollapse]="showMore">
+  <div *ngIf="backend === 'eureka'" [ngbCollapse]="showMore">
     <h3>
       <fa-icon icon="info-circle"></fa-icon>
       Configuring replication

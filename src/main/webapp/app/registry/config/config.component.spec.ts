@@ -17,17 +17,15 @@ describe('Component Tests', () => {
     let mockProfileService: ProfileService;
     let mockApplicationService: ApplicationsService;
 
-    beforeEach(
-      waitForAsync(() => {
-        TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
-          declarations: [ConfigComponent],
-          providers: [ConfigService, RefreshService],
-        })
-          .overrideTemplate(ConfigComponent, '')
-          .compileComponents();
+    beforeEach(waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
+        declarations: [ConfigComponent],
+        providers: [ConfigService, RefreshService],
       })
-    );
+        .overrideTemplate(ConfigComponent, '')
+        .compileComponents();
+    }));
 
     beforeEach(() => {
       fixture = TestBed.createComponent(ConfigComponent);
@@ -84,6 +82,36 @@ describe('Component Tests', () => {
     });
 
     describe('refresh', () => {
+      it('should prefer explicit config names over provider instance IDs', () => {
+        jest.spyOn(mockApplicationService, 'findAll').mockReturnValue(
+          of([
+            { name: 'ORDERS', configName: 'orders-config', instances: [{ instanceId: '10.0.0.1:8080' }] },
+            { name: 'EMPTY', configName: 'empty-config', instances: [] },
+          ])
+        );
+
+        comp.refresh();
+
+        expect(comp.applications).toEqual(['application', 'orders-config', 'empty-config']);
+      });
+
+      it('should safely resolve legacy config names when instances or string IDs are unavailable', () => {
+        jest.spyOn(mockApplicationService, 'findAll').mockReturnValue(
+          of([
+            { name: 'LEGACY', instances: [{ instanceId: 'legacy-config:instance-1' }] },
+            { name: 'EMPTY', instances: [] },
+            { name: 'NULL-ID', instances: [{ instanceId: null }] },
+            { name: 'NUMERIC-ID', instances: [{ instanceId: 123 }] },
+            { name: 'POD-NAME', instances: [{ instanceId: 'pod-uid' }] },
+            { name: 'EMPTY-PREFIX', instances: [{ instanceId: ':instance-1' }] },
+          ])
+        );
+
+        comp.refresh();
+
+        expect(comp.applications).toEqual(['application', 'legacy-config', 'empty', 'null-id', 'numeric-id', 'pod-name', 'empty-prefix']);
+      });
+
       it('should call refresh on init with configAsJson', () => {
         const configAsJson: string =
           '{\n' +

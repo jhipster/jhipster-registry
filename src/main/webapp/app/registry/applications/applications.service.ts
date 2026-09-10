@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 export interface Application {
   name: string;
+  configName?: string;
   instances: Array<Instance>;
   active?: string;
 }

@@ -1,0 +1,38 @@
+# Include the discovery client at build time with the Maven kubernetes profile.
+application:
+  discovery:
+    backend: kubernetes
+
+eureka:
+  client:
+    enabled: false
+
+spring:
+  cloud:
+    kubernetes:
+      enabled: true
+      client:
+        namespace: ${KUBERNETES_NAMESPACE:default}
+      discovery:
+        enabled: true
+        all-namespaces: false
+        include-not-ready-addresses: false
+        catalog-services-watch:
+          enabled: false
+      config:
+        enabled: false
+      secrets:
+        enabled: false
+      reload:
+        enabled: false
+    config:
+      discovery:
+        enabled: false
+
+management:
+  health:
+    kubernetes:
+      enabled: false
+  info:
+    kubernetes:
+      enabled: false

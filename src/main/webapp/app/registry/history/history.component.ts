@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { EurekaHistory, EurekaHistoryType, History, HistoryService } from './history.service';
 import { RefreshService } from 'app/shared/refresh/refresh.service';
+import { EurekaStatusService } from 'app/home/eureka.status.service';
 
 @Component({
   selector: 'jhi-history',
@@ -15,8 +16,13 @@ export class HistoryComponent implements OnInit, OnDestroy {
   activeKey?: EurekaHistoryType;
   unsubscribe$ = new Subject();
   active = 'registered';
+  backend = 'eureka';
 
-  constructor(private historyService: HistoryService, private refreshService: RefreshService) {}
+  constructor(
+    private historyService: HistoryService,
+    private refreshService: RefreshService,
+    private eurekaStatusService: EurekaStatusService
+  ) {}
 
   ngOnInit(): void {
     this.refreshService.refreshReload$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => this.refresh());
@@ -30,6 +36,10 @@ export class HistoryComponent implements OnInit, OnDestroy {
   }
 
   refresh(): void {
+    this.eurekaStatusService
+      .findAll()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => (this.backend = typeof data.status.backend === 'string' ? data.status.backend : 'eureka'));
     this.historyService
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))

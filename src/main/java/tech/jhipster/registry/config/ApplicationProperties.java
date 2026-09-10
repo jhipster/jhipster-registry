@@ -15,6 +15,41 @@ public class ApplicationProperties {
 
     private final Eureka eureka = new Eureka();
 
+    private final Discovery discovery = new Discovery();
+
+    public Discovery getDiscovery() {
+        return discovery;
+    }
+
+    public static class Discovery {
+
+        private Backend backend = Backend.EUREKA;
+
+        private String managementPath = "/management";
+
+        public Backend getBackend() {
+            return backend;
+        }
+
+        public void setBackend(Backend backend) {
+            this.backend = backend;
+        }
+
+        public String getManagementPath() {
+            return managementPath;
+        }
+
+        public void setManagementPath(String managementPath) {
+            this.managementPath = managementPath;
+        }
+
+        public enum Backend {
+            EUREKA,
+            CONSUL,
+            KUBERNETES,
+        }
+    }
+
     public Oauth2 getOauth2() {
         return oauth2;
     }

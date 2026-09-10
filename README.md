@@ -91,6 +91,55 @@ vault:
 
 - After successful start, you shall require entering a new password as provided in vault.
 
+## Consul and Kubernetes discovery
+
+Eureka remains the default. Alternative discovery clients are opt-in Maven dependencies;
+the default build does not include either client. Select one provider at build time and
+activate its corresponding Spring profile at runtime:
+
+```shell
+./mvnw -Pprod,consul clean verify
+java -jar target/jhipster-registry-7.5.0.jar --spring.profiles.active=prod,consul
+
+./mvnw -Pprod,kubernetes clean verify
+java -jar target/jhipster-registry-7.5.0.jar --spring.profiles.active=prod,kubernetes
+```
+
+The existing production authentication and Config Server configuration are still required.
+For local development, replace `prod` with `dev,webapp` when building and `dev` when running.
+Use only one alternative provider profile. `application.discovery.backend` selects the
+adapter (`eureka`, `consul`, or `kubernetes`); selecting a missing client fails startup with
+a configuration error rather than showing an empty registry.
+
+Consul uses `CONSUL_HOST` and `CONSUL_PORT` (defaults `localhost:8500`). Configure any
+required ACL token through Spring Cloud Consul's discovery properties. The Registry only
+reads discovery data; the profile disables service registration and catalog polling.
+Kubernetes uses `KUBERNETES_NAMESPACE` (default `default`) and the Fabric8 client's normal
+cluster or kubeconfig credentials. Grant read access to services and endpoints in that
+namespace. Discovery does not request ConfigMaps, Secrets, pod health or cluster-wide
+watching. Both optional clients default to disabled, including during early bootstrap,
+even when their dependencies are present. The selected runtime profile enables its client;
+an artifact containing an optional client can still run with the default Eureka backend.
+
+The same `/api/eureka/*` URLs serve the selected provider, preserving Home, Instances and
+Cloud Config compatibility. Generic discovery membership does not prove instance health,
+so alternative instances display `UNKNOWN`. Provider failures remain errors, distinct from
+a successful empty result. Registration history and replicas return empty compatible
+responses when the provider does not expose Eureka's lease and peer concepts. Metrics,
+health and API documentation continue to describe the Registry itself.
+
+Spring Cloud Config Server keeps its existing Git/native/Vault sources. To use a mounted
+Kubernetes ConfigMap for configuration, configure the existing native source and `k8s`
+refresh profile separately; discovery does not read configuration or secrets automatically.
+
+Instance metadata can declare `homePageUrl`, `healthCheckUrl` and `statusPageUrl` as explicit
+HTTP(S) links. Management links otherwise use the service URI and `/management` (configurable
+with `application.discovery.management-path`), with optional `context-path`,
+`management.context-path`, `management.address`, `management.port` and `management.scheme`
+metadata. Credential-bearing or invalid links are not exposed. `config-name` identifies a
+different Spring configuration application; conflicting instance values fall back to the
+service ID. Existing Eureka instance IDs and configuration-name conventions are preserved.
+
 ## OAuth 2.0 and OpenID Connect
 
 OAuth is a stateful security mechanism, like HTTP Session. Spring Security provides excellent OAuth 2.0 and OIDC support, and this is leveraged by JHipster. If you’re not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)

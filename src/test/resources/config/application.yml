@@ -17,6 +17,10 @@ spring:
   application:
     name: JHipsterRegistry
   cloud:
+    consul:
+      enabled: false
+    kubernetes:
+      enabled: false
     config:
       enabled: false
   jackson:
