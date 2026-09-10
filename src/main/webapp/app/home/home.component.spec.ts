@@ -1,5 +1,7 @@
 jest.mock('app/core/auth/account.service');
 
+import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
@@ -29,26 +31,23 @@ describe('Component Tests', () => {
     let mockProfileService: ProfileService;
     let mockRouter: Router;
 
-    beforeEach(
-      waitForAsync(() => {
-        TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot(), RouterTestingModule.withRoutes([])],
-          declarations: [HomeComponent],
-          providers: [
-            AccountService,
-            EventManager,
-            EurekaStatusService,
-            ApplicationsService,
-            HealthService,
-            LoginOAuth2Service,
-            ProfileService,
-            RefreshService,
-          ],
-        })
-          .overrideTemplate(HomeComponent, '')
-          .compileComponents();
-      })
-    );
+    beforeEach(waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [CommonModule, HttpClientTestingModule, NgxWebstorageModule.forRoot(), RouterTestingModule.withRoutes([])],
+        declarations: [HomeComponent],
+        providers: [
+          AccountService,
+          EventManager,
+          EurekaStatusService,
+          ApplicationsService,
+          HealthService,
+          LoginOAuth2Service,
+          ProfileService,
+          RefreshService,
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    }));
 
     beforeEach(() => {
       fixture = TestBed.createComponent(HomeComponent);
@@ -64,6 +63,45 @@ describe('Component Tests', () => {
       account = new Account(true, ['ROLE_ADMIN'], 'admin@admin.com', 'firstname', 'en', 'lastname', 'admin', '');
       jest.spyOn(mockAccountService, 'identity').mockReturnValue(of(account));
       jest.spyOn(mockAccountService, 'isAuthenticated').mockReturnValue(true);
+    });
+
+    describe('discovery backend rendering', () => {
+      beforeEach(() => {
+        jest.spyOn(mockApplicationService, 'findAll').mockReturnValue(of([]));
+        jest.spyOn(TestBed.inject(HealthService), 'checkHealth').mockReturnValue(of({ status: 'UP', components: {} }));
+      });
+
+      it.each(['consul', 'kubernetes'])('should render %s status without Eureka-only renewal information', backend => {
+        jest.spyOn(mockEurekaStatusService, 'findAll').mockReturnValue(
+          of({
+            status: {
+              backend,
+              environment: 'test',
+              generalStats: { 'num-of-cpus': 2 },
+              instanceInfo: { ipAddr: '127.0.0.1', status: 'UP' },
+            },
+          })
+        );
+
+        fixture.detectChanges();
+
+        const text = (fixture.nativeElement as HTMLElement).textContent!;
+        expect(text).toContain(backend === 'consul' ? 'Consul' : 'Kubernetes');
+        expect(text).toContain('127.0.0.1');
+        expect(text).not.toContain('Below Renew Threshold');
+      });
+
+      it('should render partial legacy status safely and retain Eureka renewal information', () => {
+        jest.spyOn(mockEurekaStatusService, 'findAll').mockReturnValue(of({ status: { environment: 'legacy' } }));
+
+        expect(() => fixture.detectChanges()).not.toThrow();
+
+        const text = (fixture.nativeElement as HTMLElement).textContent!;
+        expect(text).toContain('Eureka');
+        expect(text).toContain('Below Renew Threshold');
+        expect(text).toContain('Unavailable');
+        expect(text).toContain('UNKNOWN');
+      });
     });
 
     it('Should call accountService.isAuthenticated when it checks authentication', () => {

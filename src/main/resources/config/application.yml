@@ -124,6 +124,11 @@ management:
 spring:
   application:
     name: jhipster-registry
+  cloud:
+    consul:
+      enabled: false
+    kubernetes:
+      enabled: false
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by maven when building the JAR file

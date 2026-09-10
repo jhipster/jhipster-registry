@@ -4,7 +4,11 @@
     <jhi-refresh-selector class="float-end refresh-left-side"></jhi-refresh-selector>
   </div>
 
-  <div class="panel panel-default">
+  <p *ngIf="backend !== 'eureka'" class="alert alert-info">
+    {{ backend | titlecase }} discovery does not expose Eureka lease history. View currently discovered instances on the Instances page.
+  </p>
+
+  <div *ngIf="backend === 'eureka'" class="panel panel-default">
     <div class="panel-body">
       <ul ngbNav #nav="ngbNav" [(activeId)]="active" (navChange)="beforeChange($event)" class="nav-pills">
         <li ngbNavItem="registered">

@@ -1,0 +1,25 @@
+# Include the discovery client at build time with the Maven consul profile.
+application:
+  discovery:
+    backend: consul
+
+eureka:
+  client:
+    enabled: false
+
+spring:
+  cloud:
+    consul:
+      enabled: true
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        enabled: true
+        register: false
+        catalog-services-watch:
+          enabled: false
+      config:
+        enabled: false
+    config:
+      discovery:
+        enabled: false

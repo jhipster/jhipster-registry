@@ -23,6 +23,10 @@
           <table class="table">
             <tbody>
               <tr>
+                <td>Discovery Backend</td>
+                <td>{{ status.backend || 'eureka' | titlecase }}</td>
+              </tr>
+              <tr>
                 <td>Environment</td>
                 <td>{{ status.environment }}</td>
               </tr>
@@ -38,7 +42,7 @@
                 <td>System Uptime</td>
                 <td>{{ status.upTime }}</td>
               </tr>
-              <tr>
+              <tr *ngIf="!status.backend || status.backend === 'eureka'">
                 <td>Below Renew Threshold</td>
                 <td>{{ status.isBelowRenewThreshold }}</td>
               </tr>
@@ -89,25 +93,25 @@
             <tbody>
               <tr>
                 <td>Total Available Memory</td>
-                <td>{{ status.generalStats['total-avail-memory'] }}</td>
+                <td>{{ status.generalStats?.['total-avail-memory'] ?? 'Unavailable' }}</td>
               </tr>
               <tr>
                 <td>Current Memory Usage</td>
-                <td>{{ status.generalStats['current-memory-usage'] }}</td>
+                <td>{{ status.generalStats?.['current-memory-usage'] ?? 'Unavailable' }}</td>
               </tr>
               <tr>
                 <td>Number of CPU</td>
-                <td>{{ status.generalStats['num-of-cpus'] }}</td>
+                <td>{{ status.generalStats?.['num-of-cpus'] ?? 'Unavailable' }}</td>
               </tr>
               <tr>
                 <td>Instance Ip Address</td>
-                <td>{{ status.instanceInfo.ipAddr }}</td>
+                <td>{{ status.instanceInfo?.ipAddr ?? 'Unavailable' }}</td>
               </tr>
               <tr>
                 <td>Instance Status</td>
                 <td>
-                  <span class="badge rounded-pill fw-normal" [ngClass]="getBadgeClass(status.instanceInfo.status)">
-                    {{ status.instanceInfo.status }}
+                  <span class="badge rounded-pill fw-normal" [ngClass]="getBadgeClass(status.instanceInfo?.status || 'UNKNOWN')">
+                    {{ status.instanceInfo?.status || 'UNKNOWN' }}
                   </span>
                 </td>
               </tr>
