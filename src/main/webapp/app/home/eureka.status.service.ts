@@ -10,7 +10,8 @@ export type EurekaStatusKey =
   | 'datacenter'
   | 'isBelowRenewThreshold'
   | 'generalStats'
-  | 'instanceInfo';
+  | 'instanceInfo'
+  | 'discoveryProvider';
 
 export interface Eureka {
   status: {

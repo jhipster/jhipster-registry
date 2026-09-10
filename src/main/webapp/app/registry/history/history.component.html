@@ -6,6 +6,10 @@
 
   <div class="panel panel-default">
     <div class="panel-body">
+      <p>
+        Eureka lease history is available when the embedded Eureka server is active. External discovery providers do not expose this
+        history.
+      </p>
       <ul ngbNav #nav="ngbNav" [(activeId)]="active" (navChange)="beforeChange($event)" class="nav-pills">
         <li ngbNavItem="registered">
           <a ngbNavLink>Last registered leases</a>

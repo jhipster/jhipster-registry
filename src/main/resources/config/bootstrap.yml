@@ -13,6 +13,10 @@ spring:
     active: #spring.profiles.active#
     include: composite
   cloud:
+    consul:
+      enabled: false
+    kubernetes:
+      enabled: false
     config:
       server:
         bootstrap: true

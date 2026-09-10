@@ -121,6 +121,12 @@ describe('Component Tests', () => {
       });
     });
 
+    it('does not present missing portable health as a failed instance', () => {
+      expect(comp.getBadgeClass('UNKNOWN')).toEqual('bg-secondary');
+      expect(comp.checkInstanceLength([{ status: 'UNKNOWN' }])).toBe(false);
+      expect(comp.checkInstanceLength([{ status: 'UNKNOWN' }, { status: 'DOWN' }])).toBe(true);
+    });
+
     describe('getBadgeClass', () => {
       it('should get badge class', () => {
         const upBadgeClass = comp.getBadgeClass('UP');

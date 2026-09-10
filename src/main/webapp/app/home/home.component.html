@@ -39,6 +39,10 @@
                 <td>{{ status.upTime }}</td>
               </tr>
               <tr>
+                <td>Discovery Provider</td>
+                <td>{{ status.discoveryProvider || 'eureka' }}</td>
+              </tr>
+              <tr *ngIf="!status.discoveryProvider">
                 <td>Below Renew Threshold</td>
                 <td>{{ status.isBelowRenewThreshold }}</td>
               </tr>
@@ -53,7 +57,9 @@
           <h3 class="card-title">Instances Registered</h3>
         </div>
         <div class="card-block">
-          <!--{vm.apps.applications}}-->
+          <p *ngIf="status?.discoveryProvider" class="px-3 pt-3">
+            Discovery supplies instance locations. UNKNOWN means no portable health status is available from this provider.
+          </p>
           <table class="table">
             <thead>
               <tr>

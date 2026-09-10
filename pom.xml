@@ -758,6 +758,25 @@
         </pluginManagement>
     </build>
     <profiles>
+        <!-- Build with exactly one optional discovery client; Eureka remains the default. -->
+        <profile>
+            <id>consul</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>kubernetes</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-kubernetes-fabric8</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
         <profile>
             <id>api-docs</id>
             <properties>

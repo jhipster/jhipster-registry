@@ -127,6 +127,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   getBadgeClass(statusState: HealthStatus): string {
     if (statusState === 'UP') {
       return 'bg-success';
+    } else if (statusState === 'UNKNOWN') {
+      return 'bg-secondary';
     } else {
       return 'bg-danger';
     }

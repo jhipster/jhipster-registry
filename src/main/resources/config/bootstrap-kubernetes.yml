@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    kubernetes:
+      enabled: true
+      discovery:
+        all-namespaces: false
+      config:
+        enabled: false
+      secrets:
+        enabled: false
