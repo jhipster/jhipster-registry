@@ -1,0 +1,97 @@
+<div>
+  <div class="head">
+    <h2 class="d-inline-block">Spring Cloud Configuration</h2>
+    <jhi-refresh-selector class="float-end refresh-left-side" />
+  </div>
+  <form #form="ngForm" (ngSubmit)="refresh()">
+    <div class="mb-3">
+      <label for="application" class="form-label"><strong>Application</strong></label>
+      <input type="text" class="form-control" id="application" [(ngModel)]="application" name="application" required />
+    </div>
+    <div class="mb-3">
+      <label for="profile" class="form-label"><strong>Profile</strong></label>
+      <input type="text" class="form-control" id="profile" [(ngModel)]="profile" name="profile" required />
+    </div>
+    @if (!isNative()) {
+      <div class="mb-3">
+        <label for="label" class="form-label"><strong>Git Label: </strong></label>
+        <input type="text" class="form-control" id="label" name="label" [(ngModel)]="label" required />
+      </div>
+    }
+    <!-- tips to submit without button -->
+    <input type="submit" style="display: none" />
+  </form>
+  @if (configAsYaml()) {
+    <div>
+      <h3>Configuration</h3>
+      <ul ngbNav #nav="ngbNav" class="nav-pills">
+        <li ngbNavItem="yaml">
+          <a ngbNavLink>YAML</a>
+          <ng-template ngbNavContent>
+            <pre class="code-block">{{ configAsYaml() }}</pre>
+          </ng-template>
+        </li>
+        <li ngbNavItem="properties">
+          <a ngbNavLink>Properties</a>
+          <ng-template ngbNavContent>
+            <pre class="code-block">{{ configAsProperties() }}</pre>
+          </ng-template>
+        </li>
+        <li ngbNavItem="json">
+          <a ngbNavLink>JSON</a>
+          <ng-template ngbNavContent>
+            <pre class="code-block">{{ configAsJson() }}</pre>
+          </ng-template>
+        </li>
+        @if (configAsKeyValuePairs(); as keyValuePairs) {
+          <li ngbNavItem="table">
+            <a ngbNavLink>Table</a>
+            <ng-template ngbNavContent>
+              <table class="table table-striped table-bordered table-responsive d-table">
+                <thead>
+                  <tr>
+                    <th>Properties</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (property of keyValuePairs | keyvalue; track property.key) {
+                    <tr>
+                      <td>{{ property.key }}</td>
+                      <td>{{ property.value }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </ng-template>
+          </li>
+        }
+      </ul>
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </div>
+  }
+
+  <h3 class="head bottom">Configuration Sources</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Index</th>
+        <th>Configuration</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (source of configurationSources(); track $index) {
+        <tr>
+          <td>{{ $index }}</td>
+          <td>
+            <ul>
+              @for (prop of getKeys(source); track prop) {
+                <li>{{ prop }}: {{ source[prop] | json }}</li>
+              }
+            </ul>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

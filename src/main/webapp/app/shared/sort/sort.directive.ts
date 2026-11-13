@@ -1,39 +1,20 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, model, output } from '@angular/core';
+
+import { SortOrder, SortState } from './sort-state';
 
 @Directive({
   selector: '[jhiSort]',
 })
-export class SortDirective<T> {
-  @Input()
-  get predicate(): T | undefined {
-    return this._predicate;
-  }
-  set predicate(predicate: T | undefined) {
-    this._predicate = predicate;
-    this.predicateChange.emit(predicate);
-  }
+export class SortDirective {
+  readonly sortState = model.required<SortState>();
 
-  @Input()
-  get ascending(): boolean | undefined {
-    return this._ascending;
-  }
-  set ascending(ascending: boolean | undefined) {
-    this._ascending = ascending;
-    this.ascendingChange.emit(ascending);
-  }
+  readonly sortChange = output<SortState>();
 
-  @Output() predicateChange = new EventEmitter<T>();
-  @Output() ascendingChange = new EventEmitter<boolean>();
-  @Output() sortChange = new EventEmitter<{ predicate: T; ascending: boolean }>();
-
-  private _predicate?: T;
-  private _ascending?: boolean;
-
-  sort(field: T): void {
-    this.ascending = field !== this.predicate ? true : !this.ascending;
-    this.predicate = field;
-    this.predicateChange.emit(field);
-    this.ascendingChange.emit(this.ascending);
-    this.sortChange.emit({ predicate: this.predicate, ascending: this.ascending });
+  sort(field: string): void {
+    const { predicate, order } = this.sortState();
+    const toggle = (): SortOrder => (order === 'asc' ? 'desc' : 'asc');
+    const newSortState = { predicate: field, order: field === predicate ? toggle() : 'asc' };
+    this.sortState.update(() => newSortState);
+    this.sortChange.emit(newSortState);
   }
 }

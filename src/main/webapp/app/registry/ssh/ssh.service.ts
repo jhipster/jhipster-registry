@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+import { serverApiUrl } from 'app/config';
+
+@Service()
 export class SSHService {
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   getSshPublicKey(): Observable<string> {
-    return this.http.get<string>('api/ssh/public_key');
+    return this.http.get(`${serverApiUrl}api/ssh/public_key`, { responseType: 'text' });
   }
 }

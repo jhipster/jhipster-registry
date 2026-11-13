@@ -6,19 +6,18 @@ export type HealthKey =
   | 'clientConfigServer'
   | 'hystrix'
   | 'diskSpace'
+  | 'ssl'
   | 'mail'
   | 'ping'
   | 'livenessState'
   | 'readinessState';
 
-export interface Health {
+export interface HealthModel {
   status: HealthStatus;
-  components: {
-    [key in HealthKey]?: HealthDetails;
-  };
+  components?: Partial<Record<HealthKey, HealthDetails>>;
 }
 
 export interface HealthDetails {
   status: HealthStatus;
-  details?: { [key: string]: unknown };
+  details?: Record<string, unknown>;
 }
