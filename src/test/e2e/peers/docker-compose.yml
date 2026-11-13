@@ -7,13 +7,14 @@ services:
     hostname: eureka-peer-1
     volumes:
       - ../../../../central-config:/central-config
+      - ./health-check.sh:/health-check.sh
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=dev,peer1
     ports:
       - 127.0.0.1:8761:8761
     healthcheck:
-      test: ['CMD', 'bash', '-c', 'exec 3<>/dev/tcp/localhost/8761']
+      test: ['CMD', 'bash', '/health-check.sh', '8761']
       interval: 5s
       timeout: 5s
       retries: 40
@@ -22,13 +23,14 @@ services:
     hostname: eureka-peer-2
     volumes:
       - ../../../../central-config:/central-config
+      - ./health-check.sh:/health-check.sh
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=dev,peer2
     ports:
       - 127.0.0.1:8762:8762
     healthcheck:
-      test: ['CMD', 'bash', '-c', 'exec 3<>/dev/tcp/localhost/8762']
+      test: ['CMD', 'bash', '/health-check.sh', '8762']
       interval: 5s
       timeout: 5s
       retries: 40

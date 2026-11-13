@@ -65,7 +65,7 @@ jobs:
             - name: Stop the registry
               run: |
                   kill "$(cat target/registry.pid)"
-                  while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done
+                  timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
             - name: Start Keycloak
               run: docker compose -f src/main/docker/keycloak.yml up --wait
             - name: Start the registry with the oauth2 profile
@@ -78,14 +78,12 @@ jobs:
             - name: Stop the registry and Keycloak
               run: |
                   kill "$(cat target/registry.pid)"
-                  while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done
+                  timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
                   docker compose -f src/main/docker/keycloak.yml down
             - name: Build the Docker image
               run: ./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild
             - name: Start two registries that replicate to each other
-              run: |
-                  docker compose -f src/test/e2e/peers/docker-compose.yml up --wait
-                  npm run ci:server:await
+              run: docker compose -f src/test/e2e/peers/docker-compose.yml up --wait
             - name: Run end-to-end tests for peer replication
               run: npm run e2e:peers
             - name: Stop the two registries
