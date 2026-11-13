@@ -71,4 +71,24 @@ docker compose -f src/test/e2e/peers/docker-compose.yml up --wait
 docker compose -f src/test/e2e/peers/docker-compose.yml down
 ```
 
+To test the Git and Vault configuration backends, create the Git repository the tests use, start Vault, and start the registry with both as its configuration sources. Then run the tests:
+
+```
+./npmw run e2e:backends:repo
+docker compose -f src/main/docker/vault.yml up -d
+
+export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=file://$PWD/target/e2e-config-repo
+export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_TYPE=vault
+export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_KV_VERSION=2
+export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_BACKEND=secret
+export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_DEFAULT_KEY=application
+export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_PROFILE_SEPARATOR=/
+./mvnw
+
+./npmw run e2e:backends
+```
+
+Both sources have to be set, because setting one of them through the environment replaces the whole list in `bootstrap.yml`. The tests commit to the repository in `target/e2e-config-repo` and write secrets to Vault.
+
 The HTML report and the traces of failed tests are written to `target/playwright`.

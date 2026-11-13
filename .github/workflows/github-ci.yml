@@ -88,6 +88,27 @@ jobs:
                   npm run ci:server:await
             - name: Run end-to-end tests for peer replication
               run: npm run e2e:peers
+            - name: Stop the two registries
+              run: docker compose -f src/test/e2e/peers/docker-compose.yml down
+            - name: Start Vault
+              run: |
+                  docker compose -f src/main/docker/vault.yml up -d
+                  timeout 60 bash -c 'until curl -sf -o /dev/null http://localhost:8200/v1/sys/health; do sleep 1; done'
+            - name: Start the registry with Git and Vault as configuration sources
+              env:
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE: git
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_TYPE: vault
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_KV_VERSION: 2
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_BACKEND: secret
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_DEFAULT_KEY: application
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_PROFILE_SEPARATOR: /
+              run: |
+                  npm run e2e:backends:repo
+                  export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI="file://$PWD/target/e2e-config-repo"
+                  java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev > target/registry-backends.log 2>&1 &
+                  npm run ci:server:await
+            - name: Run end-to-end tests for the Git and Vault configuration backends
+              run: npm run e2e:backends
             - name: Show the registry logs
               if: failure()
               run: |

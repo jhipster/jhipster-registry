@@ -34,6 +34,8 @@
     "docker:jhipster-registry:down": "docker compose -f src/main/docker/jhipster-registry.yml down -v",
     "docker:jhipster-registry:up": "docker compose -f src/main/docker/jhipster-registry.yml up --wait",
     "e2e": "playwright test --project=jwt",
+    "e2e:backends": "playwright test --project=backends",
+    "e2e:backends:repo": "node src/test/e2e/backends/create-config-repo.mjs",
     "e2e:oauth2": "playwright test --project=oauth2",
     "e2e:peers": "playwright test --project=peers",
     "java:docker": "./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild",
