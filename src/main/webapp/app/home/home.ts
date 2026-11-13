@@ -2,14 +2,12 @@ import { KeyValuePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
-import { environment } from 'environments/environment';
 
 import { HealthModel } from 'app/admin/health/health.model';
 import { HealthService } from 'app/admin/health/health.service';
+import { displayVersion } from 'app/config/version';
 import { AccountService } from 'app/core/auth';
-import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { LoginOAuth2Service } from 'app/login/login-oauth2.service';
+import { SignInService } from 'app/login/sign-in.service';
 import { ApplicationsService, Instance } from 'app/registry/applications/applications.service';
 import RefreshSelector from 'app/shared/refresh/refresh-selector';
 import { RefreshService } from 'app/shared/refresh/refresh.service';
@@ -27,26 +25,15 @@ export default class Home implements OnInit {
   readonly health = signal<HealthModel | undefined>(undefined);
   readonly appInstances = signal<Instance[]>([]);
   readonly status = signal<EurekaStatus | undefined>(undefined);
-  readonly version: string;
+  readonly version = displayVersion;
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly accountService = inject(AccountService);
-  private readonly loginOAuth2Service = inject(LoginOAuth2Service);
+  private readonly signInService = inject(SignInService);
   private readonly eurekaStatusService = inject(EurekaStatusService);
   private readonly applicationsService = inject(ApplicationsService);
   private readonly healthService = inject(HealthService);
-  private readonly profileService = inject(ProfileService);
   private readonly refreshService = inject(RefreshService);
-  private readonly router = inject(Router);
-
-  constructor() {
-    const { VERSION } = environment;
-    if (VERSION) {
-      this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
-    } else {
-      this.version = '';
-    }
-  }
 
   ngOnInit(): void {
     this.accountService
@@ -63,16 +50,7 @@ export default class Home implements OnInit {
   }
 
   login(): void {
-    this.profileService
-      .getProfileInfo()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(profileInfo => {
-        if (profileInfo.activeProfiles?.includes('oauth2')) {
-          this.loginOAuth2Service.login();
-        } else {
-          this.router.navigate(['/login']);
-        }
-      });
+    this.signInService.signIn();
   }
 
   populateDashboard(): void {

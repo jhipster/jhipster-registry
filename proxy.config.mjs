@@ -5,7 +5,7 @@ const backendPort = 8761;
  * @type {import('vite').CommonServerOptions['proxy']}
  */
 export default {
-  '^/(api|management|v3/api-docs)': {
+  '^/(api|management|v3/api-docs|config)': {
     target: `http://${backendHost}:${backendPort}`,
     xfwd: true,
   },

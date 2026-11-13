@@ -11,6 +11,10 @@
       "description": "Java runtime options.",
       "value": "-Dfile.encoding=UTF-8"
     },
+    "SPRING_OPTS": {
+      "description": "Spring Boot options.",
+      "value": "--server.undertow.io-threads=1 --server.undertow.eager-filter-init=false"
+    },
     "JHIPSTER_REGISTRY_VERSION": {
       "description": "Version of the registry to deploy.",
       "value": "7.4.0"

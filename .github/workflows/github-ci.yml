@@ -148,11 +148,12 @@ jobs:
               run: npm run e2e:prod
             - name: Show the registry logs
               if: failure()
+              # Each of these is allowed to fail, because a step that failed early leaves no logs or containers behind
               run: |
-                  tail -n 300 target/registry-*.log
-                  docker compose -f src/test/e2e/peers/docker-compose.yml logs --tail 300
-                  docker compose -f src/main/docker/vault.yml logs --tail 100
-                  docker compose -f src/main/docker/keycloak.yml logs --tail 100
+                  tail -n 300 target/registry-*.log || true
+                  docker compose -f src/test/e2e/peers/docker-compose.yml logs --tail 300 || true
+                  docker compose -f src/main/docker/vault.yml logs --tail 100 || true
+                  docker compose -f src/main/docker/keycloak.yml logs --tail 100 || true
             - name: Upload the Playwright report
               if: failure()
               uses: actions/upload-artifact@v4

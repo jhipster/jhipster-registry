@@ -54,6 +54,17 @@ describe('Applications Component', () => {
     expect(comp.instances()).toEqual(applications[1].instances);
   });
 
+  it('should select another application when the selected one is no longer registered', () => {
+    comp.ngOnInit();
+    comp.selectActiveApplication('app1');
+    vi.spyOn(service, 'findAll').mockReturnValue(of([applications[1]]));
+
+    TestBed.inject(RefreshService).refreshReload();
+
+    expect(comp.activeApplicationName()).toBe('app2');
+    expect(comp.instances()).toEqual(applications[1].instances);
+  });
+
   it('should count the instances that are up', () => {
     expect(comp.countActiveInstances(applications[0].instances)).toBe(1);
     expect(comp.displayCountInstances(applications[0].instances)).toBe('1/2');

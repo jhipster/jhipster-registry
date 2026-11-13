@@ -38,7 +38,8 @@ export default class Applications implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(applications => {
         this.applications.set(applications);
-        if (!this.activeApplicationName() && applications.length > 0) {
+        // select the first application when none is selected, or when the selected one is no longer registered
+        if (applications.length > 0 && !applications.some(application => application.name === this.activeApplicationName())) {
           this.selectActiveApplication(applications[0].name);
         }
       });
