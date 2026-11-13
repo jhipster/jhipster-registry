@@ -75,7 +75,7 @@ To test the Git and Vault configuration backends, create the Git repository the 
 
 ```
 ./npmw run e2e:backends:repo
-docker compose -f src/main/docker/vault.yml up -d
+docker compose -f src/main/docker/vault.yml up --wait
 
 export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
 export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=file://$PWD/target/e2e-config-repo

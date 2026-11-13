@@ -91,9 +91,7 @@ jobs:
             - name: Stop the two registries
               run: docker compose -f src/test/e2e/peers/docker-compose.yml down
             - name: Start Vault
-              run: |
-                  docker compose -f src/main/docker/vault.yml up -d
-                  timeout 60 bash -c 'until curl -sf -o /dev/null http://localhost:8200/v1/sys/health; do sleep 1; done'
+              run: docker compose -f src/main/docker/vault.yml up --wait
             - name: Start the registry with Git and Vault as configuration sources
               env:
                   SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE: git
