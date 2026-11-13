@@ -1,19 +1,32 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: jhipster-registry
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:19.0.1
-    command: ['start-dev --import-realm']
+    image: quay.io/keycloak/keycloak:26.7.4-0
+    command: 'start-dev --import-realm'
     volumes:
       - ./realm-config:/opt/keycloak/data/import
+      - ./realm-config/keycloak-health-check.sh:/opt/keycloak/health-check.sh
     environment:
       - KC_DB=dev-file
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
       - KC_FEATURES=scripts
       - KC_HTTP_PORT=9080
       - KC_HTTPS_PORT=9443
+      - KC_HEALTH_ENABLED=true
+      - KC_HTTP_MANAGEMENT_PORT=9990
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:9080:9080
       - 127.0.0.1:9443:9443
+    healthcheck:
+      test: 'bash /opt/keycloak/health-check.sh'
+      interval: 5s
+      timeout: 5s
+      # Increased retries due to slow Keycloak startup in GitHub Actions using macOS
+      retries: 50
+      start_period: 10s
+    labels:
+      org.springframework.boot.ignore: true
