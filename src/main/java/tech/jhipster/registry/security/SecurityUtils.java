@@ -3,6 +3,7 @@ package tech.jhipster.registry.security;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 /**
@@ -18,7 +21,11 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
  */
 public final class SecurityUtils {
 
-    public static final  String CLAIMS_NAMESPACE = "https://www.jhipster.tech/";
+    public static final String CLAIMS_NAMESPACE = "https://www.jhipster.tech/";
+
+    public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
+
+    public static final String AUTHORITIES_CLAIM = "auth";
 
     private SecurityUtils() {}
 
@@ -33,19 +40,21 @@ public final class SecurityUtils {
     }
 
     private static String extractPrincipal(Authentication authentication) {
-        if (authentication == null) {
+        // AnonymousAuthenticationToken has a String principal that would fall through below
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return null;
-        } else if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+        } else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
             return springSecurityUser.getUsername();
-        } else if (authentication.getPrincipal() instanceof String) {
-            return (String) authentication.getPrincipal();
-        } else if (authentication instanceof OAuth2AuthenticationToken) {
-            return ((OAuth2AuthenticationToken) authentication).getPrincipal().getName();
-        } else if (authentication instanceof JwtAuthenticationToken) {
-            return (String) ((JwtAuthenticationToken) authentication).getToken().getClaims().get("preferred_username");
-        } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
-            Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
+        } else if (authentication.getPrincipal() instanceof String s) {
+            return s;
+        } else if (authentication instanceof OAuth2AuthenticationToken oauth2Token) {
+            return oauth2Token.getPrincipal().getName();
+        } else if (authentication instanceof JwtAuthenticationToken jwtToken) {
+            Jwt jwt = jwtToken.getToken();
+            String preferredUsername = jwt.getClaimAsString("preferred_username");
+            return preferredUsername != null ? preferredUsername : jwt.getSubject();
+        } else if (authentication.getPrincipal() instanceof DefaultOidcUser oidcUser) {
+            Map<String, Object> attributes = oidcUser.getAttributes();
             if (attributes.containsKey("preferred_username")) {
                 return (String) attributes.get("preferred_username");
             }
@@ -60,10 +69,16 @@ public final class SecurityUtils {
      */
     public static Optional<String> getCurrentUserJWT() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional
-            .ofNullable(securityContext.getAuthentication())
-            .filter(authentication -> authentication.getCredentials() instanceof String)
-            .map(authentication -> (String) authentication.getCredentials());
+        return Optional.ofNullable(securityContext.getAuthentication()).map(SecurityUtils::extractCredentials);
+    }
+
+    private static String extractCredentials(Authentication authentication) {
+        if (authentication.getCredentials() instanceof String token) {
+            return token;
+        } else if (authentication.getCredentials() instanceof Jwt jwt) {
+            return jwt.getTokenValue();
+        }
+        return null;
     }
 
     /**
@@ -119,10 +134,7 @@ public final class SecurityUtils {
     }
 
     private static Stream<String> getAuthorities(Authentication authentication) {
-        Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken
-            ? extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken().getClaims())
-            : authentication.getAuthorities();
-        return authorities.stream().map(GrantedAuthority::getAuthority);
+        return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority);
     }
 
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
