@@ -70,8 +70,9 @@ export async function hasEncryptionKey(request: APIRequestContext): Promise<bool
   return response.ok();
 }
 
-export async function signInWithPassword(page: Page): Promise<void> {
-  await page.goto('/');
+/** Signs in to the registry under test, or to the registry at the given URL. */
+export async function signInWithPassword(page: Page, registryUrl = '/'): Promise<void> {
+  await page.goto(registryUrl);
   await expect(page).toHaveURL(/\/login$/);
   await page.locator('#username').fill(username);
   await page.locator('#password').fill(password);

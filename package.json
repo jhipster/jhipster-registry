@@ -35,6 +35,7 @@
     "docker:jhipster-registry:up": "docker compose -f src/main/docker/jhipster-registry.yml up --wait",
     "e2e": "playwright test --project=jwt",
     "e2e:oauth2": "playwright test --project=oauth2",
+    "e2e:peers": "playwright test --project=peers",
     "java:docker": "./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild",
     "java:docker:dev": "npm run java:docker -- -Pdev,webapp",
     "java:docker:prod": "npm run java:docker -- -Pprod",

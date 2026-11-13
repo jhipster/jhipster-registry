@@ -71,12 +71,28 @@ jobs:
             - name: Start the registry with the oauth2 profile
               run: |
                   java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev,oauth2 > target/registry-oauth2.log 2>&1 &
+                  echo $! > target/registry.pid
                   npm run ci:server:await
             - name: Run end-to-end tests with Keycloak
               run: npm run e2e:oauth2
+            - name: Stop the registry and Keycloak
+              run: |
+                  kill "$(cat target/registry.pid)"
+                  while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done
+                  docker compose -f src/main/docker/keycloak.yml down
+            - name: Build the Docker image
+              run: ./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild
+            - name: Start two registries that replicate to each other
+              run: |
+                  docker compose -f src/test/e2e/peers/docker-compose.yml up --wait
+                  npm run ci:server:await
+            - name: Run end-to-end tests for peer replication
+              run: npm run e2e:peers
             - name: Show the registry logs
               if: failure()
-              run: tail -n 300 target/registry-*.log
+              run: |
+                  tail -n 300 target/registry-*.log
+                  docker compose -f src/test/e2e/peers/docker-compose.yml logs --tail 300
             - name: Upload the Playwright report
               if: failure()
               uses: actions/upload-artifact@v4

@@ -62,4 +62,13 @@ SPRING_PROFILES_ACTIVE=dev,oauth2 ./mvnw
 ./npmw run e2e:oauth2
 ```
 
+To test peer replication, build the Docker image and start two registries that replicate to each other, then run the tests. Eureka needs each peer to have its own host name, which is why this runs in containers:
+
+```
+./npmw run java:docker
+docker compose -f src/test/e2e/peers/docker-compose.yml up --wait
+./npmw run e2e:peers
+docker compose -f src/test/e2e/peers/docker-compose.yml down
+```
+
 The HTML report and the traces of failed tests are written to `target/playwright`.

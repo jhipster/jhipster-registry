@@ -5,6 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  *
  * - `jwt` needs the registry started with the default (JWT) authentication.
  * - `oauth2` needs Keycloak and the registry started with the `oauth2` profile.
+ * - `peers` needs the two registries of src/test/e2e/peers/docker-compose.yml.
  *
  * See DEVELOPMENT.md for the commands.
  */
@@ -30,6 +31,11 @@ export default defineConfig({
     {
       name: 'oauth2',
       testDir: './src/test/e2e/oauth2',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'peers',
+      testDir: './src/test/e2e/peers',
       use: { ...devices['Desktop Chrome'] },
     },
   ],
