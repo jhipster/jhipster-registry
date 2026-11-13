@@ -42,7 +42,6 @@
         <frontend-maven-plugin.version>2.0.2</frontend-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
         <jhipster-framework.version>9.4.0</jhipster-framework.version>
-        <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
         <jib-maven-plugin.image>eclipse-temurin:25-jre-noble</jib-maven-plugin.image>
         <jib-maven-plugin.version>3.5.2</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
@@ -537,13 +536,17 @@
                             <image>${jib-maven-plugin.image}</image>
                             <platforms>
                                 <platform>
-                                    <architecture>${jib-maven-plugin.architecture}</architecture>
+                                    <architecture>amd64</architecture>
+                                    <os>linux</os>
+                                </platform>
+                                <platform>
+                                    <architecture>arm64</architecture>
                                     <os>linux</os>
                                 </platform>
                             </platforms>
                         </from>
                         <to>
-                            <image>jhipsterregistry:latest</image>
+                            <image>jhipster-registry:latest</image>
                         </to>
                         <container>
                             <entrypoint>
@@ -997,16 +1000,8 @@
             <id>zipkin</id>
             <dependencies>
                 <dependency>
-                    <groupId>io.micrometer</groupId>
-                    <artifactId>micrometer-tracing</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.micrometer</groupId>
-                    <artifactId>micrometer-tracing-bridge-brave</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.zipkin.reporter2</groupId>
-                    <artifactId>zipkin-reporter-brave</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-zipkin</artifactId>
                 </dependency>
             </dependencies>
         </profile>
