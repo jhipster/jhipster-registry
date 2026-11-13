@@ -8,7 +8,9 @@ import { of, throwError } from 'rxjs';
 import { AccountService } from 'app/core/auth';
 
 import Login from './login';
+import { LoginOAuth2Service } from './login-oauth2.service';
 import { LoginService } from './login.service';
+import { SignInService } from './sign-in.service';
 
 describe('Login', () => {
   let comp: Login;
@@ -34,6 +36,18 @@ describe('Login', () => {
           provide: LoginService,
           useValue: {
             login: vi.fn(() => of({})),
+          },
+        },
+        {
+          provide: SignInService,
+          useValue: {
+            usesOAuth2: vi.fn(() => of(false)),
+          },
+        },
+        {
+          provide: LoginOAuth2Service,
+          useValue: {
+            login: vi.fn(),
           },
         },
       ],
@@ -82,6 +96,25 @@ describe('Login', () => {
 
       // THEN
       expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
+    });
+  });
+
+  describe('with the oauth2 profile', () => {
+    it('should go to the identity provider instead of showing the form', () => {
+      vi.spyOn(TestBed.inject(SignInService), 'usesOAuth2').mockReturnValue(of(true));
+      mockAccountService.identity = vi.fn(() => of(null));
+
+      comp.ngOnInit();
+
+      expect(TestBed.inject(LoginOAuth2Service).login).toHaveBeenCalled();
+    });
+
+    it('should stay on the form without the profile', () => {
+      mockAccountService.identity = vi.fn(() => of(null));
+
+      comp.ngOnInit();
+
+      expect(TestBed.inject(LoginOAuth2Service).login).not.toHaveBeenCalled();
     });
   });
 

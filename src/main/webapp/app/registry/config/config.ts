@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap/nav';
 
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { ApplicationsService } from 'app/registry/applications/applications.service';
 import RefreshSelector from 'app/shared/refresh/refresh-selector';
 import { RefreshService } from 'app/shared/refresh/refresh.service';
 
@@ -27,32 +26,30 @@ export default class Config implements OnInit {
   readonly configAsProperties = signal('');
   readonly configAsJson = signal('');
   readonly configAsKeyValuePairs = signal<Map<string, string> | undefined>(undefined);
-  readonly applications = signal(['application']);
 
   private readonly defaultLabel = 'main';
   private readonly destroyRef = inject(DestroyRef);
   private readonly configService = inject(ConfigService);
   private readonly profileService = inject(ProfileService);
-  private readonly applicationsService = inject(ApplicationsService);
   private readonly refreshService = inject(RefreshService);
 
   ngOnInit(): void {
-    this.load();
-    this.refresh();
-  }
-
-  load(): void {
     this.profileService
       .getProfileInfo()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(profileInfo => this.isNative.set(profileInfo.activeProfiles?.includes('native') ?? false));
 
+    // The configuration is fetched once the label of the config server is known, or could not be determined
     this.configService
       .getConfigSources()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(response => {
-        this.label = response.label ?? this.defaultLabel;
-        this.configurationSources.set(response.serverConfigurationSources ?? []);
+      .subscribe({
+        next: response => {
+          this.label = response.label ?? this.defaultLabel;
+          this.configurationSources.set(response.serverConfigurationSources ?? []);
+          this.refresh();
+        },
+        error: () => this.refresh(),
       });
 
     this.refreshService.refreshReload$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.refresh());
@@ -73,12 +70,7 @@ export default class Config implements OnInit {
       .subscribe({
         next: response => {
           this.configAsProperties.set(response);
-          const keyValuePairs = new Map<string, string>();
-          response.split('\n').forEach(property => {
-            const [key, value] = property.split(': ');
-            keyValuePairs.set(key, value);
-          });
-          this.configAsKeyValuePairs.set(keyValuePairs);
+          this.configAsKeyValuePairs.set(parseProperties(response));
         },
         error: () => this.configAsProperties.set(''),
       });
@@ -90,21 +82,26 @@ export default class Config implements OnInit {
         next: response => this.configAsJson.set(response),
         error: () => this.configAsJson.set(''),
       });
-
-    this.applicationsService
-      .findAll()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(applications => {
-        const names = ['application'];
-        applications.forEach(application => {
-          const instanceId = application.instances[0]?.instanceId ?? '';
-          names.push(instanceId.includes(':') ? instanceId.substring(0, instanceId.indexOf(':')) : application.name.toLowerCase());
-        });
-        this.applications.set(names);
-      });
   }
 
   getKeys(obj: Record<string, unknown>): string[] {
     return Object.keys(obj);
   }
+}
+
+/**
+ * Parses the "key: value" lines the config server answers for a .properties request.
+ * A value may itself contain ": ", and blank lines are skipped.
+ */
+export function parseProperties(properties: string): Map<string, string> {
+  const keyValuePairs = new Map<string, string>();
+  for (const line of properties.split('\n')) {
+    const separator = line.indexOf(': ');
+    if (separator > 0) {
+      keyValuePairs.set(line.substring(0, separator), line.substring(separator + 2));
+    } else if (line.trim() !== '') {
+      keyValuePairs.set(line.trim().replace(/:$/, ''), '');
+    }
+  }
+  return keyValuePairs;
 }

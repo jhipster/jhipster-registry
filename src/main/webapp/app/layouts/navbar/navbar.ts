@@ -4,12 +4,13 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap/collapse';
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap/dropdown';
-import { environment } from 'environments/environment';
 
+import { displayVersion } from 'app/config/version';
 import { AccountService } from 'app/core/auth';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginOAuth2Service } from 'app/login/login-oauth2.service';
 import { LoginService } from 'app/login/login.service';
+import { SignInService } from 'app/login/sign-in.service';
 import { HasAnyAuthorityDirective } from 'app/shared/auth';
 
 @Component({
@@ -31,22 +32,14 @@ export default class Navbar implements OnInit {
   readonly inProduction = signal(true);
   readonly isNavbarCollapsed = signal(true);
   readonly openAPIEnabled = signal(false);
-  readonly version: string;
+  readonly version = displayVersion;
   readonly account = inject(AccountService).account;
 
   private readonly loginService = inject(LoginService);
+  private readonly signInService = inject(SignInService);
   private readonly loginOAuth2Service = inject(LoginOAuth2Service);
   private readonly profileService = inject(ProfileService);
   private readonly router = inject(Router);
-
-  constructor() {
-    const { VERSION } = environment;
-    if (VERSION) {
-      this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
-    } else {
-      this.version = '';
-    }
-  }
 
   ngOnInit(): void {
     this.profileService.getProfileInfo().subscribe(profileInfo => {
@@ -60,7 +53,7 @@ export default class Navbar implements OnInit {
   }
 
   login(): void {
-    this.router.navigate(['/login']);
+    this.signInService.signIn();
   }
 
   logout(): void {
