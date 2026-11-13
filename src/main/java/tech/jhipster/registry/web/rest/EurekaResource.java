@@ -84,11 +84,16 @@ public class EurekaResource {
     public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
         Map<String, Map<Long, String>> lastn = new HashMap<>();
         PeerAwareInstanceRegistryImpl registry = (PeerAwareInstanceRegistryImpl) getRegistry();
-        Map<Long, String> canceledMap = registry.getLastNCanceledInstances().stream().collect(toMap(Pair::first, Pair::second));
-        lastn.put("canceled", canceledMap);
-        Map<Long, String> registeredMap = registry.getLastNRegisteredInstances().stream().collect(toMap(Pair::first, Pair::second));
-        lastn.put("registered", registeredMap);
+        lastn.put("canceled", toHistory(registry.getLastNCanceledInstances()));
+        lastn.put("registered", toHistory(registry.getLastNRegisteredInstances()));
         return new ResponseEntity<>(lastn, HttpStatus.OK);
+    }
+
+    /**
+     * Index the leases by their timestamp. Leases that share a timestamp are listed together.
+     */
+    static Map<Long, String> toHistory(List<Pair<Long, String>> leases) {
+        return leases.stream().collect(toMap(Pair::first, Pair::second, (first, second) -> first + ", " + second));
     }
 
     /**
