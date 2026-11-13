@@ -12,6 +12,11 @@ services:
       - 127.0.0.1:8200:8200
     cap_add:
       - IPC_LOCK
+    # In server mode Vault locks its memory, and Docker on Linux limits how much a container may lock by default
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     healthcheck:
       test: ['CMD', 'vault', 'status']
       interval: 5s
