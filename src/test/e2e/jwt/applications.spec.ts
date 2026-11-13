@@ -3,11 +3,17 @@ import { expect, test } from '@playwright/test';
 import { cancelInstance, openMenuItem, registerInstance, signInWithPassword } from '../support/registry';
 
 const app = 'E2E-APP';
-const upInstance = 'e2e-app:1';
-const downInstance = 'e2e-app:2';
+// Every test registers instances of its own. The registry replicates to itself by default, and the replicated
+// cancellation of an instance arrives a moment later, so it would remove an instance that registered again
+// with the same id right after the previous test cancelled it.
+let upInstance: string;
+let downInstance: string;
 
 test.describe('registered applications', () => {
   test.beforeEach(async ({ page, request }) => {
+    const run = Date.now().toString(36);
+    upInstance = `e2e-${run}:1`;
+    downInstance = `e2e-${run}:2`;
     await registerInstance(request, app, upInstance, 'UP');
     await registerInstance(request, app, downInstance, 'DOWN');
     await signInWithPassword(page);
