@@ -2,6 +2,7 @@ package tech.jhipster.registry.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import jakarta.servlet.DispatcherType;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,6 +71,8 @@ public class OAuth2SecurityConfiguration {
             .authorizeHttpRequests(authz ->
                 // prettier-ignore
                 authz
+                    // Let the error page of a response through, otherwise a 404 from Eureka becomes a 403
+                    .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                     .requestMatchers("/index.html", "/*.js", "/*.txt", "/*.json", "/*.map", "/*.css").permitAll()
                     .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
                     .requestMatchers("/content/**").permitAll()
