@@ -52,8 +52,8 @@ jobs:
         run: docker images
       - name: 'DOCKER: start container'
         run: docker run --name jhipster-registry -p 8761:8761 -d -t ghcr.io/${{ github.repository }}:main
-      - name: 'DOCKER: wait 30sec'
-        run: sleep 30
+      - name: 'DOCKER: wait for the registry'
+        run: timeout 120 bash -c 'until curl -sf -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
       - name: 'DOCKER list containers'
         run: docker container ps -a
       - name: 'DOCKER: see logs'
