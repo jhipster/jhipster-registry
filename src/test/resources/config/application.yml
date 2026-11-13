@@ -65,7 +65,7 @@ jhipster:
     name: 'jHipsterRegistryApp'
   logging:
     # To test json console appender
-    use-json-format: false
+    use-json-format: true # By default, logs are in Json format
     logstash:
       enabled: false
       host: localhost
