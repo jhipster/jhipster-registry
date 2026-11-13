@@ -10,8 +10,8 @@
     <property name="FILE_LOG_PATTERN" value="${FILE_LOG_PATTERN:-%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } &#45;&#45;&#45; [%t] %-40.40logger{39} : %crlf(%m) %n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
     -->
 
-    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <!-- base.xml logs to the console and to a file, which the logfile endpoint serves when logging.file.name is set -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
     <!--

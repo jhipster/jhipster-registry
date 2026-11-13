@@ -1,10 +1,14 @@
 package tech.jhipster.registry.config;
 
+import static tech.jhipster.registry.security.SecurityUtils.AUTHORITIES_CLAIM;
 import static tech.jhipster.registry.security.SecurityUtils.JWT_ALGORITHM;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Stream;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
@@ -13,10 +17,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.util.StringUtils;
 import tech.jhipster.registry.management.SecurityMetersService;
 
@@ -56,6 +63,28 @@ public class SecurityJwtConfiguration {
                 throw e;
             }
         };
+    }
+
+    /**
+     * Reads the authorities from the {@code auth} claim. Tokens issued by this version separate them with spaces,
+     * tokens issued by releases before 8.0.0 with commas, and those stay valid across an upgrade.
+     */
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            Object claim = jwt.getClaim(AUTHORITIES_CLAIM);
+            Stream<String> authorities;
+            if (claim instanceof Collection<?> collection) {
+                authorities = collection.stream().map(String::valueOf);
+            } else if (claim instanceof String text) {
+                authorities = Arrays.stream(text.split("[,\\s]+"));
+            } else {
+                authorities = Stream.empty();
+            }
+            return authorities.filter(StringUtils::hasText).<GrantedAuthority>map(SimpleGrantedAuthority::new).toList();
+        });
+        return converter;
     }
 
     @Bean

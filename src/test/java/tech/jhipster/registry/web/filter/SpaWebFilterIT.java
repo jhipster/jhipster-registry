@@ -37,6 +37,16 @@ class SpaWebFilterIT {
     }
 
     @Test
+    void forwardsTheSignInPageOfTheClient() throws Exception {
+        mockMvc.perform(get("/login")).andExpect(status().isOk()).andExpect(forwardedUrl("/index.html"));
+    }
+
+    @Test
+    void doesNotForwardTheOAuth2LoginCallback() throws Exception {
+        mockMvc.perform(get("/login/oauth2/code/oidc")).andExpect(forwardedUrl(null));
+    }
+
+    @Test
     void getBackendEndpoint() throws Exception {
         mockMvc.perform(get("/test")).andExpect(status().isOk()).andExpect(forwardedUrl("/index.html"));
     }

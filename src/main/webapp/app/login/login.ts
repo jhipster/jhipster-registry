@@ -3,7 +3,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 
 import { AccountService } from 'app/core/auth';
+import { LoginOAuth2Service } from 'app/login/login-oauth2.service';
 import { LoginService } from 'app/login/login.service';
+import { SignInService } from 'app/login/sign-in.service';
 
 @Component({
   selector: 'jhi-login',
@@ -23,9 +25,17 @@ export default class Login implements OnInit, AfterViewInit {
 
   private readonly accountService = inject(AccountService);
   private readonly loginService = inject(LoginService);
+  private readonly loginOAuth2Service = inject(LoginOAuth2Service);
+  private readonly signInService = inject(SignInService);
   private readonly router = inject(Router);
 
   ngOnInit(): void {
+    // with the oauth2 profile, users sign in at the identity provider and this form cannot work
+    this.signInService.usesOAuth2().subscribe(oauth2 => {
+      if (oauth2) {
+        this.loginOAuth2Service.login();
+      }
+    });
     // if already authenticated then navigate to home page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
