@@ -53,6 +53,9 @@ jobs:
             - name: Install the Playwright browser
               run: npx playwright install --with-deps chromium
             - name: Start the registry
+              env:
+                  # The encryption tests need a key
+                  ENCRYPT_KEY: e2e-test-key
               run: |
                   java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev > target/registry-jwt.log 2>&1 &
                   echo $! > target/registry.pid

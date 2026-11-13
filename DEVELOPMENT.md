@@ -45,12 +45,14 @@ git commit -m "Regenerate dependencies"
 
 The end-to-end tests in `src/test/e2e` use [Playwright](https://playwright.dev/) and run against a registry that is already started. Install the browser once with `npx playwright install chromium`.
 
-To test the default JWT authentication, start the registry and run the tests:
+To test the default JWT authentication, start the registry and run the tests. The encryption tests need an encryption key, so set `ENCRYPT_KEY` to any value:
 
 ```
-./mvnw
+ENCRYPT_KEY=e2e-test-key ./mvnw
 ./npmw run e2e
 ```
+
+The tests register and cancel instances of an application named `E2E-APP` through the Eureka REST API.
 
 To test OAuth 2.0, start Keycloak and the registry with the `oauth2` profile, then run the tests:
 
