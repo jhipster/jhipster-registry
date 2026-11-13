@@ -8,10 +8,19 @@ Full documentation is available on the [JHipster documentation for microservices
 
 ## Running locally
 
-To run the cloned repository;
+You need Java 21 or later. Node.js 24 is only needed if you want hot reload of the client, because the Maven build installs its own copy.
 
-- For development run `./mvnw -Pdev,webapp` to just start in development or run `./mvnw` and run `npm install && npm start` for hot reload of client side code.
-- For production profile run `./mvnw -Pprod`
+To run the cloned repository:
+
+- For development, run `./mvnw` to build the client and start the registry. For hot reload of client-side code, also run `./npmw install && ./npmw start` and open http://localhost:4200.
+- For the production profile, run `./mvnw -Pprod`.
+
+To build a Docker image and run it with Docker Compose:
+
+```shell
+./npmw run java:docker
+docker compose -f src/main/docker/app.yml up -d
+```
 
 [github-actions-build]: https://github.com/jhipster/jhipster-registry/workflows/Build/badge.svg
 [github-actions-docker]: https://github.com/jhipster/jhipster-registry/workflows/Docker%20Image/badge.svg
@@ -25,7 +34,7 @@ To run the cloned repository;
 - Start vault server docker container:
 
 ```shell
-docker-compose -f src/main/docker/vault.yml up -d
+docker compose -f src/main/docker/vault.yml up -d
 ```
 
 - The default configured root token is `jhipster-registry`. We shall use the default secrets engine backend mounted on the `secrets` path. Configure secrets using either of `ui`, `cli` or `http`.
@@ -62,7 +71,7 @@ volumes:
 - Start vault server docker container:
 
 ```shell
-docker-compose -f src/main/docker/vault.yml up -d
+docker compose -f src/main/docker/vault.yml up -d
 ```
 
 - Open `vault` server [`ui`](http://localhost:8200/ui/vault/init) to initialize master key shares. In this guide, we shall enter `1` as the number of key shares and `1` as the key threshold value. Do refer to vault documentation for recommended configuration. Note down the initial `root token` and the `key` and keep it at a safe place. You shall require the `key` to unseal the vault server after a restart.
