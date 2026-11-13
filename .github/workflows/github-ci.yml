@@ -149,6 +149,8 @@ jobs:
               run: |
                   tail -n 300 target/registry-*.log
                   docker compose -f src/test/e2e/peers/docker-compose.yml logs --tail 300
+                  docker compose -f src/main/docker/vault.yml logs --tail 100
+                  docker compose -f src/main/docker/keycloak.yml logs --tail 100
             - name: Upload the Playwright report
               if: failure()
               uses: actions/upload-artifact@v4
