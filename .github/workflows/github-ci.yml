@@ -102,8 +102,36 @@ jobs:
                   npm run e2e:backends:repo
                   export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI="file://$PWD/target/e2e-config-repo"
                   java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev > target/registry-backends.log 2>&1 &
+                  echo $! > target/registry.pid
                   npm run ci:server:await
             - name: Run end-to-end tests for the Git and Vault configuration backends
+              run: npm run e2e:backends
+            - name: Stop the registry and Vault
+              run: |
+                  kill "$(cat target/registry.pid)"
+                  timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
+                  docker compose -f src/main/docker/vault.yml down
+            - name: Start Vault in server mode
+              run: |
+                  docker compose -f src/main/docker/vault.yml -f src/test/e2e/backends/vault-server.yml up --wait
+                  echo "VAULT_ROOT_TOKEN=$(node src/test/e2e/backends/init-vault-server.mjs)" >> "$GITHUB_ENV"
+            - name: Start the registry with Git and Vault in server mode as configuration sources
+              env:
+                  SPRING_CLOUD_CONFIG_SERVER_VAULT_TOKEN: ${{ env.VAULT_ROOT_TOKEN }}
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE: git
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_TYPE: vault
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_KV_VERSION: 2
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_BACKEND: secret
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_DEFAULT_KEY: application
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_PROFILE_SEPARATOR: /
+              run: |
+                  npm run e2e:backends:repo
+                  export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI="file://$PWD/target/e2e-config-repo"
+                  java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev > target/registry-vault-server.log 2>&1 &
+                  npm run ci:server:await
+            - name: Run end-to-end tests with Vault in server mode
+              env:
+                  E2E_VAULT_TOKEN: ${{ env.VAULT_ROOT_TOKEN }}
               run: npm run e2e:backends
             - name: Show the registry logs
               if: failure()

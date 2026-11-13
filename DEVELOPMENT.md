@@ -91,4 +91,14 @@ export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_PROFILE_SEPARATOR=/
 
 Both sources have to be set, because setting one of them through the environment replaces the whole list in `bootstrap.yml`. The tests commit to the repository in `target/e2e-config-repo` and write secrets to Vault.
 
+The same tests run against Vault in server mode, which the README describes. Start Vault with the extra compose file, then initialize and unseal it. That prints the root token, which the registry and the tests need:
+
+```
+docker compose -f src/main/docker/vault.yml -f src/test/e2e/backends/vault-server.yml up --wait
+export SPRING_CLOUD_CONFIG_SERVER_VAULT_TOKEN=$(node src/test/e2e/backends/init-vault-server.mjs)
+export E2E_VAULT_TOKEN=$SPRING_CLOUD_CONFIG_SERVER_VAULT_TOKEN
+```
+
+Vault keeps its data in `src/main/docker/vault-config/data`, so delete the contents of that directory to start over.
+
 The HTML report and the traces of failed tests are written to `target/playwright`.

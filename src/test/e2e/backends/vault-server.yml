@@ -1,0 +1,12 @@
+# Runs the Vault of src/main/docker/vault.yml in server mode, as the README describes, for the end-to-end tests:
+# docker compose -f src/main/docker/vault.yml -f src/test/e2e/backends/vault-server.yml up --wait
+services:
+  vault:
+    command: server
+    volumes:
+      - ./vault-config/config:/vault/config
+      - ./vault-config/logs:/vault/logs
+      - ./vault-config/data:/vault/file
+    healthcheck:
+      # A new server is sealed until init-vault-server.mjs has run: "vault status" then exits with 2, and with 1 on errors
+      test: ['CMD-SHELL', 'vault status; test $$? -ne 1']
