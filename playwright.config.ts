@@ -7,6 +7,7 @@ import { defineConfig, devices } from '@playwright/test';
  * - `oauth2` needs Keycloak and the registry started with the `oauth2` profile.
  * - `peers` needs the two registries of src/test/e2e/peers/docker-compose.yml.
  * - `backends` needs Vault and the registry started with a Git repository and Vault as configuration sources.
+ * - `prod` needs the registry started with the prod profile and no other configuration.
  *
  * See DEVELOPMENT.md for the commands.
  */
@@ -42,6 +43,11 @@ export default defineConfig({
     {
       name: 'backends',
       testDir: './src/test/e2e/backends',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'prod',
+      testDir: './src/test/e2e/prod',
       use: { ...devices['Desktop Chrome'] },
     },
   ],

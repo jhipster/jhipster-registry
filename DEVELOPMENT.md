@@ -101,4 +101,11 @@ export E2E_VAULT_TOKEN=$SPRING_CLOUD_CONFIG_SERVER_VAULT_TOKEN
 
 Vault keeps its data in `src/main/docker/vault-config/data`, so delete the contents of that directory to start over.
 
+To test the default production configuration, start the registry with the `prod` profile and nothing else configured. It then reads its configuration from [jhipster-registry-sample-config](https://github.com/jhipster/jhipster-registry-sample-config) on GitHub:
+
+```
+./mvnw -Pprod
+./npmw run e2e:prod
+```
+
 The HTML report and the traces of failed tests are written to `target/playwright`.

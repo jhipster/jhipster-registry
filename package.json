@@ -38,6 +38,7 @@
     "e2e:backends:repo": "node src/test/e2e/backends/create-config-repo.mjs",
     "e2e:oauth2": "playwright test --project=oauth2",
     "e2e:peers": "playwright test --project=peers",
+    "e2e:prod": "playwright test --project=prod",
     "java:docker": "./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild",
     "java:docker:dev": "npm run java:docker -- -Pdev,webapp",
     "java:docker:prod": "npm run java:docker -- -Pprod",

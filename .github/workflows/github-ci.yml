@@ -128,11 +128,22 @@ jobs:
                   npm run e2e:backends:repo
                   export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI="file://$PWD/target/e2e-config-repo"
                   java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev > target/registry-vault-server.log 2>&1 &
+                  echo $! > target/registry.pid
                   npm run ci:server:await
             - name: Run end-to-end tests with Vault in server mode
               env:
                   E2E_VAULT_TOKEN: ${{ env.VAULT_ROOT_TOKEN }}
               run: npm run e2e:backends
+            - name: Stop the registry
+              run: |
+                  kill "$(cat target/registry.pid)"
+                  timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
+            - name: Start the registry with the default production configuration
+              run: |
+                  java -jar target/jhipster-registry-*.jar > target/registry-prod.log 2>&1 &
+                  npm run ci:server:await
+            - name: Run end-to-end tests for the default production configuration
+              run: npm run e2e:prod
             - name: Show the registry logs
               if: failure()
               run: |
