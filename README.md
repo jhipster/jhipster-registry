@@ -8,7 +8,7 @@ Full documentation is available on the [JHipster documentation for microservices
 
 ## Running locally
 
-You need Java 21 or later. Node.js 24 is only needed if you want hot reload of the client, because the Maven build installs its own copy.
+You need Java 21 or 25, which are the versions the build accepts. Node.js 24 is only needed if you want hot reload of the client, because the Maven build installs its own copy.
 
 To run the cloned repository:
 
@@ -62,6 +62,10 @@ docker compose -f src/main/docker/vault.yml up -d
 
 ```yml
     command: server
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - ./vault-config/config:/vault/config:ro
       - vault-logs:/vault/logs

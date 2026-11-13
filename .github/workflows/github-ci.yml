@@ -64,6 +64,8 @@ jobs:
                     http://localhost:9080/realms/jhipster/protocol/openid-connect/auth*) ;;
                     *) echo "::error::Expected a redirect to the Keycloak sign-in page"; exit 1 ;;
                   esac
-            - name: Show the registry log
+            - name: Show the registry and Keycloak logs
               if: failure()
-              run: cat target/registry-oauth2.log
+              run: |
+                  cat target/registry-oauth2.log || true
+                  docker compose -f src/main/docker/keycloak.yml logs --tail 100 || true

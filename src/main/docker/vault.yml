@@ -12,13 +12,9 @@ services:
       - 127.0.0.1:8200:8200
     cap_add:
       - IPC_LOCK
-    # In server mode Vault locks its memory, and Docker on Linux limits how much a container may lock by default
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     healthcheck:
-      test: ['CMD', 'vault', 'status']
+      # "vault status" exits with 2 while Vault is sealed, which is how it starts in server mode, and with 1 on errors
+      test: ['CMD-SHELL', 'vault status; test $$? -ne 1']
       interval: 5s
       timeout: 5s
       retries: 20
@@ -26,7 +22,12 @@ services:
     # Do ensure to keep root token and unseal keys in a safe place. Those shall be required to
     # unseal vault after the restart and configure other authentication methods.
     # The Vault image does not run as root, so the data and the logs go to Docker volumes, which it can write to.
+    # Vault locks its memory in server mode, and Docker on Linux limits how much a container may lock by default.
 #    command: server
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
 #    volumes:
 #      - ./vault-config/config:/vault/config:ro
 #      - vault-logs:/vault/logs

@@ -55,8 +55,10 @@ jobs:
       - name: 'DOCKER: wait for the registry'
         run: timeout 120 bash -c 'until curl -sf -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
       - name: 'DOCKER list containers'
+        if: always()
         run: docker container ps -a
       - name: 'DOCKER: see logs'
+        if: always()
         run: docker container logs jhipster-registry
       - name: 'DOCKER: curl 8761'
         run: curl -v http://localhost:8761
