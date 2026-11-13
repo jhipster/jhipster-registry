@@ -46,6 +46,7 @@
         <jib-maven-plugin.image>eclipse-temurin:25-jre-noble</jib-maven-plugin.image>
         <jib-maven-plugin.version>3.5.2</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
+        <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <maven-antrun-plugin.version>3.2.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <modernizer-maven-plugin.version>3.5.0</modernizer-maven-plugin.version>
@@ -192,6 +193,11 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
