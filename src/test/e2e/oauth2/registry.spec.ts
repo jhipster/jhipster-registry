@@ -29,10 +29,10 @@ test('maps the Keycloak roles so that an administrator can open the registry scr
   await signInWithKeycloak(page);
   await expectDashboard(page);
 
-  await openMenuItem(page, 'eureka-menu', 'Replicas');
+  await openMenuItem(page, 'eureka-menu', '/registry/replicas');
   await expect(page.getByRole('heading', { name: 'Registry Replicas' })).toBeVisible();
 
-  await openMenuItem(page, 'configuration-menu', 'Cloud config');
+  await openMenuItem(page, 'configuration-menu', '/registry/config');
   await expect(page.getByRole('heading', { name: 'Spring Cloud Configuration' })).toBeVisible();
   await expect(page.locator('.tab-pane.active pre.code-block')).toContainText('configserver:');
 });

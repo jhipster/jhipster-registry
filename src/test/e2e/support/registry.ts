@@ -15,12 +15,18 @@ export async function expectDashboard(page: Page): Promise<void> {
   await expect(page.locator('#healthCheck .badge', { hasText: 'UP' }).first()).toBeVisible();
 }
 
-export async function openMenuItem(page: Page, menuId: string, item: string): Promise<void> {
+/** Opens a navbar dropdown and follows the item that links to the given path. */
+export async function openMenuItem(page: Page, menuId: string, path: string): Promise<void> {
   await page.locator(`#${menuId}`).click();
-  await page.locator(`[aria-labelledby="${menuId}"]`).getByRole('link', { name: item, exact: true }).click();
+  await page.locator(`a.dropdown-item[href$="${path}"]`).click();
+  await expect(page).toHaveURL(new RegExp(`${path}$`));
 }
 
 export async function signOut(page: Page): Promise<void> {
-  await page.locator('#account-menu').click();
+  // Releases before 8.0.0 have the sign-out link directly in the navbar instead of in an account menu.
+  const accountMenu = page.locator('#account-menu');
+  if ((await accountMenu.count()) > 0) {
+    await accountMenu.click();
+  }
   await page.locator('#logout').click();
 }

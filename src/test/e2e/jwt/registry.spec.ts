@@ -47,7 +47,7 @@ test.describe('sign-in', () => {
   test('sends the visitor to the sign-in page after signing out from another screen', async ({ page }) => {
     await signIn(page);
     await expectDashboard(page);
-    await openMenuItem(page, 'eureka-menu', 'Replicas');
+    await openMenuItem(page, 'eureka-menu', '/registry/replicas');
     await expect(page.getByRole('heading', { name: 'Registry Replicas' })).toBeVisible();
 
     await signOut(page);
@@ -63,14 +63,13 @@ test.describe('registry screens', () => {
   });
 
   test('lists application instances', async ({ page }) => {
-    await openMenuItem(page, 'eureka-menu', 'Instances');
+    await openMenuItem(page, 'eureka-menu', '/registry/applications');
 
-    await expect(page).toHaveURL(/\/registry\/applications$/);
     await expect(page.getByRole('heading', { name: 'Application Instances' })).toBeVisible();
   });
 
   test('shows the instances history', async ({ page }) => {
-    await openMenuItem(page, 'eureka-menu', 'History');
+    await openMenuItem(page, 'eureka-menu', '/registry/history');
 
     await expect(page.getByRole('heading', { name: 'Instances history' })).toBeVisible();
     await page.getByRole('tab', { name: 'Last canceled leases' }).click();
@@ -78,17 +77,17 @@ test.describe('registry screens', () => {
   });
 
   test('lists the registry itself as a replica', async ({ page }) => {
-    await openMenuItem(page, 'eureka-menu', 'Replicas');
+    await openMenuItem(page, 'eureka-menu', '/registry/replicas');
 
     await expect(page.getByRole('heading', { name: 'Registry Replicas' })).toBeVisible();
     await expect(page.locator('#replicas').getByRole('link', { name: /:8761$/ })).toBeVisible();
 
-    await page.getByRole('button', { name: 'show more' }).click();
+    await page.getByText('show more').click();
     await expect(page.getByRole('heading', { name: 'Configuring replication' })).toBeVisible();
   });
 
   test('shows the configuration served by the config server', async ({ page }) => {
-    await openMenuItem(page, 'configuration-menu', 'Cloud config');
+    await openMenuItem(page, 'configuration-menu', '/registry/config');
 
     await expect(page.getByRole('heading', { name: 'Spring Cloud Configuration' })).toBeVisible();
     // central-config/application.yml is served for every application
@@ -102,7 +101,7 @@ test.describe('registry screens', () => {
   });
 
   test('shows the encryption form', async ({ page }) => {
-    await openMenuItem(page, 'configuration-menu', 'Encryption');
+    await openMenuItem(page, 'configuration-menu', '/registry/encryption');
 
     await expect(page.getByRole('heading', { name: 'Encrypt and decrypt properties' })).toBeVisible();
     const encrypt = page.getByRole('button', { name: 'Encrypt', exact: true });
@@ -112,7 +111,7 @@ test.describe('registry screens', () => {
   });
 
   test('shows the SSH public key page', async ({ page }) => {
-    await openMenuItem(page, 'configuration-menu', 'SSH');
+    await openMenuItem(page, 'configuration-menu', '/registry/ssh');
 
     await expect(page.getByRole('heading', { name: 'SSH Public Key', exact: true })).toBeVisible();
   });
@@ -124,14 +123,14 @@ test.describe('administration screens', () => {
     await expectDashboard(page);
   });
 
-  for (const [item, headingId, heading] of [
-    ['Metrics', 'metrics-page-heading', 'Application Metrics'],
-    ['Health', 'health-page-heading', 'Health Checks'],
-    ['Configuration', 'configuration-page-heading', 'Configuration'],
-    ['Logs', 'logs-page-heading', 'Logs'],
+  for (const [item, path, headingId, heading] of [
+    ['Metrics', '/admin/metrics', 'metrics-page-heading', 'Application Metrics'],
+    ['Health', '/admin/health', 'health-page-heading', 'Health Checks'],
+    ['Configuration', '/admin/configuration', 'configuration-page-heading', 'Configuration'],
+    ['Logs', '/admin/logs', 'logs-page-heading', 'Logs'],
   ]) {
     test(`opens ${item}`, async ({ page }) => {
-      await openMenuItem(page, 'admin-menu', item);
+      await openMenuItem(page, 'admin-menu', path);
 
       await expect(page.locator(`#${headingId}`)).toHaveText(heading);
     });
