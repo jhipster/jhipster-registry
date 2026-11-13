@@ -76,11 +76,13 @@ test.describe('registry screens', () => {
     await expect(page.getByRole('tab', { name: 'Last canceled leases' })).toHaveClass(/active/);
   });
 
-  test('lists the registry itself as a replica', async ({ page }) => {
+  test('lists the registry itself as a replica', async ({ page, baseURL }) => {
     await openMenuItem(page, 'eureka-menu', '/registry/replicas');
 
     await expect(page.getByRole('heading', { name: 'Registry Replicas' })).toBeVisible();
-    await expect(page.locator('#replicas').getByRole('link', { name: /:8761$/ })).toBeVisible();
+    // by default the registry replicates to itself, on the port it listens on
+    const port = new URL(baseURL ?? '').port;
+    await expect(page.locator('#replicas').getByRole('link', { name: new RegExp(`:${port}$`) })).toBeVisible();
 
     await page.getByText('show more').click();
     await expect(page.getByRole('heading', { name: 'Configuring replication' })).toBeVisible();

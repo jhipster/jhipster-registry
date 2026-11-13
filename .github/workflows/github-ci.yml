@@ -48,8 +48,8 @@ jobs:
                   ./mvnw -ntp clean verify -P-webapp
             - name: Run frontend test
               run: npm run test
-            - name: Package application
-              run: ./mvnw -ntp package -Pprod -DskipTests
+            - name: Package the application and build the Docker image
+              run: ./mvnw -ntp verify -Pprod -DskipTests jib:dockerBuild
             - name: Install the Playwright browser
               run: npx playwright install --with-deps chromium
             - name: Start the registry
@@ -80,8 +80,6 @@ jobs:
                   kill "$(cat target/registry.pid)"
                   timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
                   docker compose -f src/main/docker/keycloak.yml down
-            - name: Build the Docker image
-              run: ./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild
             - name: Start two registries that replicate to each other
               run: docker compose -f src/test/e2e/peers/docker-compose.yml up --wait
             - name: Run end-to-end tests for peer replication
@@ -156,7 +154,7 @@ jobs:
                   docker compose -f src/main/docker/keycloak.yml logs --tail 100 || true
             - name: Upload the Playwright report
               if: failure()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v4.6.2
               with:
                   name: playwright-report
                   path: target/playwright

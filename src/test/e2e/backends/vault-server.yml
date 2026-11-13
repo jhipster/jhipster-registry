@@ -3,13 +3,14 @@
 services:
   vault:
     command: server
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - ./vault-config/config:/vault/config:ro
       - vault-logs:/vault/logs
       - vault-data:/vault/file
-    healthcheck:
-      # A new server is sealed until init-vault-server.mjs has run: "vault status" then exits with 2, and with 1 on errors
-      test: ['CMD-SHELL', 'vault status; test $$? -ne 1']
 volumes:
   vault-logs:
   vault-data:

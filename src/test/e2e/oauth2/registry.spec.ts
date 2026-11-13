@@ -18,10 +18,10 @@ test('sends an anonymous visitor to Keycloak', async ({ page }) => {
   await expect(page).toHaveURL(keycloakSignIn);
 });
 
-test('shows the dashboard after signing in with Keycloak', async ({ page }) => {
+test('shows the dashboard after signing in with Keycloak', async ({ page, baseURL }) => {
   await signInWithKeycloak(page);
 
-  await expect(page).toHaveURL(/localhost:8761\/$/);
+  await expect(page).toHaveURL(new URL('/', baseURL).toString());
   await expectDashboard(page);
 });
 

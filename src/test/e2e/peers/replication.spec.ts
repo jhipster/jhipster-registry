@@ -5,7 +5,9 @@ import { cancelInstance, openMenuItem, registerInstance, signInWithPassword } fr
 // The first peer is the registry under test (baseURL), the second one listens on another port.
 const peer2Url = process.env.E2E_PEER_2_URL ?? 'http://localhost:8762';
 const app = 'E2E-REPLICATED';
-const instance = 'e2e-replicated:1';
+// Every test registers an instance of its own: a replicated cancellation from the previous test arrives a moment
+// later, and would remove an instance that registered again with the same id.
+let instance: string;
 
 // Replication between peers is asynchronous, so the screens are refreshed until the change shows up.
 const replication = { timeout: 30_000, intervals: [1_000] };
@@ -26,6 +28,10 @@ test.describe('peer replication', () => {
   test.beforeAll(async ({ playwright, baseURL }) => {
     peer1 = await playwright.request.newContext({ baseURL });
     peer2 = await playwright.request.newContext({ baseURL: peer2Url });
+  });
+
+  test.beforeEach(() => {
+    instance = `e2e-replicated-${Date.now().toString(36)}:1`;
   });
 
   test.afterEach(async () => {

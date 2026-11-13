@@ -43,7 +43,7 @@ git commit -m "Regenerate dependencies"
 
 # End-to-end tests
 
-The end-to-end tests in `src/test/e2e` use [Playwright](https://playwright.dev/) and run against a registry that is already started. Install the browser once with `npx playwright install chromium`.
+The end-to-end tests in `src/test/e2e` use [Playwright](https://playwright.dev/) and run against a registry that is already started. After `./npmw install`, install the browser once with `./npmw exec playwright install chromium`, which uses the Playwright version of this project.
 
 To test the default JWT authentication, start the registry and run the tests. The encryption tests need an encryption key, so set `ENCRYPT_KEY` to any value:
 
@@ -99,7 +99,11 @@ export SPRING_CLOUD_CONFIG_SERVER_VAULT_TOKEN=$(node src/test/e2e/backends/init-
 export E2E_VAULT_TOKEN=$SPRING_CLOUD_CONFIG_SERVER_VAULT_TOKEN
 ```
 
-Vault keeps its data in a Docker volume, so add `-v` when you stop it with `docker compose down` to start over.
+Vault keeps its data in a Docker volume that the extra compose file declares. To start over, stop Vault with both files and `-v`:
+
+```
+docker compose -f src/main/docker/vault.yml -f src/test/e2e/backends/vault-server.yml down -v
+```
 
 To test the default production configuration, start the registry with the `prod` profile and nothing else configured. It then reads its configuration from [jhipster-registry-sample-config](https://github.com/jhipster/jhipster-registry-sample-config) on GitHub:
 
