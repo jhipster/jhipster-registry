@@ -25,8 +25,12 @@ services:
     # Uncomment the below configurations to start vault in server mode and use file system backend
     # Do ensure to keep root token and unseal keys in a safe place. Those shall be required to
     # unseal vault after the restart and configure other authentication methods.
+    # The Vault image does not run as root, so the data and the logs go to Docker volumes, which it can write to.
 #    command: server
 #    volumes:
-#      - ./vault-config/config:/vault/config
-#      - ./vault-config/logs:/vault/logs
-#      - ./vault-config/data:/vault/file
+#      - ./vault-config/config:/vault/config:ro
+#      - vault-logs:/vault/logs
+#      - vault-data:/vault/file
+#volumes:
+#  vault-logs:
+#  vault-data:

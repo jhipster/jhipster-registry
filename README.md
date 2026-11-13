@@ -61,12 +61,17 @@ docker compose -f src/main/docker/vault.yml up -d
 - Uncomment the following configurations in [vault.yml](src/main/docker/vault.yml). You can refer [config.hcl](src/main/docker/vault-config/config/config.hcl) to view provided vault server configurations:
 
 ```yml
-command: server
+    command: server
+    volumes:
+      - ./vault-config/config:/vault/config:ro
+      - vault-logs:/vault/logs
+      - vault-data:/vault/file
 volumes:
-  - ./vault-config/config:/vault/config
-  - ./vault-config/logs:/vault/logs
-  - ./vault-config/data:/vault/file
+  vault-logs:
+  vault-data:
 ```
+
+The data and the logs are kept in Docker volumes, because the Vault image does not run as root and cannot write to directories of the host.
 
 - Start vault server docker container:
 
