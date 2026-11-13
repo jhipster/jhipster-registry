@@ -40,3 +40,24 @@ rm -rf node_modules package-lock.json target
 git add package-lock.json
 git commit -m "Regenerate dependencies"
 ```
+
+# End-to-end tests
+
+The end-to-end tests in `src/test/e2e` use [Playwright](https://playwright.dev/) and run against a registry that is already started. Install the browser once with `npx playwright install chromium`.
+
+To test the default JWT authentication, start the registry and run the tests:
+
+```
+./mvnw
+./npmw run e2e
+```
+
+To test OAuth 2.0, start Keycloak and the registry with the `oauth2` profile, then run the tests:
+
+```
+docker compose -f src/main/docker/keycloak.yml up --wait
+SPRING_PROFILES_ACTIVE=dev,oauth2 ./mvnw
+./npmw run e2e:oauth2
+```
+
+The HTML report and the traces of failed tests are written to `target/playwright`.

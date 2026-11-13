@@ -50,20 +50,34 @@ jobs:
               run: npm run test
             - name: Package application
               run: ./mvnw -ntp package -Pprod -DskipTests
+            - name: Install the Playwright browser
+              run: npx playwright install --with-deps chromium
+            - name: Start the registry
+              run: |
+                  java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev > target/registry-jwt.log 2>&1 &
+                  echo $! > target/registry.pid
+                  npm run ci:server:await
+            - name: Run end-to-end tests
+              run: npm run e2e
+            - name: Stop the registry
+              run: |
+                  kill "$(cat target/registry.pid)"
+                  while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done
             - name: Start Keycloak
               run: docker compose -f src/main/docker/keycloak.yml up --wait
             - name: Start the registry with the oauth2 profile
               run: |
                   java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev,oauth2 > target/registry-oauth2.log 2>&1 &
                   npm run ci:server:await
-            - name: Check that sign-in redirects to Keycloak
-              run: |
-                  location=$(curl -s -o /dev/null -w '%{redirect_url}' http://localhost:8761/oauth2/authorization/oidc)
-                  echo "Redirected to: $location"
-                  case "$location" in
-                    http://localhost:9080/realms/jhipster/protocol/openid-connect/auth*) ;;
-                    *) echo "::error::Expected a redirect to the Keycloak sign-in page"; exit 1 ;;
-                  esac
-            - name: Show the registry log
+            - name: Run end-to-end tests with Keycloak
+              run: npm run e2e:oauth2
+            - name: Show the registry logs
               if: failure()
-              run: cat target/registry-oauth2.log
+              run: tail -n 300 target/registry-*.log
+            - name: Upload the Playwright report
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-report
+                  path: target/playwright
+                  retention-days: 7
