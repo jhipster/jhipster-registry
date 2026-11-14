@@ -1,17 +1,20 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ApplicationConfigService } from '../core/config/application-config.service';
-import { Logout } from 'app/login/logout.model';
+import { serverApiUrl } from 'app/config';
 
-@Injectable({ providedIn: 'root' })
+export interface Logout {
+  logoutUrl: string;
+}
+
+@Service()
 export class LoginOAuth2Service {
-  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
+  private readonly http = inject(HttpClient);
 
   login(): void {
     let port = location.port ? `:${location.port}` : '';
-    if (port === ':9000') {
+    if (port === ':4200') {
       port = ':8761';
     }
     let contextPath = location.pathname;
@@ -19,7 +22,7 @@ export class LoginOAuth2Service {
       contextPath = contextPath.substring(0, contextPath.indexOf('accessdenied'));
     }
     if (!contextPath.endsWith('/')) {
-      contextPath = contextPath + '/';
+      contextPath = `${contextPath}/`;
     }
     // If you have configured multiple OIDC providers, then, you can update this URL to /login.
     // It will show a Spring Security generated login page with links to configured OIDC providers.
@@ -27,6 +30,6 @@ export class LoginOAuth2Service {
   }
 
   logout(): Observable<Logout> {
-    return this.http.post<Logout>(this.applicationConfigService.getEndpointFor('api/logout'), {});
+    return this.http.post<Logout>(`${serverApiUrl}api/logout`, {});
   }
 }

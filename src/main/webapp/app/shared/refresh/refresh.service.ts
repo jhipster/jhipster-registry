@@ -1,33 +1,33 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { SessionStorageService } from 'ngx-webstorage';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class RefreshService {
-  // Observable sources
-  refreshChanged$: Observable<any>;
-  refreshReload$: Observable<any>;
-  private refreshChangedSource = new Subject<any>();
-  private refreshReloadSource = new Subject<any>();
+  readonly refreshChanged$: Observable<void>;
+  readonly refreshReload$: Observable<void>;
 
-  constructor(private sessionStorage: SessionStorageService) {
+  private readonly refreshTimeKey = 'jhi-refreshTime';
+  private readonly refreshChangedSource = new Subject<void>();
+  private readonly refreshReloadSource = new Subject<void>();
+
+  constructor() {
     this.refreshChanged$ = this.refreshChangedSource.asObservable();
     this.refreshReload$ = this.refreshReloadSource.asObservable();
   }
 
   refreshChanged(): void {
-    this.refreshChangedSource.next(null);
+    this.refreshChangedSource.next();
   }
 
   refreshReload(): void {
-    this.refreshReloadSource.next(null);
+    this.refreshReloadSource.next();
   }
 
   getSelectedRefreshTime(): number {
-    return this.sessionStorage.retrieve('refreshTime') as number;
+    return Number(sessionStorage.getItem(this.refreshTimeKey) ?? 0);
   }
 
   storeSelectedRefreshTime(time: number): void {
-    this.sessionStorage.store('refreshTime', time);
+    sessionStorage.setItem(this.refreshTimeKey, String(time));
   }
 }

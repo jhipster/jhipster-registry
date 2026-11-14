@@ -1,0 +1,20 @@
+<div ngbDropdown placement="bottom-end">
+  <button type="button" class="btn btn-outline-primary" (click)="manualRefresh()">
+    <span class="times-text">Refresh now <fa-icon icon="sync" /></span>
+  </button>
+  <button type="button" class="btn btn-outline-primary times" id="refreshMenu" ngbDropdownToggle>
+    <fa-icon [icon]="activeRefreshTime() <= 0 ? 'pause' : 'redo'" />&nbsp; <span class="times-text">{{ getActiveRefreshTime() }}</span>
+  </button>
+  <div ngbDropdownMenu aria-labelledby="refreshMenu">
+    <span class="dropdown-header">Refresh times (in seconds)</span>
+    @for (time of refreshTimes; track time) {
+      <button type="button" class="dropdown-item" [class.active]="time === activeRefreshTime()" (click)="setActiveRefreshTime(time)">
+        @if (time > 0) {
+          <span>{{ time }}</span>
+        } @else {
+          disabled
+        }
+      </button>
+    }
+  </div>
+</div>

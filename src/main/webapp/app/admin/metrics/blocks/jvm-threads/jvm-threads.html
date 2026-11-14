@@ -1,0 +1,33 @@
+@let stats = threadStats();
+
+<h4>Threads</h4>
+
+<span><span>Runnable</span> {{ stats.threadDumpRunnable }}</span>
+
+<ngb-progressbar [value]="stats.threadDumpRunnable" [max]="stats.threadDumpAll" [striped]="true" [animated]="false" type="success">
+  <span>{{ (stats.threadDumpRunnable * 100) / stats.threadDumpAll | number: '1.0-0' }}%</span>
+</ngb-progressbar>
+
+<span><span>Timed waiting</span> ({{ stats.threadDumpTimedWaiting }})</span>
+
+<ngb-progressbar [value]="stats.threadDumpTimedWaiting" [max]="stats.threadDumpAll" [striped]="true" [animated]="false" type="warning">
+  <span>{{ (stats.threadDumpTimedWaiting * 100) / stats.threadDumpAll | number: '1.0-0' }}%</span>
+</ngb-progressbar>
+
+<span><span>Waiting</span> ({{ stats.threadDumpWaiting }})</span>
+
+<ngb-progressbar [value]="stats.threadDumpWaiting" [max]="stats.threadDumpAll" [striped]="true" [animated]="false" type="warning">
+  <span>{{ (stats.threadDumpWaiting * 100) / stats.threadDumpAll | number: '1.0-0' }}%</span>
+</ngb-progressbar>
+
+<span><span>Blocked</span> ({{ stats.threadDumpBlocked }})</span>
+
+<ngb-progressbar [value]="stats.threadDumpBlocked" [max]="stats.threadDumpAll" [striped]="true" [animated]="false" type="danger">
+  <span>{{ (stats.threadDumpBlocked * 100) / stats.threadDumpAll | number: '1.0-0' }}%</span>
+</ngb-progressbar>
+
+<div>Total: {{ stats.threadDumpAll }}</div>
+
+<button class="hand btn btn-primary btn-sm" (click)="open()">
+  <span>Expand</span>
+</button>
