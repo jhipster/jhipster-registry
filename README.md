@@ -25,6 +25,18 @@ docker compose -f src/main/docker/app.yml up -d
 [github-actions-build]: https://github.com/jhipster/jhipster-registry/workflows/Build/badge.svg
 [github-actions-docker]: https://github.com/jhipster/jhipster-registry/workflows/Docker%20Image/badge.svg
 
+## Upgrading from 7.x
+
+JHipster Registry 8 runs on Spring Boot 4 and keeps what 7.x had: Eureka, Spring Cloud Config, and the UI. Applications register and read their configuration the same way. These things change:
+
+- It needs Java 21 or 25 to build and Java 21 or later to run. The Docker image comes with its own Java.
+- `central-config/application.yml` sets `jhipster.security.authentication.jwt.base64-secret` instead of `secret`. A configuration repository that only sets `secret` keeps working, and the registry logs a warning that asks for `base64-secret`.
+- Tokens issued by 7.x stay valid, so people who are signed in to the registry stay signed in.
+- Eureka's own dashboard at `/registry` is gone. The registry's Instances, History, and Replicas screens show the same information.
+- The registry runs on Tomcat instead of Undertow, so `server.undertow.*` properties no longer do anything.
+- The Docker Compose files in `src/main/docker` use Keycloak 26 and Vault 2. Vault's server mode keeps its data in Docker volumes, see below.
+- The Deploy to Heroku button still deploys 7.4.0.
+
 ## HashiCorp Vault Integration
 
 ### Development Mode
