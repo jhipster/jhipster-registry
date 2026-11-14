@@ -1,0 +1,36 @@
+# Two registries that replicate to each other, for the peer replication end-to-end tests.
+# Eureka needs each peer to have its own host name, which is why this runs in containers.
+name: jhipster-registry-peers
+services:
+  eureka-peer-1:
+    image: ${REGISTRY_IMAGE:-jhipster-registry:latest}
+    hostname: eureka-peer-1
+    volumes:
+      - ../../../../central-config:/central-config
+      - ./health-check.sh:/health-check.sh
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev,peer1
+    ports:
+      - 127.0.0.1:8761:8761
+    healthcheck:
+      test: ['CMD', 'bash', '/health-check.sh', '8761']
+      interval: 5s
+      timeout: 5s
+      retries: 40
+  eureka-peer-2:
+    image: ${REGISTRY_IMAGE:-jhipster-registry:latest}
+    hostname: eureka-peer-2
+    volumes:
+      - ../../../../central-config:/central-config
+      - ./health-check.sh:/health-check.sh
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev,peer2
+    ports:
+      - 127.0.0.1:8762:8762
+    healthcheck:
+      test: ['CMD', 'bash', '/health-check.sh', '8762']
+      interval: 5s
+      timeout: 5s
+      retries: 40
