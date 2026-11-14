@@ -23,6 +23,7 @@
     "reactive": false,
     "serverPort": 8761,
     "serviceDiscoveryType": "eureka",
+    "skipJhipsterDependencies": true,
     "skipUserManagement": true,
     "testFrameworks": [],
     "withAdminUi": true
