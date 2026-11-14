@@ -1,19 +1,37 @@
-version: '2'
-
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: jhipster-registry
 services:
   vault:
-    image: vault:1.7.1
+    image: hashicorp/vault:2.2.2
     environment:
       - VAULT_DEV_ROOT_TOKEN_ID=jhipster-registry
+      - VAULT_ADDR=http://127.0.0.1:8200
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
-      - 8200:8200
+      - 127.0.0.1:8200:8200
     cap_add:
       - IPC_LOCK
+    healthcheck:
+      # "vault status" exits with 2 while Vault is sealed, which is how it starts in server mode, and with 1 on errors
+      test: ['CMD-SHELL', 'vault status; test $$? -ne 1']
+      interval: 5s
+      timeout: 5s
+      retries: 20
     # Uncomment the below configurations to start vault in server mode and use file system backend
     # Do ensure to keep root token and unseal keys in a safe place. Those shall be required to
     # unseal vault after the restart and configure other authentication methods.
+    # The Vault image does not run as root, so the data and the logs go to Docker volumes, which it can write to.
+    # Vault locks its memory in server mode, and Docker on Linux limits how much a container may lock by default.
 #    command: server
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
 #    volumes:
-#      - ./vault-config/config:/vault/config
-#      - ./vault-config/logs:/vault/logs
-#      - ./vault-config/data:/vault/file
+#      - ./vault-config/config:/vault/config:ro
+#      - vault-logs:/vault/logs
+#      - vault-data:/vault/file
+#volumes:
+#  vault-logs:
+#  vault-data:

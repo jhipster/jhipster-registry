@@ -8,13 +8,34 @@ Full documentation is available on the [JHipster documentation for microservices
 
 ## Running locally
 
-To run the cloned repository;
+You need Java 21 or 25, which are the versions the build accepts. Node.js 24 is only needed if you want hot reload of the client, because the Maven build installs its own copy.
 
-- For development run `./mvnw -Pdev,webapp` to just start in development or run `./mvnw` and run `npm install && npm start` for hot reload of client side code.
-- For production profile run `./mvnw -Pprod`
+To run the cloned repository:
+
+- For development, run `./mvnw` to build the client and start the registry. For hot reload of client-side code, also run `./npmw install && ./npmw start` and open http://localhost:4200.
+- For the production profile, run `./mvnw -Pprod`.
+
+To build a Docker image and run it with Docker Compose:
+
+```shell
+./npmw run java:docker
+docker compose -f src/main/docker/app.yml up -d
+```
 
 [github-actions-build]: https://github.com/jhipster/jhipster-registry/workflows/Build/badge.svg
 [github-actions-docker]: https://github.com/jhipster/jhipster-registry/workflows/Docker%20Image/badge.svg
+
+## Upgrading from 7.x
+
+JHipster Registry 8 runs on Spring Boot 4 and keeps what 7.x had: Eureka, Spring Cloud Config, and the UI. Applications register and read their configuration the same way. These things change:
+
+- It needs Java 21 or 25 to build and Java 21 or later to run. The Docker image comes with its own Java.
+- `central-config/application.yml` sets `jhipster.security.authentication.jwt.base64-secret` instead of `secret`. A configuration repository that only sets `secret` keeps working, and the registry logs a warning that asks for `base64-secret`.
+- Tokens issued by 7.x stay valid, so people who are signed in to the registry stay signed in.
+- Eureka's own dashboard at `/registry` is gone. The registry's Instances, History, and Replicas screens show the same information.
+- The registry runs on Tomcat instead of Undertow, so `server.undertow.*` properties no longer do anything.
+- The Docker Compose files in `src/main/docker` use Keycloak 26 and Vault 2. Vault's server mode keeps its data in Docker volumes, see below.
+- The Deploy to Heroku button still deploys 7.4.0.
 
 ## HashiCorp Vault Integration
 
@@ -25,7 +46,7 @@ To run the cloned repository;
 - Start vault server docker container:
 
 ```shell
-docker-compose -f src/main/docker/vault.yml up -d
+docker compose -f src/main/docker/vault.yml up -d
 ```
 
 - The default configured root token is `jhipster-registry`. We shall use the default secrets engine backend mounted on the `secrets` path. Configure secrets using either of `ui`, `cli` or `http`.
@@ -52,17 +73,26 @@ docker-compose -f src/main/docker/vault.yml up -d
 - Uncomment the following configurations in [vault.yml](src/main/docker/vault.yml). You can refer [config.hcl](src/main/docker/vault-config/config/config.hcl) to view provided vault server configurations:
 
 ```yml
-command: server
+    command: server
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./vault-config/config:/vault/config:ro
+      - vault-logs:/vault/logs
+      - vault-data:/vault/file
 volumes:
-  - ./vault-config/config:/vault/config
-  - ./vault-config/logs:/vault/logs
-  - ./vault-config/data:/vault/file
+  vault-logs:
+  vault-data:
 ```
+
+The data and the logs are kept in Docker volumes, because the Vault image does not run as root and cannot write to directories of the host.
 
 - Start vault server docker container:
 
 ```shell
-docker-compose -f src/main/docker/vault.yml up -d
+docker compose -f src/main/docker/vault.yml up -d
 ```
 
 - Open `vault` server [`ui`](http://localhost:8200/ui/vault/init) to initialize master key shares. In this guide, we shall enter `1` as the number of key shares and `1` as the key threshold value. Do refer to vault documentation for recommended configuration. Note down the initial `root token` and the `key` and keep it at a safe place. You shall require the `key` to unseal the vault server after a restart.
