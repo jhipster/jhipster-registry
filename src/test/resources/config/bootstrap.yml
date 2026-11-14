@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: composite
   cloud:
     config:
       enabled: false
