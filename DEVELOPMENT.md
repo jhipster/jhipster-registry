@@ -25,7 +25,7 @@ git checkout -b jhipster-X.X.X main
 git merge jhipster_upgrade
 ```
 
-Then regenerate the dependencies, and run the build and the end-to-end tests described below:
+Then regenerate the dependencies and run the build:
 
 ```
 rm -rf node_modules package-lock.json target
