@@ -27,6 +27,8 @@ public final class SecurityUtils {
 
     public static final String AUTHORITIES_CLAIM = "auth";
 
+    private static final String FACTOR_AUTHORITY_PREFIX = "FACTOR_";
+
     private SecurityUtils() {}
 
     /**
@@ -130,7 +132,21 @@ public final class SecurityUtils {
      * @return the authorities of current user
      */
     public static Set<String> getAuthorities() {
-        return getAuthorities(SecurityContextHolder.getContext().getAuthentication()).collect(Collectors.toSet());
+        return getAuthorities(SecurityContextHolder.getContext().getAuthentication())
+            .filter(SecurityUtils::isRole)
+            .collect(Collectors.toSet());
+    }
+
+    /**
+     * Spring Security 7 also grants an authority for each way a user authenticated, such as
+     * {@code FACTOR_PASSWORD} and {@code FACTOR_BEARER}. Those are not roles, and releases
+     * before 8.0.0 never reported them.
+     *
+     * @param authority the name of an authority.
+     * @return whether it is a role and not an authentication factor.
+     */
+    public static boolean isRole(String authority) {
+        return !authority.startsWith(FACTOR_AUTHORITY_PREFIX);
     }
 
     private static Stream<String> getAuthorities(Authentication authentication) {

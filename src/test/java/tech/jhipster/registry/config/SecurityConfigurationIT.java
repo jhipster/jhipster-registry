@@ -1,8 +1,11 @@
 package tech.jhipster.registry.config;
 
+import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static tech.jhipster.registry.security.SecurityUtils.AUTHORITIES_CLAIM;
@@ -12,6 +15,7 @@ import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -51,6 +55,25 @@ class SecurityConfigurationIT {
             .perform(get("/api/account").header(AUTHORIZATION, "Bearer " + token("ROLE_ADMIN,ROLE_USER")))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.authorities", hasItems("ROLE_ADMIN", "ROLE_USER")));
+    }
+
+    @Test
+    void shouldNotReportAuthenticationFactorsAsAuthorities() throws Exception {
+        String response = mockMvc
+            .perform(
+                post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content("{\"username\":\"test\",\"password\":\"test\"}")
+            )
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+        String token = response.replaceAll(".*\"id_token\"\\s*:\\s*\"([^\"]+)\".*", "$1");
+
+        mockMvc
+            .perform(get("/api/account").header(AUTHORIZATION, "Bearer " + token))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.authorities", hasItems("ROLE_ADMIN", "ROLE_USER")))
+            .andExpect(jsonPath("$.authorities", everyItem(startsWith("ROLE_"))));
     }
 
     private String token(String authorities) {
