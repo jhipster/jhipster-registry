@@ -27,6 +27,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.registry.config.Constants;
+import tech.jhipster.registry.security.SecurityUtils;
 import tech.jhipster.registry.web.rest.vm.LoginVM;
 
 /**
@@ -79,7 +80,12 @@ public class AuthenticateController {
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
-        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+        String authorities = authentication
+            .getAuthorities()
+            .stream()
+            .map(GrantedAuthority::getAuthority)
+            .filter(SecurityUtils::isRole)
+            .collect(Collectors.joining(" "));
 
         var now = Instant.now();
         Instant validity;
