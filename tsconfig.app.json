@@ -1,9 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./target/classes/static/app",
-    "types": []
+    "outDir": "./target/out-tsc/app",
+    "types": ["@angular/localize", "node"]
   },
-  "files": ["src/main/webapp/main.ts", "src/main/webapp/polyfills.ts"],
+  "files": ["src/main/webapp/main.ts"],
   "include": ["src/main/webapp/**/*.d.ts"]
 }

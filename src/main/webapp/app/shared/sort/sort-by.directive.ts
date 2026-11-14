@@ -1,55 +1,43 @@
-import { AfterContentInit, ContentChild, Directive, Host, HostListener, Input, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Directive, contentChild, effect, inject, input } from '@angular/core';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faSort, faSortDown, faSortUp, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 
 import { SortDirective } from './sort.directive';
 
 @Directive({
   selector: '[jhiSortBy]',
+  host: {
+    '(click)': 'onClick()',
+  },
 })
-export class SortByDirective<T> implements AfterContentInit, OnDestroy {
-  @Input() jhiSortBy!: T;
+export class SortByDirective {
+  readonly jhiSortBy = input.required<string>();
 
-  @ContentChild(FaIconComponent, { static: false })
-  iconComponent?: FaIconComponent;
+  readonly iconComponent = contentChild(FaIconComponent);
 
-  sortIcon = faSort;
-  sortAscIcon = faSortUp;
-  sortDescIcon = faSortDown;
+  protected sortIcon = faSort;
+  protected sortAscIcon = faSortUp;
+  protected sortDescIcon = faSortDown;
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly sort = inject(SortDirective, { host: true });
 
-  constructor(@Host() private sort: SortDirective<T>) {
-    sort.predicateChange.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateIconDefinition());
-    sort.ascendingChange.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateIconDefinition());
-  }
-
-  @HostListener('click')
-  onClick(): void {
-    if (this.iconComponent) {
-      this.sort.sort(this.jhiSortBy);
-    }
-  }
-
-  ngAfterContentInit(): void {
-    this.updateIconDefinition();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private updateIconDefinition(): void {
-    if (this.iconComponent) {
-      let icon: IconDefinition = this.sortIcon;
-      if (this.sort.predicate === this.jhiSortBy) {
-        icon = this.sort.ascending ? this.sortAscIcon : this.sortDescIcon;
+  constructor() {
+    effect(() => {
+      if (this.iconComponent()) {
+        let icon: IconDefinition = this.sortIcon;
+        const { predicate, order } = this.sort.sortState();
+        if (predicate === this.jhiSortBy() && order !== undefined) {
+          icon = order === 'asc' ? this.sortAscIcon : this.sortDescIcon;
+        }
+        this.iconComponent()!.icon.set(icon.iconName);
       }
-      this.iconComponent.icon = icon.iconName;
-      this.iconComponent.render();
+    });
+  }
+
+  onClick(): void {
+    if (this.iconComponent()) {
+      this.sort.sort(this.jhiSortBy());
     }
   }
 }

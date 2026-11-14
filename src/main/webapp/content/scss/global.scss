@@ -1,6 +1,6 @@
 @import 'bootstrap-variables';
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -14,14 +14,10 @@ h4 {
   font-weight: 300;
 }
 
-/* Increase contrast of links to get 100% on Lighthouse Accessability Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
+/* Increase contrast of links to get 100% on Lighthouse Accessibility Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
 a {
   color: #533f03;
   font-weight: bold;
-}
-
-a:hover {
-  color: #533f03;
 }
 
 /* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
@@ -35,6 +31,7 @@ a:not([href]):not([tabindex]):hover.dropdown-item {
 }
 
 a:hover {
+  color: #533f03;
   /* make sure browsers use the pointer cursor for anchors, even with no href */
   cursor: pointer;
 }
@@ -84,14 +81,6 @@ Generic styles
   padding: 10px;
 }
 
-.head {
-  margin-bottom: 1%;
-}
-
-.bottom {
-  margin-top: 2%;
-}
-
 .w-40 {
   width: 40% !important;
 }
@@ -112,20 +101,6 @@ Generic styles
 .readonly {
   background-color: #eee;
   opacity: 1;
-}
-
-pre.code-block {
-  padding: 10px;
-  background: #403d3d;
-  color: rgb(241, 187, 90);
-  border-radius: 5px;
-}
-
-.refresh-left-side {
-  .dropdown-menu {
-    left: initial;
-    right: 0;
-  }
 }
 
 .footer {
@@ -180,6 +155,43 @@ Custom alerts for notification
 }
 
 /* ==========================================================================
+entity list page css
+========================================================================== */
+
+.table-entities thead th .d-flex > * {
+  margin: auto 0;
+}
+
+/* ==========================================================================
+entity detail page css
+========================================================================== */
+.row-md.jh-entity-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  line-height: 1.5;
+}
+
+@media screen and (min-width: 768px) {
+  .row-md.jh-entity-details > {
+    dt {
+      float: left;
+      overflow: hidden;
+      clear: left;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0.5em 0;
+    }
+    dd {
+      border-bottom: 1px solid #eee;
+      padding: 0.5em 0;
+      margin-left: 0;
+    }
+  }
+}
+
+/* ==========================================================================
 ui bootstrap tweaks
 ========================================================================== */
 .nav,
@@ -197,13 +209,23 @@ ui bootstrap tweaks
 }
 
 .dropdown-menu {
-  padding-left: 0px;
+  padding-left: 0;
 }
 
 /* ==========================================================================
 angular-cli removes postcss-rtl processed inline css, processed rules must be added here instead
 ========================================================================== */
-/* navbar.component.scss */
+/* page-ribbon.scss */
+.ribbon {
+  left: -3.5em;
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+/* navbar.scss */
 .navbar {
   ul.navbar-nav {
     .nav-item {

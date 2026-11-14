@@ -31,24 +31,28 @@ public class LoggingAspect {
      * Pointcut that matches all repositories, services and Web REST endpoints.
      */
     @Pointcut(
-        "within(@org.springframework.stereotype.Repository *)" +
-        " || within(@org.springframework.stereotype.Service *)" +
-        " || within(@org.springframework.web.bind.annotation.RestController *)"
+        """
+        within(@org.springframework.stereotype.Repository *)
+        || within(@org.springframework.stereotype.Service *)
+        || within(@org.springframework.web.bind.annotation.RestController *)
+        """
     )
     public void springBeanPointcut() {
-        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+        // Method is empty as this is just a Pointcut, the implementations are in the advice methods.
     }
 
     /**
      * Pointcut that matches all Spring beans in the application's main packages.
      */
     @Pointcut(
-        "within(tech.jhipster.registry.repository..*)" +
-        " || within(tech.jhipster.registry.service..*)" +
-        " || within(tech.jhipster.registry.web.rest..*)"
+        """
+        within(tech.jhipster.registry.repository..*)
+        || within(tech.jhipster.registry.service..*)
+        || within(tech.jhipster.registry.web.rest..*)
+        """
     )
     public void applicationPackagePointcut() {
-        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+        // Method is empty as this is just a Pointcut, the implementations are in the advice methods.
     }
 
     /**
@@ -69,23 +73,7 @@ public class LoggingAspect {
      */
     @AfterThrowing(pointcut = "applicationPackagePointcut() && springBeanPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            logger(joinPoint)
-                .error(
-                    "Exception in {}() with cause = '{}' and exception = '{}'",
-                    joinPoint.getSignature().getName(),
-                    e.getCause() != null ? e.getCause() : "NULL",
-                    e.getMessage(),
-                    e
-                );
-        } else {
-            logger(joinPoint)
-                .error(
-                    "Exception in {}() with cause = {}",
-                    joinPoint.getSignature().getName(),
-                    e.getCause() != null ? e.getCause() : "NULL"
-                );
-        }
+        logException(joinPoint, e);
     }
 
     /**
@@ -93,23 +81,51 @@ public class LoggingAspect {
      *
      * @param joinPoint join point for advice.
      * @return result.
-     * @throws Throwable throws {@link IllegalArgumentException}.
+     * @throws Throwable rethrows the exception thrown by the advised method.
      */
     @Around("applicationPackagePointcut() && springBeanPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        Logger log = logger(joinPoint);
+        var log = logger(joinPoint);
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
         try {
             Object result = joinPoint.proceed();
-            if (log.isDebugEnabled()) {
-                log.debug("Exit: {}() with result = {}", joinPoint.getSignature().getName(), result);
-            }
+            logExit(log, joinPoint, result);
             return result;
         } catch (IllegalArgumentException e) {
-            log.error("Illegal argument: {} in {}()", Arrays.toString(joinPoint.getArgs()), joinPoint.getSignature().getName());
+            logIllegalArgument(log, joinPoint);
             throw e;
+        }
+    }
+
+    private void logExit(Logger log, JoinPoint joinPoint, Object result) {
+        if (log.isDebugEnabled()) {
+            log.debug("Exit: {}() with result = {}", joinPoint.getSignature().getName(), result);
+        }
+    }
+
+    private void logIllegalArgument(Logger log, JoinPoint joinPoint) {
+        if (log.isErrorEnabled()) {
+            log.error("Illegal argument: {} in {}()", Arrays.toString(joinPoint.getArgs()), joinPoint.getSignature().getName());
+        }
+    }
+
+    private void logException(JoinPoint joinPoint, Throwable e) {
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
+            logger(joinPoint).error(
+                "Exception in {}() with cause = '{}' and exception = '{}'",
+                joinPoint.getSignature().getName(),
+                e.getCause() != null ? e.getCause() : "NULL",
+                e.getMessage(),
+                e
+            );
+        } else {
+            logger(joinPoint).error(
+                "Exception in {}() with cause = {}",
+                joinPoint.getSignature().getName(),
+                e.getCause() != null ? String.valueOf(e.getCause()) : "NULL"
+            );
         }
     }
 }

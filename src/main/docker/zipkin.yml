@@ -1,7 +1,7 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-version: '3.8'
+name: jhipsterregistry
 services:
   zipkin:
-    image: openzipkin/zipkin:2.23
+    image: openzipkin/zipkin:3.6.1
     ports:
       - 127.0.0.1:9411:9411

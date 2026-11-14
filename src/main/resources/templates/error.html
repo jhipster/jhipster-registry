@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
   xmlns:th="http://www.thymeleaf.org"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -25,7 +25,6 @@
         padding: 30px 10px;
         font-size: 20px;
         line-height: 1.4;
-        color: #737373;
         background: #3e8acc;
         -webkit-text-size-adjust: 100%;
         -ms-text-size-adjust: 100%;
@@ -38,13 +37,15 @@
 
       body {
         max-width: 1000px;
-        _width: 500px;
         padding: 30px 20px 50px;
         border: 1px solid #b3b3b3;
         border-radius: 4px;
         margin: 0 auto;
-        box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+        box-shadow:
+          0 1px 10px #a7a7a7,
+          inset 0 1px 0 #fff;
         background: #fcfcfc;
+        color: #3d3d3d;
       }
 
       h1 {
@@ -54,7 +55,7 @@
       }
 
       h1 span {
-        color: #bbb;
+        color: #575757;
       }
 
       h3 {
@@ -72,7 +73,6 @@
 
       .container {
         max-width: 800px;
-        _width: 380px;
         margin: 0 auto;
       }
     </style>
@@ -83,7 +83,7 @@
 
       <p th:text="#{error.subtitle}">Sorry, an error has occurred.</p>
 
-      <span th:text="#{error.status}">Status:</span>&nbsp;<span th:text="${error}"></span>&nbsp;(<span th:text="${error}"></span>)<br />
+      <span th:text="#{error.status}">Status:</span>&nbsp;<span th:text="${status}"></span>&nbsp;(<span th:text="${error}"></span>)<br />
       <span th:if="${!#strings.isEmpty(message)}">
         <span th:text="#{error.message}">Message:</span>&nbsp;<span th:text="${message}"></span><br />
       </span>

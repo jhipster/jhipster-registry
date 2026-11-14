@@ -10,8 +10,15 @@
 # ===================================================================
 # Standard Spring Boot properties.
 # Full reference is available at:
-# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# https://docs.spring.io/spring-boot/appendix/application-properties/index.html
 # ===================================================================
+
+eureka:
+  client:
+    enabled: false
+  instance:
+    appname: JHipsterRegistry
+    instanceId: JHipsterRegistry:${spring.application.instance-id:${random.value}}
 
 spring:
   application:
@@ -20,32 +27,35 @@ spring:
     config:
       enabled: false
   jackson:
-    serialization:
-      write-durations-as-timestamps: false
+    datatype:
+      datetime:
+        write-durations-as-timestamps: false
   mail:
     host: localhost
   main:
     allow-bean-definition-overriding: true
-    allow-circular-references: true
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
   messages:
     basename: i18n/messages
   security:
     user:
       name: test
       password: test
-      roles: USER,ADMIN
+      roles:
+        - USER
+    oauth2:
+      resourceserver:
+        jwt:
+          authority-prefix: ''
+          authorities-claim-name: auth
   task:
     execution:
-      thread-name-prefix: jhipster-registry-task-
+      thread-name-prefix: j-hipster-registry-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: jhipster-registry-scheduling-
+      thread-name-prefix: j-hipster-registry-scheduling-
       pool:
         size: 20
   thymeleaf:
@@ -68,12 +78,12 @@ jhipster:
     base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender
-    use-json-format: true # By default, logs are in Json format
+    use-json-format: false
     logstash:
       enabled: false
       host: localhost
       port: 5000
-      queue-size: 512
+      ring-buffer-size: 512
   security:
     authentication:
       jwt:
@@ -81,6 +91,7 @@ jhipster:
         base64-secret: NmQ3NTY1NjhlZGY2NmEzNzUxMjFkZDVmNTA3YjRiNWIxMzM2ZGRiNDNlYjFkMDc2YzdlYTgzYjVkNTNlZGU0NTdiNDg5OTUyNTZjYmNiYjlkMWNjNjE5MTE2NjVhZjM2MmZkYTdiYjRkNGZiMDU5MzhmMDIzYTE4ZjQ3ZTVmMTU=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 86400
 
 # ===================================================================
 # Application specific properties

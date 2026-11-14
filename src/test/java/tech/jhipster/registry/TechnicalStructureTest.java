@@ -28,8 +28,6 @@ class TechnicalStructureTest {
 
         .ignoreDependency(belongToAnyOf(JHipsterRegistryApp.class), alwaysTrue())
         .ignoreDependency(alwaysTrue(), belongToAnyOf(
-            tech.jhipster.registry.config.ConfigServerProperties.class))
-        .ignoreDependency(alwaysTrue(), belongToAnyOf(
             tech.jhipster.registry.config.ApplicationProperties.class
         ));
 }

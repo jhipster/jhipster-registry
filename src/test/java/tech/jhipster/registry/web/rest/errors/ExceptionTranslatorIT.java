@@ -5,26 +5,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static tech.jhipster.registry.web.rest.errors.ExceptionTranslatorIT.TEST_USER_LOGIN;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import tech.jhipster.registry.IntegrationTest;
-import tech.jhipster.registry.security.AuthoritiesConstants;
 
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
+@WithMockUser
 @AutoConfigureMockMvc
-@WithMockUser(username = TEST_USER_LOGIN, authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
 class ExceptionTranslatorIT {
-
-    static final String TEST_USER_LOGIN = "test";
 
     @Autowired
     private MockMvc mockMvc;
@@ -87,7 +83,7 @@ class ExceptionTranslatorIT {
             .andExpect(status().isMethodNotAllowed())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.405"))
-            .andExpect(jsonPath("$.detail").value("Request method 'POST' not supported"));
+            .andExpect(jsonPath("$.detail").value("Request method 'POST' is not supported"));
     }
 
     @Test
