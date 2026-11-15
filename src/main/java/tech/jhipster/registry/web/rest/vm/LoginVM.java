@@ -1,7 +1,7 @@
 package tech.jhipster.registry.web.rest.vm;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * View Model object for storing a user's credentials.
@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 public class LoginVM {
 
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 254)
     private String username;
 
     @NotNull

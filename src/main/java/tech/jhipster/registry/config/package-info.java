@@ -1,4 +1,4 @@
 /**
- * Spring Framework configuration files.
+ * Application configuration.
  */
 package tech.jhipster.registry.config;

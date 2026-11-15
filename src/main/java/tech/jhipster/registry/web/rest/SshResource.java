@@ -2,7 +2,7 @@ package tech.jhipster.registry.web.rest;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,6 +36,6 @@ public class SshResource {
     }
 
     String getPublicKey() throws IOException {
-        return new String(Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/.ssh/id_rsa.pub")));
+        return new String(Files.readAllBytes(Path.of(System.getProperty("user.home") + "/.ssh/id_rsa.pub")));
     }
 }

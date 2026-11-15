@@ -38,14 +38,14 @@ jobs:
             - uses: actions/setup-java@v5
               with:
                   distribution: 'temurin'
-                  java-version: '17'
+                  java-version: '21'
                   cache: 'maven'
             - name: Install node.js packages
               run: npm install
             - name: Run backend test
               run: |
                   chmod +x mvnw
-                  ./mvnw -ntp clean verify -P-webpack
+                  ./mvnw -ntp clean verify -P-webapp
             - name: Run frontend test
               run: npm run test
             - name: Package application

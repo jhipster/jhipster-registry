@@ -20,16 +20,11 @@ spring:
     config:
       enabled: false
   jackson:
-    serialization:
-      write-durations-as-timestamps: false
-  mail:
-    host: localhost
+    datatype:
+      datetime:
+        write-durations-as-timestamps: false
   main:
     allow-bean-definition-overriding: true
-    allow-circular-references: true
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
   messages:
     basename: i18n/messages
   security:
@@ -37,6 +32,11 @@ spring:
       name: test
       password: test
       roles: USER,ADMIN
+    oauth2:
+      resourceserver:
+        jwt:
+          authority-prefix: ''
+          authorities-claim-name: auth
   task:
     execution:
       thread-name-prefix: jhipster-registry-task-
@@ -63,9 +63,6 @@ server:
 jhipster:
   clientApp:
     name: 'jHipsterRegistryApp'
-  mail:
-    from: JHipsterRegistry@localhost.com
-    base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender
     use-json-format: true # By default, logs are in Json format
@@ -73,7 +70,7 @@ jhipster:
       enabled: false
       host: localhost
       port: 5000
-      queue-size: 512
+      ring-buffer-size: 512
   security:
     authentication:
       jwt:
@@ -81,7 +78,7 @@ jhipster:
         base64-secret: NmQ3NTY1NjhlZGY2NmEzNzUxMjFkZDVmNTA3YjRiNWIxMzM2ZGRiNDNlYjFkMDc2YzdlYTgzYjVkNTNlZGU0NTdiNDg5OTUyNTZjYmNiYjlkMWNjNjE5MTE2NjVhZjM2MmZkYTdiYjRkNGZiMDU5MzhmMDIzYTE4ZjQ3ZTVmMTU=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
-
+        token-validity-in-seconds-for-remember-me: 86400
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -92,7 +89,3 @@ jhipster:
 # ===================================================================
 
 # application:
-management:
-  health:
-    mail:
-      enabled: false

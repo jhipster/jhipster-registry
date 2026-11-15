@@ -1,11 +1,12 @@
 package tech.jhipster.registry.service;
 
-import static com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
 import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static tech.jhipster.config.JHipsterConstants.SPRING_PROFILE_K8S;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
@@ -17,8 +18,6 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,7 +87,7 @@ public class CloudConfigRefreshService {
         List<File> fileList = new ArrayList();
         List<Integer> hashList = new ArrayList();
         WatchService watcherService = FileSystems.getDefault().newWatchService();
-        Path dirPath = Paths.get(getConfigPath());
+        Path dirPath = Path.of(getConfigPath());
         Files.walkFileTree(
             dirPath,
             new HashSet<FileVisitOption>() {
@@ -101,7 +100,7 @@ public class CloudConfigRefreshService {
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                     log.debug("Registering" + dir + " in watcher service");
-                    dir.register(watcherService, new WatchEvent.Kind[] { ENTRY_MODIFY }, HIGH);
+                    dir.register(watcherService, ENTRY_MODIFY);
                     return CONTINUE;
                 }
 

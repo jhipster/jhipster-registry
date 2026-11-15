@@ -6,14 +6,14 @@ import static tech.jhipster.registry.utils.OAuth2TestUtil.ID_TOKEN;
 import static tech.jhipster.registry.utils.OAuth2TestUtil.authenticationToken;
 import static tech.jhipster.registry.utils.OAuth2TestUtil.registerAuthenticationToken;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -58,7 +58,7 @@ class LogoutResourceIT {
     @BeforeEach
     public void before() throws Exception {
         claims = new HashMap<>();
-        claims.put("groups", Collections.singletonList(AuthoritiesConstants.USER));
+        claims.put("groups", List.of(AuthoritiesConstants.USER));
         claims.put("sub", 123);
 
         SecurityContextHolder

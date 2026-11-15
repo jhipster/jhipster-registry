@@ -11,18 +11,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tech.jhipster.registry.IntegrationTest;
 import tech.jhipster.registry.web.rest.vm.LoginVM;
+import tools.jackson.databind.ObjectMapper;
 
 /**
- * Integration tests for the {@link UserJWTController} REST controller.
+ * Integration tests for the {@link AuthenticateController} REST controller.
  */
 @AutoConfigureMockMvc
 @IntegrationTest
-class UserJWTControllerIT {
+class AuthenticateControllerIT {
+
+    @Autowired
+    private ObjectMapper om;
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,7 +37,7 @@ class UserJWTControllerIT {
         login.setUsername("test");
         login.setPassword("test");
         mockMvc
-            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(login)))
+            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
@@ -48,7 +52,7 @@ class UserJWTControllerIT {
         login.setPassword("test");
         login.setRememberMe(true);
         mockMvc
-            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(login)))
+            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
@@ -62,7 +66,7 @@ class UserJWTControllerIT {
         login.setUsername("wrong-user");
         login.setPassword("wrong password");
         mockMvc
-            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(login)))
+            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.id_token").doesNotExist())
             .andExpect(header().doesNotExist("Authorization"));
