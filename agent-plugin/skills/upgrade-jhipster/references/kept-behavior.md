@@ -19,6 +19,8 @@ Each item is something the generator's output does differently and the registry 
 - **The Docker image is built for amd64 and arm64 and is named `jhipster-registry`.**
 - **The mail and MapStruct dependencies are removed.** Nothing uses them.
 - **`EurekaResource.lastn` lists leases that share a timestamp together.**
+- **Spring Boot and Spring Cloud are on their latest patch releases**, which can be newer than the ones the generator writes. Take the newer of the two when merging.
+- **Jackson and Guava are pinned in `pom.xml`** to releases without known vulnerabilities. Each pin has a comment that says when it can go. Check whether it still applies, and scan the Docker image as described in `SKILL.md` to see whether new pins are needed.
 
 ## Client
 
