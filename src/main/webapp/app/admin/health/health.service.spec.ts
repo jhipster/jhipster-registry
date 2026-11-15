@@ -1,21 +1,21 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
+import { serverApiUrl } from 'app/config';
 
 import { HealthService } from './health.service';
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 
 describe('HealthService Service', () => {
   let service: HealthService;
   let httpMock: HttpTestingController;
-  let applicationConfigService: ApplicationConfigService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      providers: [provideHttpClientTesting()],
     });
 
     service = TestBed.inject(HealthService);
-    applicationConfigService = TestBed.inject(ApplicationConfigService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -37,7 +37,7 @@ describe('HealthService Service', () => {
       });
       const testRequest = httpMock.expectOne({
         method: 'GET',
-        url: applicationConfigService.getEndpointFor('management/health'),
+        url: `${serverApiUrl}management/health`,
       });
       testRequest.flush(checkHealth);
 

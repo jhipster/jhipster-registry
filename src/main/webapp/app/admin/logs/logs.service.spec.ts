@@ -1,5 +1,6 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { LogsService } from './logs.service';
 
@@ -9,7 +10,7 @@ describe('Logs Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      providers: [provideHttpClientTesting()],
     });
 
     service = TestBed.inject(LogsService);

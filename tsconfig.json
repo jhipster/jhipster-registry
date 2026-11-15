@@ -1,7 +1,18 @@
 {
   "compilerOptions": {
-    "baseUrl": "src/main/webapp/",
-    "outDir": "./target/classes/static/",
+    "paths": {
+      "app/config": ["./src/main/webapp/app/config/index.ts"],
+      "app/core/auth": ["./src/main/webapp/app/core/auth/index.ts"],
+      "app/core/request": ["./src/main/webapp/app/core/request/index.ts"],
+      "app/core/util": ["./src/main/webapp/app/core/util/index.ts"],
+      "app/shared/alert": ["./src/main/webapp/app/shared/alert/index.ts"],
+      "app/shared/auth": ["./src/main/webapp/app/shared/auth/index.ts"],
+      "app/shared/date": ["./src/main/webapp/app/shared/date/index.ts"],
+      "app/shared/pagination": ["./src/main/webapp/app/shared/pagination/index.ts"],
+      "app/shared/sort": ["./src/main/webapp/app/shared/sort/index.ts"],
+      "*": ["./src/main/webapp/*"]
+    },
+    "outDir": "./target/out-tsc/root",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictNullChecks": true,
@@ -9,20 +20,26 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2020",
+    "useDefineForClassFields": false,
+    "target": "es2022",
     "module": "es2020",
-    "lib": ["es2018", "dom"]
+    "types": [],
+    "lib": ["es2018", "es2020", "es2021", "dom"]
   },
+  "references": [
+    {
+      "path": "tsconfig.spec.json"
+    }
+  ],
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true,
     "preserveWhitespaces": true
   }
 }

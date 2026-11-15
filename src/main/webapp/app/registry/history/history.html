@@ -1,0 +1,36 @@
+<div>
+  <div class="head">
+    <h2 class="d-inline-block">Instances history</h2>
+    <jhi-refresh-selector class="float-end refresh-left-side" />
+  </div>
+  <ul ngbNav [activeId]="activeKey()" (navChange)="navChange($event)" class="nav-pills">
+    <li ngbNavItem="registered">
+      <a ngbNavLink>Last registered leases</a>
+      <ng-template ngbNavContent />
+    </li>
+    <li ngbNavItem="canceled">
+      <a ngbNavLink>Last canceled leases</a>
+      <ng-template ngbNavContent />
+    </li>
+  </ul>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Instance</th>
+        </tr>
+      </thead>
+      @if (histories(); as historiesRef) {
+        <tbody>
+          @for (history of historiesRef | keys | orderBy: 'key' : false; track history.key) {
+            <tr>
+              <td>{{ history.key | date: 'medium' }}</td>
+              <td>{{ history.value }}</td>
+            </tr>
+          }
+        </tbody>
+      }
+    </table>
+  </div>
+</div>

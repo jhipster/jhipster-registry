@@ -1,21 +1,42 @@
-import { Injectable } from '@angular/core';
-import { SessionStorageService } from 'ngx-webstorage';
+import { Service } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+
+@Service()
 export class StateStorageService {
-  private previousUrlKey = 'previousUrl';
-
-  constructor(private sessionStorageService: SessionStorageService) {}
+  private readonly previousUrlKey = 'previousUrl';
+  private readonly authenticationKey = AUTHENTICATION_TOKEN_KEY;
 
   storeUrl(url: string): void {
-    this.sessionStorageService.store(this.previousUrlKey, url);
+    sessionStorage.setItem(this.previousUrlKey, JSON.stringify(url));
   }
 
   getUrl(): string | null {
-    return this.sessionStorageService.retrieve(this.previousUrlKey) as string | null;
+    const previousUrl = sessionStorage.getItem(this.previousUrlKey);
+    return previousUrl ? (JSON.parse(previousUrl) as string | null) : previousUrl;
   }
 
   clearUrl(): void {
-    this.sessionStorageService.clear(this.previousUrlKey);
+    sessionStorage.removeItem(this.previousUrlKey);
+  }
+
+  storeAuthenticationToken(authenticationToken: string, rememberMe: boolean): void {
+    authenticationToken = JSON.stringify(authenticationToken);
+    this.clearAuthenticationToken();
+    if (rememberMe) {
+      localStorage.setItem(this.authenticationKey, authenticationToken);
+    } else {
+      sessionStorage.setItem(this.authenticationKey, authenticationToken);
+    }
+  }
+
+  getAuthenticationToken(): string | null {
+    const authenticationToken = localStorage.getItem(this.authenticationKey) ?? sessionStorage.getItem(this.authenticationKey);
+    return authenticationToken ? (JSON.parse(authenticationToken) as string | null) : authenticationToken;
+  }
+
+  clearAuthenticationToken(): void {
+    sessionStorage.removeItem(this.authenticationKey);
+    localStorage.removeItem(this.authenticationKey);
   }
 }

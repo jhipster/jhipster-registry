@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { KeysPipe } from './keys.pipe';
 
 describe('keysPipe Tests', () => {

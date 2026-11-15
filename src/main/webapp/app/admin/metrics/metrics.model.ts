@@ -1,8 +1,8 @@
-export interface Metrics {
-  jvm: { [key: string]: JvmMetrics };
+export interface MetricsModel {
+  jvm: Record<string, JvmMetrics>;
   databases: Databases;
   'http.server.requests': HttpServerRequests;
-  cache: { [key: string]: CacheMetrics };
+  cache: Record<string, CacheMetrics>;
   garbageCollector: GarbageCollector;
   services: Services;
   processMetrics: ProcessMetrics;
@@ -47,7 +47,7 @@ export interface HttpServerRequests {
   all: {
     count: number;
   };
-  percode: { [key: string]: MaxMeanCount };
+  percode: Record<string, MaxMeanCount>;
 }
 
 export interface MaxMeanCount {
@@ -74,11 +74,7 @@ export interface GarbageCollector {
   classesUnloaded: number;
 }
 
-export interface Services {
-  [key: string]: {
-    [key in HttpMethod]?: MaxMeanCount;
-  };
-}
+export type Services = Record<string, Record<HttpMethod, MaxMeanCount>>;
 
 export enum HttpMethod {
   Post = 'POST',
@@ -155,5 +151,4 @@ export enum ThreadState {
   Waiting = 'WAITING',
   Blocked = 'BLOCKED',
   New = 'NEW',
-  Terminated = 'TERMINATED',
 }

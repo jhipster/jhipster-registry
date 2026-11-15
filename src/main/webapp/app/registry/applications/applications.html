@@ -1,0 +1,64 @@
+<div>
+  <div class="head">
+    <h2 class="d-inline-block">Application Instances</h2>
+    <jhi-refresh-selector class="float-end refresh-left-side" />
+  </div>
+  @if (applications(); as applicationsRef) {
+    <div class="apps col-md-5">
+      <ul class="list-group">
+        @for (application of applicationsRef | orderBy: orderProp; track application.name) {
+          <li
+            class="list-group-item"
+            [class.active]="application.name === activeApplicationName()"
+            (click)="selectActiveApplication(application.name)"
+          >
+            @if (checkInstanceLength(application.instances)) {
+              <fa-icon icon="exclamation-triangle" />
+            }
+            {{ application.name }}
+            <span class="badge rounded-pill fw-normal bg-info">{{ displayCountInstances(application.instances) }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+  @if (instances(); as instancesRef) {
+    <div class="row">
+      <div id="instances" class="col-md-12">
+        <h3>Instances</h3>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-responsive d-table">
+            <thead>
+              <tr>
+                <th class="w-50">ID</th>
+                <th class="w-50">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (instance of instancesRef; track instance.instanceId) {
+                <tr>
+                  <td>
+                    <a [href]="instance.homePageUrl" target="_blank" rel="noopener noreferrer">{{ instance.instanceId }}</a>
+                  </td>
+                  <td class="text-start">
+                    <span class="badge rounded-pill fw-normal" [class]="getBadgeClass(instance.status)">
+                      {{ instance.status }}
+                    </span>
+                    @for (entry of instance.metadata ?? {} | keys; track entry.key) {
+                      <span class="float-end">
+                        <span class="badge rounded-pill bg-secondary fw-normal">
+                          <span class="badge rounded-pill bg-info fw-normal">{{ entry.key }}</span>
+                          {{ entry.value }}
+                        </span>
+                      </span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+</div>

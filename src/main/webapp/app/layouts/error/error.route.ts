@@ -1,30 +1,26 @@
 import { Routes } from '@angular/router';
 
-import { ErrorComponent } from './error.component';
-
 export const errorRoute: Routes = [
   {
     path: 'error',
-    component: ErrorComponent,
-    data: {
-      pageTitle: 'Error page!',
-    },
+    loadComponent: () => import('./error'),
+    title: 'Error page!',
   },
   {
     path: 'accessdenied',
-    component: ErrorComponent,
+    loadComponent: () => import('./error'),
     data: {
-      pageTitle: 'Error page!',
       errorMessage: 'You are not authorized to access this page.',
     },
+    title: 'Error page!',
   },
   {
     path: '404',
-    component: ErrorComponent,
+    loadComponent: () => import('./error'),
     data: {
-      pageTitle: 'Error page!',
       errorMessage: 'The page does not exist.',
     },
+    title: 'Error page!',
   },
   {
     path: '**',

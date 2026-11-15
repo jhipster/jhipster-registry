@@ -1,5 +1,6 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+if [ -z "$(which lint-staged)" ]; then
+    echo 'Running package manager install'
+    ./npmw install
+fi
 
-
-"$(dirname "$0")/../npmw" exec --no-install lint-staged
+lint-staged

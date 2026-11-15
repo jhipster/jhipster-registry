@@ -1,0 +1,34 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { of } from 'rxjs';
+
+import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+
+import PageRibbon from './page-ribbon';
+
+describe('Page Ribbon Component', () => {
+  let comp: PageRibbon;
+  let fixture: ComponentFixture<PageRibbon>;
+  const profileServiceMock = {
+    getProfileInfo: vi.fn(),
+  };
+
+  beforeEach(() => {
+    profileServiceMock.getProfileInfo.mockReset();
+    profileServiceMock.getProfileInfo.mockReturnValue(of(new ProfileInfo([], 'testEnv')));
+
+    TestBed.configureTestingModule({
+      providers: [{ provide: ProfileService, useValue: profileServiceMock }],
+    });
+
+    fixture = TestBed.createComponent(PageRibbon);
+    comp = fixture.componentInstance;
+  });
+
+  it('should call profileService.getProfileInfo on construction', () => {
+    expect(profileServiceMock.getProfileInfo).toHaveBeenCalled();
+    expect(comp.ribbonEnvSignal()).toBe('testEnv');
+  });
+});

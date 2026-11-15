@@ -1,33 +1,23 @@
-import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 
-import { ApplicationConfigService } from '../config/application-config.service';
+import { serverApiUrl } from 'app/config';
+import { StateStorageService } from 'app/core/auth';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(
-    private localStorageService: LocalStorageService,
-    private sessionStorageService: SessionStorageService,
-    private applicationConfigService: ApplicationConfigService
-  ) {}
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const stateStorageService = inject(StateStorageService);
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const serverApiUrl = this.applicationConfigService.getEndpointFor('');
-    if (!request.url || (request.url.startsWith('http') && !(serverApiUrl && request.url.startsWith(serverApiUrl)))) {
-      return next.handle(request);
-    }
-
-    const token: string | null =
-      this.localStorageService.retrieve('authenticationToken') ?? this.sessionStorageService.retrieve('authenticationToken');
-    if (token) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    }
-    return next.handle(request);
+  if (!req.url || (req.url.startsWith('http') && !(serverApiUrl && req.url.startsWith(serverApiUrl)))) {
+    return next(req);
   }
-}
+
+  const token = stateStorageService.getAuthenticationToken();
+  if (token) {
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+  return next(req);
+};

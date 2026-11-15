@@ -1,29 +1,35 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Service, inject } from '@angular/core';
+import { Observable, map } from 'rxjs';
 
-export interface Application {
-  name: string;
-  instances: Array<Instance>;
-  active?: string;
-}
-
-export type InstanceKey = 'name' | 'instanceId' | 'homePageUrl' | 'healthCheckUrl' | 'statusPageUrl' | 'status' | 'metadata';
-
-export type Instance = { [key in InstanceKey]?: any };
+import { serverApiUrl } from 'app/config';
 
 export type InstanceStatus = 'UP' | 'DOWN' | 'STARTING' | 'OUT_OF_SERVICE' | 'UNKNOWN';
 
-export interface Eureka {
-  applications: Array<Application>;
+export interface Instance {
+  name?: string;
+  instanceId?: string;
+  homePageUrl?: string;
+  healthCheckUrl?: string;
+  statusPageUrl?: string;
+  status?: InstanceStatus;
+  metadata?: Record<string, string>;
 }
 
-@Injectable({ providedIn: 'root' })
-export class ApplicationsService {
-  constructor(private http: HttpClient) {}
+export interface Application {
+  name: string;
+  instances: Instance[];
+}
 
-  findAll(): Observable<Array<Application>> {
-    return this.http.get<Eureka>('api/eureka/applications').pipe(map(eureka => eureka.applications));
+export interface Eureka {
+  applications: Application[];
+}
+
+@Service()
+export class ApplicationsService {
+  private readonly http = inject(HttpClient);
+
+  findAll(): Observable<Application[]> {
+    return this.http.get<Eureka>(`${serverApiUrl}api/eureka/applications`).pipe(map(eureka => eureka.applications));
   }
 }

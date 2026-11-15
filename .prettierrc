@@ -1,18 +1,17 @@
-# Prettier configuration
-
+endOfLine: auto
 printWidth: 140
 singleQuote: true
 tabWidth: 2
 useTabs: false
-
-# js and ts rules:
 arrowParens: avoid
-
-# jsx and tsx rules:
 bracketSameLine: false
-
-# java rules:
+plugins:
+  - prettier-plugin-packagejson
+  - prettier-plugin-java
 overrides:
   - files: "*.java"
     options:
       tabWidth: 4
+  - files: src/main/webapp/**/*.html
+    options:
+      parser: angular

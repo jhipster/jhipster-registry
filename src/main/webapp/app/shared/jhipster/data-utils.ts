@@ -1,0 +1,67 @@
+const formatAsBytes = (size: number): string => `${size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} bytes`; // NOSONAR
+
+export const paddingSize = (value: string): number => {
+  if (value.endsWith('==')) {
+    return 2;
+  }
+  if (value.endsWith('=')) {
+    return 1;
+  }
+  return 0;
+};
+
+const size = (value: string): number => (value.length / 4) * 3 - paddingSize(value);
+
+export const toBase64 = (file: File, callback: (base64Data: string) => void): void => {
+  const fileReader: FileReader = new FileReader();
+  fileReader.onload = (e: ProgressEvent<FileReader>) => {
+    if (typeof e.target?.result === 'string') {
+      const base64Data: string = e.target.result.substring(e.target.result.indexOf('base64,') + 'base64,'.length);
+      callback(base64Data);
+    }
+  };
+  fileReader.readAsDataURL(file);
+};
+
+export type BlobType = 'image' | 'text' | 'any';
+
+const DOWNLOAD_CONTENT_TYPE = 'application/octet-stream';
+
+/**
+ * Resolves the content type used to open a stored blob in a new window.
+ * Image blobs are opened as images, except XML based images like SVG which could execute scripts under the application origin.
+ * Text blobs are opened as plain text.
+ * Any other blob is opened as a download.
+ */
+export const toOpenableContentType = (contentType: string | null | undefined, blobType: BlobType = 'any'): string => {
+  const type = (contentType ?? '').split(';')[0].trim().toLowerCase();
+  if (type.endsWith('+xml')) {
+    return DOWNLOAD_CONTENT_TYPE;
+  }
+  if (blobType === 'image' && type.startsWith('image/')) {
+    return type;
+  }
+  if (blobType === 'text' && type === 'text/plain') {
+    return type;
+  }
+  return DOWNLOAD_CONTENT_TYPE;
+};
+
+export const openFile = (data: string, contentType: string | null | undefined, blobType: BlobType = 'any'): void => {
+  const byteCharacters = atob(data);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.codePointAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], {
+    type: toOpenableContentType(contentType, blobType),
+  });
+  const fileURL = globalThis.URL.createObjectURL(blob);
+  const win = globalThis.open(fileURL);
+  if (win) {
+    win.onload = () => URL.revokeObjectURL(fileURL);
+  }
+};
+
+export const byteSize = (base64String: string): string => formatAsBytes(size(base64String));

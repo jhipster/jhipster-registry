@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
-import { Health } from './health.model';
+import { serverApiUrl } from 'app/config';
 
-@Injectable({ providedIn: 'root' })
+import { HealthModel } from './health.model';
+
+@Service()
 export class HealthService {
-  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
+  private readonly http = inject(HttpClient);
 
-  checkHealth(): Observable<Health> {
-    return this.http.get<Health>(this.applicationConfigService.getEndpointFor('management/health'));
+  checkHealth(): Observable<HealthModel> {
+    return this.http.get<HealthModel>(`${serverApiUrl}management/health`);
   }
 }

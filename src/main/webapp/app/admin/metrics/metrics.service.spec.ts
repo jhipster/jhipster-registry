@@ -1,16 +1,17 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { MetricsService } from './metrics.service';
 import { ThreadDump, ThreadState } from './metrics.model';
+import { MetricsService } from './metrics.service';
 
-describe('Logs Service', () => {
+describe('Metrics Service', () => {
   let service: MetricsService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      providers: [provideHttpClientTesting()],
     });
     service = TestBed.inject(MetricsService);
     httpMock = TestBed.inject(HttpTestingController);
