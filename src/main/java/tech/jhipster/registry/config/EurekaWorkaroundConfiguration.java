@@ -24,8 +24,8 @@ public class EurekaWorkaroundConfiguration implements HealthIndicator {
     @Override
     public Health health() {
         if (!applicationIsUp) {
-            return Health.down().build();
+            return Health.down().withDetail("discovery", "Initializing Consul, Kubernetes or Eureka discovery systems").build();
         }
-        return Health.up().build();
+        return Health.up().withDetail("discovery", "Active and operational").build();
     }
 }
