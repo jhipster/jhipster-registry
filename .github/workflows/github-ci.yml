@@ -48,24 +48,114 @@ jobs:
                   ./mvnw -ntp clean verify -P-webapp
             - name: Run frontend test
               run: npm run test
-            - name: Package application
-              run: ./mvnw -ntp package -Pprod -DskipTests
+            - name: Package the application and build the Docker image
+              run: ./mvnw -ntp verify -Pprod -DskipTests jib:dockerBuild
+            - name: Install the Playwright browser
+              run: npx playwright install --with-deps chromium
+            - name: Start the registry
+              env:
+                  # The encryption tests need a key
+                  ENCRYPT_KEY: e2e-test-key
+              run: |
+                  java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev > target/registry-jwt.log 2>&1 &
+                  echo $! > target/registry.pid
+                  npm run ci:server:await
+            - name: Run end-to-end tests
+              run: npm run e2e
+            - name: Stop the registry
+              run: |
+                  kill "$(cat target/registry.pid)"
+                  timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
             - name: Start Keycloak
               run: docker compose -f src/main/docker/keycloak.yml up --wait
             - name: Start the registry with the oauth2 profile
               run: |
                   java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev,oauth2 > target/registry-oauth2.log 2>&1 &
+                  echo $! > target/registry.pid
                   npm run ci:server:await
-            - name: Check that sign-in redirects to Keycloak
+            - name: Run end-to-end tests with Keycloak
+              run: npm run e2e:oauth2
+            - name: Stop the registry and Keycloak
               run: |
-                  location=$(curl -s -o /dev/null -w '%{redirect_url}' http://localhost:8761/oauth2/authorization/oidc)
-                  echo "Redirected to: $location"
-                  case "$location" in
-                    http://localhost:9080/realms/jhipster/protocol/openid-connect/auth*) ;;
-                    *) echo "::error::Expected a redirect to the Keycloak sign-in page"; exit 1 ;;
-                  esac
-            - name: Show the registry and Keycloak logs
+                  kill "$(cat target/registry.pid)"
+                  timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
+                  docker compose -f src/main/docker/keycloak.yml down
+            - name: Start two registries that replicate to each other
+              run: docker compose -f src/test/e2e/peers/docker-compose.yml up --wait
+            - name: Run end-to-end tests for peer replication
+              run: npm run e2e:peers
+            - name: Stop the two registries
+              run: docker compose -f src/test/e2e/peers/docker-compose.yml down
+            - name: Start Vault
+              run: docker compose -f src/main/docker/vault.yml up --wait
+            - name: Start the registry with Git and Vault as configuration sources
+              env:
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE: git
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_TYPE: vault
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_KV_VERSION: 2
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_BACKEND: secret
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_DEFAULT_KEY: application
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_PROFILE_SEPARATOR: /
+              run: |
+                  npm run e2e:backends:repo
+                  export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI="file://$PWD/target/e2e-config-repo"
+                  java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev > target/registry-backends.log 2>&1 &
+                  echo $! > target/registry.pid
+                  npm run ci:server:await
+            - name: Run end-to-end tests for the Git and Vault configuration backends
+              run: npm run e2e:backends
+            - name: Stop the registry and Vault
+              run: |
+                  kill "$(cat target/registry.pid)"
+                  timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
+                  docker compose -f src/main/docker/vault.yml down
+            - name: Start Vault in server mode
+              run: |
+                  docker compose -f src/main/docker/vault.yml -f src/test/e2e/backends/vault-server.yml up --wait
+                  token=$(node src/test/e2e/backends/init-vault-server.mjs)
+                  echo "::add-mask::$token"
+                  echo "VAULT_ROOT_TOKEN=$token" >> "$GITHUB_ENV"
+            - name: Start the registry with Git and Vault in server mode as configuration sources
+              env:
+                  SPRING_CLOUD_CONFIG_SERVER_VAULT_TOKEN: ${{ env.VAULT_ROOT_TOKEN }}
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE: git
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_TYPE: vault
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_KV_VERSION: 2
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_BACKEND: secret
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_DEFAULT_KEY: application
+                  SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_1_PROFILE_SEPARATOR: /
+              run: |
+                  npm run e2e:backends:repo
+                  export SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI="file://$PWD/target/e2e-config-repo"
+                  java -jar target/jhipster-registry-*.jar --spring.profiles.active=dev > target/registry-vault-server.log 2>&1 &
+                  echo $! > target/registry.pid
+                  npm run ci:server:await
+            - name: Run end-to-end tests with Vault in server mode
+              env:
+                  E2E_VAULT_TOKEN: ${{ env.VAULT_ROOT_TOKEN }}
+              run: npm run e2e:backends
+            - name: Stop the registry
+              run: |
+                  kill "$(cat target/registry.pid)"
+                  timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
+            - name: Start the registry with the default production configuration
+              run: |
+                  java -jar target/jhipster-registry-*.jar > target/registry-prod.log 2>&1 &
+                  npm run ci:server:await
+            - name: Run end-to-end tests for the default production configuration
+              run: npm run e2e:prod
+            - name: Show the registry logs
               if: failure()
+              # Each of these is allowed to fail, because a step that failed early leaves no logs or containers behind
               run: |
-                  cat target/registry-oauth2.log || true
+                  tail -n 300 target/registry-*.log || true
+                  docker compose -f src/test/e2e/peers/docker-compose.yml logs --tail 300 || true
+                  docker compose -f src/main/docker/vault.yml logs --tail 100 || true
                   docker compose -f src/main/docker/keycloak.yml logs --tail 100 || true
+            - name: Upload the Playwright report
+              if: failure()
+              uses: actions/upload-artifact@v4.6.2
+              with:
+                  name: playwright-report
+                  path: target/playwright
+                  retention-days: 7

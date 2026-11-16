@@ -1,0 +1,16 @@
+# Runs the Vault of src/main/docker/vault.yml in server mode, as the README describes, for the end-to-end tests:
+# docker compose -f src/main/docker/vault.yml -f src/test/e2e/backends/vault-server.yml up --wait
+services:
+  vault:
+    command: server
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./vault-config/config:/vault/config:ro
+      - vault-logs:/vault/logs
+      - vault-data:/vault/file
+volumes:
+  vault-logs:
+  vault-data:
