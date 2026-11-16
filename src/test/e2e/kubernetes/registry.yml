@@ -1,0 +1,156 @@
+# The registry as the JHipster Kubernetes generator deploys it: two replicas that replicate to each other, the
+# prod and k8s profiles, and the configuration in a ConfigMap. Keep it in line with
+# generators/kubernetes/templates/registry in generator-jhipster. The two services at the end are only here so
+# that the tests can reach each replica from outside the cluster.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-secret
+type: Opaque
+data:
+  registry-admin-password: YWRtaW4= # base64 encoded "admin"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-config
+data:
+  application.yml: |-
+    configserver:
+      name: JHipster Registry
+      status: Connected to the JHipster Registry running in Kubernetes
+    eureka:
+      client:
+        initial-instance-info-replication-interval-seconds: 15
+        instance-info-replication-interval-seconds: 15
+        registry-fetch-interval-seconds: 15
+        fetch-registry: true
+        register-with-eureka: true
+        eureka-service-url-poll-interval-seconds: 15
+      instance:
+        lease-renewal-interval-in-seconds: 10
+        registry-default-open-for-traffic-count: 0
+    jhipster:
+      security:
+        authentication:
+          jwt:
+            base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
+  jhipster-registry.yml: |-
+    eureka:
+      client:
+        service-url:
+          defaultZone: http://admin:${spring.security.user.password}@jhipster-registry-0.jhipster-registry.default.svc.cluster.local:8761/eureka/,http://admin:${spring.security.user.password}@jhipster-registry-1.jhipster-registry.default.svc.cluster.local:8761/eureka/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhipster-registry
+  labels:
+    app: jhipster-registry
+spec:
+  ports:
+    - port: 8761
+      name: http
+  clusterIP: None
+  publishNotReadyAddresses: true
+  selector:
+    app: jhipster-registry
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jhipster-registry
+spec:
+  serviceName: jhipster-registry
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jhipster-registry
+      version: '1.0'
+  template:
+    metadata:
+      labels:
+        app: jhipster-registry
+        version: '1.0'
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: jhipster-registry
+          image: jhipster-registry:latest
+          # the image is loaded into the cluster by the test setup
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8761
+          readinessProbe:
+            httpGet:
+              path: /management/health
+              port: 8761
+            periodSeconds: 5
+            failureThreshold: 60
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod,k8s
+            - name: SPRING_SECURITY_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: registry-secret
+                  key: registry-admin-password
+            - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+              value: 'false'
+            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
+              value: native
+            - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
+              value: file:./central-config
+            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
+              value: '15'
+            - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
+              value: '30'
+            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
+              value: '15000'
+            - name: EUREKA_SERVER_RENEWAL_THRESHOLD_UPDATE_INTERVAL_MS
+              value: '15000'
+            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+              value: '3'
+            - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
+              value: 'false'
+            - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
+              value: '2000'
+            - name: EUREKA_CLIENT_FETCH_REGISTRY
+              value: 'true'
+            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+              value: 'true'
+            - name: K8S_CONFIG_PATH
+              value: '/central-config/'
+          volumeMounts:
+            - name: config-volume
+              mountPath: /central-config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: application-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhipster-registry-0-e2e
+spec:
+  type: NodePort
+  selector:
+    statefulset.kubernetes.io/pod-name: jhipster-registry-0
+  ports:
+    - port: 8761
+      nodePort: 30761
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhipster-registry-1-e2e
+spec:
+  type: NodePort
+  selector:
+    statefulset.kubernetes.io/pod-name: jhipster-registry-1
+  ports:
+    - port: 8761
+      nodePort: 30762

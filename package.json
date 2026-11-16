@@ -36,6 +36,7 @@
     "e2e": "playwright test --project=jwt",
     "e2e:backends": "playwright test --project=backends",
     "e2e:backends:repo": "node src/test/e2e/backends/create-config-repo.mjs",
+    "e2e:kubernetes": "playwright test --project=kubernetes",
     "e2e:oauth2": "playwright test --project=oauth2",
     "e2e:peers": "playwright test --project=peers",
     "e2e:prod": "playwright test --project=prod",
