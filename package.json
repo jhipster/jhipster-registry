@@ -34,7 +34,6 @@
     "docker:jhipster-registry:down": "docker compose -f src/main/docker/jhipster-registry.yml down -v",
     "docker:jhipster-registry:up": "docker compose -f src/main/docker/jhipster-registry.yml up --wait",
     "java:docker": "./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild",
-    "java:docker:arm64": "npm run java:docker -- -Djib-maven-plugin.architecture=arm64",
     "java:docker:dev": "npm run java:docker -- -Pdev,webapp",
     "java:docker:prod": "npm run java:docker -- -Pprod",
     "java:jar": "./mvnw -ntp verify -DskipTests --batch-mode",

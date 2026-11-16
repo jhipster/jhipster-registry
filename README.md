@@ -8,24 +8,59 @@ Full documentation is available on the [JHipster documentation for microservices
 
 ## Running locally
 
-To run the cloned repository;
+You need Java 21 or 25, which are the versions the build accepts. Node.js 24 is only needed if you want hot reload of the client, because the Maven build installs its own copy.
 
-- For development run `./mvnw -Pdev,webapp` to just start in development or run `./mvnw` and run `npm install && npm start` for hot reload of client side code.
-- For production profile run `./mvnw -Pprod`
+To run the cloned repository:
+
+- For development, run `./mvnw` to build the client and start the registry. For hot reload of client-side code, also run `./npmw install && ./npmw start` and open http://localhost:4200.
+- For the production profile, run `./mvnw -Pprod`.
+
+To build a Docker image and run it with Docker Compose:
+
+```shell
+./npmw run java:docker
+docker compose -f src/main/docker/app.yml up -d
+```
 
 [github-actions-build]: https://github.com/jhipster/jhipster-registry/workflows/Build/badge.svg
 [github-actions-docker]: https://github.com/jhipster/jhipster-registry/workflows/Docker%20Image/badge.svg
+
+## Upgrading from 7.x
+
+JHipster Registry 8 runs on Spring Boot 4 and keeps what 7.x had: Eureka, Spring Cloud Config, and the UI. Applications register and read their configuration the same way. These things change:
+
+- It needs Java 21 or 25 to build and Java 21 or later to run. The Docker image comes with its own Java.
+- A configuration repository that sets `jhipster.security.authentication.jwt.secret`, like `central-config/application.yml` does, keeps working. The registry logs a warning that asks for `base64-secret`, which it uses when both are set.
+- Tokens issued by 7.x stay valid, so people who are signed in to the registry stay signed in.
+- Eureka's own dashboard at `/registry` is gone. The registry's Instances, History, and Replicas screens show the same information.
+- The registry runs on Tomcat instead of Undertow, so `server.undertow.*` properties no longer do anything.
+- The Docker Compose files in `src/main/docker` use Keycloak 26 and Vault 2. Vault's server mode keeps its data in Docker volumes, see below.
+- The Deploy to Heroku button still deploys 7.4.0.
+
+## The registry password
+
+The registry is secured, and applications sign in to it with the `admin` user to register and to read their configuration. There are two settings, and they have to agree:
+
+- `spring.security.user.password` (`SPRING_SECURITY_USER_PASSWORD`) is the password of the `admin` user of the registry.
+- `jhipster.registry.password` (`JHIPSTER_REGISTRY_PASSWORD`) is what applications put in the URLs they use to reach the registry, such as `http://admin:${jhipster.registry.password}@localhost:8761/eureka/`.
+
+Because the password ends up in a URL, characters that mean something in a URL, such as `@`, `:` or `/`, must be percent-encoded there. For the password `p@ss`:
+
+- Set `spring.security.user.password` to `p@ss` and `jhipster.registry.password` to `p%40ss`.
+- The registry builds the URL to itself and to its replicas from `spring.security.user.password`, so also set `eureka.client.service-url.defaultZone` on the registry with the encoded password, for example `http://admin:p%40ss@localhost:8761/eureka/`.
+
+The simplest way to avoid all of this is a password of letters and digits.
 
 ## HashiCorp Vault Integration
 
 ### Development Mode
 
-`JHipster Registry` default integration uses a `vault` server with an in-memory backend. The data shall not be persist and shall require you to configure secrets after every restart. The in-memory configuration provides an easy way to test out the integration and later switch to the recommended server mode.
+`JHipster Registry` default integration uses a `vault` server with an in-memory backend. The data is not persistent, so you have to configure the secrets again after every restart. The in-memory configuration provides an easy way to test out the integration and later switch to the recommended server mode.
 
 - Start vault server docker container:
 
 ```shell
-docker-compose -f src/main/docker/vault.yml up -d
+docker compose -f src/main/docker/vault.yml up -d
 ```
 
 - The default configured root token is `jhipster-registry`. We shall use the default secrets engine backend mounted on the `secrets` path. Configure secrets using either of `ui`, `cli` or `http`.
@@ -52,17 +87,26 @@ docker-compose -f src/main/docker/vault.yml up -d
 - Uncomment the following configurations in [vault.yml](src/main/docker/vault.yml). You can refer [config.hcl](src/main/docker/vault-config/config/config.hcl) to view provided vault server configurations:
 
 ```yml
-command: server
+    command: server
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./vault-config/config:/vault/config:ro
+      - vault-logs:/vault/logs
+      - vault-data:/vault/file
 volumes:
-  - ./vault-config/config:/vault/config
-  - ./vault-config/logs:/vault/logs
-  - ./vault-config/data:/vault/file
+  vault-logs:
+  vault-data:
 ```
+
+The data and the logs are kept in Docker volumes, because the Vault image does not run as root and cannot write to directories of the host.
 
 - Start vault server docker container:
 
 ```shell
-docker-compose -f src/main/docker/vault.yml up -d
+docker compose -f src/main/docker/vault.yml up -d
 ```
 
 - Open `vault` server [`ui`](http://localhost:8200/ui/vault/init) to initialize master key shares. In this guide, we shall enter `1` as the number of key shares and `1` as the key threshold value. Do refer to vault documentation for recommended configuration. Note down the initial `root token` and the `key` and keep it at a safe place. You shall require the `key` to unseal the vault server after a restart.
