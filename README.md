@@ -37,11 +37,25 @@ JHipster Registry 8 runs on Spring Boot 4 and keeps what 7.x had: Eureka, Spring
 - The Docker Compose files in `src/main/docker` use Keycloak 26 and Vault 2. Vault's server mode keeps its data in Docker volumes, see below.
 - The Deploy to Heroku button still deploys 7.4.0.
 
+## The registry password
+
+The registry is secured, and applications sign in to it with the `admin` user to register and to read their configuration. There are two settings, and they have to agree:
+
+- `spring.security.user.password` (`SPRING_SECURITY_USER_PASSWORD`) is the password of the `admin` user of the registry.
+- `jhipster.registry.password` (`JHIPSTER_REGISTRY_PASSWORD`) is what applications put in the URLs they use to reach the registry, such as `http://admin:${jhipster.registry.password}@localhost:8761/eureka/`.
+
+Because the password ends up in a URL, characters that mean something in a URL, such as `@`, `:` or `/`, must be percent-encoded there. For the password `p@ss`:
+
+- Set `spring.security.user.password` to `p@ss` and `jhipster.registry.password` to `p%40ss`.
+- The registry builds the URL to itself and to its replicas from `spring.security.user.password`, so also set `eureka.client.service-url.defaultZone` on the registry with the encoded password, for example `http://admin:p%40ss@localhost:8761/eureka/`.
+
+The simplest way to avoid all of this is a password of letters and digits.
+
 ## HashiCorp Vault Integration
 
 ### Development Mode
 
-`JHipster Registry` default integration uses a `vault` server with an in-memory backend. The data shall not be persist and shall require you to configure secrets after every restart. The in-memory configuration provides an easy way to test out the integration and later switch to the recommended server mode.
+`JHipster Registry` default integration uses a `vault` server with an in-memory backend. The data is not persistent, so you have to configure the secrets again after every restart. The in-memory configuration provides an easy way to test out the integration and later switch to the recommended server mode.
 
 - Start vault server docker container:
 
