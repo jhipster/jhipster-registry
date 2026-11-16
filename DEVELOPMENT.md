@@ -120,4 +120,18 @@ To test the default production configuration, start the registry with the `prod`
 ./npmw run e2e:prod
 ```
 
+To test the registry on Kubernetes, build the Docker image and deploy two replicas to a local [kind](https://kind.sigs.k8s.io/) cluster, the way the JHipster Kubernetes generator deploys the registry. Then run the tests:
+
+```
+./npmw run java:docker
+kind create cluster --name jhipster-registry-e2e --config src/test/e2e/kubernetes/kind-config.yml
+kind load docker-image jhipster-registry:latest --name jhipster-registry-e2e
+kubectl --context kind-jhipster-registry-e2e apply -f src/test/e2e/kubernetes/registry.yml
+kubectl --context kind-jhipster-registry-e2e rollout status statefulset/jhipster-registry
+./npmw run e2e:kubernetes
+kind delete cluster --name jhipster-registry-e2e
+```
+
+The replicas need about a minute after they start to register with each other. One of the tests changes the ConfigMap and waits for the registry to apply it, which can take two minutes.
+
 The HTML report and the traces of failed tests are written to `target/playwright`.

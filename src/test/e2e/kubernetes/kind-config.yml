@@ -1,0 +1,13 @@
+# A local Kubernetes cluster for the end-to-end tests. It publishes the two registries on localhost:8761 and
+# localhost:8762 through the node ports of src/test/e2e/kubernetes/registry.yml.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30761
+        hostPort: 8761
+        listenAddress: 127.0.0.1
+      - containerPort: 30762
+        hostPort: 8762
+        listenAddress: 127.0.0.1

@@ -141,9 +141,23 @@ jobs:
             - name: Start the registry with the default production configuration
               run: |
                   java -jar target/jhipster-registry-*.jar > target/registry-prod.log 2>&1 &
+                  echo $! > target/registry.pid
                   npm run ci:server:await
             - name: Run end-to-end tests for the default production configuration
               run: npm run e2e:prod
+            - name: Stop the registry
+              run: |
+                  kill "$(cat target/registry.pid)"
+                  timeout 60 bash -c 'while curl -s -o /dev/null http://localhost:8761/management/health; do sleep 1; done'
+            - name: Start two registries on Kubernetes
+              run: |
+                  kind create cluster --name jhipster-registry-e2e --config src/test/e2e/kubernetes/kind-config.yml
+                  kind load docker-image jhipster-registry:latest --name jhipster-registry-e2e
+                  kubectl --context kind-jhipster-registry-e2e apply -f src/test/e2e/kubernetes/registry.yml
+                  kubectl --context kind-jhipster-registry-e2e rollout status statefulset/jhipster-registry --timeout=300s
+                  npx wait-on -t 180000 http-get://127.0.0.1:8761/management/health http-get://127.0.0.1:8762/management/health
+            - name: Run end-to-end tests on Kubernetes
+              run: npm run e2e:kubernetes
             - name: Show the registry logs
               if: failure()
               # Each of these is allowed to fail, because a step that failed early leaves no logs or containers behind
@@ -152,6 +166,8 @@ jobs:
                   docker compose -f src/test/e2e/peers/docker-compose.yml logs --tail 300 || true
                   docker compose -f src/main/docker/vault.yml logs --tail 100 || true
                   docker compose -f src/main/docker/keycloak.yml logs --tail 100 || true
+                  kubectl --context kind-jhipster-registry-e2e get pods -o wide || true
+                  kubectl --context kind-jhipster-registry-e2e logs --tail 200 --prefix -l app=jhipster-registry || true
             - name: Upload the Playwright report
               if: failure()
               uses: actions/upload-artifact@v4.6.2
