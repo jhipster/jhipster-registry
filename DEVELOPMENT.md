@@ -134,4 +134,16 @@ kind delete cluster --name jhipster-registry-e2e
 
 The replicas need about a minute after they start to register with each other. One of the tests changes the ConfigMap and waits for the registry to apply it, which can take two minutes.
 
+To test a Git repository that the registry reads over SSH, build the Docker image, create the keys and the repository, and start a Git server and the registry in Docker Compose. Then run the tests:
+
+```
+./npmw run java:docker
+./npmw run e2e:git-ssh:setup
+docker compose -f src/test/e2e/git-ssh/docker-compose.yml up --wait
+./npmw run e2e:git-ssh
+docker compose -f src/test/e2e/git-ssh/docker-compose.yml down -v
+```
+
+The setup needs `ssh-keygen` and writes to `target/e2e-git-ssh`. The registry gets its key pair and the host key of the Git server in the `.ssh` directory of the user it runs as, which is the setup its SSH screen describes.
+
 The HTML report and the traces of failed tests are written to `target/playwright`.

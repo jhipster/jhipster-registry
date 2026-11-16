@@ -1,0 +1,47 @@
+# A registry that reads its configuration from a Git repository over SSH, for the end-to-end tests.
+# Run "npm run e2e:git-ssh:setup" first, which creates the keys and the repository in target/e2e-git-ssh.
+name: jhipster-registry-git-ssh
+services:
+  git-server:
+    build: .
+    volumes:
+      - ../../../../target/e2e-git-ssh/server:/etc/ssh/keys:ro
+      - ../../../../target/e2e-git-ssh/repo:/srv/git:ro
+    healthcheck:
+      test: ['CMD', 'nc', '-z', 'localhost', '22']
+      interval: 2s
+      timeout: 2s
+      retries: 30
+  # Copies the SSH settings of the registry to a volume and gives them to the user the registry runs as.
+  # A private key must not be readable by other users, and the files created by the setup belong to someone else.
+  ssh-settings:
+    image: alpine:3.22.2
+    volumes:
+      - ../../../../target/e2e-git-ssh/client:/client:ro
+      - registry-ssh:/ssh
+    command: sh -c "cp /client/* /ssh/ && chown -R 1000:1000 /ssh && chmod 700 /ssh && chmod 600 /ssh/id_rsa"
+  jhipster-registry:
+    image: ${REGISTRY_IMAGE:-jhipster-registry:latest}
+    depends_on:
+      git-server:
+        condition: service_healthy
+      ssh-settings:
+        condition: service_completed_successfully
+    volumes:
+      # the .ssh directory in the home directory of the user the registry runs as
+      - registry-ssh:${REGISTRY_SSH_DIR:-/home/ubuntu/.ssh}:ro
+      - ../peers/health-check.sh:/health-check.sh
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=ssh://git@git-server/srv/git/config.git
+    ports:
+      - 127.0.0.1:8761:8761
+    healthcheck:
+      test: ['CMD', 'bash', '/health-check.sh', '8761']
+      interval: 5s
+      timeout: 5s
+      retries: 40
+volumes:
+  registry-ssh:

@@ -9,6 +9,7 @@ import { defineConfig, devices } from '@playwright/test';
  * - `backends` needs Vault and the registry started with a Git repository and Vault as configuration sources.
  * - `prod` needs the registry started with the prod profile and no other configuration.
  * - `kubernetes` needs the cluster and the two registries of src/test/e2e/kubernetes.
+ * - `git-ssh` needs the Git server and the registry of src/test/e2e/git-ssh/docker-compose.yml.
  *
  * See DEVELOPMENT.md for the commands.
  */
@@ -54,6 +55,11 @@ export default defineConfig({
     {
       name: 'kubernetes',
       testDir: './src/test/e2e/kubernetes',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'git-ssh',
+      testDir: './src/test/e2e/git-ssh',
       use: { ...devices['Desktop Chrome'] },
     },
   ],

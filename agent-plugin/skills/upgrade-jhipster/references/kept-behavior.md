@@ -30,6 +30,7 @@ Each item is something the generator's output does differently and the registry 
 - **`SignInService` decides how to sign in from the active profiles.** The home page, the navbar and the sign-in page use it.
 - **The registry's screens live in `app/registry/`, and shared pieces in `app/shared/array/` and `app/shared/refresh/`.** `home/` and `layouts/navbar/` are generated files with the registry's content.
 - **There is no `entities/` folder and no entity menu.**
+- **The SSH screen describes how to give the Docker image its SSH settings**: the path of the `.ssh` directory depends on the user and home directory of the base image, so check it when the base image changes. The Git over SSH tests mount it there.
 
 ## Docker Compose files and the rest
 

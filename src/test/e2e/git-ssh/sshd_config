@@ -1,0 +1,9 @@
+Port 22
+HostKey /etc/ssh/keys/ssh_host_ed25519_key
+AuthorizedKeysFile /etc/ssh/keys/authorized_keys
+# The mounted files belong to the user who ran the tests, not to the git user
+StrictModes no
+PubkeyAuthentication yes
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+AllowUsers git
