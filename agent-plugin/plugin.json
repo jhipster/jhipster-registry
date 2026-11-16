@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "jhipster-registry",
+  "version": "1.0.0",
+  "description": "Skills for maintaining the JHipster Registry, such as moving it to a new JHipster version.",
+  "author": {
+    "name": "JHipster",
+    "url": "https://www.jhipster.tech"
+  },
+  "homepage": "https://github.com/jhipster/jhipster-registry",
+  "repository": "https://github.com/jhipster/jhipster-registry",
+  "license": "Apache-2.0",
+  "keywords": ["jhipster", "jhipster-registry", "spring-boot", "angular", "upgrade"]
+}

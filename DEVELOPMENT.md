@@ -43,6 +43,12 @@ It stops being an ancestor when a pull request that merged it was squashed or re
 
 `.yo-resolve` lists the generated files the registry has changed. It only matters when JHipster runs directly in a checkout of `main`, where it leaves those files alone.
 
+## With an AI assistant
+
+The `agent-plugin` directory is an [Agent Plugins](https://agent-plugins.org/) package with a skill, `upgrade-jhipster`, that walks an AI coding assistant through these steps: the order, how to resolve the conflicts, and how to check that nothing the registry does was lost. Its list of the places where the registry deliberately differs from the generated code is in `agent-plugin/skills/upgrade-jhipster/references/kept-behavior.md`, and is worth reading before an upgrade by hand too.
+
+Assistants that support Agent Plugins load the package from the `agent-plugin` directory. Claude Code finds the skill by itself through the link in `.claude/skills`. Any other assistant can be pointed at `agent-plugin/skills/upgrade-jhipster/SKILL.md`.
+
 # End-to-end tests
 
 The end-to-end tests in `src/test/e2e` use [Playwright](https://playwright.dev/) and run against a registry that is already started. After `./npmw install`, install the browser once with `./npmw exec playwright install chromium`, which uses the Playwright version of this project.
