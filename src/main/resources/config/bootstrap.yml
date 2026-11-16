@@ -13,6 +13,13 @@ spring:
     active: #spring.profiles.active#
     include: composite
   cloud:
+    # The Registry uses its embedded Eureka server by default: the Consul and Kubernetes discovery
+    # clients are only enabled by the profiles of the same name. These defaults are set in this file
+    # because the Registry loads its configuration through the bootstrap context of its Config Server.
+    consul:
+      enabled: false
+    kubernetes:
+      enabled: false
     config:
       server:
         bootstrap: true

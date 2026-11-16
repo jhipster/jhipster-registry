@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { Application, ApplicationsService, Eureka } from './applications.service';
+import { Application, ApplicationsService, Discovery } from './applications.service';
 
 describe('Service Tests', () => {
   describe('Applications Service', () => {
     let service: ApplicationsService;
     let httpMock: HttpTestingController;
-    let expectedResult: Application[] | null;
+    let expectedResult: Discovery | null;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -35,14 +35,15 @@ describe('Service Tests', () => {
             },
           ],
         };
-        const eureka: Eureka = {
+        const discovery: Discovery = {
+          backend: 'consul',
           applications: [applications],
         };
         service.findAll().subscribe(received => (expectedResult = received));
 
-        const req = httpMock.expectOne({ method: 'GET' });
-        req.flush(eureka);
-        expect(expectedResult).toEqual([applications]);
+        const req = httpMock.expectOne({ method: 'GET', url: 'api/applications' });
+        req.flush(discovery);
+        expect(expectedResult).toEqual(discovery);
       });
     });
   });

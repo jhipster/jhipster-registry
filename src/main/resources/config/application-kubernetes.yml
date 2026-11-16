@@ -1,0 +1,38 @@
+# ===================================================================
+# Spring Boot configuration for the "kubernetes" profile.
+#
+# This configuration overrides the application.yml file.
+#
+# More information on profiles: https://www.jhipster.tech/profiles/
+# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Cloud Kubernetes properties (spring.cloud.kubernetes.*)
+#
+# Full list of properties with default values at:
+# https://github.com/spring-cloud/spring-cloud-kubernetes/blob/main/spring-cloud-kubernetes-commons/src/main/java/org/springframework/cloud/kubernetes/commons/discovery/KubernetesDiscoveryProperties.java
+#
+# Documentation at:
+# https://docs.spring.io/spring-cloud-kubernetes/docs/current/reference/html/
+# ===================================================================
+
+application:
+  discovery:
+    backend: kubernetes
+
+spring:
+  cloud:
+    kubernetes:
+      enabled: true
+      discovery:
+        # Only the ready endpoints of the services of the current namespace are listed by the Registry.
+        # Uncomment the metadata properties to display the labels and annotations of the services in the Registry UI
+        #metadata:
+        #  add-labels: true
+        #  add-annotations: true
+
+eureka:
+  client:
+    # Kubernetes replaces the discovery client of Eureka
+    enabled: false

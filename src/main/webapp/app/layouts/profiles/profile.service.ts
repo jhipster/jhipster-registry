@@ -23,6 +23,7 @@ export class ProfileService {
         activeProfiles: response.activeProfiles,
         inProduction: response.activeProfiles?.includes('prod'),
         openAPIEnabled: response.activeProfiles?.includes('api-docs'),
+        backend: response.discovery?.backend,
       })),
       shareReplay()
     );

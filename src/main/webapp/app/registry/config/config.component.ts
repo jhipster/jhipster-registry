@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { RefreshService } from 'app/shared/refresh/refresh.service';
-import { ApplicationsService } from 'app/registry/applications/applications.service';
+import { Application, ApplicationsService } from 'app/registry/applications/applications.service';
 
 @Component({
   selector: 'jhi-config',
@@ -95,19 +95,22 @@ export class ConfigComponent implements OnInit, OnDestroy {
     this.applicationsService
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(applications => {
+      .subscribe(discovery => {
         this.applications = ['application'];
-        applications.forEach(application => {
-          const instanceId = application.instances[0].instanceId;
-          let applicationName;
-          if (instanceId.indexOf(':') === -1) {
-            applicationName = application.name.toLowerCase();
-          } else {
-            applicationName = instanceId.substr(0, instanceId.indexOf(':'));
-          }
-          this.applications.push(applicationName);
-        });
+        discovery.applications.forEach(application => this.applications.push(this.configurationName(application)));
       });
+  }
+
+  /**
+   * The configuration of an application is named after the application in its Eureka instance ID and directly after
+   * the application with the other discovery backends.
+   */
+  configurationName(application: Application): string {
+    const instanceId: string = application.instances.length > 0 ? application.instances[0].instanceId : '';
+    if (!instanceId || instanceId.indexOf(':') === -1) {
+      return application.name.toLowerCase();
+    }
+    return instanceId.substring(0, instanceId.indexOf(':'));
   }
 
   getKeys(obj: Record<string, unknown>): string[] {

@@ -57,6 +57,21 @@ describe('Component Tests', () => {
       expect(mockProfileService.getProfileInfo).toHaveBeenCalled();
     });
 
+    it('Should use the discovery backend of the Registry', () => {
+      // GIVEN
+      jest.spyOn(mockProfileService, 'getProfileInfo').mockReturnValue(
+        of({
+          backend: 'consul',
+        })
+      );
+
+      // WHEN
+      comp.getProfileInfo();
+
+      // THEN
+      expect(comp.backend).toEqual('consul');
+    });
+
     it('Should call accountService.isAuthenticated on authentication', () => {
       // WHEN
       comp.isAuthenticated();

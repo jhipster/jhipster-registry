@@ -154,35 +154,66 @@ describe('Component Tests', () => {
 
       it('should call refresh on init with Applications data', () => {
         jest.spyOn(mockApplicationService, 'findAll').mockReturnValue(
-          of([
-            {
-              name: 'app1',
-              instances: [
-                {
-                  instanceId: 'app1:9p2qwuxo61ockvplncso3hzh72nonh',
-                  status: 'UP',
-                },
-                {
-                  instanceId: 'app1:jsgfimaqac5u2gnggy33jsoyfbrb4u',
-                  status: 'UP',
-                },
-              ],
-            },
-            {
-              name: 'app2',
-              instances: [
-                {
-                  instanceId: 'app2:bb47hzj0a6bzcs27gxqgp3unnrky4n',
-                  status: 'UP',
-                },
-              ],
-            },
-          ])
+          of({
+            backend: 'eureka',
+            applications: [
+              {
+                name: 'app1',
+                instances: [
+                  {
+                    instanceId: 'app1:9p2qwuxo61ockvplncso3hzh72nonh',
+                    status: 'UP',
+                  },
+                  {
+                    instanceId: 'app1:jsgfimaqac5u2gnggy33jsoyfbrb4u',
+                    status: 'UP',
+                  },
+                ],
+              },
+              {
+                name: 'app2',
+                instances: [
+                  {
+                    instanceId: 'app2:bb47hzj0a6bzcs27gxqgp3unnrky4n',
+                    status: 'UP',
+                  },
+                ],
+              },
+            ],
+          })
         );
 
         comp.ngOnInit();
 
         expect(mockApplicationService.findAll).toHaveBeenCalled();
+        expect(comp.applications.length).toEqual(3);
+        expect(comp.applications).toEqual(['application', 'app1', 'app2']);
+      });
+
+      it('should call refresh on init with the applications of a discovery backend without instance ID', () => {
+        jest.spyOn(mockApplicationService, 'findAll').mockReturnValue(
+          of({
+            backend: 'consul',
+            applications: [
+              {
+                name: 'app1',
+                instances: [
+                  {
+                    instanceId: 'app1-9p2qwuxo61ockvplncso3hzh72nonh',
+                    status: 'UP',
+                  },
+                ],
+              },
+              {
+                name: 'app2',
+                instances: [],
+              },
+            ],
+          })
+        );
+
+        comp.ngOnInit();
+
         expect(comp.applications.length).toEqual(3);
         expect(comp.applications).toEqual(['application', 'app1', 'app2']);
       });

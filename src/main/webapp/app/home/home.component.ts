@@ -9,7 +9,7 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { EventManager } from 'app/core/util/event-manager.service';
-import { ApplicationsService, Instance } from 'app/registry/applications/applications.service';
+import { ApplicationsService, DiscoveryBackend, Instance } from 'app/registry/applications/applications.service';
 import { LoginOAuth2Service } from 'app/login/login-oauth2.service';
 import { Health, HealthStatus } from 'app/shared/health/health.model';
 import { HealthService } from 'app/shared/health/health.service';
@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   updatingHealth?: boolean;
   health?: Health;
   appInstances: Array<Instance> = [];
+  backend?: DiscoveryBackend;
   status?: {
     [key in EurekaStatusKey]?: any;
   };
@@ -91,22 +92,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   populateDashboard(): void {
-    this.eurekaStatusService
-      .findAll()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => (this.status = data.status));
-
     this.applicationsService
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(applications => {
+      .subscribe(discovery => {
+        this.backend = discovery.backend;
         this.appInstances = [];
-        applications.forEach(application =>
+        discovery.applications.forEach(application =>
           application.instances.forEach(instance => {
             instance.name = application.name;
             this.appInstances.push(instance);
           })
         );
+        this.populateStatus();
       });
 
     this.healthService
@@ -122,6 +120,20 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.updatingHealth = false;
         },
       });
+  }
+
+  /**
+   * The status of the Registry is only provided by its embedded Eureka server.
+   */
+  populateStatus(): void {
+    if (this.backend !== 'eureka') {
+      this.status = undefined;
+      return;
+    }
+    this.eurekaStatusService
+      .findAll()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => (this.status = data.status));
   }
 
   getBadgeClass(statusState: HealthStatus): string {

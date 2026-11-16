@@ -29,12 +29,12 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
     this.applicationsService
       .findAll()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(applications => {
-        this.applications = applications;
+      .subscribe(discovery => {
+        this.applications = discovery.applications;
         if (this.activeApplication) {
           this.selectActiveApplication(this.activeApplication.name);
-        } else if (applications.length > 0) {
-          this.selectActiveApplication(applications[0].name);
+        } else if (this.applications.length > 0) {
+          this.selectActiveApplication(this.applications[0].name);
         }
       });
   }

@@ -13,7 +13,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.config.server.EnableConfigServer;
-import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
@@ -21,7 +20,6 @@ import tech.jhipster.registry.config.ApplicationProperties;
 import tech.jhipster.registry.config.CRLFLogConverter;
 import tech.jhipster.registry.config.ConfigServerProperties;
 
-@EnableEurekaServer
 @EnableConfigServer
 @SpringBootApplication
 @EnableConfigurationProperties({ ApplicationProperties.class, ConfigServerProperties.class })

@@ -100,6 +100,12 @@ describe('Component Tests', () => {
     });
 
     it('populate Dashboard with Eureka status data', () => {
+      jest.spyOn(mockApplicationService, 'findAll').mockReturnValue(
+        of({
+          backend: 'eureka',
+          applications: [],
+        })
+      );
       jest.spyOn(mockEurekaStatusService, 'findAll').mockReturnValue(
         of({
           status: {
@@ -114,32 +120,57 @@ describe('Component Tests', () => {
       expect(comp.status).toEqual({ environment: 'test' });
     });
 
+    it('should not populate Dashboard with Eureka status data when Eureka is not the discovery backend', () => {
+      jest.spyOn(mockApplicationService, 'findAll').mockReturnValue(
+        of({
+          backend: 'consul',
+          applications: [],
+        })
+      );
+      jest.spyOn(mockEurekaStatusService, 'findAll').mockReturnValue(
+        of({
+          status: {
+            environment: 'test',
+          },
+        })
+      );
+
+      comp.ngOnInit();
+
+      expect(comp.backend).toEqual('consul');
+      expect(mockEurekaStatusService.findAll).not.toHaveBeenCalled();
+      expect(comp.status).toBeUndefined();
+    });
+
     it('populate Dashboard with Applications data', () => {
       jest.spyOn(mockApplicationService, 'findAll').mockReturnValue(
-        of([
-          {
-            name: 'app1',
-            instances: [
-              {
-                instanceId: 1,
-                status: 'UP',
-              },
-              {
-                instanceId: 2,
-                status: 'DOWN',
-              },
-            ],
-          },
-          {
-            name: 'app2',
-            instances: [
-              {
-                instanceId: 3,
-                status: 'UP',
-              },
-            ],
-          },
-        ])
+        of({
+          backend: 'eureka',
+          applications: [
+            {
+              name: 'app1',
+              instances: [
+                {
+                  instanceId: 1,
+                  status: 'UP',
+                },
+                {
+                  instanceId: 2,
+                  status: 'DOWN',
+                },
+              ],
+            },
+            {
+              name: 'app2',
+              instances: [
+                {
+                  instanceId: 3,
+                  status: 'UP',
+                },
+              ],
+            },
+          ],
+        })
       );
 
       comp.ngOnInit();

@@ -15,12 +15,18 @@ public class ApplicationProperties {
 
     private final Eureka eureka = new Eureka();
 
+    private final Discovery discovery = new Discovery();
+
     public Oauth2 getOauth2() {
         return oauth2;
     }
 
     public Eureka getEureka() {
         return eureka;
+    }
+
+    public Discovery getDiscovery() {
+        return discovery;
     }
 
     public static class Oauth2 {
@@ -66,6 +72,43 @@ public class ApplicationProperties {
 
         public void setEnvironment(String environment) {
             this.environment = environment;
+        }
+    }
+
+    /**
+     * Discovery backend used by the Registry, see {@code application.discovery.backend}.
+     */
+    public static class Discovery {
+
+        public static final String PROPERTY_PREFIX = "application.discovery";
+
+        private Backend backend = Backend.EUREKA;
+
+        public Backend getBackend() {
+            return backend;
+        }
+
+        public void setBackend(Backend backend) {
+            this.backend = backend;
+        }
+
+        /**
+         * Discovery backends supported by the Registry. The consul and kubernetes profiles of the Registry select
+         * their own backend.
+         */
+        public enum Backend {
+            /**
+             * Embedded Eureka server, the default backend of the Registry.
+             */
+            EUREKA,
+            /**
+             * HashiCorp Consul, through the Spring Cloud Consul discovery client.
+             */
+            CONSUL,
+            /**
+             * Kubernetes, through the Spring Cloud Kubernetes discovery client.
+             */
+            KUBERNETES,
         }
     }
 }

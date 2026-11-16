@@ -27,10 +27,10 @@
       </li>
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
-        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="eureka-menu">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="discovery-menu">
           <span>
             <fa-icon icon="podcast"></fa-icon>
-            <span>Eureka</span>
+            <span>{{ backend === 'eureka' ? 'Eureka' : 'Discovery' }}</span>
             <b class="caret"></b>
           </span>
         </a>
@@ -41,13 +41,13 @@
               <span class="hidden-sm">Instances</span>
             </a>
           </li>
-          <li>
+          <li *ngIf="backend === 'eureka'">
             <a class="dropdown-item" routerLinkActive="active" routerLink="registry/history" (click)="collapseNavbar()">
               <fa-icon icon="hourglass" [fixedWidth]="true"></fa-icon>
               <span class="hidden-sm">History</span>
             </a>
           </li>
-          <li>
+          <li *ngIf="backend === 'eureka'">
             <a class="dropdown-item" routerLinkActive="active" routerLink="registry/replicas" (click)="collapseNavbar()">
               <fa-icon icon="cloud-download-alt" [fixedWidth]="true"></fa-icon>
               <span class="hidden-sm">Replicas</span>

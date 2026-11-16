@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
 import { ApplicationsComponent } from 'app/registry/applications/applications.component';
-import { Application, ApplicationsService, Instance } from 'app/registry/applications/applications.service';
+import { Application, ApplicationsService, Discovery, Instance } from 'app/registry/applications/applications.service';
 import { RefreshService } from 'app/shared/refresh/refresh.service';
 
 describe('Component Tests', () => {
@@ -58,7 +58,11 @@ describe('Component Tests', () => {
             ],
           },
         ];
-        jest.spyOn(service, 'findAll').mockReturnValue(of(applications));
+        const discovery: Discovery = {
+          backend: 'eureka',
+          applications,
+        };
+        jest.spyOn(service, 'findAll').mockReturnValue(of(discovery));
 
         comp.ngOnInit();
         tick();

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tech.jhipster.registry.discovery.RegistryApplication;
 
 public class EurekaVMTest {
 
@@ -20,7 +21,7 @@ public class EurekaVMTest {
 
     @Test
     public void getApplicationsTest() {
-        List<Map<String, Object>> list = eureka.getApplications();
+        List<RegistryApplication> list = eureka.getApplications();
         assertThat(list).isNull();
 
         eureka.setApplications(initFakeApplicationsList());
@@ -36,7 +37,7 @@ public class EurekaVMTest {
         eureka.setApplications(initFakeApplicationsList());
         assertThat(eureka.getApplications()).isNotNull();
 
-        List<Map<String, Object>> newList = new ArrayList<>();
+        List<RegistryApplication> newList = new ArrayList<>();
         eureka.setApplications(newList);
         assertThat(eureka.getApplications()).isEqualTo(newList);
     }
@@ -64,16 +65,10 @@ public class EurekaVMTest {
         assertThat(eureka.getStatus()).isEqualTo(newStatus);
     }
 
-    private List<Map<String, Object>> initFakeApplicationsList() {
-        List<Map<String, Object>> list = new ArrayList<>();
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("App1", new Object());
-        map.put("App2", new Object());
-        list.add(map);
-
-        map = new HashMap<>();
-        list.add(map);
+    private List<RegistryApplication> initFakeApplicationsList() {
+        List<RegistryApplication> list = new ArrayList<>();
+        list.add(new RegistryApplication("app1"));
+        list.add(new RegistryApplication("app2"));
 
         return list;
     }

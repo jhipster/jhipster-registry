@@ -35,7 +35,7 @@ springdoc:
 # ===================================================================
 eureka:
   client:
-    enabled: true
+    # The Eureka client is enabled by default, the consul and kubernetes profiles disable it
     healthcheck:
       enabled: true
     fetch-registry: false
@@ -135,6 +135,9 @@ spring:
         - api-docs
         # Uncomment to activate TLS for the dev profile
         #- tls
+  cloud:
+    # The Registry uses its embedded Eureka server by default: the Consul and Kubernetes discovery
+    # clients are only enabled by the profiles of the same name, see bootstrap.yml
   jmx:
     enabled: false
   messages:
@@ -182,6 +185,9 @@ springdoc:
 info:
   # Comma separated list of profiles that will trigger the ribbon to show
   display-ribbon-on-profiles: 'dev'
+  discovery:
+    # Discovery backend used by the Registry, see application.discovery.backend
+    backend: ${application.discovery.backend:eureka}
 
 # ===================================================================
 # JHipster specific properties
@@ -230,3 +236,8 @@ jhipster:
 # ===================================================================
 
 # application:
+#   discovery:
+#     # Discovery backend used by the Registry UI: eureka (default), consul or kubernetes.
+#     # The consul and kubernetes profiles of this application select their own backend
+#     # and the default backend is Eureka, see ApplicationProperties.
+#     backend: eureka

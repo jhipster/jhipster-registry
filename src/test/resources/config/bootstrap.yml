@@ -1,5 +1,11 @@
 spring:
   cloud:
+    # The Registry uses its embedded Eureka server by default: the Consul and Kubernetes discovery
+    # clients are only enabled by the profiles of the same name, see the bootstrap.yml of the application
+    consul:
+      enabled: false
+    kubernetes:
+      enabled: false
     config:
       enabled: false
       server:

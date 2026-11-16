@@ -1,0 +1,41 @@
+# ===================================================================
+# Spring Boot configuration for the "consul" profile.
+#
+# This configuration overrides the application.yml file.
+#
+# More information on profiles: https://www.jhipster.tech/profiles/
+# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Cloud Consul properties (spring.cloud.consul.*)
+#
+# Full list of properties with default values at:
+# https://github.com/spring-cloud/spring-cloud-consul/blob/main/spring-cloud-consul-core/src/main/java/org/springframework/cloud/consul/ConsulProperties.java
+#
+# Documentation at:
+# https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/
+# ===================================================================
+
+application:
+  discovery:
+    backend: consul
+
+spring:
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      discovery:
+        # The Registry registers itself in Consul, like it registers itself in its embedded Eureka server
+        register: true
+        # The health endpoint of this application is not the Spring Boot Actuator default one
+        health-check-path: ${management.endpoints.web.base-path}/health
+        # Only the instances passing their health checks are listed by the Registry
+        query-passing: true
+
+eureka:
+  client:
+    # Consul replaces the discovery client of Eureka
+    enabled: false

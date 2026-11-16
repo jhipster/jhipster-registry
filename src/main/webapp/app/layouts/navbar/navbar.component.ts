@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   inProduction?: boolean;
   isNavbarCollapsed = true;
   openAPIEnabled?: boolean;
+  backend = 'eureka';
   version: string = VERSION ? 'v' + VERSION : '';
   unsubscribe$ = new Subject();
   subscription?: Subscription;
@@ -89,6 +90,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe(profileInfo => {
         this.inProduction = profileInfo.inProduction;
         this.openAPIEnabled = profileInfo.openAPIEnabled;
+        this.backend = profileInfo.backend ?? 'eureka';
       });
   }
 }

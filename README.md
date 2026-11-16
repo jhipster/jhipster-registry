@@ -16,6 +16,109 @@ To run the cloned repository;
 [github-actions-build]: https://github.com/jhipster/jhipster-registry/workflows/Build/badge.svg
 [github-actions-docker]: https://github.com/jhipster/jhipster-registry/workflows/Docker%20Image/badge.svg
 
+## Discovery backends
+
+The Registry uses its embedded Eureka server by default. Consul and Kubernetes are also supported, so that the
+Registry UI can be used when the applications are not registered in Eureka. The discovery backend in use is
+configured with the `application.discovery.backend` property and can be selected with a Spring profile:
+
+- `eureka` (default) is the embedded Eureka server, started by the Registry itself.
+- `consul` uses the [Spring Cloud Consul](https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/) discovery client.
+- `kubernetes` uses the [Spring Cloud Kubernetes](https://docs.spring.io/spring-cloud-kubernetes/docs/current/reference/html/) discovery client.
+
+The Discovery clients of both backends are dependencies of the Registry, but they are disabled unless their profile is
+active: running the Registry in Eureka mode does not require a Consul agent or a Kubernetes cluster. These defaults are
+set in `bootstrap.yml`, as the Registry also loads its configuration through the bootstrap context of its Config Server,
+which takes precedence over the properties of the `application-<profile>.yml` files.
+
+### Consul
+
+- Start the Registry with the `consul` profile, for example `SPRING_PROFILES_ACTIVE=dev,consul,native ./mvnw` or
+  `SPRING_PROFILES_ACTIVE=prod,consul java -jar jhipster-registry.jar`.
+- The Registry connects to the Consul agent running on `localhost:8500` and registers itself in Consul with a health
+  check on its `/management/health` endpoint. Use the standard `spring.cloud.consul.*` properties to connect to
+  another agent:
+
+```yaml
+spring:
+  cloud:
+    consul:
+      host: consul.example.com
+      port: 8500
+```
+
+- The Registry UI lists the applications registered in Consul, with the instances passing their health checks. Both the
+  application name and the instance ID are the ones of Consul.
+- The Eureka server is not started, so the `/api/eureka/*` endpoints and the Eureka screens (History, Replicas) are not
+  available.
+
+### Kubernetes
+
+- Start the Registry with the `kubernetes` profile, for example `SPRING_PROFILES_ACTIVE=prod,kubernetes java -jar jhipster-registry.jar`.
+- The Registry connects to the Kubernetes API with the service account of its pod and lists the services and the ready
+  endpoints of its namespace. It therefore requires `get`, `list` and `watch` permissions on services and endpoints, for
+  example with:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jhipster-registry
+rules:
+  - apiGroups: ['']
+    resources: ['services', 'endpoints']
+    verbs: ['get', 'list', 'watch']
+```
+
+- The Registry UI lists the services of the namespace, with their ready endpoints. The application name is the name of
+  the service and the instance ID is the UID of the pod.
+- The labels and annotations of the services can be displayed in the Registry UI by enabling the metadata of the
+  discovery client:
+
+```yaml
+spring:
+  cloud:
+    kubernetes:
+      discovery:
+        metadata:
+          add-labels: true
+          add-annotations: true
+```
+
+- When an application registers several ports, `spring.cloud.kubernetes.discovery.primary-port-name` selects the port
+  used by the Registry.
+- The Eureka server is not started, so the `/api/eureka/*` endpoints and the Eureka screens (History, Replicas) are not
+  available.
+
+### Registry API
+
+Whatever the backend, the applications displayed in the Registry UI are provided by `GET /api/applications`:
+
+```json
+{
+  "backend": "consul",
+  "applications": [
+    {
+      "name": "jhipsterSampleMicroservice",
+      "instances": [
+        {
+          "instanceId": "jhipsterSampleMicroservice:1",
+          "homePageUrl": "http://localhost:8081",
+          "healthCheckUrl": "http://localhost:8081/management/health",
+          "statusPageUrl": "http://localhost:8081/management/info",
+          "status": "UP",
+          "metadata": {}
+        }
+      ]
+    }
+  ]
+}
+```
+
+With the Eureka backend, the same applications are also available on the `GET /api/eureka/applications` endpoint. With
+the Consul and Kubernetes backends, the management URLs of an instance are built from its address and can be overridden
+with the `homePageUrl`, `healthCheckUrl` and `statusPageUrl` entries of the instance metadata.
+
 ## HashiCorp Vault Integration
 
 ### Development Mode

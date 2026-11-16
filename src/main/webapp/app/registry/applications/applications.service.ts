@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 export interface Application {
   name: string;
@@ -15,7 +14,10 @@ export type Instance = { [key in InstanceKey]?: any };
 
 export type InstanceStatus = 'UP' | 'DOWN' | 'STARTING' | 'OUT_OF_SERVICE' | 'UNKNOWN';
 
-export interface Eureka {
+export type DiscoveryBackend = 'eureka' | 'consul' | 'kubernetes' | string;
+
+export interface Discovery {
+  backend: DiscoveryBackend;
   applications: Array<Application>;
 }
 
@@ -23,7 +25,7 @@ export interface Eureka {
 export class ApplicationsService {
   constructor(private http: HttpClient) {}
 
-  findAll(): Observable<Array<Application>> {
-    return this.http.get<Eureka>('api/eureka/applications').pipe(map(eureka => eureka.applications));
+  findAll(): Observable<Discovery> {
+    return this.http.get<Discovery>('api/applications');
   }
 }
