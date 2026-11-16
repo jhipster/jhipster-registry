@@ -158,6 +158,14 @@ jobs:
                   npx wait-on -t 180000 http-get://127.0.0.1:8761/management/health http-get://127.0.0.1:8762/management/health
             - name: Run end-to-end tests on Kubernetes
               run: npm run e2e:kubernetes
+            - name: Delete the Kubernetes cluster
+              run: kind delete cluster --name jhipster-registry-e2e
+            - name: Start the registry with a Git repository it reads over SSH
+              run: |
+                  npm run e2e:git-ssh:setup
+                  docker compose -f src/test/e2e/git-ssh/docker-compose.yml up --wait
+            - name: Run end-to-end tests for Git over SSH
+              run: npm run e2e:git-ssh
             - name: Show the registry logs
               if: failure()
               # Each of these is allowed to fail, because a step that failed early leaves no logs or containers behind
@@ -166,6 +174,7 @@ jobs:
                   docker compose -f src/test/e2e/peers/docker-compose.yml logs --tail 300 || true
                   docker compose -f src/main/docker/vault.yml logs --tail 100 || true
                   docker compose -f src/main/docker/keycloak.yml logs --tail 100 || true
+                  docker compose -f src/test/e2e/git-ssh/docker-compose.yml logs --tail 200 || true
                   kubectl --context kind-jhipster-registry-e2e get pods -o wide || true
                   kubectl --context kind-jhipster-registry-e2e logs --tail 200 --prefix -l app=jhipster-registry || true
             - name: Upload the Playwright report
